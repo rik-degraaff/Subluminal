@@ -1,0 +1,13 @@
+# TODO
+
+## Game design
+* [ ] ...
+
+## Code
+* [ ] ...
+
+## Artwork
+* [ ] ...
+
+## Other
+* [ ] ...

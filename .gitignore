@@ -1,1 +1,6 @@
+#files
+*.class
 
+
+#folders
+app/out/
