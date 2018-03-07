@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><project name="Subluminal" company="Bordeaux Ink" webLink="http://" view-date="2018-02-25" view-index="0" gantt-divider-location="805" resource-divider-location="300" version="2.8.6" locale="en_US">
     <description>
         <![CDATA[
+        
+        
         Subluminal game for Programmierprojekt UniBas FS2018
+    
+    
     ]]>
     </description>
     <view zooming-state="default:5" id="gantt-chart">
@@ -75,38 +79,85 @@
             <depend id="55" type="2" difference="0" hardness="Strong"/>
             <depend id="57" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="55" name="basic chat" color="#8cb6ce" meeting="false" start="2018-03-15" duration="3" complete="0" thirdDate="2018-03-14" thirdDate-constraint="0" expand="true"/>
+        <task id="55" name="basic chat" color="#8cb6ce" meeting="false" start="2018-03-15" duration="3" complete="0" thirdDate="2018-03-14" thirdDate-constraint="0" expand="true">
+            <depend id="74" type="2" difference="0" hardness="Strong"/>
+        </task>
         <task id="57" name="logout" meeting="false" start="2018-03-15" duration="1" complete="0" expand="true"/>
         <task id="65" name="write software quality concept" meeting="false" start="2018-03-08" duration="1" complete="0" expand="true"/>
         <task id="67" name="formalize network protocol" meeting="false" start="2018-03-08" duration="1" complete="0" expand="true"/>
         <task id="3" name="Milestone 2" color="#8cb6ce" meeting="true" start="2018-03-26" duration="0" complete="0" thirdDate="2018-03-05" thirdDate-constraint="0" expand="true">
             <depend id="69" type="2" difference="0" hardness="Strong"/>
             <depend id="71" type="2" difference="0" hardness="Strong"/>
+            <depend id="75" type="2" difference="0" hardness="Strong"/>
+            <depend id="77" type="2" difference="0" hardness="Strong"/>
+            <depend id="82" type="2" difference="0" hardness="Strong"/>
+            <depend id="83" type="2" difference="0" hardness="Strong"/>
+            <depend id="88" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="71" name="game list server side" meeting="false" start="2018-03-26" duration="1" complete="0" expand="true"/>
-        <task id="73" name="game list GUI" meeting="false" start="2018-02-28" duration="1" complete="0" expand="true"/>
-        <task id="74" name="chat GUI" meeting="false" start="2018-02-28" duration="1" complete="0" expand="true"/>
-        <task id="91" name="private chat" meeting="false" start="2018-02-26" duration="1" complete="0" expand="true"/>
-        <task id="75" name="model game state" meeting="false" start="2018-02-28" duration="1" complete="0" expand="true"/>
-        <task id="76" name="server game tick" meeting="false" start="2018-02-28" duration="1" complete="0" expand="true"/>
-        <task id="77" name="generate game map" meeting="false" start="2018-02-28" duration="1" complete="0" expand="true"/>
-        <task id="87" name="create game" meeting="false" start="2018-02-26" duration="1" complete="0" expand="true"/>
-        <task id="85" name="join game" meeting="false" start="2018-02-28" duration="1" complete="0" expand="true"/>
-        <task id="86" name="leave game" meeting="false" start="2018-02-28" duration="1" complete="0" expand="true"/>
-        <task id="88" name="list users" meeting="false" start="2018-02-26" duration="1" complete="0" expand="true"/>
-        <task id="89" name="lobby GUI" meeting="false" start="2018-02-26" duration="1" complete="0" expand="true"/>
-        <task id="78" name="planet capturing" meeting="false" start="2018-02-28" duration="1" complete="0" expand="true"/>
-        <task id="79" name="ship generation" meeting="false" start="2018-02-28" duration="1" complete="0" expand="true"/>
-        <task id="80" name="ship movement" meeting="false" start="2018-02-28" duration="1" complete="0" expand="true"/>
-        <task id="81" name="signal delays" meeting="false" start="2018-02-28" duration="1" complete="0" expand="true"/>
-        <task id="83" name="generate high scores" meeting="false" start="2018-02-28" duration="1" complete="0" expand="true"/>
-        <task id="84" name="persist high scores" meeting="false" start="2018-02-28" duration="1" complete="0" expand="true"/>
-        <task id="82" name="write some unit tests" meeting="false" start="2018-02-28" duration="1" complete="0" expand="true"/>
-        <task id="69" name="make a build script" meeting="false" start="2018-03-26" duration="1" complete="0" expand="true"/>
-        <task id="90" name="create powerpoint presentation MS 3" meeting="false" start="2018-02-26" duration="1" complete="0" expand="true"/>
-        <task id="6" name="Milestone 3" color="#8cb6ce" meeting="true" start="2018-04-16" duration="0" complete="0" thirdDate="2018-03-26" thirdDate-constraint="0" expand="true"/>
-        <task id="106" name="write manual" meeting="false" start="2018-02-26" duration="1" complete="0" expand="true"/>
-        <task id="93" name="create game assets" meeting="false" start="2018-02-26" duration="1" complete="0" expand="true"/>
+        <task id="71" name="game list server side" meeting="false" start="2018-03-26" duration="1" complete="0" expand="true">
+            <depend id="73" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="73" name="game list GUI" meeting="false" start="2018-03-27" duration="1" complete="0" expand="true">
+            <depend id="85" type="2" difference="0" hardness="Strong"/>
+            <depend id="87" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="74" name="chat GUI" meeting="false" start="2018-03-20" duration="1" complete="0" expand="true">
+            <depend id="91" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="91" name="private chat" meeting="false" start="2018-03-21" duration="1" complete="0" expand="true"/>
+        <task id="75" name="model game state" meeting="false" start="2018-03-26" duration="1" complete="0" expand="true">
+            <depend id="76" type="2" difference="0" hardness="Strong"/>
+            <depend id="117" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="76" name="server game tick" meeting="false" start="2018-03-27" duration="1" complete="0" expand="true">
+            <depend id="78" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="117" name="client game tick" meeting="false" start="2018-03-27" duration="1" complete="0" expand="true">
+            <depend id="78" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="77" name="generate game map" meeting="false" start="2018-03-26" duration="1" complete="0" expand="true"/>
+        <task id="87" name="create game" meeting="false" start="2018-03-28" duration="1" complete="0" expand="true"/>
+        <task id="85" name="join game" meeting="false" start="2018-03-28" duration="1" complete="0" expand="true">
+            <depend id="86" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="86" name="leave game" meeting="false" start="2018-03-29" duration="1" complete="0" expand="true">
+            <depend id="89" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="88" name="list users" meeting="false" start="2018-03-26" duration="1" complete="0" expand="true"/>
+        <task id="89" name="lobby GUI" meeting="false" start="2018-03-30" duration="1" complete="0" expand="true">
+            <depend id="90" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="78" name="planet capturing" meeting="false" start="2018-03-28" duration="1" complete="0" expand="true">
+            <depend id="79" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="79" name="ship generation" meeting="false" start="2018-03-29" duration="1" complete="0" expand="true">
+            <depend id="80" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="80" name="ship movement" meeting="false" start="2018-03-30" duration="1" complete="0" expand="true">
+            <depend id="81" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="81" name="signal delays" meeting="false" start="2018-04-02" duration="1" complete="0" expand="true">
+            <depend id="90" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="83" name="generate high scores" meeting="false" start="2018-03-26" duration="1" complete="0" expand="true">
+            <depend id="84" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="84" name="persist high scores" meeting="false" start="2018-03-27" duration="1" complete="0" expand="true">
+            <depend id="90" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="82" name="write some unit tests" meeting="false" start="2018-03-26" duration="1" complete="0" expand="true">
+            <depend id="69" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="69" name="make a build script" meeting="false" start="2018-03-27" duration="1" complete="0" expand="true">
+            <depend id="90" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="90" name="create powerpoint presentation MS 3" meeting="false" start="2018-04-03" duration="1" complete="0" expand="true"/>
+        <task id="6" name="Milestone 3" color="#8cb6ce" meeting="true" start="2018-04-16" duration="0" complete="0" thirdDate="2018-03-26" thirdDate-constraint="0" expand="true">
+            <depend id="93" type="2" difference="0" hardness="Strong"/>
+            <depend id="106" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="106" name="write manual" color="#8cb6ce" meeting="false" start="2018-04-16" duration="1" complete="0" thirdDate="2018-02-26" thirdDate-constraint="0" expand="true"/>
+        <task id="93" name="create game assets" color="#8cb6ce" meeting="false" start="2018-04-16" duration="1" complete="0" thirdDate="2018-02-26" thirdDate-constraint="0" expand="true"/>
         <task id="92" name="game GUI" meeting="false" start="2018-02-26" duration="1" complete="0" expand="true"/>
         <task id="94" name="check for win state" meeting="false" start="2018-02-26" duration="1" complete="0" expand="true"/>
         <task id="9" name="Milestone 4" color="#8cb6ce" meeting="true" start="2018-05-07" duration="0" complete="0" thirdDate="2018-04-16" thirdDate-constraint="0" expand="true"/>
