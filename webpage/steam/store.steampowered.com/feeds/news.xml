@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8" ?><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:cc="http://web.resource.org/cc/" xmlns:steam="http://www.steampowered.com" xmlns="http://purl.org/rss/1.0/">
+	<channel rdf:about="http://www.steampowered.com">
+		<title>Steam RSS News Feed</title> 
+		<link>http://www.steampowered.com/</link> 
+		<description>All Steam news, all the time!</description> 
+		<language>en</language> 
+				<pubDate>Tue, 06 Mar 2018 12:05:00 -0800</pubDate>
+		<generator>http://www.steampowered.com/</generator> 
+		<items>
+			<rdf:Seq>
+							<rdf:li rdf:resource="http://store.steampowered.com/news/37856/" />
+							<rdf:li rdf:resource="http://store.steampowered.com/news/37861/" />
+							<rdf:li rdf:resource="http://store.steampowered.com/news/37823/" />
+							<rdf:li rdf:resource="http://store.steampowered.com/news/37858/" />
+							<rdf:li rdf:resource="http://store.steampowered.com/news/37842/" />
+							<rdf:li rdf:resource="http://store.steampowered.com/news/37828/" />
+							<rdf:li rdf:resource="http://store.steampowered.com/news/37827/" />
+							<rdf:li rdf:resource="http://store.steampowered.com/news/37781/" />
+							<rdf:li rdf:resource="http://store.steampowered.com/news/37780/" />
+							<rdf:li rdf:resource="http://store.steampowered.com/news/37793/" />
+							<rdf:li rdf:resource="http://store.steampowered.com/news/37791/" />
+							<rdf:li rdf:resource="http://store.steampowered.com/news/37790/" />
+							<rdf:li rdf:resource="http://store.steampowered.com/news/37779/" />
+							<rdf:li rdf:resource="http://store.steampowered.com/news/37772/" />
+							<rdf:li rdf:resource="http://store.steampowered.com/news/37685/" />
+							<rdf:li rdf:resource="http://store.steampowered.com/news/37758/" />
+							<rdf:li rdf:resource="http://store.steampowered.com/news/37719/" />
+							<rdf:li rdf:resource="http://store.steampowered.com/news/37573/" />
+							<rdf:li rdf:resource="http://store.steampowered.com/news/37684/" />
+							<rdf:li rdf:resource="http://store.steampowered.com/news/37680/" />
+						</rdf:Seq>
+		</items>
+	</channel>
+					<item rdf:about="http://store.steampowered.com/news/37856/">
+			<title><![CDATA[Midweek Madness - Dead Cells, 33% Off]]></title>
+			<link><![CDATA[http://store.steampowered.com/news/37856/]]></link>
+			<guid isPermaLink="true"><![CDATA[http://store.steampowered.com/news/37856/]]></guid>
+			<comments>http://steamcommunity.com//discussions/</comments>
+			<pubDate>Tue, 06 Mar 2018 12:05:00 -0800</pubDate>
+			<author>Valve</author>
+			<category>Valve news update</category>
+			<dc:subject>Valve news update</dc:subject>
+			<dc:creator>Valve</dc:creator>
+			<dc:date>2018-03-06T12:05:00-0800</dc:date>
+						<content:encoded><![CDATA[Save 33% on <a href='http://store.steampowered.com/app/588650/'>Dead Cells</a> during this week's Midweek Madness*!<br><br>In this rogue-lite, metroidvania action-platformer, you'll explore a sprawling, ever-changing castle... assuming you&rsquo;re able to fight your way past its keepers in 2D souls-lite combat. No checkpoints. Kill, die, learn, repeat.<br><br>*Offer ends Friday at 10AM Pacific Time<br><a href="http://store.steampowered.com/app/588650/"><img src="https://steamcdn-a.akamaihd.net/steam/apps/588650/capsule_467x181.jpg" style=" float: left; margin-right: 12px; height: 181px; width: 467px;"></a>]]></content:encoded>
+					</item>
+					<item rdf:about="http://store.steampowered.com/news/37861/">
+			<title><![CDATA[Daily Deal - Human Resource Machine, 40% Off]]></title>
+			<link><![CDATA[http://store.steampowered.com/news/37861/]]></link>
+			<guid isPermaLink="true"><![CDATA[http://store.steampowered.com/news/37861/]]></guid>
+			<comments>http://steamcommunity.com//discussions/</comments>
+			<pubDate>Tue, 06 Mar 2018 10:00:00 -0800</pubDate>
+			<author>Valve</author>
+			<category>Valve news update</category>
+			<dc:subject>Valve news update</dc:subject>
+			<dc:creator>Valve</dc:creator>
+			<dc:date>2018-03-06T10:00:00-0800</dc:date>
+						<content:encoded><![CDATA[Today's Deal: Save 40% on <a href='http://store.steampowered.com/app/375820/'>Human Resource Machine</a>!*<br><br>Look for the deals each day on the front page of Steam.  Or follow us on <a href='http://twitter.com/steam_games'>twitter</a> or <a href='http://www.facebook.com/Steam'>Facebook</a> for instant notifications wherever you are!<br><br>*Offer ends March 14th at 10AM Pacific Time<br><a href="http://store.steampowered.com/app/375820/"><img src="https://steamcdn-a.akamaihd.net/steam/apps/375820/capsule_467x181.jpg" style=" float: left; margin-right: 12px; height: 181px; width: 467px;"></a>]]></content:encoded>
+					</item>
+					<item rdf:about="http://store.steampowered.com/news/37823/">
+			<title><![CDATA[Midweek Madness - The Surge, 60% Off]]></title>
+			<link><![CDATA[http://store.steampowered.com/news/37823/]]></link>
+			<guid isPermaLink="true"><![CDATA[http://store.steampowered.com/news/37823/]]></guid>
+			<comments>http://steamcommunity.com//discussions/</comments>
+			<pubDate>Tue, 06 Mar 2018 09:59:00 -0800</pubDate>
+			<author>Valve</author>
+			<category>Valve news update</category>
+			<dc:subject>Valve news update</dc:subject>
+			<dc:creator>Valve</dc:creator>
+			<dc:date>2018-03-06T09:59:00-0800</dc:date>
+						<content:encoded><![CDATA[Save 60% on <a href='http://store.steampowered.com/app/378540'>The Surge</a> during this week's Midweek Madness*!<br><br>A catastrophic event has knocked you out during the first day on the jobâ€¦ you wake up equipped with a heavy-grade exoskeleton, in a destroyed section of the complex. Robots gone haywire, insane augmented co-workers and rogue AI - everything wants you dead.<br><br>Defy deadly enemies and huge bosses in tight, visceral melee combat. Target and slice specific limbs off your foes, with a next-gen loot system where you loot what you dismember. Equip, upgrade and craft new weapons and armors sliced from enemies, and make yourself stronger through a fresh take on leveling-up.<br><br>*Offer ends Friday at 10AM  Pacific Time<br><a href="http://store.steampowered.com/app/378540"><img src="https://steamcdn-a.akamaihd.net/steam/apps/378540/capsule_467x181.jpg" style=" float: left; margin-right: 12px; height: 181px; width: 467px;"></a>]]></content:encoded>
+					</item>
+					<item rdf:about="http://store.steampowered.com/news/37858/">
+			<title><![CDATA[Now Available on Steam - FINAL FANTASY XV WINDOWS EDITION]]></title>
+			<link><![CDATA[http://store.steampowered.com/news/37858/]]></link>
+			<guid isPermaLink="true"><![CDATA[http://store.steampowered.com/news/37858/]]></guid>
+			<comments>http://steamcommunity.com//discussions/</comments>
+			<pubDate>Tue, 06 Mar 2018 08:58:45 -0800</pubDate>
+			<author>Valve</author>
+			<category>Valve news update</category>
+			<dc:subject>Valve news update</dc:subject>
+			<dc:creator>Valve</dc:creator>
+			<dc:date>2018-03-06T08:58:45-0800</dc:date>
+						<content:encoded><![CDATA[<a href='http://store.steampowered.com/app/637650/'>FINAL FANTASY XV WINDOWS EDITION</a> is Now Available on Steam!<br><br>Take the journey, now in ultimate quality. Boasting a wealth of bonus content and supporting ultra high-resolution graphical options and HDR 10, you can now enjoy the beautiful and carefully-crafted experience of FINAL FANTASY XV like never before.<br><a href="http://store.steampowered.com/app/637650/"><img src="https://steamcdn-a.akamaihd.net/steam/apps/637650/capsule_467x181.jpg" style=" float: left; margin-right: 12px; height: 181px; width: 467px;"></a>]]></content:encoded>
+					</item>
+					<item rdf:about="http://store.steampowered.com/news/37842/">
+			<title><![CDATA[Now Available on Steam - Trapper's Delight, 15% off!]]></title>
+			<link><![CDATA[http://store.steampowered.com/news/37842/]]></link>
+			<guid isPermaLink="true"><![CDATA[http://store.steampowered.com/news/37842/]]></guid>
+			<comments>http://steamcommunity.com//discussions/</comments>
+			<pubDate>Tue, 06 Mar 2018 03:18:48 -0800</pubDate>
+			<author>Valve</author>
+			<category>Valve news update</category>
+			<dc:subject>Valve news update</dc:subject>
+			<dc:creator>Valve</dc:creator>
+			<dc:date>2018-03-06T03:18:48-0800</dc:date>
+						<content:encoded><![CDATA[<a href='http://store.steampowered.com/app/467760/'>Trapper's Delight</a> is Now Available on Steam and is 15% off!*<br><br>In Trapper's Delight players compete to construct deadly labyrinths and then try to escape in one piece. Lure your friends into your deadly trap in local and online multiplayer or test your skills in singleplayer challenges.<br><br>*Offer ends March 13 at 10AM Pacific Time<br><a href="http://store.steampowered.com/app/467760/"><img src="https://steamcdn-a.akamaihd.net/steam/apps/467760/capsule_467x181.jpg" style=" float: left; margin-right: 12px; height: 181px; width: 467px;"></a>]]></content:encoded>
+					</item>
+					<item rdf:about="http://store.steampowered.com/news/37828/">
+			<title><![CDATA[New DLC Available - Rocket League® - DC Super Heroes DLC Pack]]></title>
+			<link><![CDATA[http://store.steampowered.com/news/37828/]]></link>
+			<guid isPermaLink="true"><![CDATA[http://store.steampowered.com/news/37828/]]></guid>
+			<comments>http://steamcommunity.com//discussions/</comments>
+			<pubDate>Mon, 05 Mar 2018 14:20:00 -0800</pubDate>
+			<author>Valve</author>
+			<category>Valve news update</category>
+			<dc:subject>Valve news update</dc:subject>
+			<dc:creator>Valve</dc:creator>
+			<dc:date>2018-03-05T14:20:00-0800</dc:date>
+						<content:encoded><![CDATA[<a href='http://store.steampowered.com/app/772150/'>Rocket League&reg; - DC Super Heroes DLC Pack</a>, all new content for <a href='http://store.steampowered.com/app/252950/'>Rocket League&reg;</a> is Now Available on Steam!<br><br>Experience the ultimate DC Comics crossover as two classic Bat(tle)-Cars from 2012&rsquo;s The Dark Knight Rises and 1989&rsquo;s Batman come to Rocket League!<br>Also included: more than 20 customization items and player banners based on Superman, Wonder Woman, The Flash and other popular characters!<br><br><a href="http://store.steampowered.com/app/772150/"><img src="https://steamcdn-a.akamaihd.net/steam/apps/772150/capsule_467x181.jpg" style=" float: left; margin-right: 12px; height: 181px; width: 467px;"></a>]]></content:encoded>
+					</item>
+					<item rdf:about="http://store.steampowered.com/news/37827/">
+			<title><![CDATA[Portal 2 - Update]]></title>
+			<link><![CDATA[http://store.steampowered.com/news/37827/]]></link>
+			<guid isPermaLink="true"><![CDATA[http://store.steampowered.com/news/37827/]]></guid>
+			<comments>http://steamcommunity.com//discussions/</comments>
+			<pubDate>Mon, 05 Mar 2018 12:23:00 -0800</pubDate>
+			<author>Valve</author>
+			<category>Valve news update</category>
+			<dc:subject>Valve news update</dc:subject>
+			<dc:creator>Valve</dc:creator>
+			<dc:date>2018-03-05T12:23:00-0800</dc:date>
+						<content:encoded><![CDATA[An update has been released for Portal 2.<br><br>- Fixed crashes on multi-core and multi-CPU systems that can allocate more than 32 threads.]]></content:encoded>
+					</item>
+					<item rdf:about="http://store.steampowered.com/news/37781/">
+			<title><![CDATA[Daily Deal - Superflight, 50% Off]]></title>
+			<link><![CDATA[http://store.steampowered.com/news/37781/]]></link>
+			<guid isPermaLink="true"><![CDATA[http://store.steampowered.com/news/37781/]]></guid>
+			<comments>http://steamcommunity.com//discussions/</comments>
+			<pubDate>Mon, 05 Mar 2018 10:00:00 -0800</pubDate>
+			<author>Valve</author>
+			<category>Valve news update</category>
+			<dc:subject>Valve news update</dc:subject>
+			<dc:creator>Valve</dc:creator>
+			<dc:date>2018-03-05T10:00:00-0800</dc:date>
+						<content:encoded><![CDATA[Today's Deal: Save 50% on <a href='http://store.steampowered.com/app/732430/'>Superflight</a>!*<br><br>Look for the deals each day on the front page of Steam.  Or follow us on <a href='http://twitter.com/steam_games'>twitter</a> or <a href='http://www.facebook.com/Steam'>Facebook</a> for instant notifications wherever you are!<br><br>*Offer ends Wednesday at 10AM Pacific Time<br><a href="http://store.steampowered.com/app/732430/"><img src="https://steamcdn-a.akamaihd.net/steam/apps/732430/capsule_467x181.jpg" style=" float: left; margin-right: 12px; height: 181px; width: 467px;"></a>]]></content:encoded>
+					</item>
+					<item rdf:about="http://store.steampowered.com/news/37780/">
+			<title><![CDATA[Daily Deal - Disgaea PC / 魔界戦記ディスガイア PC, 55% Off]]></title>
+			<link><![CDATA[http://store.steampowered.com/news/37780/]]></link>
+			<guid isPermaLink="true"><![CDATA[http://store.steampowered.com/news/37780/]]></guid>
+			<comments>http://steamcommunity.com//discussions/</comments>
+			<pubDate>Sun, 04 Mar 2018 10:00:00 -0800</pubDate>
+			<author>Valve</author>
+			<category>Valve news update</category>
+			<dc:subject>Valve news update</dc:subject>
+			<dc:creator>Valve</dc:creator>
+			<dc:date>2018-03-04T10:00:00-0800</dc:date>
+						<content:encoded><![CDATA[Today's Deal: Save 55% on <a href='http://store.steampowered.com/app/405900/'>Disgaea PC / 魔界戦記ディスガイア PC</a>!*<br><br>Look for the deals each day on the front page of Steam.  Or follow us on <a href='http://twitter.com/steam_games'>twitter</a> or <a href='http://www.facebook.com/Steam'>Facebook</a> for instant notifications wherever you are!<br><br>*Offer ends Tuesday at 10AM Pacific Time<br><a href="http://store.steampowered.com/app/405900/"><img src="https://steamcdn-a.akamaihd.net/steam/apps/405900/capsule_467x181.jpg" style=" float: left; margin-right: 12px; height: 181px; width: 467px;"></a>]]></content:encoded>
+					</item>
+					<item rdf:about="http://store.steampowered.com/news/37793/">
+			<title><![CDATA[Dota 2 Update - March 4th, 2018]]></title>
+			<link><![CDATA[http://store.steampowered.com/news/37793/]]></link>
+			<guid isPermaLink="true"><![CDATA[http://store.steampowered.com/news/37793/]]></guid>
+			<comments>http://steamcommunity.com//discussions/</comments>
+			<pubDate>Sun, 04 Mar 2018 09:28:00 -0800</pubDate>
+			<author>Valve</author>
+			<category>Valve news update</category>
+			<dc:subject>Valve news update</dc:subject>
+			<dc:creator>Valve</dc:creator>
+			<dc:date>2018-03-04T09:28:00-0800</dc:date>
+						<content:encoded><![CDATA[* Fixed Penitence being able to pierce Spell Immunity if the target becomes immune after the projectile is fired]]></content:encoded>
+					</item>
+					<item rdf:about="http://store.steampowered.com/news/37791/">
+			<title><![CDATA[Dota 2 Update - March 3rd 2018]]></title>
+			<link><![CDATA[http://store.steampowered.com/news/37791/]]></link>
+			<guid isPermaLink="true"><![CDATA[http://store.steampowered.com/news/37791/]]></guid>
+			<comments>http://steamcommunity.com//discussions/</comments>
+			<pubDate>Sat, 03 Mar 2018 10:59:00 -0800</pubDate>
+			<author>Valve</author>
+			<category>Valve news update</category>
+			<dc:subject>Valve news update</dc:subject>
+			<dc:creator>Valve</dc:creator>
+			<dc:date>2018-03-03T10:59:00-0800</dc:date>
+						<content:encoded><![CDATA[* Fixed Morphling benefiting from melee attack modifiers when returning from Metamorphosis<br>* Fixed Treant Protector's level 25 talent not affecting the Ancient]]></content:encoded>
+					</item>
+					<item rdf:about="http://store.steampowered.com/news/37790/">
+			<title><![CDATA[Dota 2 Update - March 3rd, 2018]]></title>
+			<link><![CDATA[http://store.steampowered.com/news/37790/]]></link>
+			<guid isPermaLink="true"><![CDATA[http://store.steampowered.com/news/37790/]]></guid>
+			<comments>http://steamcommunity.com//discussions/</comments>
+			<pubDate>Sat, 03 Mar 2018 10:42:00 -0800</pubDate>
+			<author>Valve</author>
+			<category>Valve news update</category>
+			<dc:subject>Valve news update</dc:subject>
+			<dc:creator>Valve</dc:creator>
+			<dc:date>2018-03-03T10:42:00-0800</dc:date>
+						<content:encoded><![CDATA[* Fixed Morphling benefiting from melee attack modifiers when returning from Metamorphosis<br>* Fixed Treant Protector's level 25 talent not affecting the Ancient]]></content:encoded>
+					</item>
+					<item rdf:about="http://store.steampowered.com/news/37779/">
+			<title><![CDATA[Daily Deal - Homefront®: The Revolution, 80% Off]]></title>
+			<link><![CDATA[http://store.steampowered.com/news/37779/]]></link>
+			<guid isPermaLink="true"><![CDATA[http://store.steampowered.com/news/37779/]]></guid>
+			<comments>http://steamcommunity.com//discussions/</comments>
+			<pubDate>Sat, 03 Mar 2018 10:00:00 -0800</pubDate>
+			<author>Valve</author>
+			<category>Valve news update</category>
+			<dc:subject>Valve news update</dc:subject>
+			<dc:creator>Valve</dc:creator>
+			<dc:date>2018-03-03T10:00:00-0800</dc:date>
+						<content:encoded><![CDATA[Today's Deal: Save 80% on <a href='http://store.steampowered.com/app/223100/'>Homefront&reg;: The Revolution</a>!*<br><br>Look for the deals each day on the front page of Steam.  Or follow us on <a href='http://twitter.com/steam_games'>twitter</a> or <a href='http://www.facebook.com/Steam'>Facebook</a> for instant notifications wherever you are!<br><br>*Offer ends Monday at 10AM Pacific Time<br><a href="http://store.steampowered.com/app/223100/"><img src="https://steamcdn-a.akamaihd.net/steam/apps/223100/capsule_467x181.jpg" style=" float: left; margin-right: 12px; height: 181px; width: 467px;"></a>]]></content:encoded>
+					</item>
+					<item rdf:about="http://store.steampowered.com/news/37772/">
+			<title><![CDATA[Now Available on Steam - Call of Duty®: WWII The Resistance DLC Pack 1]]></title>
+			<link><![CDATA[http://store.steampowered.com/news/37772/]]></link>
+			<guid isPermaLink="true"><![CDATA[http://store.steampowered.com/news/37772/]]></guid>
+			<comments>http://steamcommunity.com//discussions/</comments>
+			<pubDate>Fri, 02 Mar 2018 14:43:00 -0800</pubDate>
+			<author>Valve</author>
+			<category>Valve news update</category>
+			<dc:subject>Valve news update</dc:subject>
+			<dc:creator>Valve</dc:creator>
+			<dc:date>2018-03-02T14:43:00-0800</dc:date>
+						<content:encoded><![CDATA[<a href='http://store.steampowered.com/app/476600/'>Call of Duty&reg;: WWII The Resistance DLC Pack 1</a> is Now Available on Steam!<br><br>Continue the epic scale of war with DLC Pack 1 for Call of Duty&reg;: WWII - The Resistance. Fight in iconic locations centered around historic resistance uprisings in three new Multiplayer maps, as well as an all new objective-based War mode mission, 'Operation Intercept'. Plus, experience the latest Nazi Zombies chapter, 'The Darkest Shore'. Buy the Season Pass or Digital Deluxe Edition to access DLC Pack 1. <br><br><a href="http://store.steampowered.com/app/476600/"><img src="https://steamcdn-a.akamaihd.net/steam/apps/476600/capsule_467x181.jpg" style=" float: left; margin-right: 12px; height: 181px; width: 467px;"></a>]]></content:encoded>
+					</item>
+					<item rdf:about="http://store.steampowered.com/news/37685/">
+			<title><![CDATA[Daily Deal - Styx: Shards of Darkness, 66% Off]]></title>
+			<link><![CDATA[http://store.steampowered.com/news/37685/]]></link>
+			<guid isPermaLink="true"><![CDATA[http://store.steampowered.com/news/37685/]]></guid>
+			<comments>http://steamcommunity.com//discussions/</comments>
+			<pubDate>Fri, 02 Mar 2018 10:00:00 -0800</pubDate>
+			<author>Valve</author>
+			<category>Valve news update</category>
+			<dc:subject>Valve news update</dc:subject>
+			<dc:creator>Valve</dc:creator>
+			<dc:date>2018-03-02T10:00:00-0800</dc:date>
+						<content:encoded><![CDATA[Today's Deal: Save 66% on <a href='http://store.steampowered.com/app/355790/'>Styx: Shards of Darkness</a>!*<br><br>Look for the deals each day on the front page of Steam.  Or follow us on <a href='http://twitter.com/steam_games'>twitter</a> or <a href='http://www.facebook.com/Steam'>Facebook</a> for instant notifications wherever you are!<br><br>*Offer ends Sunday at 10AM Pacific Time<br><a href="http://store.steampowered.com/app/355790/"><img src="https://steamcdn-a.akamaihd.net/steam/apps/355790/capsule_467x181.jpg" style=" float: left; margin-right: 12px; height: 181px; width: 467px;"></a>]]></content:encoded>
+					</item>
+					<item rdf:about="http://store.steampowered.com/news/37758/">
+			<title><![CDATA[Now Available on Steam - Pit People®]]></title>
+			<link><![CDATA[http://store.steampowered.com/news/37758/]]></link>
+			<guid isPermaLink="true"><![CDATA[http://store.steampowered.com/news/37758/]]></guid>
+			<comments>http://steamcommunity.com//discussions/</comments>
+			<pubDate>Fri, 02 Mar 2018 09:03:42 -0800</pubDate>
+			<author>Valve</author>
+			<category>Valve news update</category>
+			<dc:subject>Valve news update</dc:subject>
+			<dc:creator>Valve</dc:creator>
+			<dc:date>2018-03-02T09:03:42-0800</dc:date>
+						<content:encoded><![CDATA[<a href='http://store.steampowered.com/app/291860/'>Pit People&reg;</a> is Now Available on Steam!<br><br>In this fast-paced, turn-based, co-op adventure you'll quest and explore, find awesome loot, customize your fighters, and recruit strange species! Come master your destiny in this strategic game of positioning.<br><a href="http://store.steampowered.com/app/291860/"><img src="https://steamcdn-a.akamaihd.net/steam/apps/291860/capsule_467x181.jpg" style=" float: left; margin-right: 12px; height: 181px; width: 467px;"></a>]]></content:encoded>
+					</item>
+					<item rdf:about="http://store.steampowered.com/news/37719/">
+			<title><![CDATA[Dota 2 Update - March 1st, 2018]]></title>
+			<link><![CDATA[http://store.steampowered.com/news/37719/]]></link>
+			<guid isPermaLink="true"><![CDATA[http://store.steampowered.com/news/37719/]]></guid>
+			<comments>http://steamcommunity.com//discussions/</comments>
+			<pubDate>Thu, 01 Mar 2018 12:02:00 -0800</pubDate>
+			<author>Valve</author>
+			<category>Valve news update</category>
+			<dc:subject>Valve news update</dc:subject>
+			<dc:creator>Valve</dc:creator>
+			<dc:date>2018-03-01T12:02:00-0800</dc:date>
+						<content:encoded><![CDATA[7.10:<br>====<br><br>* Enabled Dark Willow in Captain's Mode<br><br>* Bounty Rune base gold bounty increased from 50 to 60 (affects runes after the first one)<br>* Bounty Rune no longer gives XP. Previously gave 0 at the start and increased by 7 per minute. <br>* Tome of Knowledge XP bonus increased from 500 to 700<br><br>* Melee Creeps gold bounty reduced by 1 (reduced from 41 to 40)<br><br>* Randoming now gives a Faerie Fire instead of a branch<br>* Bonus hero count increased from 10 to 12<br><br><br><br>* Aeon Disk: Cooldown reduced from 100 to 90<br><br>* Boots of Speed: Cost increased from 400 to 500<br>* Boots of Speed: Movement bonus increased from 40 to 50<br>* Phase Boots: Movement bonus increased from 45 to 50<br>* Power Treads: Movement bonus increased from 45 to 50<br><br>* Animal Courier: Flying Courier movement speed increased from 450 to 460<br><br>* Monkey King Bar: Added a sound effect for successful procs<br><br>* Soul Ring: Health cost increased from 150 to 170<br><br><br><br><br>* Abaddon: Level 15 Talent increased from +50 Mist Coil Heal/Damage to +60<br>* Abaddon: Level 20 Talent increased from +15% Cooldown Reduction to +20%<br>* Abaddon: Level 25 Talent reduced from +250 Aphotic Shield Health to +225<br><br>* Alchemist: Level 20 Talent increased from +25% Cleave to +30%<br><br>* Ancient Apparition: Level 15 Talent increased from -1.5s Ice Vortex Cooldown to -2.5s<br>* Ancient Apparition: Level 25 Talent changed from 4 Charges of Cold Feet to 900 AoE Cold Feet<br><br>* Anti-Mage: Level 10 Talent changed from +175 Health to +10 Strength<br>* Anti-Mage: Level 15 Talent changed from -2s Blink Cooldown to +400 Blink Cast Range<br>* Anti-Mage: Level 20 Talent increased from +300 Blink Cast Range to -2.5s Blink Cooldown<br><br>* Arc Warden: Level 10 Talent changed from +5 Armor to 8% Cooldown Reduction<br>* Arc Warden: Level 15 Talent increased from +2s Flux Duration to +3s<br>* Arc Warden: Level 20 Talent increased from +100 Attack Range to +125<br>* Arc Warden: Level 20 Talent changed from +10% Cooldown Reduction to -1.5s Spark Wraith Cooldown<br><br>* Axe: Level 15 Talent increased from +30 Movement Speed to +40<br><br>* Bloodseeker: Bloodrage now heals you for 50% of its value if you do not get the last hit but are within 300 AoE of a dying hero.<br><br>* Centaur Warrunner: Level 20 Talent increased from +250 Double Edge Damage to +300<br><br>* Clinkz: Strafe projectile dodge count increased from 3 to 4<br>* Clinkz: Level 15 Talent increased from +15% Evasion to +20%<br><br>* Crystal Maiden: Level 10 Talent increased from +200 Health to +250<br>* Crystal Maiden: Level 15 Talent increased from +90 Gold/Min to +120<br><br>* Dark Seer: Level 20 Talent increased from +300 AoE Surge to +400<br><br>* Dazzle: Base movement speed increased from 305 to 310<br>* Dazzle: Level 20 Talent increased from +30 Poison Touch DPS to +45<br><br>* Doom: Base Intelligence increased by 2<br>* Doom: Level 10 Talent changed from +25 Movement Speed to +16% Scorched Earth Movement Speed<br><br>* Dragon Knight: Agility gain reduced from 2.2 to 2.0<br>* Dragon Knight: Level 10 Talent changed from +30 Attack Speed to -20% Breathe Fire Damage Reduction<br><br>* Drow Ranger: Level 15 Talent increased from +400 Gust Distance/Knockback to +550<br>* Drow Ranger: Level 20 Talent increased from +2s Gust Duration to +3s<br><br>* Ember Spirit: Sleight of Fist bonus hero damage increased from 25/50/75/100 to 30/60/90/120<br><br>* Enchantress: Nature's Attendants manacost increased from 125 to 140<br><br>* Gyrocopter: Improved visual effect for Flak Cannon projectiles<br>* Gyrocopter: Homing Missile bounty increased from 25 to 50<br>* Gyrocopter: Homing Missile cooldown increased from 20/17/14/11 to 26/21/16/11<br><br>* Invoker: Level 10 Talent from +0.3s Tornado Lift Time to +0.5s<br>* Invoker: Level 15 Talent from +1.5s Cold Snap Duration to +2.5s<br>* Invoker: Cataclysm Sunstrikes spawn distance is now slightly closer to each target (from 175-250 distance away to 160-220)<br><br>* Io: Tether duration increased from 12 to 14<br><br>* Jakiro: Level 10 Talent increased from +25% XP to +30%<br>* Jakiro: Level 15 Talent increased from +250 Attack Range to +300<br><br>* Kunkka: Tidebringer damage increased from 25/45/65/85 to 25/50/75/100<br><br>* Leshrac: Lightning Storm manacost rescaled from 90/100/110/120 to 75/90/105/120<br><br>* Lich: Level 25 Talent from Attacks Apply 30% MS and AS Slow to 40%<br><br>* Lina: Level 10 Talent increased from +100 Cast Range to +125<br>* Lina: Level 10 Talent increased from +25 Damage to +30<br>* Lina: Level 15 Talent increased from +300 Health to +350<br>* Lina: Level 20 Talent increased from +10% Spell Amplification to +12%<br><br>* Lion: Mana Drain slow increased from 14/16/18/20 to 16/19/22/25%<br>* Lion: Level 10 Talent increased from +75 Damage to +90<br>* Lion: Level 15 Talent increased from +90 Gold/Min to +120<br><br>* Lone Druid: Spirit Bear health regeneration increased from 4/5/6/7 to 5/6/7/8<br>* Lone Druid: Level 15 Talent increased from -8s Savage Roar Cooldown to -12s<br><br>* Luna: Level 15 Talent from -3s Lucent Beam Cooldown to -4s<br><br>* Lycan: Base damage reduced by 3<br><br>* Magnus: Base strength increased by 1<br>* Magnus: Level 25 Talent increased from +0.75s Reverse Polarity to +1s<br><br>* Mirana: Starfall manacost from 100/120/140/160 to 80/105/130/155<br>* Mirana: Level 25 Talent increased from -70 Moonlight Shadow Cooldown to -80<br><br>* Monkey King: Base damage increased by 2<br>* Monkey King: Fixed Mischief not showing the right particles for the first bounty rune<br>* Monkey King: Level 10 Talent increased from +150 Tree Dance Vision AoE to +300<br>* Monkey King: Level 15 Talent increased from +300 Tree Dance Cast Range to +600<br>* Monkey King: Level 20 Talent increased from +300 Primal Spring Damage to +400<br><br>* Morphling: Morph can now be toggled to go back and forth from the original target until the duration runs out. Has a 1 second toggle cooldown. <br><br>* Naga Siren: Sleep buff linger time reduced from 0.5 to 0.4<br>* Naga Siren: Song of the Siren manacost increased from 100 to 100/150/200<br><br>* Nature's Prophet: Wraith of Nature cooldown reduced from 70/65/60 to 60<br>* Nature's Prophet: Level 10 Talent increased from +30 Movement Speed to +40<br>* Nature's Prophet: Level 15 Talent increased from +8 Armor to +10<br><br>* Necrophos: Level 15 Talent changed from +30 Movement Speed to +16% Ghost Shroud Slow<br>* Necrophos: Level 15 Talent changed from +300 Health to +40 Death Pulse Heal<br><br>* Ogre Magi: Level 20 Talent increased from +30 Strength to +40<br><br>* Omniknight: Purification cooldown increased from 11/10/9/8 to 11<br><br>* Oracle: Turn rate improved from 0.5 to 0.7<br>* Oracle: Intelligence growth increased from 2.9 to 3.2<br><br>* Outworld Devourer: Astral Imprisonment manacost increased from 120/140/160/180 to 140/160/180/200<br>* Outworld Devourer: Level 10 Talent increased from +200 Health to +250<br><br>* Phantom Assassin: Stifiling Dagger Talent now has a 300 cast range buffer for the secondary target<br><br>* Phantom Lancer: Level 25 Talent increased from -5s Doppelganger Cooldown to -7s<br><br>* Phoenix: Level 15 Talent changed from +40% XP Gain to +500 Health<br>* Phoenix: Level 20 Talent increased from +1s Supernova Stun Duration to +1.25s<br><br>* Pudge: Rot slow reduced from 20/24/28/32% to 17/22/27/32%<br><br>* Razor: Static Link manacost increased from 50 to 65<br><br>* Riki: Level 15 Talent increased from -5s Smokescreen Cooldown to -7s<br><br>* Rubick: Level 15 Talent increased from -35 Fade Bolt Hero Attack to -45<br><br>* Shadow Demon: Level 10 Talent increased from +25% XP Gain to 30%<br>* Shadow Demon: Level 25 Talent changed from +5s Disruption Banish Duration to 2 Charges of Disruption<br><br>* Shadow Fiend: Shadow Raze damage increase per stack reduced from 80 to 50/60/70/80<br><br>* Skywrath Mage: Level 15 Talent increased from -6s Ancient Seal Cooldown to -8s<br><br>* Slardar: Level 10 Talent increased from +20 to +25 Damage<br><br>* Slark: Level 10 Talent increased from +8 Strength to +10<br><br>* Spectre: Level 25 Talent increased from +20% Haunt Illusion Damage to +40%<br><br>* Sven: Level 15 Talent changed from +30 Damage to Storm Hammer Dispels Enemies<br>* Sven: Level 20 Talent changed from Storm Hammer Dispels Enemies to -5s Storm Hammer Cooldown<br>* Sven: Level 25 Talent changed from -9s Storm Hammer Cooldown to +0.75s Storm Hammer Stun Duration<br><br>* Terrorblade: Base HP regen reduced from 3.25 to 3.0<br>* Terrorblade: Reflection no longer reduces attack speed<br><br>* Tinker: Laser Scepter bounce radius reduced from 650 to 400<br>* Tinker: Laser manacost increased from 95/120/145/170 to 110/130/150/170<br>* Tinker: Level 20 Talent from +100 Damage to +10 Armor<br><br>* Tiny: Tree Grab cooldown increased from 18/16/14/12 to 24/20/16/12<br><br>* Treant Protector: Level 10 Talent changed from +35% XP Gain to +2 Living Armor Block Instances<br>* Treant Protector: Level 15 Talent improved from 3s Tree Respawn Time to 2s<br>* Treant Protector: Level 25 Talent changed from +6 Living Armor Block Instances to 700 AoE Living Armor (heroes and buildings)<br><br><br>* Troll Warlord: Level 10 Talent increased from +200 Health to +250<br>* Troll Warlord: Level 15 Talent increased from +50 Whirling Axes Damage to +75<br><br>* Undying: Level 10 Talent increased from +100 Cast Range to +150<br>* Undying: Level 15 Talent increased from +20 Decay Duration to +30<br>* Undying: Level 20 Talent increased from +3 Tombstone Attacks to +4<br><br>* Ursa: Fury Swipes Roshan duration increased from 6 to 10<br><br>* Venomancer: Level 15 Talent increased from +150 Cast Range to +200<br>* Venomancer: Level 20 Talent increased from +6s Poison Nova Duration to +7s<br>* Venomancer: Level 25 Talent increased from +600 Poison Nova AoE to +800<br><br>* Visage: Soul Assumption Talent now has a 300 cast range buffer for the secondary targets<br>* Visage: Added secondary ability on Visage to make the nearest Familiar land each time it is clicked.<br><br>* Warlock: Level 10 Talent increased from +125 Cast Range to +150<br>* Warlock: Level 15 Talent increased from +40% XP Gain to +60%<br>* Warlock: Level 20 Talent increased from +250 Shadow Word AoE to +300<br><br>* Weaver: Level 10 Talent increased from +25% XP Gain to +35%<br><br>* Windranger: Shackleshot Manacost reduced from 90/100/110/120 to 70/85/100/115<br>* Windranger: Level 20 Talent increased from +0.5s Shackleshot Duration to +1s<br><br>* Winter Wyvern: Arctic Burn manacost reduced from 120/110/100/90 to 90<br>* Winter Wyvern: Level 10 Talent increased from +50 Damage to +60<br><br>* Wraith King: Level 15 Talent changed from +5 Max Skeletons to +25 Skeletons Attack Damage<br>* Wraith King: Level 20 Talent changed from +30 Skeletons Attack Damage to 2x Skeletons Spawned<br><br>* Zeus: Level 25 Talent increased from +200 Cast Range to +275]]></content:encoded>
+					</item>
+					<item rdf:about="http://store.steampowered.com/news/37573/">
+			<title><![CDATA[Weekend Deal - DC Franchise, Up to 75% Off]]></title>
+			<link><![CDATA[http://store.steampowered.com/news/37573/]]></link>
+			<guid isPermaLink="true"><![CDATA[http://store.steampowered.com/news/37573/]]></guid>
+			<comments>http://steamcommunity.com//discussions/</comments>
+			<pubDate>Thu, 01 Mar 2018 10:22:00 -0800</pubDate>
+			<author>Valve</author>
+			<category>Valve news update</category>
+			<dc:subject>Valve news update</dc:subject>
+			<dc:creator>Valve</dc:creator>
+			<dc:date>2018-03-01T10:22:00-0800</dc:date>
+						<content:encoded><![CDATA[The <a href="http://store.steampowered.com/app/694560/">DC Franchise Sale</a> is on now! Save up to 75% on great DC Comics titles like Injustice 2, Batman: Arkham Knight, Lego Batman and more!*<br><br>*Offer ends Monday at 10AM Pacific Time<br><a href="http://store.steampowered.com/app/694560/"><img src="https://steamcdn-a.akamaihd.net/steam/news/37573/news_post.jpg?t=1519680944" style=" float: left; margin-right: 12px;"></a>]]></content:encoded>
+					</item>
+					<item rdf:about="http://store.steampowered.com/news/37684/">
+			<title><![CDATA[Daily Deal - Comedy Night, 30% Off]]></title>
+			<link><![CDATA[http://store.steampowered.com/news/37684/]]></link>
+			<guid isPermaLink="true"><![CDATA[http://store.steampowered.com/news/37684/]]></guid>
+			<comments>http://steamcommunity.com//discussions/</comments>
+			<pubDate>Thu, 01 Mar 2018 10:00:00 -0800</pubDate>
+			<author>Valve</author>
+			<category>Valve news update</category>
+			<dc:subject>Valve news update</dc:subject>
+			<dc:creator>Valve</dc:creator>
+			<dc:date>2018-03-01T10:00:00-0800</dc:date>
+						<content:encoded><![CDATA[Today's Deal: Save 30% on <a href='http://store.steampowered.com/app/665360/'>Comedy Night</a>!*<br><br>Look for the deals each day on the front page of Steam.  Or follow us on <a href='http://twitter.com/steam_games'>twitter</a> or <a href='http://www.facebook.com/Steam'>Facebook</a> for instant notifications wherever you are!<br><br>*Offer ends Saturday at 10AM Pacific Time<br><a href="http://store.steampowered.com/app/665360/"><img src="https://steamcdn-a.akamaihd.net/steam/apps/665360/capsule_467x181.jpg" style=" float: left; margin-right: 12px; height: 181px; width: 467px;"></a>]]></content:encoded>
+					</item>
+					<item rdf:about="http://store.steampowered.com/news/37680/">
+			<title><![CDATA[Square Enix Publisher Weekend, Up to 80% Off!]]></title>
+			<link><![CDATA[http://store.steampowered.com/news/37680/]]></link>
+			<guid isPermaLink="true"><![CDATA[http://store.steampowered.com/news/37680/]]></guid>
+			<comments>http://steamcommunity.com//discussions/</comments>
+			<pubDate>Thu, 01 Mar 2018 10:00:00 -0800</pubDate>
+			<author>Valve</author>
+			<category>Valve news update</category>
+			<dc:subject>Valve news update</dc:subject>
+			<dc:creator>Valve</dc:creator>
+			<dc:date>2018-03-01T10:00:00-0800</dc:date>
+						<content:encoded><![CDATA[Save up to 80% on <a href="http://store.steampowered.com/sale/squareenix-publisher-weekend/">Square Enix games</a> as part of this week's Weekend Deal*!<br><br>*Offer ends Monday at 10AM Pacific Time<br><a href="http://store.steampowered.com/sale/squareenix-publisher-weekend/"><img src="https://steamcdn-a.akamaihd.net/steam/news/37680/SQEX_PubSale_467x181.jpg?t=1519860069" style=" float: left; margin-right: 12px; height: 181px; width: 467px;"></a>]]></content:encoded>
+					</item>
+	</rdf:RDF>
