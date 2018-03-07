@@ -1,0 +1,28 @@
+body{
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+.sub-logo{
+  display: inline-block;
+  width: 100%;
+}
+
+.sub-soon{
+  width: 50rem;
+  margin-left: auto;
+}
+
+@media screen and (max-width){
+  .sub-soon{
+    width: 30rem;
+  }
+}
+
+.logo-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
