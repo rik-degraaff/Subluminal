@@ -35,6 +35,7 @@ body{
 }
 
 .button{
+
   background-color: #1a1350; /* Green */
     border: none;
     color: white;
@@ -47,6 +48,10 @@ body{
     margin-bottom: 1rem;
 }
 
+.button:hover{
+  cursor: pointer;
+}
+
 .social-link{
   height: 3rem;
   width: auto;
@@ -55,4 +60,17 @@ body{
 
 .social{
   display: inline-block;
+}
+
+.button-preorder{
+  width: auto;
+}
+
+.details{
+  font-size: 0.2rem;
+}
+
+a{
+  text-decoration: none;
+  color: white;
 }
