@@ -1,9 +1,8 @@
+# Subluminal Project Repository
 
 > Once upon a time a clever programer named Bob created in the basement of his mom's house 4 different AIs. Throughout his whole life Bob tried to get the AIs to work together, but sadly he never achived his this goal. 
 After Bob passed away the world forgot about him and his work. 
 But the AI's never forgot, ever single one of them evolve and adopted, with the goal to be the best AI in the whole universe...
-
-# Subluminal Project Repository
 
 [![Logo](./assets/logo/subluminal_logo.png)](http://subluminal.tech) **by Bordeaux Ink.**
 
