@@ -63,7 +63,7 @@ For a detailed description go to the [/design/](/design/) folder.
 
 ![Mockup Image 1](./assets/mockup/ui_1.png)  
 
-![Mockup Image 3](./assets/mockup/ui_3.png)
+![Mockup Image 4](./assets/mockup/ui_4.png)
 
 
 ## Useful Resources/Tutorials
