@@ -12,14 +12,14 @@ before_script:
 test:
   stage: test
   script:
-    - gradlew test
+    - gradle test
   tags:
   - cs108
 
 build:
   stage: build
   script:
-  - gradlew build
+  - gradle build
   tags:
   - cs108
 
