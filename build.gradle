@@ -4,18 +4,12 @@ version '0.0.1-ALPHA'
 apply plugin: 'java'
 
 def description = """
-    This is an example project which serves as a possible entry point for the \"Programmierprojekt\" codebase.
-    
-    You are free to modify this file to your needs.
-
     Project: ${project.name}
     
-    Author(s):  Alice <alice@mail.com>
-                Bob <bob@mail.com>
-                Alan Turing <alan.turing@example.com>
-
-    More information to be added ...
-                
+    Author(s):  Rik de Graaff,
+                Lucas Galery Käser,
+                Luc Kury,
+                David Lengweiler
 """
 
 sourceSets {
@@ -31,12 +25,18 @@ sourceSets {
          }
 }
 
+project.buildDir = '/app/build/'
+
 //specifies source compatibility to Java 8
 sourceCompatibility = 1.8
 
 //adds maven central as a maven repository
 repositories {
     mavenCentral()
+    dependencies {
+        testCompile 'junit:junit:4.12'
+        compile 'junit:junit:4.12'
+    }
 }
 
 dependencies {

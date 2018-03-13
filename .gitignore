@@ -4,5 +4,9 @@
 
 
 #folders
-app/out/
+.gradle/
 .vscode/
+
+app/out/
+app/build/
+gradle/
