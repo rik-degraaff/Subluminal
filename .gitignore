@@ -1,6 +1,8 @@
 #files
 *.class
+~*.*
 
 
 #folders
 app/out/
+.vscode/
