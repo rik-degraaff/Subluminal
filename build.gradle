@@ -40,20 +40,6 @@ repositories {
 }
 
 dependencies {
-    // EXAMPLE: LOGGING
-    /*
-    The following adds the logging framework Apache Log4J2.
-    The statements serve as an example on how ot use libraries.
-    Since these are `compile` dependencies, they are packed in the final jar.
-     */
-    //compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.10.0'
-    //compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.10.0'
-
-    // JUNIT
-    /*
-    The following dependency is required to perform JUnit tests, as for example HelloWorldTest.
-    Since it is a `testCompile` dependency, it will not be part of the final product, only during testing.
-     */
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 
