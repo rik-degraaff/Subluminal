@@ -7,19 +7,20 @@ stages:
 before_script:
 #  - echo `pwd` # debug
 #  - echo "$CI_BUILD_NAME, $CI_BUILD_REF_NAME $CI_BUILD_STAGE" # debug
+  - 
 #  - export GRADLE_USER_HOME=`pwd`/.gradle
 
 test:
   stage: test
   script:
-    - gradle test
+    - ./gradlew test
   tags:
   - cs108
 
 build:
   stage: build
   script:
-  - gradle build
+  - ./gradle build
   tags:
   - cs108
 
