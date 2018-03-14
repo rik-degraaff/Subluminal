@@ -12,7 +12,7 @@ export default {
   name: 'App',
   data () {
     return {
-      msg: 'Welcome Traveler,'+ '\n' + 'You Just Discovered'
+      msg: 'Welcome Traveler'
     }
   }
 }
@@ -26,10 +26,13 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  box-sizing: content-box;
 }
 html {
-   font-family: 'Press Start 2P', cursive;
    background: black;
+}
+*{
+  font-family: 'Press Start 2P', cursive;
 }
 .banner{
    width: 100%;
