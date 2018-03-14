@@ -32,12 +32,12 @@ $ git push ...
 2.3. Contain your name token  
 
 For example:  
-| Type | Name | Token |
-|------|------|-------|
-| -ft (features) | [a-zA-Z0-9_]* | -dav |
-| -hf (hotfixes)  |   | -lgk  |
-| -rl (releases) |   | -luc  |
-| ... |   | -rik |
+| Type            | Name          | Token|
+| --------------- | ------------- | ---- |
+| -ft (features)  | [a-zA-Z0-9_]* | -dav |
+| -hf (hotfixes)  |               | -lgk |
+| -rl (releases)  |               | -luc |
+| ...             | ...           | -rik |
 
 3. On ``git.scicore.unibas.ch`` create a pull request to the ``dev`` branch. It will be merged on review by the collective.
 4. Merges into master should be a rare thing (milestones and important releases).
