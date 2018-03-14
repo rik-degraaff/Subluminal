@@ -29,12 +29,13 @@
     </ul>
     <h2>Preorder</h2>
     <ul>
-      <li>
+      <li class="button-pixel">
         <a
           href="http://buy.subluminal.tech/store.steampowered.com/app/427520/Factorio/index.html"
           target="_blank"
         >
           Steam*
+          <p class="mini-details">*not an actual steam page</p>
         </a>
       </li>
       
@@ -65,5 +66,12 @@ li {
 a {
   color: #42b983;
   text-decoration: none;
+}
+.mini-details{
+  font-size: 0.25rem;
+}
+.button-pixel{
+  padding: 5px;
+  background-color: white;
 }
 </style>

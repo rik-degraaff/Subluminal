@@ -27,10 +27,8 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-* {
+html {
    font-family: 'Press Start 2P', cursive;
-   line-height: 1.5rem;
-   font-size: 1.25rem;
    background: black;
 }
 .banner{
