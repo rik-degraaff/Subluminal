@@ -1,0 +1,81 @@
+group 'example.com'
+version '0.0.1-ALPHA'
+
+apply plugin: 'java'
+
+def description = """
+    Project: ${project.name}
+    
+    Author(s):  Rik de Graaff,
+                Lucas Galery Käser,
+                Luc Kury,
+                David Lengweiler
+"""
+
+sourceSets {
+    main {
+         java {
+              srcDir 'app/src'
+              }
+         }
+    test {
+         java {
+              srcDir 'app/src'
+              }
+         }
+}
+
+project.buildDir = '/app/build/'
+
+//specifies source compatibility to Java 8
+sourceCompatibility = 1.8
+
+//adds maven central as a maven repository
+repositories {
+    mavenCentral()
+    dependencies {
+        testCompile 'junit:junit:4.12'
+        compile 'junit:junit:4.12'
+    }
+}
+
+dependencies {
+    // EXAMPLE: LOGGING
+    /*
+    The following adds the logging framework Apache Log4J2.
+    The statements serve as an example on how ot use libraries.
+    Since these are `compile` dependencies, they are packed in the final jar.
+     */
+    //compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.10.0'
+    //compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.10.0'
+
+    // JUNIT
+    /*
+    The following dependency is required to perform JUnit tests, as for example HelloWorldTest.
+    Since it is a `testCompile` dependency, it will not be part of the final product, only during testing.
+     */
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+/*
+The following statements are respondible for:
+    a) adding the compile-libraries to the jar
+    b) setting the executable main class, so the jar is executable
+ */
+jar {
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } // a) Adding dependencies to jar
+    }
+    manifest{
+        attributes 'Main-Class': 'ch.unibas.cs.p9.fs18.example.HelloWorld' // b) Set main class
+    }
+}
+
+/**
+ * Example task which simply prints the project's description
+ */
+task info {
+    doFirst{
+        println "${description}"
+    }
+}

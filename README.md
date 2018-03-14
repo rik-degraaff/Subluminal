@@ -1,5 +1,9 @@
 # Subluminal Project Repository
 
+> Once upon a time a clever programer named Bob created in the basement of his mom's house 4 different AIs. Throughout his whole life Bob tried to get the AIs to work together, but sadly he never achived his this goal. 
+After Bob passed away the world forgot about him and his work. 
+But the AI's never forgot, ever single one of them evolve and adopted, with the goal to be the best AI in the whole universe...
+
 [![Logo](./assets/logo/subluminal_logo.png)](http://subluminal.tech) **by Bordeaux Ink.**
 
 
@@ -24,10 +28,23 @@ $ git push ...
 ```
 
 
-## Contribute
+## Contributing (&Branching)
 1. Make sure to checkout the most recent ``dev`` branch.
-2. Create a new branch to commit your changes.
-3. On ``git.scicore.unibas.ch`` create a pull request to the ``dev`` branch.
+2. Create a new branch to commit your changes.  Your branch names should adhere to the following conventions:  
+2.1. Start with a branch type descriptor
+2.2. Contain your branch name in snake case (word separated by underscores)  
+2.3. Contain your name token  
+
+For example:
+| Type | Name | Token |
+|------|------|-------|
+| -ft (features) | [a-zA-Z0-9_]* | -dav |
+| -hf (hotfixes)  |   | -lgk  |
+| -rl (releases) |   | -luc |
+|   |   | -rik |
+
+3. On ``git.scicore.unibas.ch`` create a pull request to the ``dev`` branch. It will be merged on review by the collective.
+4. Merges into master should be a rare thing (milestones and important releases).
 
 For example:
 ```sh
@@ -46,7 +63,7 @@ For a detailed description go to the [/design/](/design/) folder.
 
 ![Mockup Image 1](./assets/mockup/ui_1.png)  
 
-![Mockup Image 2](./assets/mockup/ui_2.png)
+![Mockup Image 4](./assets/mockup/ui_4.png)
 
 
 ## Useful Resources/Tutorials

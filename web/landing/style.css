@@ -1,0 +1,76 @@
+body{
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  font-family: 'Press Start 2P', cursive;
+}
+.sub-logo{
+  display: inline-block;
+  width: 100%;
+}
+
+.sub-soon{
+  width: 50rem;
+  margin-left: auto;
+}
+
+@media screen and (max-width){
+  .sub-soon{
+    width: 30rem;
+  }
+}
+
+.logo-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.coming-soon{
+  margin-left: auto;
+  margin-right: 40px;
+  text-align: right;
+}
+
+.button{
+
+  background-color: #1a1350; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    font-family: 'Press Start 2P', cursive;
+    margin-bottom: 1rem;
+}
+
+.button:hover{
+  cursor: pointer;
+}
+
+.social-link{
+  height: 3rem;
+  width: auto;
+  display: inline-block;
+}
+
+.social{
+  display: inline-block;
+}
+
+.button-preorder{
+  width: auto;
+}
+
+.details{
+  font-size: 0.2rem;
+}
+
+a{
+  text-decoration: none;
+  color: black;
+}
