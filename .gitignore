@@ -1,12 +1,14 @@
 #files
 ~*.*
 *.class
+*.classpath
+*.project
 .idea/**/*.xml
 .idea/*.xml
 
-
 #folders
 .gradle/
+.settings/
 .vscode/
 
 app/out/

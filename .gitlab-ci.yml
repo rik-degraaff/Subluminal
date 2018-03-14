@@ -5,6 +5,7 @@ stages:
   - build
  
 before_script:
+  - cd "/home/gradle/project"
 
 test:
   stage: test
