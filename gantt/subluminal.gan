@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><project name="Subluminal" company="Bordeaux Ink" webLink="http://" view-date="2018-02-25" view-index="0" gantt-divider-location="805" resource-divider-location="300" version="2.8.6" locale="en_US">
     <description>
         <![CDATA[
-        Subluminal game for Programmierprojekt UniBas FS2018
+        
+        
+        Subluminal game for Programmierprojekt UniBas FS2018!
+    
+    
     ]]>
     </description>
     <view zooming-state="default:5" id="gantt-chart">
