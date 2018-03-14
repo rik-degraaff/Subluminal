@@ -2,7 +2,7 @@
   <div id="app">
     <pre><h1>{{ msg }}</h1></pre>
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
-    <img src="./assets/subluminal_logo.png">
+    <img class="banner" src="./assets/subluminal_logo.png">
     <router-view/>
   </div>
 </template>
@@ -29,7 +29,12 @@ export default {
 }
 * {
    font-family: 'Press Start 2P', cursive;
-   line-height: 3rem;
+   line-height: 1.5rem;
+   font-size: 1.25rem;
    background: black;
+}
+.banner{
+   width: 100%;
+   height: auto;
 }
 </style>
