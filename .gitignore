@@ -8,6 +8,7 @@
 
 
 #folders
+.gradle/
 .vscode/
 
 bin/
