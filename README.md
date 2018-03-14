@@ -31,7 +31,9 @@ $ git push ...
 2.2. Contain your branch name in snake case (word separated by underscores)  
 2.3. Contain your name token  
 
-### For example:  
+For example:  
+
+
 | Type            | Name          | Token |
 | --------------- | ------------- | ----- |
 | -ft (features)  | ...           | -dav  |
