@@ -1,6 +1,6 @@
 <template>
   <div class="hello">
-    <h2>Social</h2>
+    <h3>Social</h3>
     <ul>
       <li>
         <a
@@ -27,7 +27,7 @@
         </a>
       </li>
     </ul>
-    <h2>Preorder</h2>
+    <h3>Preorder</h3>
     <ul>
       <li class="button-pixel">
         <a
@@ -38,7 +38,7 @@
           <p class="mini-details">*not an actual steam page</p>
         </a>
       </li>
-      
+
     </ul>
     <h1>More Coming Soon</h1>
   </div>
@@ -52,26 +52,53 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-  text-decoration: none;
-}
-.mini-details{
-  font-size: 0.25rem;
-}
-.button-pixel{
-  padding: 5px;
-  background-color: white;
-}
+  h1, h2 {
+    font-weight: normal;
+  }
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  li {
+    display: inline-block;
+    margin: 0 10px;
+  }
+  a {
+    color: #42b983;
+    text-decoration: none;
+  }
+  .mini-details{
+    font-size: 0.25rem;
+  }
+/*  .button-pixel{
+    padding: 5px;
+    border:2px solid black;
+    border-radius:0;
+    background-color: white;
+    position: relative;
+  }
+  .button-pixel::after, .button-pixel::before{
+    position:absolute; left:-4px; top:0px;
+    display:block; content:'';
+    border:2px solid black;
+    width:3px; height:90%;
+    background:inherit;
+    border-width:2px 0 2px 2px;
+  }
+  .button-pixel::after{
+    left:auto; right:-4px; top:0px;
+    border-width:2px 2px 2px 0;
+  }
+  .button-pixel:hover{
+    background-color: black;
+    color: white;
+  }*/
+  .button-pixel{
+    border: 3px solid transparent;
+    padding: 10px 5px;
+  }
+
+  .button-pixel:hover{
+    border: 3px red solid;
+  }
 </style>
