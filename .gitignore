@@ -1,6 +1,7 @@
 #files
 *.class
 ~*.*
+.idea/**/*.xml
 
 
 #folders
