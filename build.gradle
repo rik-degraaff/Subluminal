@@ -19,6 +19,7 @@ sourceSets {
               srcDir 'app/src'
               }
          }
+
     test {
          java {
               srcDir 'app/src'
@@ -33,11 +34,12 @@ sourceCompatibility = 1.8
 
 //adds maven central as a maven repository
 repositories {
-    jCentral()
-    dependencies {
-        testCompile 'junit:junit:4.12'
-        compile 'junit:junit:4.12'
-    }
+    jcenter()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+    compile 'junit:junit:4.12'
 }
 
 /*
