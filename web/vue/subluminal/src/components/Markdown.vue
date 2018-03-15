@@ -4,13 +4,15 @@
         <div class="sub-rules">
                 {{rules}}
         </div>
+        <markdown></markdown>
   </div>
 </template>
 
 <script>
-import rules from '../assets/GameRules.md'
+import Markdown from '../assets/GameRules.md'
 
 export default {
+    components: {Markdown},
     data() {
         return {
             rules: "test"
