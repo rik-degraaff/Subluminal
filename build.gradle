@@ -16,13 +16,13 @@ def description = """
 sourceSets {
     main {
          java {
-              srcDir 'app/src'
+              srcDir 'app/src/main/java'
               }
          }
 
     test {
          java {
-              srcDir 'app/src'
+              srcDir 'app/src/test/java'
               }
          }
 }
