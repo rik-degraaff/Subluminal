@@ -3,13 +3,11 @@
 *.classpath
 *.project
 ~*.*
-.idea/*.xml
-.idea/**/*.xml
 
 
 #folders
 .gradle/
-.settings/
+.idea/
 .vscode/
 
 bin/
