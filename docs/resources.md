@@ -8,6 +8,11 @@ Copy your entry into the category which best describes the resourse. If necessar
 - TCP - On Keepalive (hearbeat) packets. [2012]. [https://stackoverflow.com/questions/10702517/in-a-tcp-connection-java-packets]
 - Java TCP Sockets and Swing Tutorial. [2011]. [http://ashishmyles.com/tutorials/tcpchat/index.html]
 
+### Software Architecture
+- Functional Interfaces in Java 8. [2017]. [http://www.baeldung.com/java-8-functional-interfaces]
+- A simple Webserver in Java by the **world famous** overactor. [2016]. [https://github.com/overactor/JAWS/tree/master/src/jaws/data/net]
+- Example Code for a Client. [2016]. [https://github.com/overactor/JAWS_client]
+
 ### JFX
 
 ### 
