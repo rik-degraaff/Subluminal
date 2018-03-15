@@ -1,5 +1,6 @@
 <template>
   <div class="hello">
+    <sub-header></sub-header>
     <h3>Social</h3>
     <ul>
       <li>
@@ -45,8 +46,12 @@
 </template>
 
 <script>
+import Header from './Header'
 export default {
   name: 'HelloWorld',
+  components: {
+    'sub-header': Header
+  }
 }
 </script>
 
