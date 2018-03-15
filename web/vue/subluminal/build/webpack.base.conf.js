@@ -67,16 +67,15 @@ module.exports = {
       },
       {
         test: /\.md$/,
-        exclude: /(node_modules|bower_components)/,
-        use: [
+        loaders: [
           'vue-loader',
           {
-            loader: 'markdown-to-vue-loader',
+            loader: 'vue-md-loader',
             options: {
-              exportSource: true,
-            },
-          },
-        ],
+              // your preferred options
+            }
+          }
+        ]
       }
     ]
   },
