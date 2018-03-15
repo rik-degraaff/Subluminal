@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Main from '@/components/Main'
-import Latex from '@/components/Latex'
+import Markdown from '@/components/Markdown'
 
 Vue.use(Router)
 
@@ -14,9 +14,9 @@ export default new Router({
       component: Main
     },
     {
-      path: '/latex',
-      name: 'Latex',
-      component: Latex
+      path: '/markdown',
+      name: 'Markdown',
+      component: Markdown
 
     }
   ],
