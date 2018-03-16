@@ -5,6 +5,8 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'checkstyle'
 
+def generatedResources = "$buildDir/generated-resources/main"
+
 def description = """
     Project: ${project.name}
     
@@ -16,21 +18,31 @@ def description = """
 
 sourceSets {
     main {
-        java.outputDir = file('/app/out/')
-        java {
-            srcDir 'app/src/main/java'
-            }
-        }
+        java.outputDir = file('app/out/main')
+         java {
+              srcDir 'app/src/main/java'
+              }
+         }
+
 
     test {
-        java.outputDir = file('/app/out/')
-        java {
-            srcDir 'app/src/test/java'
-            }
-        }
+        java.outputDir = file('app/out/test')
+         java {
+              srcDir 'app/src/test/java'
+              }
+         }
 }
 
 project.buildDir = '/app/build/'
+
+
+idea{
+    module{
+        inheritOutputDirs = false
+        outputDir = compileJava.destinationDir
+        testOutputDir = compileTestJava.destinationDir
+    }
+}
 
 //specifies source compatibility to Java 8
 sourceCompatibility = 1.8
@@ -65,5 +77,13 @@ jar {
 task info {
     doFirst{
         println "${description}"
+    }
+}
+
+//a task that generates the resources:
+task generateMyResources {
+    doLast {
+        def generated = new File(generatedResources, "myGeneratedResource.properties")
+        generated.text = "message=Stay happy!"
     }
 }
