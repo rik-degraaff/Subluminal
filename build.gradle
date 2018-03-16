@@ -1,7 +1,10 @@
-group 'example.com'
-version '0.0.1-ALPHA'
+group 'Bordeaux Ink.'
+version '0.0.1'
 
 apply plugin: 'java'
+apply plugin: 'idea'
+
+def generatedResources = "$buildDir/generated-resources/main"
 
 def description = """
     Project: ${project.name}
@@ -14,33 +17,43 @@ def description = """
 
 sourceSets {
     main {
+        java.outputDir = file('app/out/main')
          java {
-              srcDir 'app/src'
+              srcDir 'app/src/main/java'
               }
          }
+
+
     test {
+        java.outputDir = file('app/out/test')
          java {
-              srcDir 'app/src'
+              srcDir 'app/src/test/java'
               }
          }
 }
 
 project.buildDir = '/app/build/'
 
+
+idea{
+    module{
+        inheritOutputDirs = false
+        outputDir = compileJava.destinationDir
+        testOutputDir = compileTestJava.destinationDir
+    }
+}
+
 //specifies source compatibility to Java 8
 sourceCompatibility = 1.8
 
 //adds maven central as a maven repository
 repositories {
-    mavenCentral()
-    dependencies {
-        testCompile 'junit:junit:4.12'
-        compile 'junit:junit:4.12'
-    }
+    jcenter()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile 'junit:junit:4.12'
+    compile 'junit:junit:4.12'
 }
 
 /*

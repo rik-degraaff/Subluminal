@@ -28,20 +28,22 @@ $ git push ...
 ```
 
 
-## Contributing (&Branching)
+## Contributing (& Branching)
 1. Make sure to checkout the most recent ``dev`` branch.
 2. Create a new branch to commit your changes.  Your branch names should adhere to the following conventions:  
 2.1. Start with a branch type descriptor
 2.2. Contain your branch name in snake case (word separated by underscores)  
 2.3. Contain your name token  
 
-For example:
-| Type | Name | Token |
-|------|------|-------|
-| -ft (features) | [a-zA-Z0-9_]* | -dav |
-| -hf (hotfixes)  |   | -lgk  |
-| -rl (releases) |   | -luc |
-|   |   | -rik |
+For example:  
+
+
+| Type            | Name          | Token |
+| --------------- | ------------- | ----- |
+| -ft (features)  | [a-zA-Z0-9_]  | -dav  |
+| -hf (hotfixes)  |               | -lgk  |
+| -rl (releases)  |               | -luc  |
+| ...             | ...           | -rik  |
 
 3. On ``git.scicore.unibas.ch`` create a pull request to the ``dev`` branch. It will be merged on review by the collective.
 4. Merges into master should be a rare thing (milestones and important releases).
