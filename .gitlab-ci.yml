@@ -5,7 +5,10 @@ stages:
   - build
  
 before_script:
-  - cd "/home/gradle/project"
+  - echo "Start CI"
+  - echo $(pwd)
+  - echo $(ls)
+
 
 test:
   stage: test
