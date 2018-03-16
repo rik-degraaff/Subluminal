@@ -32,7 +32,7 @@ sourceSets {
          }
 }
 
-project.buildDir = '/app/build/'
+project.buildDir = 'app/build/'
 
 
 idea{
