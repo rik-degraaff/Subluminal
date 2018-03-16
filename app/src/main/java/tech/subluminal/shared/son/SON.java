@@ -1,4 +1,4 @@
-package tech.subliminal.shared.son;
+package tech.subluminal.shared.son;
 
 import java.util.Optional;
 
