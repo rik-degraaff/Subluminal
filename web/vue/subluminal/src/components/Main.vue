@@ -41,15 +41,9 @@
       </li>
 
     </ul>
-    <h3>Game Rules</h3>
         <ul>
           <li class="button-pixel">
-            <a
-              href="/gamerules"
-              target="_blank"
-            >
-              Show Me
-            </a>
+            <router-link to="/gamerules"><h2>Game Rules</h2></router-link>
           </li>
 
         </ul>
