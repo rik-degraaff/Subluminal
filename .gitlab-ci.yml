@@ -7,20 +7,18 @@ stages:
 before_script:
   - echo "Start CI"
   - pwd
-  - gradle --version
-  - gradle wrapper
 
 test:
   stage: test
   script:
-    - sh ./gradlew test
+    - gradle test
   tags:
   - cs108
 
 build:
   stage: build
   script:
-  - sh ./gradlew build
+  - gradle build
   tags:
   - cs108
 
