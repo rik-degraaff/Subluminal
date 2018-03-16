@@ -6,21 +6,21 @@ stages:
  
 before_script:
   - echo "Start CI"
-  - echo $(pwd)
-  - echo $(ls)
+  - pwd
+  - ls -lah
 
 
 test:
   stage: test
   script:
-    - ./gradlew test
+    - sh ./gradlew test
   tags:
   - cs108
 
 build:
   stage: build
   script:
-  - ./gradlew build
+  - sh ./gradlew build
   tags:
   - cs108
 
