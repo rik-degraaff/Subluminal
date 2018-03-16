@@ -3,6 +3,7 @@ version '0.0.1'
 
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'checkstyle'
 
 def description = """
     Project: ${project.name}
@@ -15,18 +16,18 @@ def description = """
 
 sourceSets {
     main {
-         java.outputDir = file('/app/out/')
-         java {
-              srcDir 'app/src/main/java'
-              }
-         }
+        java.outputDir = file('/app/out/')
+        java {
+            srcDir 'app/src/main/java'
+            }
+        }
 
     test {
-         java.outputDir = file('/app/out/')
-         java {
-              srcDir 'app/src/test/java'
-              }
-         }
+        java.outputDir = file('/app/out/')
+        java {
+            srcDir 'app/src/test/java'
+            }
+        }
 }
 
 project.buildDir = '/app/build/'
