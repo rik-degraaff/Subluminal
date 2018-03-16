@@ -11,14 +11,14 @@ before_script:
 test:
   stage: test
   script:
-    - sudo gradle test
+    - gradle test
   tags:
   - cs108
 
 build:
   stage: build
   script:
-  - sudo gradle build
+  - gradle build
   tags:
   - cs108
 
