@@ -23,7 +23,4 @@ export default {
 html {
    background: black;
 }
-*{
-  font-family: 'Press Start 2P', cursive;
-}
 </style>

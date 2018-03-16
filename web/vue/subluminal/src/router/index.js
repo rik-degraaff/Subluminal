@@ -14,7 +14,7 @@ export default new Router({
       component: Main
     },
     {
-      path: '/markdown',
+      path: '/gamerules',
       name: 'Markdown',
       component: Markdown
 
