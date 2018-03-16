@@ -7,8 +7,8 @@ stages:
 before_script:
   - echo "Start CI"
   - pwd
-  - ls -lah
-
+  - gradle --version
+  - gradle wrapper
 
 test:
   stage: test
