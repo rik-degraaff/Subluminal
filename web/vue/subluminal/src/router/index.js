@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Main from '@/components/Main'
 import Markdown from '@/components/Markdown'
+import Disclaimer from '@/components/Disclaimer'
 
 Vue.use(Router)
 
@@ -18,6 +19,11 @@ export default new Router({
       name: 'Markdown',
       component: Markdown
 
+    },
+    {
+      path: '/disclaimer',
+      name: 'Disclaimer',
+      component: Disclaimer
     }
   ],
 })

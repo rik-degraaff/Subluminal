@@ -1,6 +1,6 @@
 <template>
   <div>
-    <pre><h1>{{ msg }}</h1></pre>
+    <h1>{{ msg }}</h1>
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <img class="banner" src="../assets/subluminal_logo.png">
   </div>
