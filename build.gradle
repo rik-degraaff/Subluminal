@@ -79,11 +79,3 @@ task info {
         println "${description}"
     }
 }
-
-//a task that generates the resources:
-task generateMyResources {
-    doLast {
-        def generated = new File(generatedResources, "myGeneratedResource.properties")
-        generated.text = "message=Stay happy!"
-    }
-}
