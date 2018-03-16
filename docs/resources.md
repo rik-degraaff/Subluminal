@@ -23,6 +23,7 @@ Copy your entry into the category which best describes the resourse. If necessar
 - A sample of .gitlab-ci.yml for a gradle project. [2017]. [https://gist.github.com/t0kieu/deee875c35d45b61239a7ce1b1cb83b0]
 - Configuration of your jobs with .gitlab-ci.yml (Official GitLab Documentation). [2018]. [https://docs.gitlab.com/ee/ci/yaml/]
 - Docker Image for Gradle. [2018]. [https://hub.docker.com/_/gradle/]
+- Getting started with GitLab CI/CD. [2018]. [https://docs.gitlab.com/ee/ci/quick_start/]
 
 ## VCS
 - What to gitignore from the .idea folder? [2012].
@@ -31,5 +32,6 @@ Copy your entry into the category which best describes the resourse. If necessar
 ## Gradle
 - The gradle build system tutorial. [2016]. [http://www.vogella.com/tutorials/Gradle/article.html#building-java-projects]
 - Use the Gradle Wrapper and Stop Wasting Valuable Time. [2013]. [https://dzone.com/articles/use-gradle-wrapper-and-stop]
+- Gradle settings (IntelliJ). [2018]. [https://www.jetbrains.com/help/idea/gradle-settings.html]
 
 ## Web
