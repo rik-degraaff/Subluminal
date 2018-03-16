@@ -65,3 +65,7 @@ task info {
         println "${description}"
     }
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.0'
+}
