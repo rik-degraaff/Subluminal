@@ -7,14 +7,15 @@
 .idea/**/*.xml
 .idea/*.xml
 
+
 #folders
 .idea/
 .gradle/
 .settings/
 .vscode/
 
-bin/
-build/
 app/out/
 app/build/
+bin/
+build/
 gradle/
