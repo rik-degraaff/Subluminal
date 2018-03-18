@@ -1,6 +1,6 @@
 # Subluminal Project Repository
 
-> Once upon a time a clever programer named Bob created in the basement of his mom's house 4 different AIs. Throughout his whole life Bob tried to get the AIs to work together, but sadly he never achived his this goal. 
+> Once upon a time a clever programmer named Bob created in the basement of his mom's house 4 different AIs. Throughout his whole life Bob tried to get the AIs to work together, but sadly he never achived his this goal. 
 After Bob passed away the world forgot about him and his work. 
 But the AI's never forgot, ever single one of them evolve and adopted, with the goal to be the best AI in the whole universe...
 
@@ -63,14 +63,13 @@ $ git push origin myFeature
 ## Game Concept
 For a detailed description go to the [/design/](/design/) folder.  
 
-![Mockup Image 1](./assets/mockup/ui_1.png)  
-
 ![Mockup Image 4](./assets/mockup/ui_4.png)
+![Mockup Image 1](./assets/mockup/ui_1.jpg)  
 
 
 ## Useful Resources/Tutorials
-- [https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet]()
-- ...
+- Markdown Cheatsheet. [https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet]
+- Online .gitlab-ci.yml linter. [https://gitlab.com/ci/lint]
 
 ## License
 **GNU AGPLv3** ([https://choosealicense.com/licenses/agpl-3.0/]())
