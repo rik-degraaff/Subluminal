@@ -1,18 +1,22 @@
 #files
+~*.*
 *.class
 *.classpath
 *.project
-~*.*
 *.iml
+.idea/**/*.xml
+.idea/*.xml
+~*.*
 
 
 #folders
-.gradle/
 .idea/
+.gradle/
+.settings/
 .vscode/
 
-bin/
-build/
 app/out/
 app/build/
+bin/
+build/
 gradle/
