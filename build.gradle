@@ -34,7 +34,7 @@ sourceSets {
          }
 }
 
-project.buildDir = '/app/build/'
+project.buildDir = 'app/build/'
 
 idea{
     module{
@@ -59,10 +59,10 @@ dependencies {
 
 jar {
     from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } // a) Adding dependencies to jar
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
     manifest{
-        attributes 'Main-Class': 'ch.unibas.cs.p9.fs18.example.HelloWorld' // b) Set main class
+        attributes 'Main-Class': 'ch.unibas.cs.p9.fs18.example.HelloWorld'
     }
 }
 
