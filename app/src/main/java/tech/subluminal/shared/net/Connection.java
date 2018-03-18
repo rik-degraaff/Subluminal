@@ -3,12 +3,13 @@ package tech.subluminal.shared.net;
 import tech.subluminal.shared.son.SONConverter;
 import tech.subluminal.shared.son.SONRepresentable;
 
+import java.io.Closeable;
 import java.util.function.Consumer;
 
 /**
  * Represents a channel over which SONRepresentable objects can be sent and received.
  */
-public interface Connection {
+public interface Connection extends Closeable {
 
     /**
      * Registers a handler which is called when a provided type of SONRepresentable is received.
