@@ -5,7 +5,9 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'checkstyle'
 
-def generatedResources = "$buildDir/generated-resources/main"
+checkstyle { 
+    toolVersion = '8.5'
+}
 
 def description = """
     Project: ${project.name}
@@ -24,7 +26,6 @@ sourceSets {
               }
          }
 
-
     test {
         java.outputDir = file('app/out/test')
          java {
@@ -34,7 +35,6 @@ sourceSets {
 }
 
 project.buildDir = '/app/build/'
-
 
 idea{
     module{
@@ -57,11 +57,6 @@ dependencies {
     compile 'junit:junit:4.12'
 }
 
-/*
-The following statements are respondible for:
-    a) adding the compile-libraries to the jar
-    b) setting the executable main class, so the jar is executable
- */
 jar {
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } // a) Adding dependencies to jar
@@ -71,9 +66,6 @@ jar {
     }
 }
 
-/**
- * Example task which simply prints the project's description
- */
 task info {
     doFirst{
         println "${description}"
