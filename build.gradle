@@ -71,3 +71,13 @@ task info {
         println "${description}"
     }
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.0'
+}
+
+test {
+    afterTest { desc, result ->
+        logger.quiet "Executing test ${desc.name} [${desc.className}] with result: ${result.resultType}"
+    }
+}
