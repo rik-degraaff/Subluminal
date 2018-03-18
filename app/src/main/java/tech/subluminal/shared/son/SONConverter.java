@@ -2,5 +2,6 @@ package tech.subluminal.shared.son;
 
 @FunctionalInterface
 public interface SONConverter<T> {
-    T convert(SON son) throws SONConversionError;
+
+  T convert(SON son) throws SONConversionError;
 }
