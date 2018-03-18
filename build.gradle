@@ -18,7 +18,7 @@ def description = """
 
 sourceSets {
     main {
-        java.outputDir = file('app/out/main')
+         java.outputDir = file('.app/out/main')
          java {
               srcDir 'app/src/main/java'
               }
@@ -26,14 +26,14 @@ sourceSets {
 
 
     test {
-        java.outputDir = file('app/out/test')
+         java.outputDir = file('app/out/test')
          java {
               srcDir 'app/src/test/java'
               }
          }
 }
 
-project.buildDir = '/app/build/'
+project.buildDir = 'app/build/'
 
 
 idea{
@@ -77,5 +77,15 @@ jar {
 task info {
     doFirst{
         println "${description}"
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.0'
+}
+
+test {
+    afterTest { desc, result ->
+        logger.quiet "Executing test ${desc.name} [${desc.className}] with result: ${result.resultType}"
     }
 }
