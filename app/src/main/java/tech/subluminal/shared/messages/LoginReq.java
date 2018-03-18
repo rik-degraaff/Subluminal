@@ -12,6 +12,11 @@ public class LoginReq implements SONRepresentable {
   public static final String USERNAME_KEY = "username";
   private String username;
 
+  /**
+   * Creates a login request for the specified user.
+   *
+   * @param username for the login request.
+   */
   public LoginReq(String username) {
     this.username = username;
   }
@@ -58,7 +63,7 @@ public class LoginReq implements SONRepresentable {
     String username = son.getString(USERNAME_KEY)
         .orElseThrow(() -> new SONConversionError(
             "Login Request did not contain valid " + USERNAME_KEY + "."));
-    
+
     return new LoginReq(username);
   }
 }

@@ -14,6 +14,12 @@ public class LoginRes implements SONRepresentable {
   private String username;
   private String userID;
 
+  /**
+   * Creates response with the specified username and id.
+   *
+   * @param username the accepted username for the response.
+   * @param id the id for the response.
+   */
   public LoginRes(String username, String id) {
     this.username = username;
     this.userID = id;
