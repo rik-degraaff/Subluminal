@@ -3,34 +3,48 @@
     <sub-header></sub-header>
     <h3>Social</h3>
     <ul>
-      <li>
+      <li class="button-pixel">
+        <div class="sub-button-top"></div>
+        <div class="sub-button-left"></div>
         <a
           href="http://twitter.com/subluminalgame"
           target="_blank"
         >
           Twitter
         </a>
+        <div class="sub-button-right"></div>
+        <div class="sub-button-bottom"></div>
       </li>
-      <li>
+      <li class="button-pixel">
+        <div class="sub-button-top"></div>
+        <div class="sub-button-left"></div>
         <a
           href="http://instagram.com/subluminalgame"
           target="_blank"
         >
           Instagram
         </a>
+        <div class="sub-button-right"></div>
+        <div class="sub-button-bottom"></div>
       </li>
-      <li>
+      <li class="button-pixel">
+        <div class="sub-button-top"></div>
+        <div class="sub-button-left"></div>
         <a
           href="https://www.reddit.com/r/subluminal/"
           target="_blank"
         >
           Reddit
         </a>
+        <div class="sub-button-right"></div>
+        <div class="sub-button-bottom"></div>
       </li>
     </ul>
     <h3>Preorder</h3>
     <ul>
       <li class="button-pixel">
+        <div class="sub-button-top"></div>
+        <div class="sub-button-left"></div>
         <a
           href="http://buy.subluminal.tech/store.steampowered.com/app/427520/Factorio/index.html"
           target="_blank"
@@ -38,12 +52,18 @@
           Steam*
           <p class="mini-details">*not an actual steam page</p>
         </a>
+        <div class="sub-button-right"></div>
+        <div class="sub-button-bottom"></div>
       </li>
 
     </ul>
         <ul>
           <li class="button-pixel">
-            <router-link to="/gamerules"><h2>Game Rules</h2></router-link>
+            <div class="sub-button-top"></div>
+            <div class="sub-button-left"></div>
+              <router-link to="/gamerules">Game Rules</router-link>
+            <div class="sub-button-right"></div>
+            <div class="sub-button-bottom"></div>
           </li>
 
         </ul>
@@ -83,11 +103,52 @@ export default {
   }
 
   .button-pixel{
-    border: 3px solid transparent;
+    border: 1px solid transparent;
     padding: 10px 5px;
+    position: relative;
   }
 
   .button-pixel:hover{
-    border: 3px red solid;
+    border: 1px solid red;
+  }
+
+ .sub-button-top{
+    position: absolute;
+    top: 0;
+    left: 10%;
+    margin-top: -5px;
+    width: 80%;
+    height: 5px;
+    background: black;
+  }
+
+  .sub-button-bottom{
+    position: absolute;
+    bottom: 0;
+    right: 10%;
+    margin-bottom: -5px;
+    width: 80%;
+    height: 5px;
+    background: black;
+  }
+
+  .sub-button-left{
+    position: absolute;
+    margin-left: -5px;
+    width: 5px;
+    height: 70%;
+    top: 15%;
+    left: 0;
+    background: black;
+  }
+
+  .sub-button-right{
+    position: absolute;
+    margin-right: -5px;
+    width: 5px;
+    height: 70%;
+    top: 15%;
+    right: 0;
+    background: black;
   }
 </style>
