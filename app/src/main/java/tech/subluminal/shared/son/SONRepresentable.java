@@ -12,5 +12,5 @@ public interface SONRepresentable {
      * @return the SON representation.
      */
     SON asSON();
-    // static Self fromSON(SON son);
+    // static Self fromSON(SON son) throws SONRepresentationError;
 }
