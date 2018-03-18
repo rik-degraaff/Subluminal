@@ -20,7 +20,7 @@ def description = """
 
 sourceSets {
     main {
-         java.outputDir = file('.app/out/main')
+         java.outputDir = file('app/out/main')
          java {
               srcDir 'app/src/main/java'
               }
