@@ -19,10 +19,10 @@ public class ClientInitializer {
    * @param username initial username to request from the server.
    */
   public static void init(String server, int port, String username) {
-    Connection connection = null; // new ClientSocketConneciton(server, port);
+    Connection connection = null; // new ClientSocketConneciton(server, port); TODO: uncomment this
     UserStore userStore = new InMemoryUserStore();
     UserManager userManager = new UserManager(connection, userStore);
-    
+
     userManager.start(username);
   }
 }
