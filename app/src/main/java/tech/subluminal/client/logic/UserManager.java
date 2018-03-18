@@ -4,7 +4,7 @@ import tech.subluminal.shared.messages.LoginReq;
 import tech.subluminal.shared.messages.LoginRes;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.records.User;
-import tech.subluminal.tech.subluminal.client.stores.UserStore;
+import tech.subluminal.client.stores.UserStore;
 
 /**
  * Manages the information of the active user.
