@@ -1,7 +1,7 @@
 package tech.subluminal.server.stores;
 
+import java.util.Collection;
 import java.util.Optional;
-import java.util.Set;
 import tech.subluminal.shared.records.User;
 
 /**
@@ -12,7 +12,7 @@ public interface UserStore {
   /**
    * @return all the users that are connected to the server.
    */
-  Set<User> getUsers();
+  Collection<User> getUsers();
 
   /**
    * Adds a user to the user store.
