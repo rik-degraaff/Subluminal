@@ -2,11 +2,19 @@
 # Project Diary
 
 **RIK** = Rik de Graaff  
-**DAV** = David Lengwiler  
+**DAV** = David Lengweiler  
 **LUC** = Luc Kury  
 **LGK** = Lucas Galery Käser
 
-## Monday, March 6th, 2018, 3rd meeting (all)
+## Sunday, March 18th, 2018, 5th meeting (all)
+Today we spent some time trying to figure out how to implement the first classes.
+
+## Wednesday, March 14th, 2018, 4th meeting (all)
+### Decisions/ideas:
+- Our code style is going to the Google Java code style.
+- We specified the package structure for the project (in the app folder).
+
+## Monday, March 5th, 2018, 3rd meeting (all)
 ### Decisions/ideas:
 In this meeting we decided about most of the rules of our game. They are:
 #### _{Rules}_
@@ -42,7 +50,6 @@ In this meeting we decided about most of the rules of our game. They are:
 - The mother ship has an own basic defense value.
 - If the base of the mother ship is intruded, the mother ship is the last one to be torn down.
 - Every mother ship and every regular ship broadcast their position so that every player can see it.
-
 
 ## Sunday, March 4th, 2018, 2nd meeting (DAV, LUC, LGK)
 ### Decisions/ideas:
