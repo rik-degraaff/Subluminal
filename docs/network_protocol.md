@@ -1,3 +1,11 @@
+# Network protocol
+## Properties
+- A message is terminated by a newline character (\r\n)
+- Preamble contains message type (package length is ommited)
+- Delimeter: space between preamble and message content
+
+### Example from slides (invalid)
+```
 Login:
 C: HI <username>
 S: HI <username1>
@@ -62,3 +70,4 @@ C: MOVE <game-id>
       <target-planet-id>
 
 C: LEAVE <game-id>
+```
