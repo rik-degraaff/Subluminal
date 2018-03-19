@@ -55,7 +55,9 @@ public class ConnectionMessageDistributor implements MessageDistributor {
   @Override
   public void sendMessage(SONRepresentable message, String connectionID) {
     Connection cnx = connections.get(connectionID);
-    if (cnx == null) return;
+    if (cnx == null) {
+      return;
+    }
     cnx.sendMessage(message);
   }
 
