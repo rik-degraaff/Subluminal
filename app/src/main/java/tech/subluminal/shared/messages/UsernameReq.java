@@ -5,19 +5,19 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Represents a login request from client to server.
+ * Represents a username change request from the client to the server
  */
-public class LoginReq implements SONRepresentable {
+public class UsernameReq implements SONRepresentable {
 
   public static final String USERNAME_KEY = "username";
   private String username;
 
   /**
-   * Creates a login request for the specified user.
+   * Creates a username change request for the specified user.
    *
-   * @param username for the login request.
+   * @param username for the username change request.
    */
-  public LoginReq(String username) {
+  public UsernameReq(String username) {
     this.username = username;
   }
 
@@ -39,9 +39,8 @@ public class LoginReq implements SONRepresentable {
     return username;
   }
 
-
   /**
-   * Creates a SON object representing this login request.
+   * Creates a SON object representing this object.
    *
    * @return the SON representation.
    */
@@ -52,17 +51,17 @@ public class LoginReq implements SONRepresentable {
   }
 
   /**
-   * Creates a login request from a SON object.
+   * Creates a username change request from a SON object.
    *
-   * @param son the SON object to be converted to a login request.
-   * @return the created login request.
+   * @param son the SON object to be converted to a username change request.
+   * @return the created username change request.
    * @throws SONConversionError when the conversion fails.
    */
-  public static LoginReq fromSON(SON son) throws SONConversionError {
+  public static UsernameReq fromSON(SON son) throws SONConversionError {
     String username = son.getString(USERNAME_KEY)
         .orElseThrow(() -> new SONConversionError(
-            "Login Request did not contain valid " + USERNAME_KEY + "."));
+            "Username change Request did not contain valid " + USERNAME_KEY + "."));
 
-    return new LoginReq(username);
+    return new UsernameReq(username);
   }
 }
