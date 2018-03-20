@@ -1,8 +1,13 @@
 # Network protocol
 ## Properties
-- A message is terminated by a newline character (\r\n)
-- Preamble contains message type (package length is ommited)
-- Delimeter: space between preamble and message content
+- A message is terminated by a newline character ``\r\n``.
+- Preamble contains message type only. Package length is ommited, parsed till EOL.
+- Delimeter: ``space`` between preamble and message content.
+- Object notation: 
+  - Objects: ``{ }``
+  - Lists: ``[ ]``
+  - Key/Value delimiter: ``:``
+  - Field separator: ``,``
 
 ### Example from slides (invalid)
 ```
