@@ -9,18 +9,12 @@ import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.son.SONConverter;
 import tech.subluminal.shared.son.SONRepresentable;
 
-public class ClientSocketConnection implements Connection {
+public class SocketConnection implements Connection {
 
   Socket socket;
 
-  public ClientSocketConnection(String host, int port) {
-    try {
-      this.socket = new Socket(host, port);
-    } catch (IOException e) {
-      System.err.println(e.toString());
-      System.exit(1);
-    }
-
+  public SocketConnection(Socket socket) {
+    this.socket = socket;
     new Thread(this::inStreamLoop).start();
   }
 
