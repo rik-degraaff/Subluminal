@@ -30,6 +30,8 @@ public class ClientInitializer {
       e.printStackTrace();
     }
     Connection connection = new SocketConnection(socket);
+    connection.start();
+
     UserStore userStore = new InMemoryUserStore();
 
     UserPresenter userPresenter = null; //new ConsoleUserPresenter(userStore);

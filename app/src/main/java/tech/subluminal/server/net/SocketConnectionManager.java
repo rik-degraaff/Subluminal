@@ -3,13 +3,17 @@ package tech.subluminal.server.net;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Consumer;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.net.ConnectionManager;
 import tech.subluminal.shared.net.SocketConnection;
 
 public class SocketConnectionManager implements ConnectionManager {
-  ServerSocket serverSocket;
+
+  private ServerSocket serverSocket;
+  private Set<Consumer<Connection>> connectionListeners = new HashSet<>();
 
   public SocketConnectionManager(int port) {
     try {
@@ -26,10 +30,12 @@ public class SocketConnectionManager implements ConnectionManager {
 
       while (true) {
         Socket socket = serverSocket.accept();
-        new SocketConnection(socket);
+        Connection connection = new SocketConnection(socket);
+        connectionListeners.forEach(listener -> listener.accept(connection));
+        connection.start();
       }
     } catch (IOException e) {
-      e.printStackTrace();;
+      e.printStackTrace();
       System.exit(1);
     }
   }
@@ -41,7 +47,7 @@ public class SocketConnectionManager implements ConnectionManager {
    */
   @Override
   public void addConnectionOpenedHandler(Consumer<Connection> handler) {
-
+    connectionListeners.add(handler);
   }
 
   /**

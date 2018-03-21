@@ -24,7 +24,6 @@ public class SocketConnection implements Connection {
 
   public SocketConnection(Socket socket) {
     this.socket = socket;
-    new Thread(this::inStreamLoop).start();
   }
 
   private void inStreamLoop() {
@@ -89,6 +88,14 @@ public class SocketConnection implements Connection {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  /**
+   * Tells the connection that it can start listening for messages.
+   */
+  @Override
+  public void start() {
+    new Thread(this::inStreamLoop).start();
   }
 
   /**
