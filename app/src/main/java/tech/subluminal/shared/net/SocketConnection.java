@@ -5,15 +5,22 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.function.Consumer;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.son.SON;
+import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONConverter;
 import tech.subluminal.shared.son.SONRepresentable;
 
 public class SocketConnection implements Connection {
 
-  Socket socket;
+  private Socket socket;
+  private Map<String, Set<Consumer<SON>>> handlers = new HashMap<>();
 
   public SocketConnection(Socket socket) {
     this.socket = socket;
@@ -28,9 +35,13 @@ public class SocketConnection implements Connection {
       while (true) {
         String message = scanner.nextLine();
         System.out.println(message);
-        //= message.split(" ")[0];
+        final Set<Consumer<SON>> loginReqHandlers = handlers.get("LoginReq");
+        if (loginReqHandlers != null) {
+          loginReqHandlers.forEach(handler -> handler.accept(new SON().put("shroud","username")));
+        }
       }
     } catch (IOException e) {
+      //TODO: Handle client disconnect
       System.err.println(e.toString());
       System.exit(1);
     }
@@ -48,7 +59,19 @@ public class SocketConnection implements Connection {
   @Override
   public <T extends SONRepresentable> void registerHandler(Class<T> type, SONConverter<T> converter,
       Consumer<T> handler) {
+    String method = type.getSimpleName();
+    if (handlers.get(method) == null) {
+      handlers.put(method, new HashSet<>());
+    }
+    handlers.get(method).add(son -> handleMessage(converter, handler, son));
+  }
 
+  private static <T extends SONRepresentable> void handleMessage(SONConverter<T> converter, Consumer<T> handler, SON son) {
+    try {
+      handler.accept(converter.convert(son));
+    } catch (SONConversionError sonConversionError) {
+      sonConversionError.printStackTrace();
+    }
   }
 
   /**
