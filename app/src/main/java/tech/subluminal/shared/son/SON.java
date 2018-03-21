@@ -82,7 +82,7 @@ public class SON {
   public SON put(boolean value, String key, String... additionalKeys) {
     if (additionalKeys.length != 0) {
       getNested(key, additionalKeys).put(value, additionalKeys[additionalKeys.length - 1]);
-    } else 
+    } else {
       booleanMap.put(key, value);
     }
     return this;
