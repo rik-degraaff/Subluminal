@@ -13,5 +13,5 @@ public interface ConnectionManager extends Closeable {
    *
    * @param handler is called when a new Connection is opened.
    */
-  void connectionOpenedHandler(Consumer<Connection> handler);
+  void addConnectionOpenedHandler(Consumer<Connection> handler);
 }

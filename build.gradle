@@ -1,5 +1,5 @@
 group 'Bordeaux Ink.'
-version '0.0.1'
+version '0.1.0-m1'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -20,16 +20,16 @@ def description = """
 
 sourceSets {
     main {
-         java.outputDir = file('/app/out/main')
+         java.outputDir = file('app/out/main')
          java {
-              srcDir '/app/src/main/java'
+              srcDir 'app/src/main/java'
               }
          }
 
     test {
-         java.outputDir = file('/app/out/test')
+         java.outputDir = file('app/out/test')
          java {
-              srcDir '/app/src/test/java'
+              srcDir 'app/src/test/java'
               }
          }
 }
@@ -62,7 +62,7 @@ jar {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
     manifest{
-        attributes 'Main-Class': 'ch.unibas.cs.p9.fs18.example.HelloWorld'
+        attributes 'Main-Class': 'tech.subluminal.main.Subluminal'
     }
 }
 
@@ -73,7 +73,7 @@ task info {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.6'
+    gradleVersion = '4.6.0'
 }
 
 test {

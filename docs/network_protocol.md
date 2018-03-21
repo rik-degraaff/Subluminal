@@ -1,3 +1,16 @@
+# Network protocol
+## Properties
+- A message is terminated by a newline character ``\r\n``.
+- Preamble contains message type only. Package length is ommited, parsed till EOL.
+- Delimeter: ``space`` between preamble and message content.
+- Object notation: 
+  - Objects: ``{ }``
+  - Lists: ``[ ]``
+  - Key/Value delimiter: ``:``
+  - Field separator: ``,``
+
+### Example from slides (invalid)
+```
 Login:
 C: HI <username>
 S: HI <username1>
@@ -62,3 +75,4 @@ C: MOVE <game-id>
       <target-planet-id>
 
 C: LEAVE <game-id>
+```
