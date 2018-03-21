@@ -1,10 +1,13 @@
 package tech.subluminal.client.init;
 
+import java.io.IOException;
+import java.net.Socket;
 import tech.subluminal.client.logic.UserManager;
 import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.client.stores.InMemoryUserStore;
 import tech.subluminal.client.stores.UserStore;
+import tech.subluminal.shared.net.SocketConnection;
 
 /**
  * Assembles the client-side architecture.
@@ -19,7 +22,14 @@ public class ClientInitializer {
    * @param username initial username to request from the server.
    */
   public static void init(String server, int port, String username) {
-    Connection connection = null; // new ClientSocketConnection(server, port); TODO: uncomment this
+    Socket socket = null;
+    try {
+      socket = new Socket(server, port);
+    } catch (IOException e) {
+      //TODO: Proper error handling
+      e.printStackTrace();
+    }
+    Connection connection = new SocketConnection(socket);
     UserStore userStore = new InMemoryUserStore();
 
     UserPresenter userPresenter = null; //new ConsoleUserPresenter(userStore);
