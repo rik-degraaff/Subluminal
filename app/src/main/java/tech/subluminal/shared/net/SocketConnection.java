@@ -2,6 +2,8 @@ package tech.subluminal.shared.net;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.Socket;
 import java.util.Scanner;
 import java.util.function.Consumer;
@@ -25,6 +27,7 @@ public class SocketConnection implements Connection {
 
       while (true) {
         String message = scanner.nextLine();
+        System.out.println(message);
         //= message.split(" ")[0];
       }
     } catch (IOException e) {
@@ -55,7 +58,14 @@ public class SocketConnection implements Connection {
    */
   @Override
   public void sendMessage(SONRepresentable message) {
-
+    try {
+      OutputStream out = socket.getOutputStream();
+      synchronized (out) {
+        new PrintStream(out).println("testing");
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   /**
