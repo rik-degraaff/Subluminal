@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 import tech.subluminal.server.stores.UserStore;
 import tech.subluminal.shared.messages.LoginReq;
 import tech.subluminal.shared.messages.LoginRes;
+import tech.subluminal.shared.messages.UsernameReq;
+import tech.subluminal.shared.messages.UsernameRes;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.records.User;
 
@@ -28,14 +30,32 @@ public class UserManager {
   }
 
   private void attachHandlers(String id, Connection connection) {
-    connection
-        .registerHandler(LoginReq.class, LoginReq::fromSON, req -> onLogin(id, connection, req));
+    connection.registerHandler(LoginReq.class, LoginReq::fromSON,
+        req -> onLogin(id, connection, req));
+    connection.registerHandler(UsernameReq.class, UsernameReq::fromSON,
+        req -> onUsernameChange(id, connection, req));
+  }
+
+  /**
+   * This function handles a user trying to change their username on the server.
+   *
+   * @param id the id of the user/connection as determined by the message distributor.
+   * @param connection the connection belonging to the user.
+   * @param usernameReq the username change request sent by the user.
+   */
+  private void onUsernameChange(String id, Connection connection, UsernameReq usernameReq) {
+    String username = usernameReq.getUsername();
+    synchronized (userStore) {
+      username = getUnusedUsername(username);
+      userStore.updateUser(new User(username, id));
+    }
+    connection.sendMessage(new UsernameRes(username));
   }
 
   /**
    * This function handles a user trying to log in to the server.
    *
-   * @param id the id of the user/connection ass determined by the message distributor.
+   * @param id the id of the user/connection as determined by the message distributor.
    * @param connection the connection belonging to the user.
    * @param loginReq the login request sent by the user.
    */
