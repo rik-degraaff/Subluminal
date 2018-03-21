@@ -9,13 +9,14 @@ import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.records.User;
 
 /**
- * Handles
+ * Handles the console Input and prints the received messages.
  */
-public class ConsolePresenter implements UserPresenter {
+public class ConsolePresenter implements UserPresenter, ChatPresenter {
 
   private InputStream in;
   private PrintStream out;
   private ReadOnlyUserStore userStore;
+  private ChatPresenter.Delegate chatDelegate;
 
   public ConsolePresenter(InputStream in, PrintStream out, ReadOnlyUserStore userStore) {
     this.in = in;
@@ -29,7 +30,23 @@ public class ConsolePresenter implements UserPresenter {
     Scanner scanner = new Scanner(in);
 
     while (true) {
-      String command = scanner.nextLine();
+      String line = scanner.nextLine();
+      if (line.charAt(0) == '@') {
+        //remove "@" and put into channel
+        String channel = line.split(" ", 1)[0].substring(1).toLowerCase();
+        if(channel.equals("all")){
+          //send @all
+        }else if(channel.equals("game")){
+
+        }else {
+          if ( != null) {
+
+          }
+        }
+
+      } else {
+        //send @all
+      }
     }
   }
 
@@ -46,4 +63,45 @@ public class ConsolePresenter implements UserPresenter {
     }
   }
 
+  /**
+   * Fired when a someone sends a message to all users on the server.
+   *
+   * @param message is the text of the message.
+   * @param username from the sender of the message.
+   */
+  @Override
+  public void GlobalMessageReceived(String message, String username) {
+    out.println("Server /" + username + ": " + message);
+  }
+
+  /**
+   * Fired when a personal message is received.
+   *
+   * @param message of the received whisper.
+   * @param username of the sender.
+   */
+  @Override
+  public void WhisperMessageReceived(String message, String username) {
+    out.println(username + "@ you" + ": " + message);
+  }
+
+  /**
+   * Fired when a message from the same game is received.
+   *
+   * @param message of the game message.
+   * @param username fo the sender.
+   */
+  @Override
+  public void GameMessageReceived(String message, String username) {
+    out.println("Game /" + username + ": " + message);
+  }
+
+  /**
+   *
+   * @param delegate
+   */
+  @Override
+  public void setChatDelegate(Delegate delegate) {
+    this.chatDelegate = delegate;
+  }
 }
