@@ -1,4 +1,4 @@
-package tech.subluminal.client.net;
+package tech.subluminal.shared.net;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,7 +31,7 @@ public class ClientSocketConnection implements Connection {
 
       while (true) {
         String message = scanner.nextLine();
-        = message.split(" ")[0];
+        //= message.split(" ")[0];
       }
     } catch (IOException e) {
       System.err.println(e.toString());
