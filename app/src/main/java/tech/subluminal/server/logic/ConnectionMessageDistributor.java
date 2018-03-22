@@ -1,12 +1,17 @@
 package tech.subluminal.server.logic;
 
+import static tech.subluminal.shared.util.IdUtils.generateId;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.net.ConnectionManager;
 import tech.subluminal.shared.son.SONRepresentable;
@@ -17,11 +22,12 @@ import tech.subluminal.shared.son.SONRepresentable;
 public class ConnectionMessageDistributor implements MessageDistributor {
 
   private final ConnectionManager connectionManager;
-  Map<String, Connection> connections = new HashMap<>();
-  List<BiConsumer<String, Connection>> connectionOpenedHandlers = new ArrayList<>();
+  private final Map<String, Connection> connections = new HashMap<>();
+  private final Set<BiConsumer<String, Connection>> connectionOpenedHandlers = new HashSet<>();
+  private final Set<Consumer<String>> connectionClosedListeners = new HashSet<>();
 
   /**
-   * Creates a connection message mistributor from a connection manager.
+   * Creates a connection message distributor from a connection manager.
    *
    * @param connectionManager the connection manager this distribution.
    */
@@ -31,7 +37,7 @@ public class ConnectionMessageDistributor implements MessageDistributor {
   }
 
   private void connectionOpened(Connection connection) {
-    String id = UUID.randomUUID().toString().replace("-", "").substring(0, 6);
+    String id = generateId(6);
     connections.put(id, connection);
     connectionOpenedHandlers.forEach(handler -> handler.accept(id, connection));
   }
@@ -68,15 +74,42 @@ public class ConnectionMessageDistributor implements MessageDistributor {
    * @param connectionIDs the ids of teh connections to use.
    */
   @Override
-  public void sendMessage(SONRepresentable message, Set<String> connectionIDs) {
+  public void sendMessage(SONRepresentable message, Collection<String> connectionIDs) {
     connectionIDs.forEach(id -> sendMessage(message, id));
+  }
+
+  /**
+   * Close a connection managed by the distributor.
+   *
+   * @param connectionID the id of the connection that should be closed.
+   */
+  @Override
+  public void closeConnection(String connectionID) {
+    Connection connection = connections.get(connectionID);
+    if (connection != null) {
+      try {
+        connection.close();
+      } catch (IOException e) {
+        e.printStackTrace(); // TODO: do something that makes sense.
+      }
+    }
+  }
+
+  /**
+   * Adds a listener that can react to a connection being closed.
+   *
+   * @param listener the listener that will receive the id of the connection upon deletion.
+   */
+  @Override
+  public void addConnectionClosedListener(Consumer<String> listener) {
+    connectionClosedListeners.add(listener);
   }
 
   /**
    * Allows user of this class to react to a new connection being created.
    *
-   * @param handler a function which takes a connectionID and a connection and does something with
-   * it.
+   * @param handler a function which takes a connectionID and a newly opened connection and does
+   * something with it.
    */
   @Override
   public void addConnectionOpenedHandler(BiConsumer<String, Connection> handler) {

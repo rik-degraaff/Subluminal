@@ -31,4 +31,9 @@ public interface PingStore {
    * @return all the pings that were sent to this client.
    */
   Collection<SentPing> getPings(String userId);
+
+  /**
+   * @return the ids of users that have open pings that they haven't responded to yet.
+   */
+  Collection<String> getUsersWithPings();
 }
