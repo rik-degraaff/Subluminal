@@ -2,7 +2,6 @@ package tech.subluminal.server.logic;
 
 import static tech.subluminal.shared.util.IdUtils.generateId;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -13,18 +12,24 @@ import tech.subluminal.shared.messages.Pong;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.records.SentPing;
 import tech.subluminal.shared.records.User;
-import tech.subluminal.shared.son.SONRepresentable;
 
 /**
  * Manages the pings that are sent to and received from the clients
  */
 public class PingManager {
 
-  public static final int PING_TIMEOUT_MILLIS = 6000;
+  private static final int PING_TIMEOUT_MILLIS = 6000;
   private final PingStore pingStore;
   private final ReadOnlyUserStore userStore;
   private final MessageDistributor distributor;
 
+  /**
+   * Creates a ping manager with a ping store, users tore and a message distributor.
+   *
+   * @param pingStore the store the manager uses to read and write pings.
+   * @param userStore the store the manager uses to read information about users from.
+   * @param distributor the message distributor the manager receives and sends messages over.
+   */
   public PingManager(PingStore pingStore, ReadOnlyUserStore userStore,
       MessageDistributor distributor) {
     this.pingStore = pingStore;
@@ -75,7 +80,7 @@ public class PingManager {
         SentPing sentPing = new SentPing(System.currentTimeMillis(), id);
         users.forEach(userId -> pingStore.addPing(userId, sentPing));
       }
-      
+
       distributor.broadcast(ping);
     }
   }
