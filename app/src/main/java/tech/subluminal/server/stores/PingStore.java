@@ -1,6 +1,6 @@
 package tech.subluminal.server.stores;
 
-import java.util.Set;
+import java.util.Collection;
 import tech.subluminal.shared.records.SentPing;
 
 /**
@@ -30,5 +30,5 @@ public interface PingStore {
    * @param userId the id of the user whose pings should be retrieved.
    * @return all the pings that were sent to this client.
    */
-  Set<SentPing> getPings(String userId);
+  Collection<SentPing> getPings(String userId);
 }
