@@ -33,26 +33,52 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
     while (true) {
       String line = scanner.nextLine();
       char command = line.charAt(0);
+
       if (command == '@') {
-
-        String channel = line.split(" ", 1)[0].substring(1).toLowerCase();
-        if (channel.equals("all")) {
-          //send @all
-        } else if (channel.equals("game")) {
-
-        } else {
-          if ( !=null){
-            chatDelegate.
-            //TODO: Implement this
-          }
-        }
+        handleDirectedChatMessage(line);
       } else if (command == '/') {
-        chatDelegate.
+        handleCommand(line);
       } else {
         //send @all
         chatDelegate.sendGlobalMessage(line);
       }
     }
+  }
+
+  private void handleCommand(String line) {
+    //send /cmd
+    String channel = getSpecifier(line);
+    if (channel.equals("logout")) {
+      userDelegate.logout();
+    }
+  }
+
+  private void handleDirectedChatMessage(String line) {
+    String channel = getSpecifier(line);
+    String message = extractMessage(line, channel);
+
+    if (channel.equals("all")) {
+      //send @all
+
+      chatDelegate.sendGlobalMessage(message);
+    } else if (channel.equals("game")) {
+      //send @game
+      chatDelegate.sendGameMessage(message);
+    } else {
+      //send @player
+      if (userStore.getUserByUsername(channel) != null) {
+
+        chatDelegate.sendWhisperMessage(message, channel);
+      }
+    }
+  }
+
+  private String getSpecifier(String line) {
+    return line.split(" ", 1)[0].substring(1).toLowerCase();
+  }
+
+  private String extractMessage(String line, String channel) {
+    return line.substring(channel.length() + 1);
   }
 
 
@@ -111,7 +137,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
    * @param delegate
    */
   @Override
-  public void setChatDelegate(Delegate delegate) {
+  public void setChatDelegate(ChatPresenter.Delegate delegate) {
     this.chatDelegate = delegate;
   }
 }

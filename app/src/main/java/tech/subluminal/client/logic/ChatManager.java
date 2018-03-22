@@ -2,6 +2,7 @@ package tech.subluminal.client.logic;
 
 import tech.subluminal.client.presentation.ChatPresenter;
 import tech.subluminal.client.stores.UserStore;
+import tech.subluminal.shared.messages.ChatMessageOut;
 import tech.subluminal.shared.net.Connection;
 
 public class ChatManager implements ChatPresenter.Delegate{
@@ -20,16 +21,17 @@ public class ChatManager implements ChatPresenter.Delegate{
 
   @Override
   public void sendGlobalMessage(String message) {
-    //TODO: implement whole class
+    connection.sendMessage(new ChatMessageOut(message, null, true);
   }
-
+    //TODO: implement whole class
   @Override
   public void sendGameMessage(String message) {
-
+    connection.sendMessage(new ChatMessageOut(message, null, false));
   }
 
   @Override
   public void sendWhisperMessage(String message, String username) {
-
+    //TODO: handle error
+    connection.sendMessage(new ChatMessageOut(message, userStore.getUserByUsername(username).getUsername(), false));
   }
 }
