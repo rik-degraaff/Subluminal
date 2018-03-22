@@ -11,4 +11,5 @@ public interface UserStore extends ReadOnlyUserStore {
    * @param user to be set as current user.
    */
   void setCurrentUser(User user);
+
 }

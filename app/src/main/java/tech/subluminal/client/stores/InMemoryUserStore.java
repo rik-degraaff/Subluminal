@@ -29,4 +29,10 @@ public class InMemoryUserStore implements UserStore {
       currentUser = user;
     }
   }
+
+  @Override
+  public User getUserByUsername(String username) {
+    //TODO implement this
+    return null;
+  }
 }

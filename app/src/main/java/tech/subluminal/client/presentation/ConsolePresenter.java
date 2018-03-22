@@ -9,13 +9,15 @@ import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.records.User;
 
 /**
- * Handles
+ * Handles the console Input and prints the received messages.
  */
-public class ConsolePresenter implements UserPresenter {
+public class ConsolePresenter implements UserPresenter, ChatPresenter {
 
   private InputStream in;
   private PrintStream out;
   private ReadOnlyUserStore userStore;
+  private ChatPresenter.Delegate chatDelegate;
+  private UserPresenter.Delegate userDelegate;
 
   public ConsolePresenter(InputStream in, PrintStream out, ReadOnlyUserStore userStore) {
     this.in = in;
@@ -29,8 +31,55 @@ public class ConsolePresenter implements UserPresenter {
     Scanner scanner = new Scanner(in);
 
     while (true) {
-      String command = scanner.nextLine();
+      String line = scanner.nextLine();
+      char command = line.charAt(0);
+
+      if (command == '@') {
+        handleDirectedChatMessage(line);
+      } else if (command == '/') {
+        handleCommand(line);
+      } else {
+        //send @all
+        chatDelegate.sendGlobalMessage(line);
+        System.out.println("GlobalMessage");
+      }
     }
+  }
+
+  private void handleCommand(String line) {
+    //send /cmd
+    String channel = getSpecifier(line);
+    if (channel.equals("logout")) {
+      userDelegate.logout();
+    }
+  }
+
+  private void handleDirectedChatMessage(String line) {
+    String channel = getSpecifier(line);
+    String message = extractMessage(line, channel);
+
+    if (channel.equals("all")) {
+      //send @all
+
+      chatDelegate.sendGlobalMessage(message);
+    } else if (channel.equals("game")) {
+      //send @game
+      chatDelegate.sendGameMessage(message);
+    } else {
+      //send @player
+      if (userStore.getUserByUsername(channel) != null) {
+
+        chatDelegate.sendWhisperMessage(message, channel);
+      }
+    }
+  }
+
+  private String getSpecifier(String line) {
+    return line.split(" ", 2)[0].substring(1).toLowerCase();
+  }
+
+  private String extractMessage(String line, String channel) {
+    return line.substring(channel.length() + 1);
   }
 
 
@@ -46,4 +95,50 @@ public class ConsolePresenter implements UserPresenter {
     }
   }
 
+  @Override
+  public void setUserDelegate(UserPresenter.Delegate delegate) {
+    this.userDelegate = delegate;
+  }
+
+  /**
+   * Fired when a someone sends a message to all users on the server.
+   *
+   * @param message is the text of the message.
+   * @param username from the sender of the message.
+   */
+  @Override
+  public void GlobalMessageReceived(String message, String username) {
+    out.println("Server /" + username + ": " + message);
+  }
+
+  /**
+   * Fired when a personal message is received.
+   *
+   * @param message of the received whisper.
+   * @param username of the sender.
+   */
+  @Override
+  public void WhisperMessageReceived(String message, String username) {
+    out.println(username + "@ you" + ": " + message);
+  }
+
+  /**
+   * Fired when a message from the same game is received.
+   *
+   * @param message of the game message.
+   * @param username fo the sender.
+   */
+  @Override
+  public void GameMessageReceived(String message, String username) {
+    out.println("Game /" + username + ": " + message);
+  }
+
+  /**
+   *
+   * @param delegate
+   */
+  @Override
+  public void setChatDelegate(ChatPresenter.Delegate delegate) {
+    this.chatDelegate = delegate;
+  }
 }

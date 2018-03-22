@@ -9,25 +9,6 @@ import tech.subluminal.shared.son.SONRepresentable;
 public interface ChatPresenter {
 
   /**
-   * Gets called when the User wants to send a new message to everyone.
-   *
-   * @param message is the text to be send.
-   */
-  void sendGlobalMessage(String message);
-
-  /**
-   * Send a message to all players in the same game.
-   */
-  void sendGameMessage(String message);
-
-  /**
-   * Send a message to a single player.
-   *
-   * @param message The actual message.
-   */
-  void sendWhisperMessage(String message, String username);
-
-  /**
    * Fired when a someone sends a message to all users on the server.
    *
    * @param username from the sender of the message.
@@ -50,4 +31,20 @@ public interface ChatPresenter {
    * @param username fo the sender.
    */
   void GameMessageReceived(String message, String username);
+
+  /**
+   *
+   * @param delegate
+   */
+  void setChatDelegate(Delegate delegate);
+
+  public static interface Delegate {
+
+    void sendGlobalMessage(String message);
+
+    void sendGameMessage(String message);
+
+    void sendWhisperMessage(String message, String username);
+
+  }
 }
