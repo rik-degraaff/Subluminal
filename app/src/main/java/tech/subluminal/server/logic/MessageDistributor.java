@@ -3,6 +3,7 @@ package tech.subluminal.server.logic;
 import java.util.Collection;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import tech.subluminal.shared.messages.ChatMessageIn;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.son.SONRepresentable;
 
@@ -33,6 +34,14 @@ public interface MessageDistributor {
    * @param connectionIDs the ids of the connections to use.
    */
   void sendMessage(SONRepresentable message, Collection<String> connectionIDs);
+
+  /**
+   * Sends a message to all but one connected clients.
+   *
+   * @param message the message to send.
+   * @param connectionID the id of the connection not to send to.
+   */
+  void sendMessageToAllExcept(SONRepresentable message, String connectionID);
 
   /**
    * Close a connection managed by the distributor.
