@@ -2,6 +2,7 @@ package tech.subluminal.client.init;
 
 import java.io.IOException;
 import java.net.Socket;
+import tech.subluminal.client.logic.ChatManager;
 import tech.subluminal.client.logic.UserManager;
 import tech.subluminal.client.presentation.ConsolePresenter;
 import tech.subluminal.client.presentation.UserPresenter;
@@ -33,9 +34,10 @@ public class ClientInitializer {
     Connection connection = new SocketConnection(socket);
     UserStore userStore = new InMemoryUserStore();
 
-    ConsolePresenter userPresenter = new ConsolePresenter(System.in, System.out, userStore);
+    ConsolePresenter presenter = new ConsolePresenter(System.in, System.out, userStore);
 
-    UserManager userManager = new UserManager(connection, userStore);
+    UserManager userManager = new UserManager(connection, userStore, presenter);
+    new ChatManager(userStore, presenter, connection);
 
     userManager.start(username);
   }

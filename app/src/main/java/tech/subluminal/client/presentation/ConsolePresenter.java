@@ -75,7 +75,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
   }
 
   private String getSpecifier(String line) {
-    return line.split(" ", 1)[0].substring(1).toLowerCase();
+    return line.split(" ", 2)[0].substring(1).toLowerCase();
   }
 
   private String extractMessage(String line, String channel) {
