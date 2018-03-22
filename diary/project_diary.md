@@ -6,18 +6,52 @@
 **LUC** = Luc Kury  
 **LGK** = Lucas Galery Käser
 
-## Sunday, March 18th, 2018, 5th meeting (all)
-Today we spent some time trying to figure out how to implement the first classes.
+### Wednesday, March 22th, 2018 (all)
+- Long coding evening, implementing all methods of the SON.java class, the network chat functionality and the client-side chat presentation.
+- Our tutor Marco recommended us to take better care of our diary.
 
-## Wednesday, March 14th, 2018, 4th meeting (all)
-### Decisions/ideas:
-- Our code style is going to the Google Java code style.
+### Sunday, March 18th, 2018 (all)
+We spent half a day implementing the first classes and interfaces.
+
+### Wednesday, March 14th, 2018 (all)
+##### Decisions/ideas:
+- Our code style is going to be the Google Java code style.
 - We specified the package structure for the project (in the app folder).
-
-## Monday, March 5th, 2018, 3rd meeting (all)
-### Decisions/ideas:
+The structure is as follows:  
+```
+src
+|
+|__main   
+     |
+     |__java  
+         |
+         |__tech.subluminal
+             |
+             |__client
+             |   |
+             |   |__init
+             |   |
+             |   |__logic   
+             |   | 
+             |   |__presentation
+             |   |
+             |   |__stores
+             |
+             |__shared 
+                 |
+                 |__messages
+                 |
+                 |__net
+                 |
+                 |__records
+                 |
+                 |__son
+                       
+```
+### Monday, March 5th, 2018 (all)
+##### Decisions/ideas:
 In this meeting we decided about most of the rules of our game. They are:
-#### _{Rules}_
+##### _Rules_
 - Possibly 2-n players, for the moment we decided the maximum number of players will be 8.
 - At the beginning of a game, the map is created randomly.
 - You lose the game when your mother ship does not exist anymore.
@@ -51,23 +85,23 @@ In this meeting we decided about most of the rules of our game. They are:
 - If the base of the mother ship is intruded, the mother ship is the last one to be torn down.
 - Every mother ship and every regular ship broadcast their position so that every player can see it.
 
-## Sunday, March 4th, 2018, 2nd meeting (DAV, LUC, LGK)
-### Decisions/ideas:
+## Sunday, March 4th, 2018 (DAV, LUC, LGK)
+##### Decisions/ideas:
 - The language for all documents concerning the programming project will be English
 - The game concept will be concreted on Monday, March 5th
 - On Monday we will also make a final decision if the game is going to be round-based or in real time
 
-### Task division
+##### Task division
 **LUC**: Definition of our software requirements for the project; brainstorming/design of our repository and branch structure and of our IntelliJ configuration  
 **DAV**: Setup of a rudimentary merchandise website as a gag for the first milestone
 
-## Friday, March 2nd, 2018, 1st meeting (RIK, DAV, LGK)
-### Decisions/ideas:
+### Friday, March 2nd, 2018 (RIK, DAV, LGK)
+##### Decisions/ideas:
 - **Ideas for game names**: Ether, Far Away, Separation, Delay, Subluminal
 - **Team name**: Bordeaux Ink.
 - **Basic game principle**: The game happens on an outer space map with stars. In the beginning every player has his main ship placed in a random planet system and produces his fleet of smaller ships with the resources that his planets offer. The goal is to conquer the biggest number of planet systems. The players can inform themselves about the position of their adversaries and in which state of colonization other planet systems are by sending out requests. The twist is that the messenger ships take some time to get to their target and back, so when they are back the information is already not the latest anymore and the player has to make decisions upon outdated information.
 
-### Task division:  
+##### Task division:  
 **DAV**: Mock-ups; graphical sketches  
 **RIK**: Division client/server; definition of the network protocol  
 **LGK**: Planning of the presentation; definition of the style and structure of upcoming presentations  
