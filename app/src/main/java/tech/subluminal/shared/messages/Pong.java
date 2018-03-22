@@ -22,6 +22,13 @@ public class Pong implements SONRepresentable {
   }
 
   /**
+   * @return the id of the pong message.
+   */
+  public String getId() {
+    return id;
+  }
+
+  /**
    * Creates a SON object representing this object.
    *
    * @return the SON representation.

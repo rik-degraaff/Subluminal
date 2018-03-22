@@ -22,6 +22,13 @@ public class Ping implements SONRepresentable {
   }
 
   /**
+   * @return the id of the ping message.
+   */
+  public String getId() {
+    return id;
+  }
+
+  /**
    * Creates a SON object representing this object.
    *
    * @return the SON representation.
