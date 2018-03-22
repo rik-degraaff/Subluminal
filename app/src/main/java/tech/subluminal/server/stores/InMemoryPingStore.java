@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import tech.subluminal.shared.records.SentPing;
 
 /**
@@ -56,5 +58,16 @@ public class InMemoryPingStore implements PingStore {
       return new HashSet<>();
     }
     return userPings.values();
+  }
+
+  /**
+   * @return the ids of users that have open pings that they haven't responded to yet.
+   */
+  @Override
+  public Collection<String> getUsersWithPings() {
+    return pings.entrySet().stream()
+        .filter(e -> !e.getValue().isEmpty())
+        .map(e -> e.getKey())
+        .collect(Collectors.toCollection(HashSet::new));
   }
 }
