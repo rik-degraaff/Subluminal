@@ -38,7 +38,8 @@ public interface ChatPresenter {
    */
   void setChatDelegate(Delegate delegate);
 
-  public static interface Delegate{
+  public static interface Delegate {
+
     void sendGlobalMessage(String message);
 
     void sendGameMessage(String message);

@@ -40,7 +40,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
 
         }else {
           if ( != null) {
-
+            chatDelegate. //TODO: Implement this
           }
         }
 
