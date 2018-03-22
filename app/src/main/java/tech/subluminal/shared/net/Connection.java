@@ -29,4 +29,9 @@ public interface Connection extends Closeable {
    * @param message the message to send.
    */
   void sendMessage(SONRepresentable message);
+
+  /**
+   * Tells the connection that it can start listening for messages.
+   */
+  void start();
 }

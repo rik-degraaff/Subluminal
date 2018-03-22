@@ -32,6 +32,8 @@ public class ClientInitializer {
       e.printStackTrace();
     }
     Connection connection = new SocketConnection(socket);
+    connection.start();
+
     UserStore userStore = new InMemoryUserStore();
 
     ConsolePresenter presenter = new ConsolePresenter(System.in, System.out, userStore);
