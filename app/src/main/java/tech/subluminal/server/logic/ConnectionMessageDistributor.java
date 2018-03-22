@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -76,6 +77,20 @@ public class ConnectionMessageDistributor implements MessageDistributor {
   @Override
   public void sendMessage(SONRepresentable message, Collection<String> connectionIDs) {
     connectionIDs.forEach(id -> sendMessage(message, id));
+  }
+
+  /**
+   * Sends a message to all but one connected clients.
+   *
+   * @param message the message to send.
+   * @param connectionID the id of the connection not to send to.
+   */
+  @Override
+  public void sendMessageToAllExcept(SONRepresentable message, String connectionID) {
+    connections.entrySet().stream()
+        .filter(e -> e.getKey() != connectionID)
+        .map(Entry::getValue)
+        .forEach(c -> c.sendMessage(message));
   }
 
   /**
