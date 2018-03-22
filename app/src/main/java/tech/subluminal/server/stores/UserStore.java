@@ -7,12 +7,7 @@ import tech.subluminal.shared.records.User;
 /**
  * Stores server-side information about the users.
  */
-public interface UserStore {
-
-  /**
-   * @return all the users that are connected to the server.
-   */
-  Collection<User> getUsers();
+public interface UserStore extends ReadOnlyUserStore {
 
   /**
    * Adds a user to the user store.
@@ -20,14 +15,6 @@ public interface UserStore {
    * @param user the user to add.
    */
   void addUser(User user);
-
-  /**
-   * Retrieves a user identified by a given id.
-   *
-   * @param id the id of the requested user.
-   * @return the user, empty when not found.
-   */
-  Optional<User> getUserByID(String id);
 
   /**
    * Updates the user identified by user.userID.
