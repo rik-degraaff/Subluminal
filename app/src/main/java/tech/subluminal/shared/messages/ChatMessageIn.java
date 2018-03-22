@@ -9,7 +9,7 @@ import tech.subluminal.shared.son.SONRepresentable;
  */
 public class ChatMessageIn implements SONRepresentable {
 
-  public static final String USERNAME_KEY = "username";
+  public static final String MESSAGE_KEY = "message";
   private static final String CLASS_NAME = ChatMessageIn.class.getSimpleName();
   public static final String SENDER_ID_KEY = "senderID";
   public static final String CHANNEL_KEY = "channel";
@@ -43,12 +43,15 @@ public class ChatMessageIn implements SONRepresentable {
 
   @Override
   public SON asSON() {
-    return null;
+    return new SON()
+        .put(message, MESSAGE_KEY)
+        .put(senderID, SENDER_ID_KEY)
+        .put(channel.toString(), CHANNEL_KEY);
   }
 
   public static ChatMessageIn fromSON(SON son) throws SONConversionError {
-    String message = son.getString(USERNAME_KEY)
-        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, USERNAME_KEY));
+    String message = son.getString(MESSAGE_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, MESSAGE_KEY));
 
     String senderID = son.getString(SENDER_ID_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, SENDER_ID_KEY));
