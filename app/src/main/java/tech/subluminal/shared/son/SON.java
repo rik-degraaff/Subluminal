@@ -1,9 +1,12 @@
 package tech.subluminal.shared.son;
 
+import static tech.subluminal.shared.son.SONParsing.*;
+
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Subluminal Object Notation:
@@ -249,5 +252,27 @@ public class SON {
           .flatMap(s -> s.getList(additionalKeys[additionalKeys.length - 1]));
     }
     return Optional.ofNullable(sonListMap.get(key));
+  }
+
+  public String asString() {
+    StringBuilder builder = new StringBuilder();
+
+    builder.append(OBJECT_LEFTBRACE);
+
+    Stream.of(
+            intMap.entrySet().stream().map(e -> keyValueString(e.getKey(), e.getValue())),
+            doubleMap.entrySet().stream().map(e -> keyValueString(e.getKey(), e.getValue())),
+            booleanMap.entrySet().stream().map(e -> keyValueString(e.getKey(), e.getValue())),
+            stringMap.entrySet().stream().map(e -> keyValueString(e.getKey(), e.getValue())),
+            sonMap.entrySet().stream().map(e -> keyValueString(e.getKey(), e.getValue())),
+            sonListMap.entrySet().stream().map(e -> keyValueString(e.getKey(), e.getValue())))
+        .flatMap(s -> s)
+        .flatMap(s -> Stream.of(ENTRY_DELIMITER, s))
+        .skip(1)
+        .forEach(builder::append);
+
+    builder.append(OBJECT_RIGHTBRACE);
+
+    return builder.toString();
   }
 }

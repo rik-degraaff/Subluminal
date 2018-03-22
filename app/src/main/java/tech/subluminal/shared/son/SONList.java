@@ -212,4 +212,9 @@ public class SONList {
 
     return Optional.empty();
   }
+
+  public String asString() {
+    //TODO: implement this
+    return "";
+  }
 }

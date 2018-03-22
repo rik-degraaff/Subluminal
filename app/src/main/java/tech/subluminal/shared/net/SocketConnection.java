@@ -82,8 +82,10 @@ public class SocketConnection implements Connection {
   public void sendMessage(SONRepresentable message) {
     try {
       OutputStream out = socket.getOutputStream();
+      String typeName = message.getClass().getSimpleName();
+      String msg = message.asSON().asString();
       synchronized (out) {
-        new PrintStream(out).println("testing");
+        new PrintStream(out).println(typeName + " " + msg);
       }
     } catch (IOException e) {
       e.printStackTrace();
