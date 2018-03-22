@@ -41,6 +41,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
       } else {
         //send @all
         chatDelegate.sendGlobalMessage(line);
+        System.out.println("GlobalMessage");
       }
     }
   }

@@ -22,7 +22,7 @@ public class SocketConnectionManager implements ConnectionManager {
 
   private void portListenLoop() {
     try {
-      System.out.println("Warte auf Verbindungen auf Port " + serverSocket.getLocalPort() + "...");
+      System.out.println("Waiting for connection on port " + serverSocket.getLocalPort() + "...");
 
       while (true) {
         Socket socket = serverSocket.accept();

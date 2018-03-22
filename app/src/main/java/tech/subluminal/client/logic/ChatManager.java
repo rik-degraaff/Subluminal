@@ -21,7 +21,7 @@ public class ChatManager implements ChatPresenter.Delegate{
 
   @Override
   public void sendGlobalMessage(String message) {
-    connection.sendMessage(new ChatMessageOut(message, null, true);
+    connection.sendMessage(new ChatMessageOut(message, null, true));
   }
     //TODO: implement whole class
   @Override
