@@ -6,7 +6,10 @@
 **LUC** = Luc Kury  
 **LGK** = Lucas Galery Käser
 
-### Wednesday, March 22th, 2018 (all)
+### Thursday, March 22nd, 2018 (all)
+- Added feature: When you prepend "/" or "@" to your command-line message you can add functionality to it, for example "/logout", or "@alex02". These changes were made in ConsolePresenter.java. 
+
+### Wednesday, March 21st, 2018 (all)
 - Long coding evening, implementing all methods of the SON.java class, the network chat functionality and the client-side chat presentation.
 - Our tutor Marco recommended us to take better care of our diary.
 
