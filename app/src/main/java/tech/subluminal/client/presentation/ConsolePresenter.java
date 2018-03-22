@@ -17,6 +17,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
   private PrintStream out;
   private ReadOnlyUserStore userStore;
   private ChatPresenter.Delegate chatDelegate;
+  private UserPresenter.Delegate userDelegate;
 
   public ConsolePresenter(InputStream in, PrintStream out, ReadOnlyUserStore userStore) {
     this.in = in;
@@ -31,21 +32,25 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
 
     while (true) {
       String line = scanner.nextLine();
-      if (line.charAt(0) == '@') {
-        //remove "@" and put into channel
-        String channel = line.split(" ", 1)[0].substring(1).toLowerCase();
-        if(channel.equals("all")){
-          //send @all
-        }else if(channel.equals("game")){
+      char command = line.charAt(0);
+      if (command == '@') {
 
-        }else {
-          if ( != null) {
-            chatDelegate. //TODO: Implement this
+        String channel = line.split(" ", 1)[0].substring(1).toLowerCase();
+        if (channel.equals("all")) {
+          //send @all
+        } else if (channel.equals("game")) {
+
+        } else {
+          if ( !=null){
+            chatDelegate.
+            //TODO: Implement this
           }
         }
-
+      } else if (command == '/') {
+        chatDelegate.
       } else {
         //send @all
+        chatDelegate.sendGlobalMessage(line);
       }
     }
   }
@@ -61,6 +66,11 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
     synchronized (out) {
       out.println("Successfully logged in as " + username);
     }
+  }
+
+  @Override
+  public void setUserDelegate(UserPresenter.Delegate delegate) {
+    this.userDelegate = delegate;
   }
 
   /**

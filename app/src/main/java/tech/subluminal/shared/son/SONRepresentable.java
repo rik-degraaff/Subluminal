@@ -14,4 +14,8 @@ public interface SONRepresentable {
    */
   SON asSON();
   // static Self fromSON(SON son) throws SONConversionError;
+
+  static SONConversionError error(String source, String key) {
+    return new SONConversionError(source + "did not contain a valid " + key + ".");
+  }
 }
