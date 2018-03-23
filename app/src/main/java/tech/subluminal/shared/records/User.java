@@ -28,7 +28,7 @@ public class User {
 
   /**
    *
-   * @param to be set.
+   * @param username to be set.
    */
   public void setUsername(String username) {
     this.username = username;
@@ -44,7 +44,7 @@ public class User {
 
   /**
    *
-   * @param to be set as user id.
+   * @param id to be set as user id.
    */
   public void setId(String id) {
     this.id = id;
