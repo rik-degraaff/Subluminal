@@ -12,7 +12,7 @@ public class ChatMessageOut implements SONRepresentable {
   private static final String MESSAGE_KEY = "message";
   private static final String GLOBAL_KEY = "global";
   private static final String RECEIVER_ID_KEY = "receiverID";
-  private static final String CLASS_NAME = ChatMessageIn.class.getSimpleName();
+  private static final String CLASS_NAME = ChatMessageOut.class.getSimpleName();
   private String message;
   private String receiverID;
   private boolean global;
@@ -69,7 +69,7 @@ public class ChatMessageOut implements SONRepresentable {
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, MESSAGE_KEY));
 
     String receiverID = son.getString(RECEIVER_ID_KEY)
-        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, RECEIVER_ID_KEY));
+        .orElse(null);
 
     boolean global = receiverID == null ? false : son.getBoolean(GLOBAL_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, GLOBAL_KEY));
