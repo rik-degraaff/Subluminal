@@ -22,6 +22,8 @@ public class SocketConnection implements Connection {
 
   private Socket socket;
   private Map<String, Set<Consumer<SON>>> handlers = new HashMap<>();
+  private Set<Runnable> closeListeners = new HashSet<>();
+  private volatile boolean stop = false;
 
   public SocketConnection(Socket socket) {
     this.socket = socket;
@@ -32,7 +34,7 @@ public class SocketConnection implements Connection {
     try {
       Scanner scanner = new Scanner(socket.getInputStream());
 
-      while (true) {
+      while (!stop) {
         try{
           String message = scanner.nextLine();
           System.out.println(message);
@@ -103,6 +105,16 @@ public class SocketConnection implements Connection {
   }
 
   /**
+   * Adds a listener, which can react to this connection closing.
+   *
+   * @param listener will be run when the connection is closed.
+   */
+  @Override
+  public void addCloseListener(Runnable listener) {
+    closeListeners.add(listener);
+  }
+
+  /**
    * Tells the connection that it can start listening for messages.
    */
   @Override
@@ -122,6 +134,6 @@ public class SocketConnection implements Connection {
    */
   @Override
   public void close() throws IOException {
-
+    stop = true;
   }
 }

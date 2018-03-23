@@ -31,6 +31,13 @@ public interface Connection extends Closeable {
   void sendMessage(SONRepresentable message);
 
   /**
+   * Adds a listener, which can react to this connection closing.
+   *
+   * @param listener will be run when the connection is closed.
+   */
+  void addCloseListener(Runnable listener);
+
+  /**
    * Tells the connection that it can start listening for messages.
    */
   void start();

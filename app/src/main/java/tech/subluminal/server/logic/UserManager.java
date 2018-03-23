@@ -1,16 +1,16 @@
 package tech.subluminal.server.logic;
 
+import java.io.IOException;
 import java.util.Set;
 import java.util.stream.Collectors;
 import tech.subluminal.server.stores.UserStore;
-import tech.subluminal.shared.messages.ChatMessageIn;
 import tech.subluminal.shared.messages.LoginReq;
 import tech.subluminal.shared.messages.LoginRes;
+import tech.subluminal.shared.messages.LogoutReq;
 import tech.subluminal.shared.messages.UsernameReq;
 import tech.subluminal.shared.messages.UsernameRes;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.records.User;
-import tech.subluminal.shared.son.SONRepresentable;
 
 /**
  * Manages the information of connected users.
@@ -28,7 +28,15 @@ public class UserManager {
   public UserManager(UserStore userStore, MessageDistributor distributor) {
     this.userStore = userStore;
 
-    distributor.addConnectionOpenedHandler(this::attachHandlers);
+
+    distributor.addConnectionOpenedListener(this::attachHandlers);
+    distributor.addConnectionClosedListener(this::onConnectionClosed);
+  }
+
+  private void onConnectionClosed(String id) {
+    synchronized (userStore){
+      userStore.removeUserByID(id);
+    }
   }
 
   private void attachHandlers(String id, Connection connection) {
@@ -36,6 +44,16 @@ public class UserManager {
         req -> onLogin(id, connection, req));
     connection.registerHandler(UsernameReq.class, UsernameReq::fromSON,
         req -> onUsernameChange(id, connection, req));
+    connection.registerHandler(LogoutReq.class, LogoutReq::fromSON,
+        req -> onLogout(connection));
+  }
+
+  private void onLogout(Connection connection) {
+    try {
+      connection.close();
+    } catch (IOException e) {
+      //TODO: handle this accordingly
+    }
   }
 
   /**

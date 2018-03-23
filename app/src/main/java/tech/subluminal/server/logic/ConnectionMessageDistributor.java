@@ -123,11 +123,11 @@ public class ConnectionMessageDistributor implements MessageDistributor {
   /**
    * Allows user of this class to react to a new connection being created.
    *
-   * @param handler a function which takes a connectionID and a newly opened connection and does
+   * @param listener a function which takes a connectionID and a newly opened connection and does
    * something with it.
    */
   @Override
-  public void addConnectionOpenedHandler(BiConsumer<String, Connection> handler) {
-    connectionOpenedHandlers.add(handler);
+  public void addConnectionOpenedListener(BiConsumer<String, Connection> listener) {
+    connectionOpenedHandlers.add(listener);
   }
 }

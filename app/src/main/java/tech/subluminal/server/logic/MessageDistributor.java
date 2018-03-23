@@ -60,8 +60,8 @@ public interface MessageDistributor {
   /**
    * Allows user of this class to react to a new connection being created.
    *
-   * @param handler a function which takes a connectionID and a connection and does something with
+   * @param listener a function which takes a connectionID and a connection and does something with
    * it.
    */
-  void addConnectionOpenedHandler(BiConsumer<String, Connection> handler);
+  void addConnectionOpenedListener(BiConsumer<String, Connection> listener);
 }

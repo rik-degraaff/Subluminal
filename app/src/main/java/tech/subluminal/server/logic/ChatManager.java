@@ -2,7 +2,6 @@ package tech.subluminal.server.logic;
 
 import java.util.Optional;
 import tech.subluminal.server.stores.ReadOnlyUserStore;
-import tech.subluminal.server.stores.UserStore;
 import tech.subluminal.shared.messages.ChatMessageIn;
 import tech.subluminal.shared.messages.ChatMessageIn.Channel;
 import tech.subluminal.shared.messages.ChatMessageOut;
@@ -21,7 +20,7 @@ public class ChatManager {
     this.userStore = userStore;
     this.distributor = distributor;
 
-    distributor.addConnectionOpenedHandler(this::attachHandlers);
+    distributor.addConnectionOpenedListener(this::attachHandlers);
   }
 
   private void attachHandlers(String id, Connection connection) {

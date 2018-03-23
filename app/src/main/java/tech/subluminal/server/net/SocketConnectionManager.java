@@ -14,6 +14,7 @@ public class SocketConnectionManager implements ConnectionManager {
 
   private ServerSocket serverSocket;
   private Set<Consumer<Connection>> connectionListeners = new HashSet<>();
+  private volatile boolean stop = false;
 
   public SocketConnectionManager(int port) {
     try {
@@ -28,7 +29,7 @@ public class SocketConnectionManager implements ConnectionManager {
     try {
       System.out.println("Waiting for connection on port " + serverSocket.getLocalPort() + "...");
 
-      while (true) {
+      while (!stop) {
         Socket socket = serverSocket.accept();
         Connection connection = new SocketConnection(socket);
         connectionListeners.forEach(listener -> listener.accept(connection));
@@ -62,6 +63,6 @@ public class SocketConnectionManager implements ConnectionManager {
    */
   @Override
   public void close() throws IOException {
-
+    stop = true;
   }
 }
