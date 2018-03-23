@@ -1,12 +1,9 @@
 package tech.subluminal.client.presentation;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 import tech.subluminal.client.stores.ReadOnlyUserStore;
-import tech.subluminal.client.stores.UserStore;
-import tech.subluminal.shared.records.User;
 
 /**
  * Handles the console Input and prints the received messages.
@@ -46,17 +43,34 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
     }
   }
 
+  /**
+   * Handles all possible commands input by the user.
+   *
+   * @param line is the whole command input by the user.
+   */
   private void handleCommand(String line) {
     //send /cmd
     String channel = getSpecifier(line);
     if (channel.equals("logout")) {
       userDelegate.logout();
+    } else if (channel.equals("changename")) {
+      handleNameChangeCmd(line, channel);
+    } else if (channel.equals("changelobby")) {
+      //TODO: add functionality to change lobby
     }
+  }
+
+  private void handleNameChangeCmd(String line, String channel) {
+    String new_username = extractMessageBody(line, channel);
+    //removes all whitespaces //TODO: may change later
+    String username = new_username.replaceAll(" ", "");
+
+    userDelegate.changeUsername(username);
   }
 
   private void handleDirectedChatMessage(String line) {
     String channel = getSpecifier(line);
-    String message = extractMessage(line, channel);
+    String message = extractMessageBody(line, channel);
 
     if (channel.equals("all")) {
       //send @all
@@ -78,7 +92,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
     return line.split(" ", 2)[0].substring(1).toLowerCase();
   }
 
-  private String extractMessage(String line, String channel) {
+  private String extractMessageBody(String line, String channel) {
     return line.substring(channel.length() + 1);
   }
 

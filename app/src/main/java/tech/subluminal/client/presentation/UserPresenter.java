@@ -27,8 +27,15 @@ public interface UserPresenter {
   public static interface Delegate {
 
     /**
-     * Fired when a user has to be logged out.
+     * Fired when a user tries to change his name.
      *
+     * @param username the desired new username.
+     */
+    void changeUsername(String username);
+
+
+    /**
+     * Fired when a user has to be logged out.
      */
     void logout();
   }
