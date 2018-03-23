@@ -71,7 +71,7 @@ public class ChatMessageOut implements SONRepresentable {
     String receiverID = son.getString(RECEIVER_ID_KEY)
         .orElse(null);
 
-    boolean global = receiverID == null ? false : son.getBoolean(GLOBAL_KEY)
+    boolean global = receiverID != null ? false : son.getBoolean(GLOBAL_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, GLOBAL_KEY));
 
     return new ChatMessageOut(message, receiverID, global);
