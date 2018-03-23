@@ -15,6 +15,7 @@ import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONConverter;
+import tech.subluminal.shared.son.SONParsingError;
 import tech.subluminal.shared.son.SONRepresentable;
 
 public class SocketConnection implements Connection {
@@ -32,11 +33,19 @@ public class SocketConnection implements Connection {
       Scanner scanner = new Scanner(socket.getInputStream());
 
       while (true) {
-        String message = scanner.nextLine();
-        System.out.println(message);
-        final Set<Consumer<SON>> loginReqHandlers = handlers.get("LoginReq");
-        if (loginReqHandlers != null) {
-          loginReqHandlers.forEach(handler -> handler.accept(new SON().put("shroud","username")));
+        try{
+          String message = scanner.nextLine();
+          System.out.println(message);
+          String[] parts = message.split(" ", 2);
+          if (parts.length == 2) {
+            SON son = SON.parse(parts[1]);
+            Set<Consumer<SON>> consumers = handlers.get(parts[0]);
+            if (consumers != null) {
+              consumers.forEach(c -> c.accept(son));
+            }
+          }
+        } catch (SONParsingError e) {
+          System.out.println("Parsing of "+ e.getMessage() + "failed"); //TODO: log better
         }
       }
     } catch (IOException e) {
@@ -65,11 +74,12 @@ public class SocketConnection implements Connection {
     handlers.get(method).add(son -> handleMessage(converter, handler, son));
   }
 
-  private static <T extends SONRepresentable> void handleMessage(SONConverter<T> converter, Consumer<T> handler, SON son) {
+  private static <T extends SONRepresentable> void handleMessage(SONConverter<T> converter,
+      Consumer<T> handler, SON son) {
     try {
       handler.accept(converter.convert(son));
     } catch (SONConversionError sonConversionError) {
-      sonConversionError.printStackTrace();
+      System.out.println("Structure of " + sonConversionError.getMessage() + "packets was incorrect, son.");
     }
   }
 
