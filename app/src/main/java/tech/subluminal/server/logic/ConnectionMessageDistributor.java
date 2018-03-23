@@ -41,7 +41,10 @@ public class ConnectionMessageDistributor implements MessageDistributor {
     String id = generateId(6);
     connections.put(id, connection);
     connectionOpenedHandlers.forEach(handler -> handler.accept(id, connection));
-    connection.addCloseListener(() -> connections.remove(id));
+    connection.addCloseListener(() -> {
+      connections.remove(id);
+      connectionClosedListeners.forEach(l -> l.accept(id));
+    });
   }
 
   /**

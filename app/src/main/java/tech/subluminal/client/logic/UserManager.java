@@ -60,7 +60,6 @@ public class UserManager implements UserPresenter.Delegate {
       userStore.setCurrentUser(new User(res.getUsername(), res.getUserID()));
     }
     userPresenter.loginSucceeded();
-
   }
 
   /**
