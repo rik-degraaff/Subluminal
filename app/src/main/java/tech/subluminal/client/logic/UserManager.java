@@ -1,8 +1,10 @@
 package tech.subluminal.client.logic;
 
+import java.io.IOException;
 import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.shared.messages.LoginReq;
 import tech.subluminal.shared.messages.LoginRes;
+import tech.subluminal.shared.messages.LogoutReq;
 import tech.subluminal.shared.messages.UsernameReq;
 import tech.subluminal.shared.messages.UsernameRes;
 import tech.subluminal.shared.net.Connection;
@@ -59,7 +61,6 @@ public class UserManager implements UserPresenter.Delegate {
       userStore.setCurrentUser(new User(res.getUsername(), res.getUserID()));
     }
     userPresenter.loginSucceeded();
-
   }
 
   /**
@@ -77,6 +78,14 @@ public class UserManager implements UserPresenter.Delegate {
    */
   @Override
   public void logout() {
-    // TODO: initialize logout
+    connection.sendMessage(new LogoutReq());
+    try {
+      connection.close();
+    } catch (IOException e) {
+      e.printStackTrace(); //TODO: sensible stuff
+    }
+
+    System.out.println("Bye!"); //TODO: send to presenter instead.
+    System.exit(0);
   }
 }

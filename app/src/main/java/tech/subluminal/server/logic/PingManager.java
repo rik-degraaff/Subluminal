@@ -38,7 +38,7 @@ public class PingManager {
     this.userStore = userStore;
     this.distributor = distributor;
 
-    distributor.addConnectionOpenedHandler(this::attachHandlers);
+    distributor.addConnectionOpenedListener(this::attachHandlers);
 
     Thread pingThread = new Thread(this::pingLoop);
     pingThread.setDaemon(true);
