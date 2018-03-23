@@ -14,7 +14,7 @@ public interface ChatPresenter {
    * @param username from the sender of the message.
    * @param message is the text of the message.
    */
-  void GlobalMessageReceived(String message, String username);
+  void globalMessageReceived(String message, String username);
 
   /**
    * Fired when a personal message is received.
@@ -22,7 +22,7 @@ public interface ChatPresenter {
    * @param message of the received whisper.
    * @param username of the sender.
    */
-  void WhisperMessageReceived(String message, String username);
+  void whisperMessageReceived(String message, String username);
 
   /**
    * Fired when a message from the same game is received.
@@ -30,7 +30,7 @@ public interface ChatPresenter {
    * @param message of the game message.
    * @param username fo the sender.
    */
-  void GameMessageReceived(String message, String username);
+  void gameMessageReceived(String message, String username);
 
   /**
    *

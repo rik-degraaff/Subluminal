@@ -130,7 +130,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
    * @param username from the sender of the message.
    */
   @Override
-  public void GlobalMessageReceived(String message, String username) {
+  public void globalMessageReceived(String message, String username) {
     out.println("Server /" + username + ": " + message);
   }
 
@@ -141,7 +141,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
    * @param username of the sender.
    */
   @Override
-  public void WhisperMessageReceived(String message, String username) {
+  public void whisperMessageReceived(String message, String username) {
     out.println(username + "@ you" + ": " + message);
   }
 
@@ -152,7 +152,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
    * @param username fo the sender.
    */
   @Override
-  public void GameMessageReceived(String message, String username) {
+  public void gameMessageReceived(String message, String username) {
     out.println("Game /" + username + ": " + message);
   }
 

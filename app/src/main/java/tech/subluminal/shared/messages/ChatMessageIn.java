@@ -11,10 +11,10 @@ public class ChatMessageIn implements SONRepresentable {
 
   public static final String MESSAGE_KEY = "message";
   private static final String CLASS_NAME = ChatMessageIn.class.getSimpleName();
-  public static final String SENDER_ID_KEY = "senderID";
+  public static final String USERNAME_KEY = "username";
   public static final String CHANNEL_KEY = "channel";
   private String message;
-  private String senderID;
+  private String username;
   private Channel channel;
 
 
@@ -23,9 +23,9 @@ public class ChatMessageIn implements SONRepresentable {
   }
 
 
-  public ChatMessageIn(String message, String senderID, Channel channel) {
+  public ChatMessageIn(String message, String username, Channel channel) {
     this.message = message;
-    this.senderID = senderID;
+    this.username = username;
     this.channel = channel;
   }
 
@@ -33,8 +33,8 @@ public class ChatMessageIn implements SONRepresentable {
     return message;
   }
 
-  public String getSenderID() {
-    return senderID;
+  public String getUsername() {
+    return username;
   }
 
   public Channel getChannel() {
@@ -45,7 +45,7 @@ public class ChatMessageIn implements SONRepresentable {
   public SON asSON() {
     return new SON()
         .put(message, MESSAGE_KEY)
-        .put(senderID, SENDER_ID_KEY)
+        .put(username, USERNAME_KEY)
         .put(channel.toString(), CHANNEL_KEY);
   }
 
@@ -53,8 +53,8 @@ public class ChatMessageIn implements SONRepresentable {
     String message = son.getString(MESSAGE_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, MESSAGE_KEY));
 
-    String senderID = son.getString(SENDER_ID_KEY)
-        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, SENDER_ID_KEY));
+    String username = son.getString(USERNAME_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, USERNAME_KEY));
 
     //Has to be initialized in this scope
     Channel channel;
@@ -66,6 +66,6 @@ public class ChatMessageIn implements SONRepresentable {
       throw new SONConversionError("Message was send with an invalid channel.");
     }
 
-    return new ChatMessageIn(message, senderID, channel);
+    return new ChatMessageIn(message, username, channel);
   }
 }
