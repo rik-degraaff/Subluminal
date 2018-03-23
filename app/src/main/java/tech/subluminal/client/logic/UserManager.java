@@ -17,7 +17,6 @@ public class UserManager implements UserPresenter.Delegate {
   private UserPresenter userPresenter;
 
   /**
-   *
    * @param connection to the server to communicate with.
    * @param userStore to hold the current users.
    */

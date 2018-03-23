@@ -5,13 +5,13 @@ import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.messages.ChatMessageOut;
 import tech.subluminal.shared.net.Connection;
 
-public class ChatManager implements ChatPresenter.Delegate{
+public class ChatManager implements ChatPresenter.Delegate {
 
   private final UserStore userStore;
   private final ChatPresenter chatPresenter;
   private final Connection connection;
 
-  public ChatManager(UserStore userStore, ChatPresenter chatPresenter, Connection connection){
+  public ChatManager(UserStore userStore, ChatPresenter chatPresenter, Connection connection) {
     this.userStore = userStore;
     this.chatPresenter = chatPresenter;
     this.connection = connection;
@@ -23,7 +23,7 @@ public class ChatManager implements ChatPresenter.Delegate{
   public void sendGlobalMessage(String message) {
     connection.sendMessage(new ChatMessageOut(message, null, true));
   }
-    //TODO: implement whole class
+
   @Override
   public void sendGameMessage(String message) {
     connection.sendMessage(new ChatMessageOut(message, null, false));
@@ -32,6 +32,7 @@ public class ChatManager implements ChatPresenter.Delegate{
   @Override
   public void sendWhisperMessage(String message, String username) {
     //TODO: handle error
-    connection.sendMessage(new ChatMessageOut(message, userStore.getUserByUsername(username).getUsername(), false));
+    connection.sendMessage(
+        new ChatMessageOut(message, userStore.getUserByUsername(username).getUsername(), false));
   }
 }
