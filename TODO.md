@@ -22,11 +22,15 @@ Please create an issue on gitlab for the task you are working on, a
 * [X] gitlab CI is not working... docker problem?
 * [ ] use watch plugin for gradle.
 * [X] get IntelliJ to play nice with gradle project
-* [ ] gradle ‘rootProject.projectDir’ option necessary?
+* [ ] gradle 'rootProject.projectDir' option necessary?
+* [ ] crate gradle 'run' task for client/server (plugin application)
 
 ## CI
-* [ ] create manual deploy script for server in docker container
+* [ ] create (manual) deploy script for server in docker container
+* [ ] additional stages for CI, make allow_fail for low prio branches
 
 ## Other
 * [ ] update diary with more entries
-* [ ] 
+* [ ] flesh out network protocol documentation, draw UML diagram
+* [ ] create quality assurance workflow acording to slides from Schuldt
+* [ ] think about presentation structure/sequence
