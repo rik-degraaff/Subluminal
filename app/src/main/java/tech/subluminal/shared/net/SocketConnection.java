@@ -24,6 +24,7 @@ public class SocketConnection implements Connection {
   private Map<String, Set<Consumer<SON>>> handlers = new HashMap<>();
   private Set<Runnable> closeListeners = new HashSet<>();
   private volatile boolean stop = false;
+  private Thread readThread;
 
   public SocketConnection(Socket socket) {
     this.socket = socket;
@@ -35,7 +36,7 @@ public class SocketConnection implements Connection {
       Scanner scanner = new Scanner(socket.getInputStream());
 
       while (!stop) {
-        try{
+        try {
           String message = scanner.nextLine();
           System.out.println(message);
           String[] parts = message.split(" ", 2);
@@ -47,7 +48,7 @@ public class SocketConnection implements Connection {
             }
           }
         } catch (SONParsingError e) {
-          System.out.println("Parsing of "+ e.getMessage() + "failed"); //TODO: log better
+          System.out.println("Parsing of " + e.getMessage() + "failed"); //TODO: log better
         }
       }
     } catch (IOException e) {
@@ -55,6 +56,7 @@ public class SocketConnection implements Connection {
       System.err.println(e.toString());
       System.exit(1);
     }
+    closeListeners.forEach(Runnable::run);
   }
 
   /**
@@ -81,7 +83,8 @@ public class SocketConnection implements Connection {
     try {
       handler.accept(converter.convert(son));
     } catch (SONConversionError sonConversionError) {
-      System.out.println("Structure of " + sonConversionError.getMessage() + "packets was incorrect, son.");
+      System.err.println(
+          "Structure of " + sonConversionError.getMessage() + "packets was incorrect, son.");
     }
   }
 
@@ -119,7 +122,8 @@ public class SocketConnection implements Connection {
    */
   @Override
   public void start() {
-    new Thread(this::inStreamLoop).start();
+    readThread = new Thread(this::inStreamLoop);
+    readThread.start();
   }
 
   /**
@@ -135,5 +139,6 @@ public class SocketConnection implements Connection {
   @Override
   public void close() throws IOException {
     stop = true;
+    readThread.interrupt();
   }
 }
