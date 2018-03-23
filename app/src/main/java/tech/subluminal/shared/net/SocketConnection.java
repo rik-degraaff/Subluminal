@@ -38,7 +38,6 @@ public class SocketConnection implements Connection {
       while (!stop) {
         try {
           String message = scanner.nextLine();
-          System.out.println(message);
           String[] parts = message.split(" ", 2);
           if (parts.length == 2) {
             SON son = SON.parse(parts[1]);

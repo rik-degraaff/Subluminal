@@ -6,7 +6,8 @@ import tech.subluminal.client.logic.ChatManager;
 import tech.subluminal.client.logic.PingManager;
 import tech.subluminal.client.logic.UserManager;
 import tech.subluminal.client.presentation.ConsolePresenter;
-import tech.subluminal.client.presentation.UserPresenter;
+import tech.subluminal.client.stores.InMemoryPingStore;
+import tech.subluminal.client.stores.PingStore;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.client.stores.InMemoryUserStore;
 import tech.subluminal.client.stores.UserStore;
@@ -36,12 +37,13 @@ public class ClientInitializer {
     connection.start();
 
     UserStore userStore = new InMemoryUserStore();
+    PingStore pingStore = new InMemoryPingStore();
 
     ConsolePresenter presenter = new ConsolePresenter(System.in, System.out, userStore);
 
     UserManager userManager = new UserManager(connection, userStore, presenter);
     new ChatManager(userStore, presenter, connection);
-    new PingManager(connection);
+    new PingManager(connection, pingStore);
 
     userManager.start(username);
   }
