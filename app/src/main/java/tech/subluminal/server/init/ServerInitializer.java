@@ -1,5 +1,6 @@
 package tech.subluminal.server.init;
 
+import tech.subluminal.server.logic.ChatManager;
 import tech.subluminal.server.logic.ConnectionMessageDistributor;
 import tech.subluminal.server.logic.MessageDistributor;
 import tech.subluminal.server.logic.PingManager;
@@ -26,5 +27,6 @@ public class ServerInitializer {
 
     new UserManager(userStore, messageDistributor);
     new PingManager(pingStore, userStore, messageDistributor);
+    new ChatManager(messageDistributor, userStore);
   }
 }
