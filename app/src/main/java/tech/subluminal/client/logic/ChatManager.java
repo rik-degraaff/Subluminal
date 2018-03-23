@@ -2,6 +2,7 @@ package tech.subluminal.client.logic;
 
 import tech.subluminal.client.presentation.ChatPresenter;
 import tech.subluminal.client.stores.UserStore;
+import tech.subluminal.shared.messages.ChatMessageIn;
 import tech.subluminal.shared.messages.ChatMessageOut;
 import tech.subluminal.shared.net.Connection;
 
@@ -17,6 +18,22 @@ public class ChatManager implements ChatPresenter.Delegate {
     this.connection = connection;
 
     chatPresenter.setChatDelegate(this);
+
+    connection
+        .registerHandler(ChatMessageIn.class, ChatMessageIn::fromSON, this::onMessageReceived);
+  }
+
+  private void onMessageReceived(ChatMessageIn message) {
+    switch (message.getChannel()) {
+      case GAME:
+        chatPresenter.gameMessageReceived(message.getMessage(), message.getUsername());
+        break;
+      case GLOBAL:
+        chatPresenter.globalMessageReceived(message.getMessage(), message.getUsername());
+        break;
+      case WHISPER:
+        chatPresenter.whisperMessageReceived(message.getMessage(), message.getUsername());
+    }
   }
 
   @Override

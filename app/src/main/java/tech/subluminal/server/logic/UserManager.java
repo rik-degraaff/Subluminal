@@ -3,12 +3,14 @@ package tech.subluminal.server.logic;
 import java.util.Set;
 import java.util.stream.Collectors;
 import tech.subluminal.server.stores.UserStore;
+import tech.subluminal.shared.messages.ChatMessageIn;
 import tech.subluminal.shared.messages.LoginReq;
 import tech.subluminal.shared.messages.LoginRes;
 import tech.subluminal.shared.messages.UsernameReq;
 import tech.subluminal.shared.messages.UsernameRes;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.records.User;
+import tech.subluminal.shared.son.SONRepresentable;
 
 /**
  * Manages the information of connected users.
@@ -50,6 +52,7 @@ public class UserManager {
     userStore.updateUser(new User(username, id));
 
     connection.sendMessage(new UsernameRes(username));
+
   }
 
   /**

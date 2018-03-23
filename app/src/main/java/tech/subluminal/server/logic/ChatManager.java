@@ -44,12 +44,12 @@ public class ChatManager {
   }
 
   private void sendDirectMessage(User sender, String message, String receiver) {
-    distributor.sendMessage(new ChatMessageIn(message, sender.getId(), Channel.WHISPER), receiver);
+    distributor.sendMessage(new ChatMessageIn(message, sender.getUsername(), Channel.WHISPER), receiver);
   }
 
   private void sendMessage(User sender, String message, boolean global) {
     if (global) {
-      distributor.sendMessageToAllExcept(new ChatMessageIn(message, sender.getId(), Channel.GLOBAL), sender.getId());
+      distributor.sendMessageToAllExcept(new ChatMessageIn(message, sender.getUsername(), Channel.GLOBAL), sender.getId());
     } else {
       // TODO: implement game channel messaging
     }
