@@ -1,24 +1,32 @@
 # TODO
+Please create an issue on gitlab for the task you are working on, a
 
 ## Game design
 * [ ] ...
 
 ## Code
-* [ ] ...
+* [ ] correct all the checkstyle errors (SON exception)
+* [ ] integrate Log4J and take debug lvl as command line argument
+* [ ] command line argument parser 
 
 ## Artwork
 * [X] game icon for social media, may also be used as a program icon
 
 ## Web
-* [ ] disclaimer for homepage (copyright, steamstore, ...)
-* [ ] pusblish game rules document (--> markdown render)
+* [X] disclaimer for homepage (copyright, steamstore, ...)
+* [X] pusblish game rules document (--> markdown render)
 
 ## Gradle/IntelliJ/Gitlab
-* [ ] reroute ``out`` folder in IntelliJ to ``app/out/`` using the idea gradle plugin.
-* [ ] gitlab CI is not working... docker problem?
+* [X] reroute ``out`` folder in IntelliJ to ``app/out/`` using the idea gradle plugin.
+* [ ] javadocs output to docs folder
+* [X] gitlab CI is not working... docker problem?
 * [ ] use watch plugin for gradle.
-* [ ] get IntelliJ to play nice with gradle project (maybe only set )
+* [X] get IntelliJ to play nice with gradle project
+* [ ] gradle ‘rootProject.projectDir’ option necessary?
 
+## CI
+* [ ] create manual deploy script for server in docker container
 
 ## Other
-* [ ] ...
+* [ ] update diary with more entries
+* [ ] 
