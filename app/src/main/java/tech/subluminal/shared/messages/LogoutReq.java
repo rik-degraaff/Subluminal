@@ -12,7 +12,7 @@ public class LogoutReq implements SONRepresentable {
    */
   @Override
   public SON asSON() {
-    return null;
+    return new SON();
   }
 
   public static LogoutReq fromSON(SON son){
