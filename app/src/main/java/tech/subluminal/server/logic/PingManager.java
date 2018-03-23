@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import tech.subluminal.server.stores.PingStore;
 import tech.subluminal.server.stores.ReadOnlyUserStore;
+import tech.subluminal.shared.logic.PingResponder;
 import tech.subluminal.shared.messages.Ping;
 import tech.subluminal.shared.messages.Pong;
 import tech.subluminal.shared.net.Connection;
@@ -22,6 +23,7 @@ public class PingManager {
   private final PingStore pingStore;
   private final ReadOnlyUserStore userStore;
   private final MessageDistributor distributor;
+  private final PingResponder pingResponder = new PingResponder();
 
   /**
    * Creates a ping manager with a ping store, users tore and a message distributor.
@@ -45,17 +47,13 @@ public class PingManager {
 
   private void attachHandlers(String id, Connection connection) {
     connection.registerHandler(Pong.class, Pong::fromSON, pong -> pongReceived(pong, id));
-    connection.registerHandler(Ping.class, Ping::fromSON, ping -> pingReceived(ping, connection));
+    pingResponder.attachHandlers(connection);
   }
 
   private void pongReceived(Pong pong, String userID) {
     synchronized (userStore) {
       pingStore.removePing(userID, pong.getId());
     }
-  }
-
-  private void pingReceived(Ping ping, Connection connection) {
-    connection.sendMessage(new Pong(ping.getId()));
   }
 
   private void pingLoop() {
