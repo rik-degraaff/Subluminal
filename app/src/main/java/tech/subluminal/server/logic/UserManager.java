@@ -45,10 +45,10 @@ public class UserManager {
    */
   private void onUsernameChange(String id, Connection connection, UsernameReq usernameReq) {
     String username = usernameReq.getUsername();
-    synchronized (userStore) {
-      username = getUnusedUsername(username);
-      userStore.updateUser(new User(username, id));
-    }
+
+    username = getUnusedUsername(username);
+    userStore.updateUser(new User(username, id));
+
     connection.sendMessage(new UsernameRes(username));
   }
 
@@ -61,10 +61,10 @@ public class UserManager {
    */
   private void onLogin(String id, Connection connection, LoginReq loginReq) {
     String username = loginReq.getUsername();
-    synchronized (userStore) {
-      username = getUnusedUsername(username);
-      userStore.addUser(new User(username, id));
-    }
+
+    username = getUnusedUsername(username);
+    userStore.addUser(new User(username, id));
+
     connection.sendMessage(new LoginRes(username, id));
   }
 
