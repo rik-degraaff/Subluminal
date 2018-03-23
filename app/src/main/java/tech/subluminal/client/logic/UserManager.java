@@ -3,6 +3,7 @@ package tech.subluminal.client.logic;
 import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.shared.messages.LoginReq;
 import tech.subluminal.shared.messages.LoginRes;
+import tech.subluminal.shared.messages.LogoutReq;
 import tech.subluminal.shared.messages.UsernameReq;
 import tech.subluminal.shared.messages.UsernameRes;
 import tech.subluminal.shared.net.Connection;
@@ -77,6 +78,6 @@ public class UserManager implements UserPresenter.Delegate {
    */
   @Override
   public void logout() {
-    // TODO: initialize logout
+    connection.sendMessage(new LogoutReq());
   }
 }
