@@ -1,5 +1,6 @@
 package tech.subluminal.client.logic;
 
+import java.io.IOException;
 import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.shared.messages.LoginReq;
 import tech.subluminal.shared.messages.LoginRes;
@@ -78,5 +79,13 @@ public class UserManager implements UserPresenter.Delegate {
   @Override
   public void logout() {
     connection.sendMessage(new LogoutReq());
+    try {
+      connection.close();
+    } catch (IOException e) {
+      e.printStackTrace(); //TODO: sensible stuff
+    }
+
+    System.out.println("Bye!"); //TODO: send to presenter instead.
+    System.exit(0);
   }
 }
