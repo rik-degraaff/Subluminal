@@ -13,7 +13,7 @@ import tech.subluminal.shared.records.SentPing;
  */
 public class InMemoryPingStore implements PingStore {
 
-  private Map<String, Map<String, SentPing>> pings;
+  private Map<String, Map<String, SentPing>> pings = new HashMap<>();
 
   /**
    * Adds a ping record to te store for a given user.

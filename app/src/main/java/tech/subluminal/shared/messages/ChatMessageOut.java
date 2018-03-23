@@ -49,7 +49,12 @@ public class ChatMessageOut implements SONRepresentable {
    */
   @Override
   public SON asSON() {
-    return null;
+    SON son = new SON().put(message, MESSAGE_KEY);
+    if (receiverID == null) {
+      return son.put(global, GLOBAL_KEY);
+    } else {
+      return son.put(receiverID, RECEIVER_ID_KEY);
+    }
   }
 
   /**
