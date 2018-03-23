@@ -14,6 +14,11 @@ public interface UserPresenter {
    */
   void loginSucceeded();
 
+  /**
+   * Fired when a username got successfully changed.
+   */
+  void nameChangeSucceeded();
+
   void setUserDelegate(Delegate delegate);
 
   /**

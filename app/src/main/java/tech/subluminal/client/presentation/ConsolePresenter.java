@@ -86,12 +86,21 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
   /**
    * Function that should be called when login succeeded.
    */
-  @java.lang.Override
+  @Override
   public void loginSucceeded() {
     String username = userStore.getCurrentUser().getUsername();
 
     synchronized (out) {
       out.println("Successfully logged in as " + username);
+    }
+  }
+
+  @Override
+  public void nameChangeSucceeded() {
+    String username = userStore.getCurrentUser().getUsername();
+
+    synchronized (out) {
+      out.println("Successfully changed name to" + username);
     }
   }
 
