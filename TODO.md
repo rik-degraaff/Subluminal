@@ -12,6 +12,8 @@ This is a temporary task store. Please create an issue on gitlab for the task yo
 * [ ] write unittests.
 * [ ] use mockito framework
 * [ ] implement SONList
+* [ ] master server for game browser
+* [ ] global config store 
 
 ## Artwork
 * [X] game icon for social media, may also be used as a program icon.
