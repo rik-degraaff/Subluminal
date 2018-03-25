@@ -8,6 +8,10 @@ import tech.subluminal.server.init.ServerInitializer;
  */
 public class Subluminal {
 
+  /**
+   * Parses the command line arguments and calls the relevant packages.
+   * @param args are the command line arguments.
+   */
   public static void main(String[] args) {
     if (args.length < 2) {
       invalidArguments();

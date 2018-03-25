@@ -9,13 +9,19 @@ import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.records.User;
 
 /**
- * Manages the chat messages that are sent to and received from the clients
+ * Manages the chat messages that are sent to and received from the clients.
  */
 public class ChatManager {
 
   private final ReadOnlyUserStore userStore;
   private final MessageDistributor distributor;
 
+  /**
+   * Manages the Messages from the clients and sends them as needed.
+   *
+   * @param distributor to send new messages.
+   * @param userStore to check for active users.
+   */
   public ChatManager(MessageDistributor distributor, ReadOnlyUserStore userStore) {
     this.userStore = userStore;
     this.distributor = distributor;

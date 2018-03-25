@@ -15,7 +15,7 @@ import tech.subluminal.shared.records.SentPing;
 import tech.subluminal.shared.records.User;
 
 /**
- * Manages the pings that are sent to and received from the clients
+ * Manages the pings that are sent to and received from the clients.
  */
 public class PingManager {
 
