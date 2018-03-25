@@ -87,6 +87,5 @@ javadoc {
 }
 
 // task openBrowser(type:Exec) {
-//     workingDir './docs/javadocs/'
-//     java.awt.Desktop.desktop.browse "".toURI()
+//     java.awt.Desktop.desktop.browse rootProject.path+"docs/javadocs/index.html".toURI()
 // }
