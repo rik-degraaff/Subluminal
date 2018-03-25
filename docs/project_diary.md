@@ -35,6 +35,7 @@ We spent half a day implementing the first classes and interfaces.
 - Our code style is going to be the Google Java code style.
 - We specified the package structure for the project (in the app folder).
 The structure is as follows:  
+
 ```
 src
 |
