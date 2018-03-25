@@ -5,6 +5,8 @@ import tech.subluminal.shared.records.User;
 public interface ReadOnlyUserStore {
 
   /**
+   * Get the current user.
+   *
    * @return the current user.
    */
   User getCurrentUser();

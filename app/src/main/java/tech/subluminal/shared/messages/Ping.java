@@ -36,6 +36,8 @@ public class Ping implements SONRepresentable {
   }
 
   /**
+   * Grabs the id of the Ping object.
+   *
    * @return the id of the ping message.
    */
   public String getId() {
