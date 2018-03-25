@@ -11,6 +11,8 @@ public class InMemoryUserStore implements UserStore {
   private User currentUser;
 
   /**
+   * Grabs the current User.
+   *
    * @return the current user.
    */
   @Override
@@ -21,6 +23,8 @@ public class InMemoryUserStore implements UserStore {
   }
 
   /**
+   * Sets the current User
+   *
    * @param user to be set as current user.
    */
   @Override

@@ -20,6 +20,8 @@ public class User {
   }
 
   /**
+   * Gets the username.
+   *
    * @return the user.
    */
   public String getUsername() {
@@ -27,13 +29,17 @@ public class User {
   }
 
   /**
-   * @param to be set.
+   * Sets the username of the user.
+   *
+   * @param username be set.
    */
   public void setUsername(String username) {
     this.username = username;
   }
 
   /**
+   * Gets the id of the user.
+   *
    * @return the user id.
    */
   public String getId() {
@@ -41,7 +47,9 @@ public class User {
   }
 
   /**
-   * @param to be set as user id.
+   * Sets the id of the user.
+   *
+   * @param id to be set as user id.
    */
   public void setId(String id) {
     this.id = id;

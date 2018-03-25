@@ -8,6 +8,8 @@ import tech.subluminal.shared.records.User;
 public interface UserStore extends ReadOnlyUserStore {
 
   /**
+   * Set the current user.
+   *
    * @param user to be set as current user.
    */
   void setCurrentUser(User user);
