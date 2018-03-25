@@ -54,7 +54,6 @@ repositories {
 
 dependencies {
     testCompile 'junit:junit:4.12'
-    compile 'junit:junit:4.12'
 }
 
 jar {
@@ -81,3 +80,12 @@ test {
         logger.quiet "Executing test ${desc.name} [${desc.className}] with result: ${result.resultType}"
     }
 }
+
+javadoc {
+    setDestinationDir(file('docs/javadocs'))
+
+}
+
+// task openBrowser(type:Exec) {
+//     java.awt.Desktop.desktop.browse rootProject.path+"docs/javadocs/index.html".toURI()
+// }
