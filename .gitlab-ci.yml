@@ -1,0 +1,50 @@
+image: gradle:4.6.0-jdk8-alpine
+
+before_script:
+  - echo "----- Start CI -----"
+  - pwd
+  - export GRADLE_USER_HOME=`pwd`/.gradle
+
+cache:
+  paths:
+    - .gradle/wrapper
+    - .gradle/caches
+
+stages:
+  - checkstyle
+  - build
+  - test
+  - javadoc
+
+checkstyle:
+  stage: checkstyle
+  script:
+    - gradle check
+  tags:
+    - cs108
+  allow_failure: true
+
+test:
+  stage: test
+  script:
+    - gradle test
+  tags:
+  - cs108
+
+build:
+  stage: build
+  script:
+  - gradle build
+  tags:
+  - cs108
+
+javadoc:
+  stage: javadoc
+  script:
+    - gradle javadoc
+  tags:
+    - cs108
+  allow_failure: true
+
+after_script:
+  - echo "----- End CI -----"

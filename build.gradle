@@ -1,0 +1,91 @@
+group 'Bordeaux Ink.'
+version '0.2.0-m2'
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'checkstyle'
+
+checkstyle { 
+    toolVersion = '8.5'
+}
+
+def description = """
+    Project: ${project.name}
+    
+    Author(s):  Rik de Graaff,
+                Lucas Galery Käser,
+                Luc Kury,
+                David Lengweiler
+"""
+
+sourceSets {
+    main {
+         java.outputDir = file('app/out/main')
+         java {
+              srcDir 'app/src/main/java'
+              }
+         }
+
+    test {
+         java.outputDir = file('app/out/test')
+         java {
+              srcDir 'app/src/test/java'
+              }
+         }
+}
+
+project.buildDir = 'app/build/'
+
+idea{
+    module{
+        inheritOutputDirs = false
+        outputDir = compileJava.destinationDir
+        testOutputDir = compileTestJava.destinationDir
+    }
+}
+
+//specifies source compatibility to Java 8
+sourceCompatibility = 1.8
+
+//adds maven central as a maven repository
+repositories {
+    jcenter()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.12'
+}
+
+jar {
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    manifest{
+        attributes 'Main-Class': 'tech.subluminal.main.Subluminal'
+    }
+}
+
+task info {
+    doFirst{
+        println "${description}"
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.6'
+}
+
+test {
+    afterTest { desc, result ->
+        logger.quiet "Executing test ${desc.name} [${desc.className}] with result: ${result.resultType}"
+    }
+}
+
+javadoc {
+    setDestinationDir(file('docs/javadocs'))
+
+}
+
+// task openBrowser(type:Exec) {
+//     java.awt.Desktop.desktop.browse rootProject.path+"docs/javadocs/index.html".toURI()
+// }

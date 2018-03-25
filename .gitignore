@@ -1,6 +1,23 @@
 #files
+~*.*
 *.class
+*.classpath
+*.project
+*.iml
+.idea/**/*.xml
+.idea/*.xml
+*.log
 
 
 #folders
+.app/
+.idea/
+.gradle/
+.settings/
+.vscode/
+
 app/out/
+app/build/
+bin/
+build/
+docs/javadocs/
