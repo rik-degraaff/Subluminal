@@ -14,6 +14,8 @@ This is a temporary task store. Please create an issue on gitlab for the task yo
 * [ ] implement SONList
 * [ ] master server for game browser
 * [ ] global config store 
+* [ ] random string generator (usernames, loading messags, planets, solar systems)
+* [ ] make consolue input work during message receive
 
 ## Artwork
 * [X] game icon for social media, may also be used as a program icon.
@@ -35,7 +37,7 @@ This is a temporary task store. Please create an issue on gitlab for the task yo
 ## CI
 * [ ] create (manual) deploy script for server in docker container.
 * [ ] additional stages for CI, make allow_fail for low prio branches.
-* [ ] attach binaries from ci to release in gitlab
+* [ ] attach binaries from CI to release in gitlab
 
 ## Other
 * [ ] update diary with more entries.
@@ -46,3 +48,4 @@ This is a temporary task store. Please create an issue on gitlab for the task yo
 * [ ] open javadoc and test report on completation.
 * [ ] generate CHANGELOG from commits.
 * [ ] update CONTRIBUTING file.
+* [ ] create ``.template`` folder for gitlab

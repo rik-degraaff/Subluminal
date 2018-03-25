@@ -1,78 +1,114 @@
 # Network protocol
-## Properties
-- A message is terminated by a newline character ``\r\n``.
-- Preamble contains message type only. Package length is ommited, parsed till EOL.
-- Delimeter: ``space`` between preamble and message content.
+Our implementation of a network protocol is stronglly influenced by JSON. The packets are constructed like objects - before sending all whitespace is removed and the keys and values are concatonated.
+
+## Protocol properties
+- The packet preamble contains only the type.
+- A packet is terminated by the newline character ``\r\n``.
+- Package length/size is not calculated and transmitted.
+- Between preamble and message content there is a ``space`` as delimiter.
 - Object notation: 
   - Objects: ``{ }``
   - Lists: ``[ ]``
   - Key/Value delimiter: ``:``
   - Field separator: ``,``
 
-### Example from slides (invalid)
+## Protocol message structure
+The following package types are implemented: loginreq, loginres, logoutreq, chatmessagein, chatmessageout, ping, pong, usernamereq, usernameres
+
+### LoginReq
+***Client***: Register a new user to the server. Expects response with ``LoginRes`` object.
+
+fields
 ```
-Login:
-C: HI <username>
-S: HI <username1>
-
-Logout:
-C: BYE
-S: BYE
-
-Username:
-C: NAME <username>
-S: NAME <username1>
-
-Lobbbies:
-C: GETGAMES
-S: GAMES
-     <id> <name> <players> <started>
-     [...]
-
-C: MKGAME <name>
-S: NEWGAME <id> <name>
-
-C: JOINGAME <id>
-S: JOINGAME <id>
-
-C: READY <game-id>
-S: READY <game-id>
-
-C: STAT <game-id>
-S: STAT <game-id> <name>
-     <player> <ready>
-     [...]
-
-Chat:
-C: SAY <game-id> <message>
-
-S: SAID <game-id> <player> <message>
-
-Game:
-S: GAMESTART <game-id>
-     PLANETS
-       <planet-id> <x> <y> <resources>
-       [...]
-     PLAYERS
-       <player> <planet-id>
-
-C: STAT <game-id>
-S: STAT <game-id>
-     PLAYERS
-       <player>
-         [<x> <y>] <target-planet-id> // Mothership location
-         [<x> <y>] <target-planet-id> <signal-time> <ship-id> [...]
-         [...]
-       [...]
-     PLANETS
-       <planet-id> [<player> <capture-percent>]
-       [...]
-
-C: SIGNAL <game-id>
-     <planet-id> <target-planet-id> <move-percent>
-
-C: MOVE <game-id>
-      <target-planet-id>
-
-C: LEAVE <game-id>
+{
+  "username":s"<String>"
+}
 ```
+
+### LoginRes
+***Server***: Confirms login and returns ``userid``.
+
+fields
+```
+{
+  "userid":i"<integer>",
+  "username":s"<String>"
+}
+```
+
+### LogoutReq
+***Client***: Properly disconnects the client from the server.
+
+fields
+```
+{
+ //empty object
+}
+```
+
+### ChatMessageOut
+***Client***: Send ``message`` to server. ``message`` and  ``global`` are handled by the server.
+
+fields
+```
+{
+  "message":s"<String>",
+  "receiverID":s"<String>",
+  "global":b"<boolean>"
+}
+```
+
+### ChatMessageIn
+***Server***: Send ``message`` to client.
+
+fields
+```
+{
+  "message":s"<String>",
+  "username":s"<String>",
+  "channel":s"<String>"
+}
+```
+
+### Ping
+***Server***: Initiate ping/pong.
+
+fields
+```
+{
+  "id":s"<String>"
+}
+```
+
+### Pong
+***Client***: Respond to ping with pong.
+
+fields
+```
+{
+  "id":s"<String>"
+}
+```
+
+### UsernameReq
+***Client***: Send request to change the ``username``. Expects response with ``UsernameRes`` object.
+
+fields
+```
+{
+  "username":s"<String>"
+}
+```
+
+### UsernameRes
+***Server***: Sends new ``username`` to client.
+
+fields
+```
+{
+  "username":s"<String>"
+}
+```
+
+## Diagram
+![UML Diagram of basic messaging](../assets/other/basic_messaging.svg)

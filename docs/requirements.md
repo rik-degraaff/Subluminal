@@ -3,17 +3,18 @@
 ## Coding
 | Application | Version | Download |
 |-------------|---------|----------|
-| Java SE Development Kit  | >= 9.0.4 | ``http://www.oracle.com/technetwork/java/javase/downloads/jdk9-downloads-3848520.html`` |
-| JetBrains IntelliJ IDEA Ultimate | >= 2018.1 EAP | ``https://www.jetbrains.com/idea/nextversion/`` |
+| Java SE Development Kit  | >= 1.8.0_144 | ``https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html`` |
+| JetBrains IntelliJ IDEA Ultimate | >= 2017.3.4 | ``https://www.jetbrains.com/idea/`` |
 | Git | >= 2.16.2 | ``https://git-scm.com/download/win`` |
-| Git-lfs | >=? | ?? |
-| Git | >=?  | ``Let the wrapper download`` |
+| Git-lfs | >= 2.3.4 | ?? |
+| Gradle | = 4.6.0  | ``Let the wrapper download`` |
 
 ## Graphics & Audio
 | Application | Version | Download |
 |-------------|---------|----------|
-| Photoshop | ? | ``none`` |
-| Illustrator | ? | ``none`` |
+| Photoshop | = CC2018 | ``via Adobe`` |
+| Illustrator | = CC2018 | ``via Adobe`` |
+| Visio | = 2016 | ``via Microsoft`` |
 
 ## Other
 | Application | Version | Download |
