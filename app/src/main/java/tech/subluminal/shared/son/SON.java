@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 /**
  * Subluminal Object Notation:
  *
- * A structured object with keys associated with typed values.
+ * <p>A structured object with keys associated with typed values.
  */
 public class SON {
 
@@ -132,6 +132,7 @@ public class SON {
    */
   public SON put(int value, String key, String... additionalKeys) {
     if (additionalKeys.length != 0) {
+      getNested(key, additionalKeys).put(value, additionalKeys[additionalKeys.length - 1]);
     }
     intMap.put(key, value);
     return this;
@@ -337,7 +338,9 @@ public class SON {
   }
 
   /**
-   * @return a string representation of this son object that can be parsed again.
+   * Transforms a SON object into a string.
+   *
+   * @return a string representation of this SON object that can be parsed again.
    */
   public String asString() {
     StringBuilder builder = new StringBuilder();
