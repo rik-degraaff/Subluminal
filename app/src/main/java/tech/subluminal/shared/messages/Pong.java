@@ -36,6 +36,8 @@ public class Pong implements SONRepresentable {
   }
 
   /**
+   * Returns the id of the pong message.
+   *
    * @return the id of the pong message.
    */
   public String getId() {

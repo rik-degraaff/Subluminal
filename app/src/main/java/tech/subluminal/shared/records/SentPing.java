@@ -9,7 +9,7 @@ public class SentPing {
   private String id;
 
   /**
-   * Creates a ping sent record with a sent time and an id
+   * Creates a ping sent record with a sent time and an id.
    *
    * @param sentTime the time (currentmillis) when the ping was sent
    * @param id the id of the ping that was sent
@@ -20,6 +20,8 @@ public class SentPing {
   }
 
   /**
+   * Returns the time the ping was sent.
+   *
    * @return the time when the ping was sent.
    */
   public long getSentTime() {
@@ -27,13 +29,17 @@ public class SentPing {
   }
 
   /**
-   * @param sentTime teh time when the ping was sent.
+   * Sets the sending time of a sent ping.
+   *
+   * @param sentTime the time the ping was sent.
    */
   public void setSentTime(long sentTime) {
     this.sentTime = sentTime;
   }
 
   /**
+   * Returns the id of a sent ping.
+   *
    * @return the id of the sent ping.
    */
   public String getId() {
@@ -41,7 +47,9 @@ public class SentPing {
   }
 
   /**
-   * @param id teh id of the sent ping.
+   * Sets the id of a sent ping.
+   *
+   * @param id the id of the sent ping.
    */
   public void setId(String id) {
     this.id = id;

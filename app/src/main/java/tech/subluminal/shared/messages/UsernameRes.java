@@ -5,7 +5,7 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Represents a username change response from the server to the client
+ * Represents a username change response from the server to the client.
  */
 public class UsernameRes implements SONRepresentable {
 
