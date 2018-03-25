@@ -1,8 +1,5 @@
 package tech.subluminal.client.presentation;
 
-import tech.subluminal.client.presentation.ChatPresenter.Delegate;
-import tech.subluminal.shared.records.User;
-
 /**
  * Presenter for the user interatcion.
  */

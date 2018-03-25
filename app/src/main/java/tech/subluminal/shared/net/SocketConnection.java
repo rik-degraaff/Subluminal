@@ -1,7 +1,6 @@
 package tech.subluminal.shared.net;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
@@ -12,7 +11,6 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.function.Consumer;
-import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONConverter;
@@ -29,6 +27,16 @@ public class SocketConnection implements Connection {
 
   public SocketConnection(Socket socket) {
     this.socket = socket;
+  }
+
+  private static <T extends SONRepresentable> void handleMessage(SONConverter<T> converter,
+      Consumer<T> handler, SON son) {
+    try {
+      handler.accept(converter.convert(son));
+    } catch (SONConversionError sonConversionError) {
+      System.err.println(
+          "Structure of " + sonConversionError.getMessage() + "packets was incorrect, son.");
+    }
   }
 
   private void inStreamLoop() {
@@ -82,16 +90,6 @@ public class SocketConnection implements Connection {
     handlers.get(method).add(son -> handleMessage(converter, handler, son));
   }
 
-  private static <T extends SONRepresentable> void handleMessage(SONConverter<T> converter,
-      Consumer<T> handler, SON son) {
-    try {
-      handler.accept(converter.convert(son));
-    } catch (SONConversionError sonConversionError) {
-      System.err.println(
-          "Structure of " + sonConversionError.getMessage() + "packets was incorrect, son.");
-    }
-  }
-
   /**
    * Sends a message over the connection.
    *
@@ -134,7 +132,7 @@ public class SocketConnection implements Connection {
    * Closes this stream and releases any system resources associated with it. If the stream is
    * already closed then invoking this method has no effect.
    *
-   * <p> As noted in {@link AutoCloseable#close()}, cases where the close may fail require careful
+   * <p>As noted in {@link AutoCloseable#close()}, cases where the close may fail require careful
    * attention. It is strongly advised to relinquish the underlying resources and to internally
    * <em>mark</em> the {@code Closeable} as closed, prior to throwing the {@code IOException}.
    *

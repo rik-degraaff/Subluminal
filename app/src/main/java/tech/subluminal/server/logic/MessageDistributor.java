@@ -3,7 +3,6 @@ package tech.subluminal.server.logic;
 import java.util.Collection;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import tech.subluminal.shared.messages.ChatMessageIn;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.son.SONRepresentable;
 

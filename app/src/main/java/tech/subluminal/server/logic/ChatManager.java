@@ -9,13 +9,19 @@ import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.records.User;
 
 /**
- * Manages the chat messages that are sent to and received from the clients
+ * Manages the chat messages that are sent to and received from the clients.
  */
 public class ChatManager {
 
   private final ReadOnlyUserStore userStore;
   private final MessageDistributor distributor;
 
+  /**
+   * Manages the Messages from the clients and sends them as needed.
+   *
+   * @param distributor to send new messages.
+   * @param userStore to check for active users.
+   */
   public ChatManager(MessageDistributor distributor, ReadOnlyUserStore userStore) {
     this.userStore = userStore;
     this.distributor = distributor;
@@ -24,7 +30,8 @@ public class ChatManager {
   }
 
   private void attachHandlers(String id, Connection connection) {
-    connection.registerHandler(ChatMessageOut.class, ChatMessageOut::fromSON, msg -> chatMessageReceived(msg, id));
+    connection.registerHandler(ChatMessageOut.class, ChatMessageOut::fromSON,
+        msg -> chatMessageReceived(msg, id));
   }
 
   private void chatMessageReceived(ChatMessageOut msg, String userID) {
@@ -43,12 +50,15 @@ public class ChatManager {
   }
 
   private void sendDirectMessage(User sender, String message, String receiver) {
-    distributor.sendMessage(new ChatMessageIn(message, sender.getUsername(), Channel.WHISPER), receiver);
+    distributor
+        .sendMessage(new ChatMessageIn(message, sender.getUsername(), Channel.WHISPER), receiver);
   }
 
   private void sendMessage(User sender, String message, boolean global) {
     if (global) {
-      distributor.sendMessageToAllExcept(new ChatMessageIn(message, sender.getUsername(), Channel.GLOBAL), sender.getId());
+      distributor
+          .sendMessageToAllExcept(new ChatMessageIn(message, sender.getUsername(), Channel.GLOBAL),
+              sender.getId());
     } else {
       // TODO: implement game channel messaging
     }

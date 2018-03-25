@@ -10,14 +10,20 @@ import tech.subluminal.client.stores.ReadOnlyUserStore;
  */
 public class ConsolePresenter implements UserPresenter, ChatPresenter {
 
+  static volatile boolean keepRunning = true;
   private InputStream in;
   private PrintStream out;
   private ReadOnlyUserStore userStore;
   private ChatPresenter.Delegate chatDelegate;
   private UserPresenter.Delegate userDelegate;
 
-  static volatile boolean keepRunning = true;
-
+  /**
+   * Reads and prints to the console, checks the userstore.
+   *
+   * @param in is InputStream from the console.
+   * @param out is OuputStream from the console.
+   * @param userStore to check for the current User and all active ones.
+   */
   public ConsolePresenter(InputStream in, PrintStream out, ReadOnlyUserStore userStore) {
     this.in = in;
     this.out = out;
@@ -26,6 +32,9 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
     new Thread(this::inputLoop).start();
   }
 
+  /**
+   * Reads the console constantly and handles the input accordingly.
+   */
   public void inputLoop() {
     Scanner scanner = new Scanner(in);
 
@@ -63,12 +72,12 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
   }
 
   private void handleNameChangeCmd(String line, String channel) {
-    String new_username = extractMessageBody(line, channel);
+    String newUsername = extractMessageBody(line, channel);
     //removes all whitespaces //TODO: may change later
-    String username = new_username.replaceAll(" ", "");
+    String username = newUsername.replaceAll(" ", "");
 
-    if (username.equals("")){
-      synchronized (out){
+    if (username.equals("")) {
+      synchronized (out) {
         out.println("You did not enter a new username, I got you covered, fam.");
       }
       username = "ThisisPatrick!";
@@ -135,6 +144,9 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
     }
   }
 
+  /**
+   * Sets a userDelegate to listen to.
+   */
   @Override
   public void setUserDelegate(UserPresenter.Delegate delegate) {
     this.userDelegate = delegate;
@@ -173,10 +185,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
     out.println("Game|" + username + ": " + message);
   }
 
-  /**
-   *
-   * @param delegate
-   */
+
   @Override
   public void setChatDelegate(ChatPresenter.Delegate delegate) {
     this.chatDelegate = delegate;

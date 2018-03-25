@@ -16,6 +16,11 @@ public class SocketConnectionManager implements ConnectionManager {
   private Set<Consumer<Connection>> connectionListeners = new HashSet<>();
   private volatile boolean stop = false;
 
+  /**
+   * Builds a new socket on the specific port.
+   *
+   * @param port to bind the socket to.
+   */
   public SocketConnectionManager(int port) {
     try {
       serverSocket = new ServerSocket(port);
@@ -55,9 +60,9 @@ public class SocketConnectionManager implements ConnectionManager {
    * Closes this stream and releases any system resources associated with it. If the stream is
    * already closed then invoking this method has no effect.
    *
-   * <p> As noted in {@link AutoCloseable#close()}, cases where the close may fail require careful
+   * <p>As noted in {@link AutoCloseable#close()}, cases where the close may fail require careful
    * attention. It is strongly advised to relinquish the underlying resources and to internally
-   * <em>mark</em> the {@code Closeable} as closed, prior to throwing the {@code IOException}.
+   * <em>mark</em> the {@code Closeable} as closed, prior to throwing the {@code IOException}.</p>
    *
    * @throws IOException if an I/O error occurs
    */

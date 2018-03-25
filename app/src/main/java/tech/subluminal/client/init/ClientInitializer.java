@@ -7,11 +7,11 @@ import tech.subluminal.client.logic.PingManager;
 import tech.subluminal.client.logic.UserManager;
 import tech.subluminal.client.presentation.ConsolePresenter;
 import tech.subluminal.client.stores.InMemoryPingStore;
+import tech.subluminal.client.stores.InMemoryUserStore;
 import tech.subluminal.client.stores.PingStore;
+import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.messages.LogoutReq;
 import tech.subluminal.shared.net.Connection;
-import tech.subluminal.client.stores.InMemoryUserStore;
-import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.net.SocketConnection;
 
 /**

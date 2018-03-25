@@ -2,33 +2,20 @@ package tech.subluminal.shared.son;
 
 class SONParsing {
 
-  private static final char STRING_DELIMITER = '"';
-  private static final char STRING_ESCAPE = '\\';
   static final char KEY_VALUE_DELIMITER = ':';
   static final char ENTRY_DELIMITER = ',';
-
   static final char OBJECT_LEFTBRACE = '{';
   static final char OBJECT_RIGHTBRACE = '}';
   static final char LIST_LEFTBRACE = '[';
   static final char LIST_RIGHTBRACE = ']';
-
   static final char INTEGER_ID = 'i';
   static final char DOUBLE_ID = 'd';
   static final char BOOLEAN_ID = 'b';
   static final char STRING_ID = 's';
   static final char OBJECT_ID = 'o';
   static final char LIST_ID = 'l';
-
-  static class PartialParseResult<T> {
-
-    final T result;
-    final int pos;
-
-    PartialParseResult(T result, int pos) {
-      this.result = result;
-      this.pos = pos;
-    }
-  }
+  private static final char STRING_DELIMITER = '"';
+  private static final char STRING_ESCAPE = '\\';
 
   static String keyValueString(String key, Integer value) {
     return stringString(key) + KEY_VALUE_DELIMITER + INTEGER_ID + integerString(value);
@@ -154,5 +141,16 @@ class SONParsing {
     return str
         .replace("" + STRING_DELIMITER, "" + STRING_ESCAPE + STRING_DELIMITER)
         .replace("" + STRING_ESCAPE, "" + STRING_ESCAPE + STRING_ESCAPE);
+  }
+
+  static class PartialParseResult<T> {
+
+    final T result;
+    final int pos;
+
+    PartialParseResult(T result, int pos) {
+      this.result = result;
+      this.pos = pos;
+    }
   }
 }

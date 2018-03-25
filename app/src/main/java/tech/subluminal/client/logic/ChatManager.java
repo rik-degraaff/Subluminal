@@ -12,6 +12,13 @@ public class ChatManager implements ChatPresenter.Delegate {
   private final ChatPresenter chatPresenter;
   private final Connection connection;
 
+  /**
+   * Holds the connection and coordinates the userStore and the chatPresenter.
+   *
+   * @param userStore holds all active users.
+   * @param chatPresenter handles the representation of the chat.
+   * @param connection is the active socket to communicate with the server.
+   */
   public ChatManager(UserStore userStore, ChatPresenter chatPresenter, Connection connection) {
     this.userStore = userStore;
     this.chatPresenter = chatPresenter;
@@ -33,6 +40,9 @@ public class ChatManager implements ChatPresenter.Delegate {
         break;
       case WHISPER:
         chatPresenter.whisperMessageReceived(message.getMessage(), message.getUsername());
+        break;
+      default:
+        System.err.println("The object did not contain a valid channel.");
     }
   }
 

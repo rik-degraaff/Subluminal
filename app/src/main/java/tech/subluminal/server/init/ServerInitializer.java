@@ -17,6 +17,11 @@ import tech.subluminal.shared.net.ConnectionManager;
  */
 public class ServerInitializer {
 
+  /**
+   * Inizializes the server and creates the needed objects.
+   *
+   * @param port to bind the server to.
+   */
   public static void init(int port) {
     ConnectionManager connectionManager = new SocketConnectionManager(port);
 

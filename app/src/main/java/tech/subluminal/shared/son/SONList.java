@@ -5,7 +5,7 @@ import java.util.Optional;
 /**
  * Subluminal Object Notation List:
  *
- * A dynamic list with typed values.
+ * <p>A dynamic list with typed values.
  */
 public class SONList {
 

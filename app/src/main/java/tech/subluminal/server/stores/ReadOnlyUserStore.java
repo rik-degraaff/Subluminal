@@ -10,6 +10,8 @@ import tech.subluminal.shared.records.User;
 public interface ReadOnlyUserStore {
 
   /**
+   * Retrieves a list of all users connected to the server.
+   *
    * @return all the users that are connected to the server.
    */
   Collection<User> getUsers();

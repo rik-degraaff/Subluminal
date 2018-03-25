@@ -1,8 +1,5 @@
 package tech.subluminal.client.presentation;
 
-import java.util.Optional;
-import tech.subluminal.shared.son.SONRepresentable;
-
 /**
  * Handles the presentation of the chat.
  */
@@ -33,8 +30,9 @@ public interface ChatPresenter {
   void gameMessageReceived(String message, String username);
 
   /**
+   * Sets the delegate who gets fired by user messages.
    *
-   * @param delegate
+   * @param delegate is the delegate which will be set.
    */
   void setChatDelegate(Delegate delegate);
 
