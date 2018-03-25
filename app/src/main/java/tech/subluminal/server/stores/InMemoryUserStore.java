@@ -14,6 +14,8 @@ public class InMemoryUserStore implements UserStore {
   private Map<String, User> userMap = new HashMap<>();
 
   /**
+   * Returns the users that are connected to the server.
+   *
    * @return all the users that are connected to the server.
    */
   @Override
