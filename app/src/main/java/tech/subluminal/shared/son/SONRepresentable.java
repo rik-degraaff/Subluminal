@@ -7,15 +7,15 @@ package tech.subluminal.shared.son;
  */
 public interface SONRepresentable {
 
+  static SONConversionError error(String source, String key) {
+    return new SONConversionError(source + "did not contain a valid " + key + ".");
+  }
+  // static Self fromSON(SON son) throws SONConversionError;
+
   /**
    * Creates a SON object representing this object.
    *
    * @return the SON representation.
    */
   SON asSON();
-  // static Self fromSON(SON son) throws SONConversionError;
-
-  static SONConversionError error(String source, String key) {
-    return new SONConversionError(source + "did not contain a valid " + key + ".");
-  }
 }

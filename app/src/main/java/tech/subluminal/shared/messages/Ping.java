@@ -22,6 +22,20 @@ public class Ping implements SONRepresentable {
   }
 
   /**
+   * Creates a ping from a SON object.
+   *
+   * @param son the SON object to be converted to a ping.
+   * @return the created ping.
+   * @throws SONConversionError when the conversion fails.
+   */
+  public static Ping fromSON(SON son) throws SONConversionError {
+    String id = son.getString(ID_KEY)
+        .orElseThrow(() -> new SONConversionError(
+            "Ping did not contain valid " + ID_KEY + "."));
+    return new Ping(id);
+  }
+
+  /**
    * @return the id of the ping message.
    */
   public String getId() {
@@ -36,19 +50,5 @@ public class Ping implements SONRepresentable {
   @Override
   public SON asSON() {
     return new SON().put(id, ID_KEY);
-  }
-
-  /**
-   * Creates a ping from a SON object.
-   *
-   * @param son the SON object to be converted to a ping.
-   * @return the created ping.
-   * @throws SONConversionError when the conversion fails.
-   */
-  public static Ping fromSON(SON son) throws SONConversionError {
-    String id = son.getString(ID_KEY)
-        .orElseThrow(() -> new SONConversionError(
-            "Ping did not contain valid " + ID_KEY + "."));
-    return new Ping(id);
   }
 }

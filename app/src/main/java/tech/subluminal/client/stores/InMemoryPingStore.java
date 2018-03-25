@@ -2,7 +2,7 @@ package tech.subluminal.client.stores;
 
 import tech.subluminal.shared.records.SentPing;
 
-public class InMemoryPingStore implements PingStore{
+public class InMemoryPingStore implements PingStore {
 
   private SentPing ping;
 

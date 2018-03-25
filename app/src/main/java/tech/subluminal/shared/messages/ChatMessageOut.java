@@ -29,34 +29,6 @@ public class ChatMessageOut implements SONRepresentable {
     this.receiverID = receiverID;
   }
 
-  public String getMessage() {
-    return message;
-  }
-
-  public String getReceiverID() {
-    return receiverID;
-  }
-
-  public boolean isGlobal() {
-    return global;
-  }
-
-
-  /**
-   * Creates a SON object representing the ChatMessageOut.
-   *
-   * @return the SON representation.
-   */
-  @Override
-  public SON asSON() {
-    SON son = new SON().put(message, MESSAGE_KEY);
-    if (receiverID == null) {
-      return son.put(global, GLOBAL_KEY);
-    } else {
-      return son.put(receiverID, RECEIVER_ID_KEY);
-    }
-  }
-
   /**
    * Creates a ChatMessageOut from a SON object.
    *
@@ -76,5 +48,32 @@ public class ChatMessageOut implements SONRepresentable {
 
     return new ChatMessageOut(message, receiverID, global);
 
+  }
+
+  public String getMessage() {
+    return message;
+  }
+
+  public String getReceiverID() {
+    return receiverID;
+  }
+
+  public boolean isGlobal() {
+    return global;
+  }
+
+  /**
+   * Creates a SON object representing the ChatMessageOut.
+   *
+   * @return the SON representation.
+   */
+  @Override
+  public SON asSON() {
+    SON son = new SON().put(message, MESSAGE_KEY);
+    if (receiverID == null) {
+      return son.put(global, GLOBAL_KEY);
+    } else {
+      return son.put(receiverID, RECEIVER_ID_KEY);
+    }
   }
 }

@@ -7,8 +7,8 @@ import tech.subluminal.shared.records.User;
  */
 public class InMemoryUserStore implements UserStore {
 
-  private User currentUser;
   private final Object currentUserLock = new Object();
+  private User currentUser;
 
   /**
    * @return the current user.

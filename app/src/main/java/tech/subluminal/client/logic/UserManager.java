@@ -2,6 +2,7 @@ package tech.subluminal.client.logic;
 
 import java.io.IOException;
 import tech.subluminal.client.presentation.UserPresenter;
+import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.messages.LoginReq;
 import tech.subluminal.shared.messages.LoginRes;
 import tech.subluminal.shared.messages.LogoutReq;
@@ -9,16 +10,14 @@ import tech.subluminal.shared.messages.UsernameReq;
 import tech.subluminal.shared.messages.UsernameRes;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.records.User;
-import tech.subluminal.client.stores.UserStore;
-import tech.subluminal.shared.son.SONRepresentable;
 
 /**
  * Manages the information of the active user.
  */
 public class UserManager implements UserPresenter.Delegate {
 
-  private Connection connection;
   private final UserStore userStore;
+  private Connection connection;
   private UserPresenter userPresenter;
 
   /**
@@ -50,14 +49,14 @@ public class UserManager implements UserPresenter.Delegate {
   }
 
   private void onUsernameChanged(UsernameRes res) {
-    synchronized (userStore){
+    synchronized (userStore) {
       userStore.setCurrentUser(new User(res.getUsername(), userStore.getCurrentUser().getId()));
     }
     userPresenter.nameChangeSucceeded();
   }
 
   private void onLogin(LoginRes res) {
-    synchronized (userStore){
+    synchronized (userStore) {
       userStore.setCurrentUser(new User(res.getUsername(), res.getUserID()));
     }
     userPresenter.loginSucceeded();

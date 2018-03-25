@@ -24,7 +24,8 @@ public class ChatManager {
   }
 
   private void attachHandlers(String id, Connection connection) {
-    connection.registerHandler(ChatMessageOut.class, ChatMessageOut::fromSON, msg -> chatMessageReceived(msg, id));
+    connection.registerHandler(ChatMessageOut.class, ChatMessageOut::fromSON,
+        msg -> chatMessageReceived(msg, id));
   }
 
   private void chatMessageReceived(ChatMessageOut msg, String userID) {
@@ -43,12 +44,15 @@ public class ChatManager {
   }
 
   private void sendDirectMessage(User sender, String message, String receiver) {
-    distributor.sendMessage(new ChatMessageIn(message, sender.getUsername(), Channel.WHISPER), receiver);
+    distributor
+        .sendMessage(new ChatMessageIn(message, sender.getUsername(), Channel.WHISPER), receiver);
   }
 
   private void sendMessage(User sender, String message, boolean global) {
     if (global) {
-      distributor.sendMessageToAllExcept(new ChatMessageIn(message, sender.getUsername(), Channel.GLOBAL), sender.getId());
+      distributor
+          .sendMessageToAllExcept(new ChatMessageIn(message, sender.getUsername(), Channel.GLOBAL),
+              sender.getId());
     } else {
       // TODO: implement game channel messaging
     }

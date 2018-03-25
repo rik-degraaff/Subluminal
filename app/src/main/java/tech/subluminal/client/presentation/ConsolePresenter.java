@@ -10,13 +10,12 @@ import tech.subluminal.client.stores.ReadOnlyUserStore;
  */
 public class ConsolePresenter implements UserPresenter, ChatPresenter {
 
+  static volatile boolean keepRunning = true;
   private InputStream in;
   private PrintStream out;
   private ReadOnlyUserStore userStore;
   private ChatPresenter.Delegate chatDelegate;
   private UserPresenter.Delegate userDelegate;
-
-  static volatile boolean keepRunning = true;
 
   public ConsolePresenter(InputStream in, PrintStream out, ReadOnlyUserStore userStore) {
     this.in = in;
@@ -67,8 +66,8 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
     //removes all whitespaces //TODO: may change later
     String username = new_username.replaceAll(" ", "");
 
-    if (username.equals("")){
-      synchronized (out){
+    if (username.equals("")) {
+      synchronized (out) {
         out.println("You did not enter a new username, I got you covered, fam.");
       }
       username = "ThisisPatrick!";

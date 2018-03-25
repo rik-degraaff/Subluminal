@@ -22,35 +22,6 @@ public class UsernameRes implements SONRepresentable {
   }
 
   /**
-   * Sets the username for the response.
-   *
-   * @param username the accepted client username.
-   */
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  /**
-   * Gets the username from the response.
-   *
-   * @return the accepted client username.
-   */
-  public String getUsername() {
-    return username;
-  }
-
-  /**
-   * Creates a SON object representing this object.
-   *
-   * @return the SON representation.
-   */
-  @Override
-  public SON asSON() {
-    return new SON()
-        .put(username, USERNAME_KEY);
-  }
-
-  /**
    * Creates a username change response from a SON object.
    *
    * @param son the SON object to be converted to a username change response.
@@ -63,5 +34,34 @@ public class UsernameRes implements SONRepresentable {
             "Username change Response did not contain valid " + USERNAME_KEY + "."));
 
     return new UsernameRes(username);
+  }
+
+  /**
+   * Gets the username from the response.
+   *
+   * @return the accepted client username.
+   */
+  public String getUsername() {
+    return username;
+  }
+
+  /**
+   * Sets the username for the response.
+   *
+   * @param username the accepted client username.
+   */
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  /**
+   * Creates a SON object representing this object.
+   *
+   * @return the SON representation.
+   */
+  @Override
+  public SON asSON() {
+    return new SON()
+        .put(username, USERNAME_KEY);
   }
 }

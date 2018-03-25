@@ -52,7 +52,8 @@ public class Subluminal {
 
   private static void invalidArguments() {
     System.err.println("Incorrect commandline arguments.");
-    System.err.println("Call either with (client <hostaddress>:<port> [<username>]) or (server <port>)");
+    System.err
+        .println("Call either with (client <hostaddress>:<port> [<username>]) or (server <port>)");
     System.exit(1);
   }
 }

@@ -1,8 +1,5 @@
 package tech.subluminal.client.presentation;
 
-import java.util.Optional;
-import tech.subluminal.shared.son.SONRepresentable;
-
 /**
  * Handles the presentation of the chat.
  */

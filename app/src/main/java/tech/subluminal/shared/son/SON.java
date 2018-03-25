@@ -1,13 +1,26 @@
 package tech.subluminal.shared.son;
 
-import static tech.subluminal.shared.son.SONParsing.*;
+import static tech.subluminal.shared.son.SONParsing.BOOLEAN_ID;
+import static tech.subluminal.shared.son.SONParsing.DOUBLE_ID;
+import static tech.subluminal.shared.son.SONParsing.ENTRY_DELIMITER;
+import static tech.subluminal.shared.son.SONParsing.INTEGER_ID;
+import static tech.subluminal.shared.son.SONParsing.KEY_VALUE_DELIMITER;
+import static tech.subluminal.shared.son.SONParsing.LIST_ID;
+import static tech.subluminal.shared.son.SONParsing.OBJECT_ID;
+import static tech.subluminal.shared.son.SONParsing.OBJECT_LEFTBRACE;
+import static tech.subluminal.shared.son.SONParsing.OBJECT_RIGHTBRACE;
+import static tech.subluminal.shared.son.SONParsing.PartialParseResult;
+import static tech.subluminal.shared.son.SONParsing.STRING_ID;
+import static tech.subluminal.shared.son.SONParsing.keyValueString;
+import static tech.subluminal.shared.son.SONParsing.partialParseBoolean;
+import static tech.subluminal.shared.son.SONParsing.partialParseDouble;
+import static tech.subluminal.shared.son.SONParsing.partialParseInt;
+import static tech.subluminal.shared.son.SONParsing.partialParseString;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
-import org.omg.CORBA.OBJECT_NOT_EXIST;
 
 /**
  * Subluminal Object Notation:
@@ -23,6 +36,74 @@ public class SON {
   private Map<String, SON> sonMap = new HashMap<>();
   private Map<String, SONList> sonListMap = new HashMap<>();
 
+  public static SON parse(String str) throws SONParsingError {
+    return partialParse(str, 0).result;
+  }
+
+  private static PartialParseResult<SON> partialParse(String str, int start)
+      throws SONParsingError {
+    try {
+      if (str.charAt(start) != OBJECT_LEFTBRACE) {
+        throw new SONParsingError("Expected an object but found no left brace.");
+      }
+
+      SON son = new SON();
+
+      int i = start;
+      if (str.charAt(i + 1) == OBJECT_RIGHTBRACE) {
+        return new PartialParseResult<>(son, i + 2);
+      }
+
+      do {
+        PartialParseResult<String> keyRes = partialParseString(str, i + 1);
+        i = keyRes.pos;
+        if (str.charAt(i++) != KEY_VALUE_DELIMITER) {
+          throw new SONParsingError("Expected a key-value pair, but found no colon.");
+        }
+
+        char typeID = str.charAt(i++);
+        switch (typeID) {
+          case INTEGER_ID:
+            PartialParseResult<Integer> intRes = partialParseInt(str, i);
+            i = intRes.pos;
+            son.put(intRes.result, keyRes.result);
+            break;
+          case DOUBLE_ID:
+            PartialParseResult<Double> doubleRes = partialParseDouble(str, i);
+            i = doubleRes.pos;
+            son.put(doubleRes.result, keyRes.result);
+            break;
+          case BOOLEAN_ID:
+            PartialParseResult<Boolean> boolRes = partialParseBoolean(str, i);
+            i = boolRes.pos;
+            son.put(boolRes.result, keyRes.result);
+            break;
+          case STRING_ID:
+            PartialParseResult<String> strRes = partialParseString(str, i);
+            i = strRes.pos;
+            son.put(strRes.result, keyRes.result);
+            break;
+          case OBJECT_ID:
+            PartialParseResult<SON> objRes = partialParse(str, i);
+            i = objRes.pos;
+            son.put(objRes.result, keyRes.result);
+            break;
+          case LIST_ID:
+            break;
+          default:
+            throw new SONParsingError("Expected a value, but found no type identifier.");
+        }
+      } while (str.charAt(i) == ENTRY_DELIMITER);
+
+      if (str.charAt(i) != OBJECT_RIGHTBRACE) {
+        throw new SONParsingError("SON object was not terminated.");
+      }
+
+      return new PartialParseResult<>(son, i + 1);
+    } catch (IndexOutOfBoundsException e) {
+      throw new SONParsingError("SON object was not terminated.");
+    }
+  }
 
   private SON getNested(String key, String[] additionalKeys) {
     SON son = getSONForced(key);
@@ -278,75 +359,5 @@ public class SON {
     builder.append(OBJECT_RIGHTBRACE);
 
     return builder.toString();
-  }
-
-
-  public static SON parse(String str) throws SONParsingError {
-    return partialParse(str, 0).result;
-  }
-
-  private static PartialParseResult<SON> partialParse(String str, int start)
-      throws SONParsingError {
-    try {
-      if (str.charAt(start) != OBJECT_LEFTBRACE) {
-        throw new SONParsingError("Expected an object but found no left brace.");
-      }
-
-      SON son = new SON();
-
-      int i = start;
-      if (str.charAt(i + 1) == OBJECT_RIGHTBRACE) {
-        return new PartialParseResult<>(son, i + 2);
-      }
-
-      do {
-        PartialParseResult<String> keyRes = partialParseString(str, i + 1);
-        i = keyRes.pos;
-        if (str.charAt(i++) != KEY_VALUE_DELIMITER) {
-          throw new SONParsingError("Expected a key-value pair, but found no colon.");
-        }
-
-        char typeID = str.charAt(i++);
-        switch (typeID) {
-          case INTEGER_ID:
-            PartialParseResult<Integer> intRes = partialParseInt(str, i);
-            i = intRes.pos;
-            son.put(intRes.result, keyRes.result);
-            break;
-          case DOUBLE_ID:
-            PartialParseResult<Double> doubleRes = partialParseDouble(str, i);
-            i = doubleRes.pos;
-            son.put(doubleRes.result, keyRes.result);
-            break;
-          case BOOLEAN_ID:
-            PartialParseResult<Boolean> boolRes = partialParseBoolean(str, i);
-            i = boolRes.pos;
-            son.put(boolRes.result, keyRes.result);
-            break;
-          case STRING_ID:
-            PartialParseResult<String> strRes = partialParseString(str, i);
-            i = strRes.pos;
-            son.put(strRes.result, keyRes.result);
-            break;
-          case OBJECT_ID:
-            PartialParseResult<SON> objRes = partialParse(str, i);
-            i = objRes.pos;
-            son.put(objRes.result, keyRes.result);
-            break;
-          case LIST_ID:
-            break;
-          default:
-            throw new SONParsingError("Expected a value, but found no type identifier.");
-        }
-      } while (str.charAt(i) == ENTRY_DELIMITER);
-
-      if (str.charAt(i) != OBJECT_RIGHTBRACE) {
-        throw new SONParsingError("SON object was not terminated.");
-      }
-
-      return new PartialParseResult<>(son, i + 1);
-    } catch (IndexOutOfBoundsException e) {
-      throw new SONParsingError("SON object was not terminated.");
-    }
   }
 }

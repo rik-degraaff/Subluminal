@@ -28,13 +28,12 @@ public class UserManager {
   public UserManager(UserStore userStore, MessageDistributor distributor) {
     this.userStore = userStore;
 
-
     distributor.addConnectionOpenedListener(this::attachHandlers);
     distributor.addConnectionClosedListener(this::onConnectionClosed);
   }
 
   private void onConnectionClosed(String id) {
-    synchronized (userStore){
+    synchronized (userStore) {
       userStore.removeUserByID(id);
     }
   }

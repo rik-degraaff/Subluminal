@@ -22,6 +22,20 @@ public class Pong implements SONRepresentable {
   }
 
   /**
+   * Creates a ping from a SON object.
+   *
+   * @param son the SON object to be converted to a pong.
+   * @return the created pong.
+   * @throws SONConversionError when the conversion fails.
+   */
+  public static Pong fromSON(SON son) throws SONConversionError {
+    String id = son.getString(ID_KEY)
+        .orElseThrow(() -> new SONConversionError(
+            "Pong did not contain valid " + ID_KEY + "."));
+    return new Pong(id);
+  }
+
+  /**
    * @return the id of the pong message.
    */
   public String getId() {
@@ -36,19 +50,5 @@ public class Pong implements SONRepresentable {
   @Override
   public SON asSON() {
     return new SON().put(id, ID_KEY);
-  }
-
-  /**
-   * Creates a ping from a SON object.
-   *
-   * @param son the SON object to be converted to a pong.
-   * @return the created pong.
-   * @throws SONConversionError when the conversion fails.
-   */
-  public static Pong fromSON(SON son) throws SONConversionError {
-    String id = son.getString(ID_KEY)
-        .orElseThrow(() -> new SONConversionError(
-            "Pong did not contain valid " + ID_KEY + "."));
-    return new Pong(id);
   }
 }

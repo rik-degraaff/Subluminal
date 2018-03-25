@@ -5,6 +5,10 @@ import tech.subluminal.shared.son.SONRepresentable;
 
 public class LogoutReq implements SONRepresentable {
 
+  public static LogoutReq fromSON(SON son) {
+    return new LogoutReq();
+  }
+
   /**
    * Creates a SON object representing this object.
    *
@@ -13,9 +17,5 @@ public class LogoutReq implements SONRepresentable {
   @Override
   public SON asSON() {
     return new SON();
-  }
-
-  public static LogoutReq fromSON(SON son){
-    return new LogoutReq();
   }
 }
