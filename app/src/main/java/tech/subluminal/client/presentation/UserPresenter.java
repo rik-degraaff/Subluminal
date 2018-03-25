@@ -15,6 +15,11 @@ public interface UserPresenter {
   void loginSucceeded();
 
   /**
+   * Gets called when the client got logged out.
+   */
+  void logoutSucceeded();
+
+  /**
    * Fired when a username got successfully changed.
    */
   void nameChangeSucceeded();

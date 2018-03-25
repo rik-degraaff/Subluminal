@@ -16,6 +16,8 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
   private ChatPresenter.Delegate chatDelegate;
   private UserPresenter.Delegate userDelegate;
 
+  static volatile boolean keepRunning = true;
+
   public ConsolePresenter(InputStream in, PrintStream out, ReadOnlyUserStore userStore) {
     this.in = in;
     this.out = out;
@@ -27,7 +29,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
   public void inputLoop() {
     Scanner scanner = new Scanner(in);
 
-    while (true) {
+    while (keepRunning) {
       String line = scanner.nextLine();
       char command = line.charAt(0);
 
@@ -53,6 +55,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
     if (channel.equals("logout")) {
       userDelegate.logout();
     } else if (channel.equals("changename")) {
+
       handleNameChangeCmd(line, channel);
     } else if (channel.equals("changelobby")) {
       //TODO: add functionality to change lobby
@@ -64,6 +67,13 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
     //removes all whitespaces //TODO: may change later
     String username = new_username.replaceAll(" ", "");
 
+    if (username.equals("")){
+      synchronized (out){
+        out.println("You did not enter a new username, I got you covered, fam.");
+      }
+      username = "ThisisPatrick!";
+    }
+
     userDelegate.changeUsername(username);
   }
 
@@ -71,7 +81,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
     String channel = getSpecifier(line);
     String message = extractMessageBody(line, channel);
 
-    if (channel.equals("all")) {
+    if (channel.equals("all") || channel.equals(("server"))) {
       //send @all
 
       chatDelegate.sendGlobalMessage(message);
@@ -109,11 +119,19 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
   }
 
   @Override
+  public void logoutSucceeded() {
+    synchronized (out) {
+      out.println("Successfully logged out.");
+    }
+    keepRunning = false;
+  }
+
+  @Override
   public void nameChangeSucceeded() {
     String username = userStore.getCurrentUser().getUsername();
 
     synchronized (out) {
-      out.println("Successfully changed name to" + username);
+      out.println("Successfully changed name to " + username);
     }
   }
 
@@ -130,7 +148,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
    */
   @Override
   public void globalMessageReceived(String message, String username) {
-    out.println("Server /" + username + ": " + message);
+    out.println("Server|" + username + ": " + message);
   }
 
   /**
@@ -141,7 +159,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
    */
   @Override
   public void whisperMessageReceived(String message, String username) {
-    out.println(username + "@ you" + ": " + message);
+    out.println(username + "@you" + ": " + message);
   }
 
   /**
@@ -152,7 +170,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
    */
   @Override
   public void gameMessageReceived(String message, String username) {
-    out.println("Game /" + username + ": " + message);
+    out.println("Game|" + username + ": " + message);
   }
 
   /**
