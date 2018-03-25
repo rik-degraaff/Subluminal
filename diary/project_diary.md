@@ -6,8 +6,17 @@
 **LUC** = Luc Kury  
 **LGK** = Lucas Galery Käser
 
-### Friday, March 23rd, 2918 (all)
+### Sunday, March 25th, 2018 (DAV, LGK, LUC)
+- Logout functionality implementation was finished.
+- Protocol document was created.
+- Source code documentation was updated.
+
+### Friday, March 23rd, 2018 (DAV, LUC, RIK)
 - DAV created a syntax for all "/"-commands for console messages.
+- SON parsing functionality was implemented.
+- Ping manager was implemented.
+- Name change functionality was implemented.
+- Logout functionality was started to be implemented. 
 
 ### Thursday, March 22nd, 2018 (all)
 - Added feature: When you prepend "/" or "@" to your command-line message you can add functionality to it, for example "/logout", or "@alex02". These changes were made in ConsolePresenter.java. 
