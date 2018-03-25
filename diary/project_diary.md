@@ -63,6 +63,11 @@ src
                  |__son
                        
 ```
+
+### Sunday, March, 11th, 2018 (all)
+
+TO COMPLETE: DECISION HOW TO SOLVE THE MESSAGE SENDING PROBLEM + ARGUMENTS FOR THAT DESICION.
+
 ### Monday, March 5th, 2018 (all)
 ##### Decisions/ideas:
 In this meeting we decided about most of the rules of our game. They are:
