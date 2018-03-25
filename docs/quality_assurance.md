@@ -9,7 +9,7 @@
 6. Assignable issues in gitlab for specific to do's.
 7. Javadoc comments are not created for private functions.
 8. Functionality is also randomly tested by hand, i.a. on different physical machines.
-9. We code by Google Java code style conventions, which are checked by the automated gradle style checker.
+9. We code by Google Java code style conventions, which are checked by the automated gradle style checker.ll
 
 
 ## Merge requirements
