@@ -50,6 +50,7 @@ class SONParsing {
       StringBuilder builder = new StringBuilder();
       char nextChar = str.charAt(i);
       while (nextChar == '-' || nextChar >= '0' && nextChar <= '9') {
+        //loop throught string and append
         builder.append(nextChar);
         nextChar = str.charAt(++i);
       }
@@ -79,6 +80,7 @@ class SONParsing {
         nextChar = str.charAt(++i);
       }
 
+      //create double from StringBuilder
       try {
         double value = Double.parseDouble(builder.toString());
         return new PartialParseResult<>(value, i);
@@ -117,6 +119,7 @@ class SONParsing {
         throw new SONParsingError("Expected a string but didn't find a string delimiter.");
       }
 
+      //build string wait for DELIMITER and escape ESCAPE
       StringBuilder builder = new StringBuilder();
       int i = start + 1;
       char nextChar = str.charAt(i);

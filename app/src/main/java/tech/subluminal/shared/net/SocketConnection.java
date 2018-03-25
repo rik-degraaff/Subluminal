@@ -46,16 +46,20 @@ public class SocketConnection implements Connection {
 
       while (!stop) {
         try {
+          //Get the next message and separate type and SON
           String message = scanner.nextLine();
           String[] parts = message.split(" ", 2);
           if (parts.length == 2) {
+            //parse in the message to SON
             SON son = SON.parse(parts[1]);
             Set<Consumer<SON>> consumers = handlers.get(parts[0]);
             if (consumers != null) {
+              //if consumer does not exist create new one
               consumers.forEach(c -> c.accept(son));
             }
           }
         } catch (SONParsingError e) {
+          //wrong format
           System.out.println("Parsing of " + e.getMessage() + "failed"); //TODO: log better
         } catch (NoSuchElementException e) {
           System.out.println("Socket was forcefully closed.");
@@ -85,6 +89,7 @@ public class SocketConnection implements Connection {
       Consumer<T> handler) {
     String method = type.getSimpleName();
     if (handlers.get(method) == null) {
+      //new handler for SONRepresentable type
       handlers.put(method, new HashSet<>());
     }
     handlers.get(method).add(son -> handleMessage(converter, handler, son));
@@ -102,6 +107,7 @@ public class SocketConnection implements Connection {
       String typeName = message.getClass().getSimpleName();
       String msg = message.asSON().asString();
       synchronized (out) {
+        //concatenate type and message and send on a journey
         new PrintStream(out).println(typeName + " " + msg);
       }
     } catch (IOException e) {

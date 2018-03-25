@@ -64,7 +64,6 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
     if (channel.equals("logout")) {
       userDelegate.logout();
     } else if (channel.equals("changename")) {
-
       handleNameChangeCmd(line, channel);
     } else if (channel.equals("changelobby")) {
       //TODO: add functionality to change lobby
