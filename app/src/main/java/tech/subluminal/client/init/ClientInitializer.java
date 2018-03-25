@@ -8,6 +8,7 @@ import tech.subluminal.client.logic.UserManager;
 import tech.subluminal.client.presentation.ConsolePresenter;
 import tech.subluminal.client.stores.InMemoryPingStore;
 import tech.subluminal.client.stores.PingStore;
+import tech.subluminal.shared.messages.LogoutReq;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.client.stores.InMemoryUserStore;
 import tech.subluminal.client.stores.UserStore;
@@ -46,5 +47,17 @@ public class ClientInitializer {
     new PingManager(connection, pingStore);
 
     userManager.start(username);
+
+    final Thread mainThread = Thread.currentThread();
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      connection.sendMessage(new LogoutReq());
+      presenter.logoutSucceeded(); //TODO: handle in userManager
+      try {
+        mainThread.join();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }));
+
   }
 }

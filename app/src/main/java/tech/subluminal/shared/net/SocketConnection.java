@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -48,6 +49,10 @@ public class SocketConnection implements Connection {
           }
         } catch (SONParsingError e) {
           System.out.println("Parsing of " + e.getMessage() + "failed"); //TODO: log better
+        } catch (NoSuchElementException e) {
+          System.out.println("Socket was forcefully closed.");
+          stop = true;
+          System.exit(0); //FIXME: cleaner way
         }
       }
     } catch (IOException e) {

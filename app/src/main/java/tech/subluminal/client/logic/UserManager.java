@@ -84,8 +84,6 @@ public class UserManager implements UserPresenter.Delegate {
     } catch (IOException e) {
       e.printStackTrace(); //TODO: sensible stuff
     }
-
-    System.out.println("Bye!"); //TODO: send to presenter instead.
     System.exit(0);
   }
 }
