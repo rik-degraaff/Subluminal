@@ -80,3 +80,13 @@ test {
         logger.quiet "Executing test ${desc.name} [${desc.className}] with result: ${result.resultType}"
     }
 }
+
+javadoc {
+    setDestinationDir(file('docs/javadocs'))
+
+}
+
+// task openBrowser(type:Exec) {
+//     workingDir './docs/javadocs/'
+//     java.awt.Desktop.desktop.browse "".toURI()
+// }
