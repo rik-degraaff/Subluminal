@@ -9,26 +9,27 @@
 6. Assignable issues in gitlab for specific to do's.
 7. Javadoc comments are not created for private functions.
 8. Functionality is also randomly tested by hand, i.a. on different physical machines.
-9. We code by Google Java code style conventions, which are checked by the automated gradle style checker.ll
 
+## Quality characteristics
+### 1. Efficiency / Latency
+To ensure a fluid gaming experience, the average roundtrip time of a package from client to server should be no more than 150 ms. This can be tracked with an internal timer and a simple logging statement. Also relevant for this metric could be the effective package size. WireShark will be used to determine the average package size in a test environment.
+
+### 2. Reliability / Error tolerance
+The software is rigorously tested with unit tests to cover all edge cases. As a metric we use the code coverage percentage ("degree to which the source code of a program is executed when a particular test suite runs". [Wikipedia](https://en.wikipedia.org/w/index.php?title=Code_coverage&oldid=831669504)). Initial goal shall be to achieve a coverage of around 50 %.
 
 ## Merge requirements
 
-
-| Branch          |                                       |
-|:----------------|---------------------------------------|
-| ``master``    : | Checkstyle ✔️, UnitTest ✔️, Build ✔️ |
-| ``dev``       : | Checkstyle ✔️, UnitTest ✔️, Build ⭕   |
-| ``ft-branch`` : | Checkstyle ✔, UnitTest ⭕, Build ⭕ |
+| Branch          |                                               |
+|:----------------|-----------------------------------------------|
+| ``master``    : | Checkstyle ✔️, UnitTest ✔️, Build ✔️, JavaDoc ✔️  |
+| ``rl-branch`` : | Checkstyle ✔, UnitTest ✔️, Build ✔️, JavaDoc ✔️  |
+| ``dev``       : | Checkstyle ✔️, UnitTest ✔️, Build ✔️, JavaDoc ⭕️ |
+| ``ft-branch`` : | Checkstyle ✔, UnitTest ✔, Build ⭕, JavaDoc ⭕ |
 
 
 ## Build process
-//TODOS
+//TODO
 
 
 ## Javadocs
-//TODOS
-
-
-## UML diagrams
-//TODOS
+//TODO
