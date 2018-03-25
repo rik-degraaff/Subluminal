@@ -30,8 +30,9 @@ public interface ChatPresenter {
   void gameMessageReceived(String message, String username);
 
   /**
+   * Sets the delegate who gets fired by user messages.
    *
-   * @param delegate
+   * @param delegate is the delegate which will be set.
    */
   void setChatDelegate(Delegate delegate);
 

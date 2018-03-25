@@ -18,6 +18,12 @@ public class PingManager {
   private final PingStore pingStore;
   private final Connection connection;
 
+  /**
+   * Hand the sent Pings to the store, Waits for the Pongs and answers the received Pongs from the
+   * server.
+   *
+   * @param pingStore stores the sent Pings.
+   */
   public PingManager(Connection connection, PingStore pingStore) {
     this.pingStore = pingStore;
     this.connection = connection;
