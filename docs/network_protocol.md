@@ -1,26 +1,36 @@
 # Network protocol
-Our implementation of a network protocol is stronglly influenced by JSON. The packets are constructed like objects - before sending all whitespace is removed and the keys and values are concatonated.
+Our implementation of a network protocol is strongly influenced by JSON, now called SON (**S**ubluminal **O**bject **N**otation). The packets are constructed like objects. Before sending all, whitespace is removed and the keys and values are concatonated with their respective delimiters. The only whitespace remaining is a single space between package type and message content.
+
+## Supported commands
+### /changename
+***Client***: Sets new username.
+``/changename <new username>``
+
+### /logout
+***Client***: Closes your connection to the server and exits the client.
+``/logout`` (no arguments)
+
 
 ## Protocol properties
-- The packet preamble contains only the type.
-- A packet is terminated by the newline character ``\r\n``.
 - Package length/size is not calculated and transmitted.
-- Between preamble and message content there is a ``space`` as delimiter.
+- The packet preamble contains only the its type.
+- Between preamble and message content, there is a single ``space`` as delimiter.
+- A packet is terminated by the newline character ``\r\n``.
 - Object notation: 
   - Objects: ``{ }``
   - Lists: ``[ ]``
   - Key/Value delimiter: ``:``
   - Field separator: ``,``
 
+
 ## Protocol message structure
-The following package types are implemented: loginreq, loginres, logoutreq, chatmessagein, chatmessageout, ping, pong, usernamereq, usernameres
+Each message can contain zero or more values of the following java variable type: ``boolean (b)``, ``integer (i)``, ``double (d)``, ``String (s)``, ``list<SON> (l)``. The key is always a string enlosed in quotes (parsing help), the value is a string representation of its original value enclosed in quotes (parsing help), prepended with a char to represent its original type for later parsing. The list type is not yet working (required to send multiple values of the same type of more importantly to send other SON objects). The following package types are already implemented and in use: 
 
 ### LoginReq
 ***Client***: Register a new user to the server. Expects response with ``LoginRes`` object.
 
-fields
 ```
-{
+loginreq {
   "username":s"<String>"
 }
 ```
@@ -28,9 +38,8 @@ fields
 ### LoginRes
 ***Server***: Confirms login and returns ``userid``.
 
-fields
 ```
-{
+loginres {
   "userid":i"<integer>",
   "username":s"<String>"
 }
@@ -39,9 +48,8 @@ fields
 ### LogoutReq
 ***Client***: Properly disconnects the client from the server.
 
-fields
 ```
-{
+logoutreq {
  //empty object
 }
 ```
@@ -49,9 +57,8 @@ fields
 ### ChatMessageOut
 ***Client***: Send ``message`` to server. ``message`` and  ``global`` are handled by the server.
 
-fields
 ```
-{
+chatmessageout {
   "message":s"<String>",
   "receiverID":s"<String>",
   "global":b"<boolean>"
@@ -61,9 +68,8 @@ fields
 ### ChatMessageIn
 ***Server***: Send ``message`` to client.
 
-fields
 ```
-{
+chatmassagein {
   "message":s"<String>",
   "username":s"<String>",
   "channel":s"<String>"
@@ -73,9 +79,8 @@ fields
 ### Ping
 ***Server***: Initiate ping/pong.
 
-fields
 ```
-{
+ping {
   "id":s"<String>"
 }
 ```
@@ -83,9 +88,8 @@ fields
 ### Pong
 ***Client***: Respond to ping with pong.
 
-fields
 ```
-{
+pong {
   "id":s"<String>"
 }
 ```
@@ -93,9 +97,8 @@ fields
 ### UsernameReq
 ***Client***: Send request to change the ``username``. Expects response with ``UsernameRes`` object.
 
-fields
 ```
-{
+usernamereq {
   "username":s"<String>"
 }
 ```
@@ -103,12 +106,12 @@ fields
 ### UsernameRes
 ***Server***: Sends new ``username`` to client.
 
-fields
 ```
-{
+usernameres {
   "username":s"<String>"
 }
 ```
 
 ## Diagram
-![UML Diagram of basic messaging](../assets/other/basic_messaging.svg)
+![UML Diagram of basic messaging](./../assets/other/basic_messaging1.png)  
+Example: Sending a ``LoginReq`` message from client to server. 

@@ -1,6 +1,8 @@
-# Subluminal /sʌbˈlɪmɪnəl/ - The Game
+# Subluminal /ˌsʌbˈl(j)uːmɪnl/ - The Game
 
-> Once upon a time a clever programmer named Bob created in the basement of his mom's house 4 different AIs. Throughout his whole life Bob tried to get the AIs to work together, but sadly he never achived his this goal. After Bob passed away the world forgot about him and his work. But the AI's never forgot, ever single one of them evolve and adopted, with the goal to be the best AI in the whole universe...
+> Once upon a time a clever programmer named Bob created in the basement of his mom's house 4 different AIs. Throughout his whole life Bob tried to get the AIs to work together, but sadly he never achived his this goal. After Bob passed away the world forgot about him and his work. But the AI's never forgot, ever single one of them evolve and adopted, with the goal to be the best AI in the whole universe ...  
+
+Meaning of game title: [Oxforddictionaries](https://en.oxforddictionaries.com/definition/us/subluminal), [Wiktionary](https://en.wiktionary.org/wiki/subluminal), [Wikipedia](https://en.wikipedia.org/wiki/Faster-than-light)
 
 [![Logo](./assets/logo/subluminal_logo.png)](http://subluminal.tech) **by Bordeaux Ink.**
 
@@ -16,22 +18,21 @@
 
 
 ## 1. Overview
-//TODOS //WIP  
-pronounciation **/ˌsʌbˈl(j)uːmɪnl/**  
-origin: ...  
-https://en.oxforddictionaries.com/definition/us/subluminal  
-https://en.wiktionary.org/wiki/subluminal  
-https://en.wikipedia.org/wiki/Faster-than-light  
-
-
-
+### Basic Usage:
+Download the current jar bundle (Subluminal-0.2.0-m2.jar) or clone the repo and run ``gradle build`` (output in ``./app/build/libs/``).  Start the game with the following command:
+```sh
+# Start server.
+java -jar Subluminal-0.2.0-m2.jar client <hostaddress>:<port> [<username>]
+# Start client.
+java -jar Subluminal-0.2.0-m2.jar server <port>
+```
+On the client you can use */changename* to change your username and */logout* to exit the client.
 
 ## 2. Getting Started
 1. Generate a pair of SSH keys and add them to your Gitlab account (follow [these instructions](https://git.scicore.unibas.ch/help/ssh/README#generating-a-new-ssh-key-pair) or run  
 ``ssh-keygen -t rsa -C "your.email@stud.unibas.ch" -b 4096``)
 2. Configure your local git installation by entering the following commands into your command line:
-(Careful: Don't use the ``--global`` flag if you have an existing git installation. Change into the project directory and run the commands **without**  
-``--global``.)
+(Careful: Don't use the ``--global`` flag if you have an existing git installation. Change into the project directory and run the commands **without** ``--global``.)
 ```sh
 $ git config --global user.name "User Name - shortname00"
 $ git config --global user.email "your.email@stud.unibas.ch"
@@ -39,6 +40,7 @@ $ git config --global core.autocrlf true
 ```
 3. Clone the repo to your harddrive ``git clone https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11.git``  
 4. cd into the project directory and try to build the project with ``./gradlew build`` (on Unix) or ``gradlew.bat build`` (on Windows).
+
 
 ## 3. Contributing
 1. Make sure to checkout the most recent ``dev`` branch.
@@ -55,7 +57,7 @@ $ ssh-add /c/users/$(whoami)/.ssh/id_rsa
 $ git push ...
 ```
 4. On ``git.scicore.unibas.ch`` create a pull request to the ``dev`` branch. Assign someone to review your changes.
-5. A more specific document on code quality assurance is located in [CONTRIBUTING.md](CONTRIBUTING.md) and [docs/quality_assurance.md](docs/quality_assurance.md)
+5. A more specific document on code quality assurance is located in [docs/quality_assurance.md](docs/quality_assurance.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
 6. Check and add to [TODO.md](TODO.md). Open issues for missing feature on gitlab and remove them from TODO file.
 
 
@@ -76,6 +78,7 @@ A detailed description is kept in [docs/game_rules.md](docs/game_rules.md) folde
 ## 6. License
 ![GNU AGPL Logo](assets/other/AGPLv3_Logo.png)  
 **GNU AGPLv3**. [https://choosealicense.com/licenses/agpl-3.0/]()
+
 
 ## 7. Webpage
 [subluminal.tech](http://subluminal.tech)  /   [merch.subluminal.tech](http://merch.subluminal.tech)  /   [buy.subluminal.tech](http://buy.subluminal.tech)
