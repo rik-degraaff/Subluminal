@@ -23,7 +23,7 @@ public class InMemoryUserStore implements UserStore {
   }
 
   /**
-   * Sets the current User
+   * Sets the current User.
    *
    * @param user to be set as current user.
    */
