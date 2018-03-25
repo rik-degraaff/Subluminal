@@ -49,3 +49,4 @@ This is a temporary task store. Please create an issue on gitlab for the task yo
 * [ ] generate CHANGELOG from commits.
 * [ ] update CONTRIBUTING file.
 * [ ] create ``.template`` folder for gitlab
+* [ ] overhaul build vs branch matrix
