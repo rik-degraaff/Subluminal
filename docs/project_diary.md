@@ -16,7 +16,8 @@
 - SON parsing functionality was implemented.
 - Ping manager was implemented.
 - Name change functionality was implemented.
-- Logout functionality was started to be implemented. 
+- Logout functionality was starting to be implemented.
+![coding with some pizza](../assets/pictures/m2_friday_pizza.jpg) 
 
 ### Thursday, March 22nd, 2018 (all)
 - Added feature: When you prepend "/" or "@" to your command-line message you can add functionality to it, for example "/logout", or "@alex02". These changes were made in ConsolePresenter.java. 
@@ -24,6 +25,7 @@
 ### Wednesday, March 21st, 2018 (all)
 - Long coding evening, implementing all methods of the SON.java class, the network chat functionality and the client-side chat presentation.
 - Our tutor Marco recommended us to take better care of our diary.
+![late night coding](../assets/pictures/m2_random_coding_session.jpg)
 
 ### Sunday, March 18th, 2018 (all)
 We spent half a day implementing the first classes and interfaces.
@@ -64,9 +66,11 @@ src
                        
 ```
 
-### Sunday, March, 11th, 2018 (all)
+### Sunday, March 11th, 2018 (all)
+After some discussion within the group and consulting the tutors, we decided to use our own implementation of the JSON format. We named it SON (**S**ubluminal **O**bject **N**otation). This format will be used to generalize the network communication between the client and the server. It is designed as an interface and thus allows us to parse any Java object into a transferable object.
 
-TO COMPLETE: DECISION HOW TO SOLVE THE MESSAGE SENDING PROBLEM + ARGUMENTS FOR THAT DESICION.
+### Thursday, March 9th, 2018 (all)
+![Our Team at Milestone 1](../assets/pictures/m1_presentation.jpg)
 
 ### Monday, March 5th, 2018 (all)
 ##### Decisions/ideas:
