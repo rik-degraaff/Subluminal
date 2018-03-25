@@ -12,8 +12,8 @@ cache:
 
 stages:
   - checkstyle
-  - test
   - build
+  - test
   - javadoc
 
 checkstyle:
@@ -21,9 +21,8 @@ checkstyle:
   script:
     - gradle check
   tags:
-    -cs108
-  only:
-    - ft-buildtools-luc
+    - cs108
+  allow_failure: true
 
 test:
   stage: test
@@ -39,12 +38,13 @@ build:
   tags:
   - cs108
 
-  javadoc:
-    stage: javadoc
-    script:
-      - gradle check
-    tags:
-      -cs108
+javadoc:
+  stage: javadoc
+  script:
+    - gradle javadoc
+  tags:
+    - cs108
+  allow_failure: true
 
 after_script:
   - echo "----- End CI -----"
