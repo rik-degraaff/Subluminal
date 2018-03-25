@@ -26,55 +26,6 @@ public class LoginRes implements SONRepresentable {
   }
 
   /**
-   * Sets the username for the response.
-   *
-   * @param username the accepted client username.
-   */
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  /**
-   * Gets the username from the response.
-   *
-   * @return the accepted client username.
-   */
-  public String getUsername() {
-    return username;
-  }
-
-  /**
-   * Sets the id for the response.
-   *
-   * @param id the accepted client id.
-   */
-  public void setUserID(String id) {
-    this.userID = id;
-  }
-
-  /**
-   * Gets the username from the response.
-   *
-   * @return the accepted client id.
-   */
-  public String getUserID() {
-    return userID;
-  }
-
-
-  /**
-   * Creates a SON object representing this login response.
-   *
-   * @return the SON representation.
-   */
-  @Override
-  public SON asSON() {
-    return new SON()
-        .put(username, USERNAME_KEY)
-        .put(userID, USER_ID_KEY);
-  }
-
-  /**
    * Creates a login request from a SON object.
    *
    * @param son the SON object to be converted to a login request.
@@ -90,6 +41,54 @@ public class LoginRes implements SONRepresentable {
             "Login Response did not contain valid " + USER_ID_KEY + "."));
 
     return new LoginRes(username, id);
+  }
+
+  /**
+   * Gets the username from the response.
+   *
+   * @return the accepted client username.
+   */
+  public String getUsername() {
+    return username;
+  }
+
+  /**
+   * Sets the username for the response.
+   *
+   * @param username the accepted client username.
+   */
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  /**
+   * Gets the username from the response.
+   *
+   * @return the accepted client id.
+   */
+  public String getUserID() {
+    return userID;
+  }
+
+  /**
+   * Sets the id for the response.
+   *
+   * @param id the accepted client id.
+   */
+  public void setUserID(String id) {
+    this.userID = id;
+  }
+
+  /**
+   * Creates a SON object representing this login response.
+   *
+   * @return the SON representation.
+   */
+  @Override
+  public SON asSON() {
+    return new SON()
+        .put(username, USERNAME_KEY)
+        .put(userID, USER_ID_KEY);
   }
 }
 

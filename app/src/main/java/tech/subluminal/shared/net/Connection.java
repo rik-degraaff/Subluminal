@@ -1,10 +1,9 @@
 package tech.subluminal.shared.net;
 
-import tech.subluminal.shared.son.SONConverter;
-import tech.subluminal.shared.son.SONRepresentable;
-
 import java.io.Closeable;
 import java.util.function.Consumer;
+import tech.subluminal.shared.son.SONConverter;
+import tech.subluminal.shared.son.SONRepresentable;
 
 /**
  * Represents a channel over which SONRepresentable objects can be sent and received.
@@ -29,4 +28,16 @@ public interface Connection extends Closeable {
    * @param message the message to send.
    */
   void sendMessage(SONRepresentable message);
+
+  /**
+   * Adds a listener, which can react to this connection closing.
+   *
+   * @param listener will be run when the connection is closed.
+   */
+  void addCloseListener(Runnable listener);
+
+  /**
+   * Tells the connection that it can start listening for messages.
+   */
+  void start();
 }
