@@ -5,7 +5,16 @@ import tech.subluminal.shared.records.User;
 public interface ReadOnlyUserStore {
 
   /**
+   * Get the current user.
+   *
    * @return the current user.
    */
   User getCurrentUser();
+
+  /**
+   * Check with a username if a specific user exists.
+   *
+   * @return the found user object.
+   */
+  User getUserByUsername(String username);
 }

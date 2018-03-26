@@ -6,7 +6,7 @@
 *.iml
 .idea/**/*.xml
 .idea/*.xml
-~*.*
+*.log
 
 
 #folders

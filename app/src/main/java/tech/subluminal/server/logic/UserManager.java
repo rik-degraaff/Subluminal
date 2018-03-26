@@ -1,10 +1,12 @@
 package tech.subluminal.server.logic;
 
+import java.io.IOException;
 import java.util.Set;
 import java.util.stream.Collectors;
 import tech.subluminal.server.stores.UserStore;
 import tech.subluminal.shared.messages.LoginReq;
 import tech.subluminal.shared.messages.LoginRes;
+import tech.subluminal.shared.messages.LogoutReq;
 import tech.subluminal.shared.messages.UsernameReq;
 import tech.subluminal.shared.messages.UsernameRes;
 import tech.subluminal.shared.net.Connection;
@@ -26,7 +28,14 @@ public class UserManager {
   public UserManager(UserStore userStore, MessageDistributor distributor) {
     this.userStore = userStore;
 
-    distributor.addConnectionOpenedHandler(this::attachHandlers);
+    distributor.addConnectionOpenedListener(this::attachHandlers);
+    distributor.addConnectionClosedListener(this::onConnectionClosed);
+  }
+
+  private void onConnectionClosed(String id) {
+    synchronized (userStore) {
+      userStore.removeUserByID(id);
+    }
   }
 
   private void attachHandlers(String id, Connection connection) {
@@ -34,6 +43,16 @@ public class UserManager {
         req -> onLogin(id, connection, req));
     connection.registerHandler(UsernameReq.class, UsernameReq::fromSON,
         req -> onUsernameChange(id, connection, req));
+    connection.registerHandler(LogoutReq.class, LogoutReq::fromSON,
+        req -> onLogout(connection));
+  }
+
+  private void onLogout(Connection connection) {
+    try {
+      connection.close();
+    } catch (IOException e) {
+      //TODO: handle this accordingly
+    }
   }
 
   /**
@@ -45,11 +64,12 @@ public class UserManager {
    */
   private void onUsernameChange(String id, Connection connection, UsernameReq usernameReq) {
     String username = usernameReq.getUsername();
-    synchronized (userStore) {
-      username = getUnusedUsername(username);
-      userStore.updateUser(new User(username, id));
-    }
+
+    username = getUnusedUsername(username);
+    userStore.updateUser(new User(username, id));
+
     connection.sendMessage(new UsernameRes(username));
+
   }
 
   /**
@@ -61,10 +81,10 @@ public class UserManager {
    */
   private void onLogin(String id, Connection connection, LoginReq loginReq) {
     String username = loginReq.getUsername();
-    synchronized (userStore) {
-      username = getUnusedUsername(username);
-      userStore.addUser(new User(username, id));
-    }
+
+    username = getUnusedUsername(username);
+    userStore.addUser(new User(username, id));
+
     connection.sendMessage(new LoginRes(username, id));
   }
 

@@ -8,6 +8,10 @@ import tech.subluminal.server.init.ServerInitializer;
  */
 public class Subluminal {
 
+  /**
+   * Parses the command line arguments and calls the relevant packages.
+   * @param args are the command line arguments.
+   */
   public static void main(String[] args) {
     if (args.length < 2) {
       invalidArguments();
@@ -52,7 +56,8 @@ public class Subluminal {
 
   private static void invalidArguments() {
     System.err.println("Incorrect commandline arguments.");
-    System.err.println("Call either with (client <hostaddress>:<port> [<username>]) or (server <port>)");
+    System.err
+        .println("Call either with (client <hostaddress>:<port> [<username>]) or (server <port>)");
     System.exit(1);
   }
 }

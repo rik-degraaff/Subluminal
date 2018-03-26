@@ -2,14 +2,81 @@
 # Project Diary
 
 **RIK** = Rik de Graaff  
-**DAV** = David Lengwiler  
+**DAV** = David Lengweiler  
 **LUC** = Luc Kury  
 **LGK** = Lucas Galery Käser
 
-## Monday, March 6th, 2018, 3rd meeting (all)
-### Decisions/ideas:
+### Sunday, March 25th, 2018 (DAV, LGK, LUC)
+- Logout functionality implementation was finished.
+- Protocol document was created.
+- Source code documentation was updated.
+
+### Friday, March 23rd, 2018 (DAV, LUC, RIK)
+- DAV created a syntax for all "/"-commands for console messages.
+- SON parsing functionality was implemented.
+- Ping manager was implemented.
+- Name change functionality was implemented.
+- Logout functionality was starting to be implemented.
+![coding with some pizza](../assets/pictures/m2_friday_pizza.jpg) 
+
+### Thursday, March 22nd, 2018 (all)
+- Added feature: When you prepend "/" or "@" to your command-line message you can add functionality to it, for example "/logout", or "@alex02". These changes were made in ConsolePresenter.java. 
+
+### Wednesday, March 21st, 2018 (all)
+- Long coding evening, implementing all methods of the SON.java class, the network chat functionality and the client-side chat presentation.
+- Our tutor Marco recommended us to take better care of our diary.
+![late night coding](../assets/pictures/m2_random_coding_session.jpg)
+
+### Sunday, March 18th, 2018 (all)
+We spent half a day implementing the first classes and interfaces.
+
+### Wednesday, March 14th, 2018 (all)
+##### Decisions/ideas:
+- Our code style is going to be the Google Java code style.
+- We specified the package structure for the project (in the app folder).
+The structure is as follows:  
+
+```
+src
+|
+|__main   
+     |
+     |__java  
+         |
+         |__tech.subluminal
+             |
+             |__client
+             |   |
+             |   |__init
+             |   |
+             |   |__logic   
+             |   | 
+             |   |__presentation
+             |   |
+             |   |__stores
+             |
+             |__shared 
+                 |
+                 |__messages
+                 |
+                 |__net
+                 |
+                 |__records
+                 |
+                 |__son
+                       
+```
+
+### Sunday, March 11th, 2018 (all)
+After some discussion within the group and consulting the tutors, we decided to use our own implementation of the JSON format. We named it SON (**S**ubluminal **O**bject **N**otation). This format will be used to generalize the network communication between the client and the server. It is designed as an interface and thus allows us to parse any Java object into a transferable object.
+
+### Thursday, March 9th, 2018 (all)
+![Our Team at Milestone 1](../assets/pictures/m1_presentation.jpg)
+
+### Monday, March 5th, 2018 (all)
+##### Decisions/ideas:
 In this meeting we decided about most of the rules of our game. They are:
-#### _{Rules}_
+##### _Rules_
 - Possibly 2-n players, for the moment we decided the maximum number of players will be 8.
 - At the beginning of a game, the map is created randomly.
 - You lose the game when your mother ship does not exist anymore.
@@ -43,25 +110,24 @@ In this meeting we decided about most of the rules of our game. They are:
 - If the base of the mother ship is intruded, the mother ship is the last one to be torn down.
 - Every mother ship and every regular ship broadcast their position so that every player can see it.
 
-
-## Sunday, March 4th, 2018, 2nd meeting (DAV, LUC, LGK)
-### Decisions/ideas:
+## Sunday, March 4th, 2018 (DAV, LUC, LGK)
+##### Decisions/ideas:
 - The language for all documents concerning the programming project will be English
 - The game concept will be concreted on Monday, March 5th
 - On Monday we will also make a final decision if the game is going to be round-based or in real time
 
-### Task division
-**LUC**: Definition of our software requirements for the project; brainstorming/design of our repository and branch structure and of our IntelliJ configuration  
-**DAV**: Setup of a rudimentary merchandise website as a gag for the first milestone
+##### Task division
+LUC: Definition of our software requirements for the project; brainstorming/design of our repository and branch structure and of our IntelliJ configuration  
+DAV: Setup of a rudimentary merchandise website as a gag for the first milestone
 
-## Friday, March 2nd, 2018, 1st meeting (RIK, DAV, LGK)
-### Decisions/ideas:
+### Friday, March 2nd, 2018 (RIK, DAV, LGK)
+##### Decisions/ideas:
 - **Ideas for game names**: Ether, Far Away, Separation, Delay, Subluminal
 - **Team name**: Bordeaux Ink.
 - **Basic game principle**: The game happens on an outer space map with stars. In the beginning every player has his main ship placed in a random planet system and produces his fleet of smaller ships with the resources that his planets offer. The goal is to conquer the biggest number of planet systems. The players can inform themselves about the position of their adversaries and in which state of colonization other planet systems are by sending out requests. The twist is that the messenger ships take some time to get to their target and back, so when they are back the information is already not the latest anymore and the player has to make decisions upon outdated information.
 
-### Task division:  
-**DAV**: Mock-ups; graphical sketches  
-**RIK**: Division client/server; definition of the network protocol  
-**LGK**: Planning of the presentation; definition of the style and structure of upcoming presentations  
-**LUC**: (Create a git-repository;) Planning of the structure of the git-repository; decision if we should use the IntelliJ-plugin for git
+##### Task division:  
+DAV: Mock-ups; graphical sketches  
+RIK: Division client/server; definition of the network protocol  
+LGK: Planning of the presentation; definition of the style and structure of upcoming presentations  
+LUC: (Create a git-repository;) Planning of the structure of the git-repository; decision if we should use the IntelliJ-plugin for git

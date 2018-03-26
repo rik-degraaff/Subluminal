@@ -1,78 +1,117 @@
 # Network protocol
-## Properties
-- A message is terminated by a newline character ``\r\n``.
-- Preamble contains message type only. Package length is ommited, parsed till EOL.
-- Delimeter: ``space`` between preamble and message content.
+Our implementation of a network protocol is strongly influenced by JSON, now called SON (**S**ubluminal **O**bject **N**otation). The packets are constructed like objects. Before sending all, whitespace is removed and the keys and values are concatonated with their respective delimiters. The only whitespace remaining is a single space between package type and message content.
+
+## Supported commands
+### /changename
+***Client***: Sets new username.
+``/changename <new username>``
+
+### /logout
+***Client***: Closes your connection to the server and exits the client.
+``/logout`` (no arguments)
+
+
+## Protocol properties
+- Package length/size is not calculated and transmitted.
+- The packet preamble contains only the its type.
+- Between preamble and message content, there is a single ``space`` as delimiter.
+- A packet is terminated by the newline character ``\r\n``.
 - Object notation: 
   - Objects: ``{ }``
   - Lists: ``[ ]``
   - Key/Value delimiter: ``:``
   - Field separator: ``,``
 
-### Example from slides (invalid)
+
+## Protocol message structure
+Each message can contain zero or more values of the following java variable type: ``boolean (b)``, ``integer (i)``, ``double (d)``, ``String (s)``, ``list<SON> (l)``. The key is always a string enlosed in quotes (parsing help), the value is a string representation of its original value enclosed in quotes (parsing help), prepended with a char to represent its original type for later parsing. The list type is not yet working (required to send multiple values of the same type of more importantly to send other SON objects). The following package types are already implemented and in use: 
+
+### LoginReq
+***Client***: Register a new user to the server. Expects response with ``LoginRes`` object.
+
 ```
-Login:
-C: HI <username>
-S: HI <username1>
-
-Logout:
-C: BYE
-S: BYE
-
-Username:
-C: NAME <username>
-S: NAME <username1>
-
-Lobbbies:
-C: GETGAMES
-S: GAMES
-     <id> <name> <players> <started>
-     [...]
-
-C: MKGAME <name>
-S: NEWGAME <id> <name>
-
-C: JOINGAME <id>
-S: JOINGAME <id>
-
-C: READY <game-id>
-S: READY <game-id>
-
-C: STAT <game-id>
-S: STAT <game-id> <name>
-     <player> <ready>
-     [...]
-
-Chat:
-C: SAY <game-id> <message>
-
-S: SAID <game-id> <player> <message>
-
-Game:
-S: GAMESTART <game-id>
-     PLANETS
-       <planet-id> <x> <y> <resources>
-       [...]
-     PLAYERS
-       <player> <planet-id>
-
-C: STAT <game-id>
-S: STAT <game-id>
-     PLAYERS
-       <player>
-         [<x> <y>] <target-planet-id> // Mothership location
-         [<x> <y>] <target-planet-id> <signal-time> <ship-id> [...]
-         [...]
-       [...]
-     PLANETS
-       <planet-id> [<player> <capture-percent>]
-       [...]
-
-C: SIGNAL <game-id>
-     <planet-id> <target-planet-id> <move-percent>
-
-C: MOVE <game-id>
-      <target-planet-id>
-
-C: LEAVE <game-id>
+loginreq {
+  "username":s"<String>"
+}
 ```
+
+### LoginRes
+***Server***: Confirms login and returns ``userid``.
+
+```
+loginres {
+  "userid":i"<integer>",
+  "username":s"<String>"
+}
+```
+
+### LogoutReq
+***Client***: Properly disconnects the client from the server.
+
+```
+logoutreq {
+ //empty object
+}
+```
+
+### ChatMessageOut
+***Client***: Send ``message`` to server. ``message`` and  ``global`` are handled by the server.
+
+```
+chatmessageout {
+  "message":s"<String>",
+  "receiverID":s"<String>",
+  "global":b"<boolean>"
+}
+```
+
+### ChatMessageIn
+***Server***: Send ``message`` to client.
+
+```
+chatmassagein {
+  "message":s"<String>",
+  "username":s"<String>",
+  "channel":s"<String>"
+}
+```
+
+### Ping
+***Server***: Initiate ping/pong.
+
+```
+ping {
+  "id":s"<String>"
+}
+```
+
+### Pong
+***Client***: Respond to ping with pong.
+
+```
+pong {
+  "id":s"<String>"
+}
+```
+
+### UsernameReq
+***Client***: Send request to change the ``username``. Expects response with ``UsernameRes`` object.
+
+```
+usernamereq {
+  "username":s"<String>"
+}
+```
+
+### UsernameRes
+***Server***: Sends new ``username`` to client.
+
+```
+usernameres {
+  "username":s"<String>"
+}
+```
+
+## Diagram
+![UML Diagram of basic messaging](./../assets/other/basic_messaging1.png)  
+Example: Sending a ``LoginReq`` message from client to server. 

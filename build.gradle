@@ -1,5 +1,5 @@
 group 'Bordeaux Ink.'
-version '0.1.0-m1'
+version '0.2.0-m2'
 
 apply plugin: 'java'
 apply plugin: 'idea'

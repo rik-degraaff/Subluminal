@@ -3,7 +3,6 @@ Collection of pointers to online resources for this project to get everyone on t
 Copy your entry into the category which best describes the resourse. If necessary create a new one or a subcategory. Please put at least the title infront of your reference, not just the blank link.
 
 ## Java
-
 ### Networking
 - TCP - On Keepalive (hearbeat) packets. [2012]. [https://stackoverflow.com/questions/10702517/in-a-tcp-connection-java-packets](https://stackoverflow.com/questions/10702517/in-a-tcp-connection-java-packets).
 - Java TCP Sockets and Swing Tutorial. [2011]. [http://ashishmyles.com/tutorials/tcpchat/index.html](http://ashishmyles.com/tutorials/tcpchat/index.html).
@@ -14,11 +13,9 @@ Copy your entry into the category which best describes the resourse. If necessar
 - Example Code for a Client. [2016]. [https://github.com/overactor/JAWS_client](https://github.com/overactor/JAWS_client).
 
 ### JFX
-
-### 
+- none
 
 ## GitLab
-
 ### CI/CD
 - A sample of .gitlab-ci.yml for a gradle project. [2017]. [https://gist.github.com/t0kieu/deee875c35d45b61239a7ce1b1cb83b0](https://gist.github.com/t0kieu/deee875c35d45b61239a7ce1b1cb83b0).
 - Configuration of your jobs with .gitlab-ci.yml (Official GitLab Documentation). [2018]. [https://docs.gitlab.com/ee/ci/yaml/](https://docs.gitlab.com/ee/ci/yaml/).
@@ -34,3 +31,6 @@ Copy your entry into the category which best describes the resourse. If necessar
 - Gradle settings (IntelliJ). [2018]. [https://www.jetbrains.com/help/idea/gradle-settings.html](https://www.jetbrains.com/help/idea/gradle-settings.html).
 
 ## Web
+
+## Other
+RegexOne. Learn Regular Expressions with simple, interactive exercises. [2018]. [https://regexone.com](https://regexone.com)

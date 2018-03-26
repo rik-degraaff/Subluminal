@@ -4,6 +4,7 @@ package tech.subluminal.shared.records;
  * Record that represents a user.
  */
 public class User {
+
   private String username;
   private String id;
 
@@ -19,6 +20,7 @@ public class User {
   }
 
   /**
+   * Gets the username.
    *
    * @return the user.
    */
@@ -27,6 +29,7 @@ public class User {
   }
 
   /**
+   * Sets the username of the user.
    *
    * @param username to be set.
    */
@@ -35,6 +38,7 @@ public class User {
   }
 
   /**
+   * Gets the id of the user.
    *
    * @return the user id.
    */
@@ -43,6 +47,7 @@ public class User {
   }
 
   /**
+   * Sets the id of the user.
    *
    * @param id to be set as user id.
    */
