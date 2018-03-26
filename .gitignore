@@ -6,10 +6,11 @@
 *.iml
 .idea/**/*.xml
 .idea/*.xml
-~*.*
+*.log
 
 
 #folders
+.app/
 .idea/
 .gradle/
 .settings/
@@ -19,4 +20,4 @@ app/out/
 app/build/
 bin/
 build/
-gradle/
+docs/javadocs/

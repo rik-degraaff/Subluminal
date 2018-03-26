@@ -1,5 +1,5 @@
 group 'Bordeaux Ink.'
-version '0.0.1'
+version '0.2.0-m2'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -20,16 +20,16 @@ def description = """
 
 sourceSets {
     main {
-         java.outputDir = file('/app/out/main')
+         java.outputDir = file('app/out/main')
          java {
-              srcDir '/app/src/main/java'
+              srcDir 'app/src/main/java'
               }
          }
 
     test {
-         java.outputDir = file('/app/out/test')
+         java.outputDir = file('app/out/test')
          java {
-              srcDir '/app/src/test/java'
+              srcDir 'app/src/test/java'
               }
          }
 }
@@ -54,7 +54,6 @@ repositories {
 
 dependencies {
     testCompile 'junit:junit:4.12'
-    compile 'junit:junit:4.12'
 }
 
 jar {
@@ -62,7 +61,7 @@ jar {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
     manifest{
-        attributes 'Main-Class': 'ch.unibas.cs.p9.fs18.example.HelloWorld'
+        attributes 'Main-Class': 'tech.subluminal.main.Subluminal'
     }
 }
 
@@ -81,3 +80,12 @@ test {
         logger.quiet "Executing test ${desc.name} [${desc.className}] with result: ${result.resultType}"
     }
 }
+
+javadoc {
+    setDestinationDir(file('docs/javadocs'))
+
+}
+
+// task openBrowser(type:Exec) {
+//     java.awt.Desktop.desktop.browse rootProject.path+"docs/javadocs/index.html".toURI()
+// }
