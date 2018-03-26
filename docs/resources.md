@@ -13,7 +13,8 @@ Copy your entry into the category which best describes the resourse. If necessar
 - Example Code for a Client. [2016]. [https://github.com/overactor/JAWS_client](https://github.com/overactor/JAWS_client).
 
 ### JFX
-- none
+- MVC Pattern. [2017]. [http://griffon-framework.org/tutorials/5_mvc_patterns.html] (http://griffon-framework.org/tutorials/5_mvc_patterns.html)
+- JavaFX Tutorial. [2015]. [https://www.tutorialspoint.com/javafx/index.htm] (https://www.tutorialspoint.com/javafx/index.htm)
 
 ## GitLab
 ### CI/CD
