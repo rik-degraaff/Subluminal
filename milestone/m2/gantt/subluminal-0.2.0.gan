@@ -1,21 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Subluminal" company="Bordeaux Ink" webLink="http://" view-date="2018-03-04" view-index="0" gantt-divider-location="379" resource-divider-location="300" version="2.8.6" locale="en_US">
-    <description>
-        <![CDATA[
+<?xml version="1.0" encoding="UTF-8"?><project name="Subluminal" company="Bordeaux Ink" webLink="http://" view-date="2018-02-12" view-index="0" gantt-divider-location="379" resource-divider-location="300" version="2.8.6" locale="de">
+    <description><![CDATA[
+        
         
         
         Subluminal game for Programmierprojekt UniBas FS2018
     
     
-    ]]>
-    </description>
+    
+    ]]></description>
     <view zooming-state="default:5" id="gantt-chart">
-        <field id="tpd3" name="Name" width="154" order="0"/>
-        <field id="tpd4" name="Begin date" width="103" order="1"/>
-        <field id="tpd5" name="End date" width="103" order="2"/>
+        <field id="tpd3" name="Vorgang" width="154" order="0"/>
+        <field id="tpd4" name="Anfang" width="103" order="1"/>
+        <field id="tpd5" name="Ende" width="103" order="2"/>
     </view>
     <view id="resource-table">
-        <field id="0" name="Name" width="210" order="0"/>
-        <field id="1" name="Default role" width="86" order="1"/>
+        <field id="0" name="Ressource" width="210" order="0"/>
+        <field id="1" name="Rolle" width="86" order="1"/>
     </view>
     <!-- -->
     <calendars>
@@ -85,7 +85,7 @@
         <task id="57" name="logout" color="#8cb6ce" meeting="false" start="2018-03-16" duration="1" complete="0" thirdDate="2018-03-16" thirdDate-constraint="0" expand="true"/>
         <task id="65" name="write software quality concept" color="#8cb6ce" meeting="false" start="2018-03-08" duration="3" complete="0" thirdDate="2018-03-08" thirdDate-constraint="0" expand="true"/>
         <task id="67" name="formalize network protocol" color="#8cb6ce" meeting="false" start="2018-03-08" duration="1" complete="0" thirdDate="2018-03-08" thirdDate-constraint="0" expand="true"/>
-        <task id="3" name="Milestone 2" color="#8cb6ce" meeting="true" start="2018-03-26" duration="0" complete="0" thirdDate="2018-03-05" thirdDate-constraint="0" expand="true">
+        <task id="3" name="Milestone 2" color="#8cb6ce" meeting="true" start="2018-03-26" duration="0" complete="0" thirdDate="2018-03-26" thirdDate-constraint="0" expand="true">
             <depend id="69" type="2" difference="0" hardness="Strong"/>
             <depend id="71" type="2" difference="0" hardness="Strong"/>
             <depend id="75" type="2" difference="0" hardness="Strong"/>
