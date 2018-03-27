@@ -49,6 +49,7 @@ build:
   artifacts:
     paths:
     - app/build/libs/*.jar
+    - app/out/
 
 javadoc:
   stage: javadoc
