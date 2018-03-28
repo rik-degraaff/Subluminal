@@ -1,3 +1,4 @@
+![build](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/badges/dev/build.svg) ![build](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/badges/dev/coverage.svg)
 # Subluminal /ˌsʌbˈl(j)uːmɪnl/ - The Game
 
 > Once upon a time a clever programmer named Bob created in the basement of his mom's house 4 different AIs. Throughout his whole life Bob tried to get the AIs to work together, but sadly he never achived his this goal. After Bob passed away the world forgot about him and his work. But the AI's never forgot, ever single one of them evolve and adopted, with the goal to be the best AI in the whole universe ...  

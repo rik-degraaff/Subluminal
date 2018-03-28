@@ -15,36 +15,69 @@ stages:
   - build
   - test
   - javadoc
+  - staging
+  - deploy
 
 checkstyle:
   stage: checkstyle
   script:
-    - gradle check
+    - gradle -q check
   tags:
     - cs108
   allow_failure: true
+  artifacts:
+    paths:
+    - app/build/reports/checktyle/
+
 
 test:
   stage: test
   script:
-    - gradle test
+    - gradle -q test
   tags:
   - cs108
+  artifacts:
+    paths:
+    - app/build/reports/tests/test/
 
 build:
   stage: build
   script:
-  - gradle build
+  - gradle -q build
   tags:
   - cs108
+  artifacts:
+    paths:
+    - app/build/libs/*.jar
+    - app/out/
 
 javadoc:
   stage: javadoc
   script:
-    - gradle javadoc
+    - gradle -q javadoc
   tags:
     - cs108
   allow_failure: true
+  artifacts:
+    paths:
+    - docs/javadocs/
+
+staging:
+  stage: staging
+  script:
+    - echo "Missing sh script to setup testing/staging environment."
+  when: manual
+  only:
+    - /^release/.*$/
+    - dev
+
+deploy:
+  stage: staging
+  script:
+    - echo "Missing sh script to setup deployment environment."
+  when: manual
+  only:
+    - master
 
 after_script:
   - echo "----- End CI -----"
