@@ -7,7 +7,9 @@
 | JetBrains IntelliJ IDEA Ultimate | >= 2017.3.4 | [``https://www.jetbrains.com/idea/``](https://www.jetbrains.com/idea/) |
 | Git | >= 2.16.2 | [``https://git-scm.com/download/win``](https://git-scm.com/download/win) |
 | Git-lfs | >= 2.3.4 | ["https://git-lfs.github.com/"](https://git-lfs.github.com/) |
-| Gradle | = 4.6.0  | ``Download via gradle wrapper task`` |
+| Git-flow | ? | ``via GitKraken`` |
+| GitKraken | >= 3.5.0 | ``https://www.gitkraken.com/download`` |
+| Gradle | = 4.6.0 | ``Download via gradle wrapper task`` |
 
 ## Graphics & Audio
 | Application | Version | Download |
