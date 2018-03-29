@@ -31,6 +31,10 @@ Copy your entry into the category which best describes the resourse. If necessar
 - Gradle settings (IntelliJ). [2018]. [https://www.jetbrains.com/help/idea/gradle-settings.html](https://www.jetbrains.com/help/idea/gradle-settings.html).
 
 ## Web
+- none
 
 ## Other
-RegexOne. Learn Regular Expressions with simple, interactive exercises. [2018]. [https://regexone.com](https://regexone.com)
+- RegexOne. Learn Regular Expressions with simple, interactive exercises. [2018]. [https://regexone.com](https://regexone.com)
+- Essential Git. [https://nhs.io/git/](https://gitlab.com/ci/lint).
+- Online .gitlab-ci.yml linter. [https://gitlab.com/ci/lint](https://gitlab.com/ci/lint).
+- Markdown Cheatsheet. [https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
