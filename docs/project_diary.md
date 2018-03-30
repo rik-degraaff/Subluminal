@@ -14,7 +14,7 @@
   - to fix the faulty parsing of double quotes in strings
   - to improve the reaction logic of the server when it doesn't get the client's pong message anymore
   - to overwork the QA plan: instead of the latency time we want to track the client and server tick rates and achieve certain rates (which yet are to be set)
-
+- Log4J and Mockito are external libraries we are going to use until M3
 ### Sunday, March 25th, 2018 (DAV, LGK, LUC)
 - Logout functionality implementation was finished.
 - Protocol document was created.
