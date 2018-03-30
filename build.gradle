@@ -47,8 +47,15 @@ sourceSets {
          java {
               srcDir 'app/src/main/java'
               }
+
+        resources {
+            srcDirs = ['app/src/main/java', 'src/main/resources']
+            exclude "**/*.java"
+
+        }
          java.outputDir = file('app/out/main')
-         }
+
+    }
 
     test {
          java {

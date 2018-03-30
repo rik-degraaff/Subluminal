@@ -2,10 +2,12 @@ package tech.subluminal.client.init;
 
 import java.io.IOException;
 import java.net.Socket;
+import javafx.application.Application;
 import tech.subluminal.client.logic.ChatManager;
 import tech.subluminal.client.logic.PingManager;
 import tech.subluminal.client.logic.UserManager;
 import tech.subluminal.client.presentation.ConsolePresenter;
+import tech.subluminal.client.presentation.UiPresenter;
 import tech.subluminal.client.stores.InMemoryPingStore;
 import tech.subluminal.client.stores.InMemoryUserStore;
 import tech.subluminal.client.stores.PingStore;
@@ -40,7 +42,9 @@ public class ClientInitializer {
     UserStore userStore = new InMemoryUserStore();
     PingStore pingStore = new InMemoryPingStore();
 
-    ConsolePresenter presenter = new ConsolePresenter(System.in, System.out, userStore);
+    //ConsolePresenter presenter = new ConsolePresenter(System.in, System.out, userStore);
+    UiPresenter presenter = new UiPresenter();
+    Application.launch(UiPresenter.class);
 
     UserManager userManager = new UserManager(connection, userStore, presenter);
     new ChatManager(userStore, presenter, connection);

@@ -1,0 +1,32 @@
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('../PressStart2P-Regular.ttf');
+}
+
+.root {
+  -fx-background-color: black;
+  -fx-font-family: "Press Start 2P";
+}
+
+.label {
+  -fx-font-size: 18;
+  -fx-text-fill: green;
+}
+
+.button{
+  -fx-font-family: "Press Start 2P";
+  -fx-font-size: 8;
+}
+
+#chat-box {
+  -fx-background-color: black;
+}
+
+.text-area {
+  text-area-background: black;
+  -fx-text-fill: white;
+}
+
+.text-area .content{
+  -fx-background-color: black;
+}
