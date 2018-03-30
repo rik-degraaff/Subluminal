@@ -1,10 +1,19 @@
 ﻿
 # Project Diary
 
-**RIK** = Rik de Graaff  
 **DAV** = David Lengweiler  
+**LGK** = Lucas Galery Käser  
 **LUC** = Luc Kury  
-**LGK** = Lucas Galery Käser
+**RIK** = Rik de Graaff  
+
+### Thursday, March 29th, 2018 (DAV, LGK, LUC)
+##### Decisions:
+- Justified master merges are now allowed anytime. Issue templates for example need to be in the master branch to be detected correctly. However, direct merges of source code into the master branch are still forbidden.
+- Current to do's are:  
+  - to fix the NetCat-Situation of M2 (to be specified)
+  - to fix the faulty parsing of double quotes in strings
+  - to improve the reaction logic of the server when it doesn't get the client's pong message anymore
+  - to overwork the QA plan: instead of the latency time we want to track the client and server tick rates and achieve certain rates (which yet are to be set)
 
 ### Sunday, March 25th, 2018 (DAV, LGK, LUC)
 - Logout functionality implementation was finished.
