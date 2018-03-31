@@ -1,10 +1,43 @@
-﻿
+
 # Project Diary
 
 **DAV** = David Lengweiler  
 **LGK** = Lucas Galery Käser  
 **LUC** = Luc Kury  
 **RIK** = Rik de Graaff  
+
+### Saturday, March 31st, 2018 (all)
+##### Decisions:
+- We are going to define Lobby-Stores because it is easier to store Users and Lobbies separately
+- For the reconnection procedure we need later, our current idea is: If a player loses connection to the game, a cookie file is generated and temporarily stored on the client. This file contains data the client needs to send a reconnection request to the server.
+- Name changing during a game shall not be possible. However, this issue has a low priority.
+- Nice-to-haves:
+    - ship fleets are represented as swarms
+    - game speed settings
+    - reconnection to lobby with password
+    - reconnection to game via user ID
+- Representation of the structure a single game state will have:
+```
+gameState
+    |__listOfPlayers
+    |   |
+    |   |__<Player_X>
+    |   .       |__motherShip
+    |   .       |       |__position
+    |   .       |__listOfFleets
+    |                   |__<Fleet_n°8>
+    |                   |      |__n°ofShips
+    |                   .      |__position/direction
+    |                   .
+    |                   .
+    |__listOfStars
+        |
+        |__<Star_Y>
+        |       |__coordinates
+        .       |__owner possession %
+        .       |__owner ID (may be null)
+        . 
+```    
 
 ### Thursday, March 29th, 2018 (DAV, LGK, LUC)
 ##### Decisions:
