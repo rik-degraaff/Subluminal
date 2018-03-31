@@ -4,11 +4,16 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import tech.subluminal.client.presentation.controller.FXMLController;
 
 public class UiPresenter extends Application implements ChatPresenter, UserPresenter {
+
+  volatile boolean keepRunning = true;
+  private ChatPresenter.Delegate chatDelegate;
+  private UserPresenter.Delegate userDelegate;
+  private FXMLController controller;
+
 
   /**
    * Fired when a someone sends a message to all users on the server.
@@ -18,7 +23,8 @@ public class UiPresenter extends Application implements ChatPresenter, UserPrese
    */
   @Override
   public void globalMessageReceived(String message, String username) {
-
+    FXMLController controller = new FXMLController();
+    controller.addMessageChat(message, username);
   }
 
   /**
@@ -50,7 +56,7 @@ public class UiPresenter extends Application implements ChatPresenter, UserPrese
    */
   @Override
   public void setChatDelegate(ChatPresenter.Delegate delegate) {
-
+    this.chatDelegate = delegate;
   }
 
   /**
@@ -58,7 +64,8 @@ public class UiPresenter extends Application implements ChatPresenter, UserPrese
    */
   @Override
   public void loginSucceeded() {
-
+    //TODO: complete this
+    controller.addMessageChat("Successfully logged in as " + ".");
   }
 
   /**
@@ -66,7 +73,7 @@ public class UiPresenter extends Application implements ChatPresenter, UserPrese
    */
   @Override
   public void logoutSucceeded() {
-
+    controller.addMessageChat("Successfully logged out"); //TODO: add username
   }
 
   /**
@@ -79,7 +86,7 @@ public class UiPresenter extends Application implements ChatPresenter, UserPrese
 
   @Override
   public void setUserDelegate(UserPresenter.Delegate delegate) {
-
+    this.userDelegate = delegate;
   }
 
   @Override
@@ -92,6 +99,8 @@ public class UiPresenter extends Application implements ChatPresenter, UserPrese
     primaryStage.setTitle("Subluminal Lobby");
     primaryStage.setScene(new Scene(root));
     primaryStage.show();
+
+    controller = loader.getController();
   }
 
 
