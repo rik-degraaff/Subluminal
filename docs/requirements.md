@@ -22,5 +22,22 @@
 | Application | Version | Download |
 |-------------|---------|----------|
 | GanttProject | >= 2.8.6 | [``https://www.ganttproject.biz/download/free``](https://www.ganttproject.biz/download/free) |
-| PowerPoint | = 2016  | ``none``  |
-| WireShark | = 2.4.5  | [``https://www.wireshark.org/#download``](https://www.wireshark.org/#download)  |
+| PowerPoint | = 2016  | ``none`` |
+| WireShark | = 2.4.5  | [``https://www.wireshark.org/#download``](https://www.wireshark.org/#download) |
+
+## Libraries
+### Logging
+| Name | Version | Pros | Cons |
+|-------------|---------|----------|---|
+
+### Command line parsing
+| Name | Version | Pros | Cons |
+|-------------|---------|----------|---|
+
+### Settings store
+| Name | Version | Pros | Cons |
+|-------------|---------|----------|---|
+
+### Unittests
+| Name | Version | Pros | Cons |
+|-------------|---------|----------|---|
