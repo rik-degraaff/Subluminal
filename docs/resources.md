@@ -15,6 +15,8 @@ Copy your entry into the category which best describes the resourse. If necessar
 ### JFX
 - MVC Pattern. [2017]. [http://griffon-framework.org/tutorials/5_mvc_patterns.html] (http://griffon-framework.org/tutorials/5_mvc_patterns.html)
 - JavaFX Tutorial. [2015]. [https://www.tutorialspoint.com/javafx/index.htm] (https://www.tutorialspoint.com/javafx/index.htm)
+- Preparing JavaFX for Intellij IDEA. [2017]. [https://www.jetbrains.com/help/idea/preparing-for-javafx-application-development.html#path_to_scene_builder] (https://www.jetbrains.com/help/idea/preparing-for-javafx-application-development.html#path_to_scene_builder)
+- JavaFX 8 Tutorial.(MVC) [2017]. [http://code.makery.ch/library/javafx-8-tutorial/part1/] (http://code.makery.ch/library/javafx-8-tutorial/part1/)
 
 ## GitLab
 ### CI/CD

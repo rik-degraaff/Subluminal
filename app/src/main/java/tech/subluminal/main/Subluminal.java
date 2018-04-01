@@ -1,12 +1,14 @@
 package tech.subluminal.main;
 
+import javafx.application.Application;
 import tech.subluminal.client.init.ClientInitializer;
+import tech.subluminal.client.presentation.UiPresenter;
 import tech.subluminal.server.init.ServerInitializer;
 
 /**
  * The main class of the Subluminal project containing the main function which starts the program.
  */
-public class Subluminal {
+public class Subluminal{
 
   /**
    * Parses the command line arguments and calls the relevant packages.
@@ -52,6 +54,7 @@ public class Subluminal {
     String username = args.length > 2 ? args[2] : System.getProperty("user.name");
 
     ClientInitializer.init(host, port, username);
+    Application.launch(UiPresenter.class);
   }
 
   private static void invalidArguments() {
@@ -60,4 +63,5 @@ public class Subluminal {
         .println("Call either with (client <hostaddress>:<port> [<username>]) or (server <port>)");
     System.exit(1);
   }
+
 }

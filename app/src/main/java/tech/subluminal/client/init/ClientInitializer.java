@@ -2,12 +2,7 @@ package tech.subluminal.client.init;
 
 import java.io.IOException;
 import java.net.Socket;
-import javafx.application.Application;
-import tech.subluminal.client.logic.ChatManager;
-import tech.subluminal.client.logic.PingManager;
-import tech.subluminal.client.logic.UserManager;
-import tech.subluminal.client.presentation.ConsolePresenter;
-import tech.subluminal.client.presentation.UiPresenter;
+
 import tech.subluminal.client.stores.InMemoryPingStore;
 import tech.subluminal.client.stores.InMemoryUserStore;
 import tech.subluminal.client.stores.PingStore;
@@ -16,10 +11,12 @@ import tech.subluminal.shared.messages.LogoutReq;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.net.SocketConnection;
 
+import static javafx.application.Application.launch;
+
 /**
  * Assembles the client-side architecture.
  */
-public class ClientInitializer {
+public class ClientInitializer{
 
   /**
    * Initializes the assembling.
@@ -43,19 +40,22 @@ public class ClientInitializer {
     PingStore pingStore = new InMemoryPingStore();
 
     //ConsolePresenter presenter = new ConsolePresenter(System.in, System.out, userStore);
-    UiPresenter presenter = new UiPresenter();
-    Application.launch(UiPresenter.class);
+    //initGui();
+    System.out.println("test");
 
-    UserManager userManager = new UserManager(connection, userStore, presenter);
-    new ChatManager(userStore, presenter, connection);
-    new PingManager(connection, pingStore);
 
-    userManager.start(username);
+
+
+    //UserManager userManager = new UserManager(connection, userStore, presenter);
+    //new ChatManager(userStore, presenter, connection);
+    //new PingManager(connection, pingStore);
+
+    //userManager.start(username);
 
     final Thread mainThread = Thread.currentThread();
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
       connection.sendMessage(new LogoutReq());
-      presenter.logoutSucceeded(); //TODO: handle in userManager
+      //presenter.logoutSucceeded(); //TODO: handle in userManager
       try {
         mainThread.join();
       } catch (InterruptedException e) {
@@ -64,4 +64,6 @@ public class ClientInitializer {
     }));
 
   }
+
+
 }
