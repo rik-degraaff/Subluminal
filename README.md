@@ -1,17 +1,14 @@
-# Subluminal /ˌsʌbˈl(j)uːmɪnl/ - The Game
+**Table of Contents**  
+[1. Overview](#1-overview)  
+[2. Getting Started](#2-getting-started)  
+[3. Game Concept](#3-game-concept)  
+[4. License](#4-license)  
+[5. Webpage](#5-webpage)
 
-> Once upon a time a clever programmer named Bob created in the basement of his mom's house 4 different AIs. Throughout his whole life Bob tried to get the AIs to work together, but sadly he never achived his this goal. After Bob passed away the world forgot about him and his work. But the AI's never forgot, ever single one of them evolve and adopted, with the goal to be the best AI in the whole universe ...  
-
-Meaning of game title: [Oxforddictionaries](https://en.oxforddictionaries.com/definition/us/subluminal), [Wiktionary](https://en.wiktionary.org/wiki/subluminal), [Wikipedia](https://en.wikipedia.org/wiki/Faster-than-light)
-
+# [Subluminal](https://en.wiktionary.org/wiki/subluminal) /ˌsʌbˈl(j)uːmɪnl/ - The Game
 [![Logo](./assets/logo/subluminal_logo.png)](http://subluminal.tech) **by Bordeaux Ink.**
 
-**Table of Contents**
-[1. Overview](##Overview) 
-[2. Getting Started](##Getting-Started)
-[3. Game Concept](##Game-Concept)
-[4. License](##License)
-[5. Webpage](##Webpage)
+> Once upon a time a clever programmer named Bob created in the basement of his mom's house 4 different AIs. Throughout his whole life Bob tried to get the AIs to work together, but sadly he never achieved his this goal. After Bob passed away the world forgot about him and his work. But the AI's never forgot, ever single one of them evolve and adopted, with the goal to be the best AI in the whole universe ...  
 
 
 ## 1. Overview
@@ -27,18 +24,18 @@ On the client you can use ***/changename*** to change your username and ***/logo
 
 
 ## 2. Getting Started
-1. Generate a pair of SSH keys and add them to your Gitlab account (follow [these instructions](https://git.scicore.unibas.ch/help/ssh/README#generating-a-new-ssh-key-pair) or run  
+1. Generate a pair of ssh keys and add them to your gitlab account (follow [these instructions](https://git.scicore.unibas.ch/help/ssh/README#generating-a-new-ssh-key-pair) or run  
 ``ssh-keygen -t rsa -C "your.email@stud.unibas.ch" -b 4096``)
-3. Clone the repo to your harddrive ``git clone https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11.git``  
+3. Clone the repo to your hard drive ``git clone https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11.git``  
 4. cd into the project directory and try to build the project with ``./gradlew build`` (on Unix) or ``gradlew.bat build`` (on Windows).
 5. A more specific document on code quality assurance is located in [docs/quality_assurance.md](docs/quality_assurance.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
 
 
 ## 3. Game Concept
-Youc an find a detailed description on how the game is played, in [docs/game_rules.md](docs/game_rules.md) folder.  
+You can find a detailed description on how the game is played, in [docs/game_rules.md](docs/game_rules.md) folder.  
 
-![Mockup Image 4](./assets/mockup/ui_4.png)
-![Mockup Image 1](./assets/mockup/ui_1.jpg)  
+![Mockup of user interface](./assets/mockup/ui_4.png)
+![Mockup of detail view](./assets/mockup/ui_1.jpg)  
 
 
 ## 4. License

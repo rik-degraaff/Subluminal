@@ -1,10 +1,10 @@
 # Resources
 Collection of pointers to online resources for this project to get everyone on the same page about technical stuff.
-Copy your entry into the category which best describes the resourse. If necessary create a new one or a subcategory. Please put at least the title infront of your reference, not just the blank link.
+Copy your entry into the category which best describes the resource. If necessary create a new one or a subcategory. Please put at least the title in front of your reference, not just the blank link.
 
 ## Java
 ### Networking
-- TCP - On Keepalive (hearbeat) packets. [2012]. [https://stackoverflow.com/questions/10702517/in-a-tcp-connection-java-packets](https://stackoverflow.com/questions/10702517/in-a-tcp-connection-java-packets).
+- TCP - On Keepalive (heartbeat) packets. [2012]. [https://stackoverflow.com/questions/10702517/in-a-tcp-connection-java-packets](https://stackoverflow.com/questions/10702517/in-a-tcp-connection-java-packets).
 - Java TCP Sockets and Swing Tutorial. [2011]. [http://ashishmyles.com/tutorials/tcpchat/index.html](http://ashishmyles.com/tutorials/tcpchat/index.html).
 
 ### Software Architecture
@@ -38,3 +38,4 @@ Copy your entry into the category which best describes the resourse. If necessar
 - Essential Git. [https://nhs.io/git/](https://gitlab.com/ci/lint).
 - Online .gitlab-ci.yml linter. [https://gitlab.com/ci/lint](https://gitlab.com/ci/lint).
 - Markdown Cheatsheet. [https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
+- Flaticon [2018]. [https://www.flaticon.com/](https://www.flaticon.com/)
