@@ -15,7 +15,7 @@ import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.stores.ReadOnlyUserStore;
 import tech.subluminal.client.stores.UserStore;
 
-public class ChatController implements ChatPresenter, UserPresenter{
+public class ChatController implements ChatPresenter, UserPresenter, Initializable{
 
     @FXML
     private VBox chatBox;
@@ -186,7 +186,6 @@ public class ChatController implements ChatPresenter, UserPresenter{
     @Override
     public void loginSucceeded() {
         addMessageChat("Succesfully logged in as: " + userStore.getCurrentUser().getUsername());
-        System.out.println("logged in");
     }
 
     /**
@@ -208,5 +207,10 @@ public class ChatController implements ChatPresenter, UserPresenter{
     @Override
     public void setUserDelegate(UserPresenter.Delegate delegate) {
         this.userDelegate = delegate;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        chatHistory.setWrapText(true);
     }
 }

@@ -3,7 +3,6 @@ package tech.subluminal.client.init;
 import java.io.IOException;
 import java.net.Socket;
 
-import java.util.concurrent.TimeUnit;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,7 +11,6 @@ import javafx.stage.Stage;
 import tech.subluminal.client.logic.ChatManager;
 import tech.subluminal.client.logic.PingManager;
 import tech.subluminal.client.logic.UserManager;
-import tech.subluminal.client.presentation.UiPresenter;
 import tech.subluminal.client.presentation.controller.ChatController;
 import tech.subluminal.client.presentation.controller.LobbyController;
 import tech.subluminal.client.stores.InMemoryPingStore;
@@ -96,7 +94,7 @@ public class ClientInitializer extends Application{
     loader.setLocation(getClass().getResource("/tech/subluminal/client/presentation/view/LobbyView.fxml"));
     //loader.setController(new LobbyController());
     Parent root = loader.load();
-    root.getStylesheets().add(getClass().getResource("/tech/subluminal/client/presentation/view/sample.css").toExternalForm());
+    root.getStylesheets().add(getClass().getResource("/tech/subluminal/client/presentation/view/lobby.css").toExternalForm());
 
     controller = (LobbyController)loader.getController();
 
@@ -104,7 +102,9 @@ public class ClientInitializer extends Application{
     primaryStage.setScene(new Scene(root));
     primaryStage.show();
 
-    init("localhost",1790,"tester");
+    String[] cmd = getParameters().getRaw().toArray(new String[3]);
+
+    init(cmd[0],Integer.parseInt(cmd[1]),cmd[2]);
 
     //controller.getChatController().addMessageChat("hello my little bitch");
   }
