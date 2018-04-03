@@ -12,6 +12,7 @@
 .root {
   -fx-background-color: #171717;
   -fx-font-family: "PxPlus IBM VGA9";
+  -fx-font-size: 20px;
 }
 
 .label {
@@ -20,8 +21,13 @@
 
 .button{
   -fx-font-family: "PxPlus IBM VGA9";
+  -fx-font-size: 16px;
+  -fx-text-fill: #59FF00;
 }
 
+.button:hover{
+  -fx-cursor: hand;
+}
 
 #chatBox {
   -fx-background-color: black;

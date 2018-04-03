@@ -1,6 +1,7 @@
 package tech.subluminal.main;
 
 import javafx.application.Application;
+import javafx.stage.Stage;
 import tech.subluminal.client.init.ClientInitializer;
 import tech.subluminal.client.presentation.UiPresenter;
 import tech.subluminal.server.init.ServerInitializer;
@@ -51,10 +52,11 @@ public class Subluminal{
       invalidArguments();
     }
 
+
     String username = args.length > 2 ? args[2] : System.getProperty("user.name");
 
-    ClientInitializer.init(host, port, username);
-    Application.launch(UiPresenter.class);
+    //ClientInitializer.init(host, port, username);
+    Application.launch(ClientInitializer.class);
   }
 
   private static void invalidArguments() {

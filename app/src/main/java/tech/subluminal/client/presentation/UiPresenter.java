@@ -66,7 +66,7 @@ public class UiPresenter extends Application implements ChatPresenter, UserPrese
   @Override
   public void loginSucceeded() {
     //controller.addMessageChat("Successfully logged in");
-    System.out.println("test");
+    System.out.println("logged in");
   }
 
   @Override
