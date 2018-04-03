@@ -12,20 +12,29 @@ import java.util.ResourceBundle;
 import tech.subluminal.client.presentation.ChatPresenter;
 import tech.subluminal.client.presentation.ChatPresenter.Delegate;
 import tech.subluminal.client.presentation.UserPresenter;
+import tech.subluminal.client.stores.ReadOnlyUserStore;
+import tech.subluminal.client.stores.UserStore;
 
 public class ChatController implements ChatPresenter, UserPresenter{
 
     @FXML
     private VBox chatBox;
-
     @FXML
     private TextArea chatHistory;
     @FXML
     private TextField messageText;
 
+    private ReadOnlyUserStore userStore;
+    private ChatPresenter.Delegate chatDelegate;
+    private UserPresenter.Delegate userDelegate;
+
 
     public ChatController getController(){
         return this;
+    }
+
+    public void setUserStore(UserStore store){
+        this.userStore = store;
     }
 
     public void sendMessage(String message) {
@@ -35,8 +44,11 @@ public class ChatController implements ChatPresenter, UserPresenter{
     public void sendMessage(ActionEvent actionEvent) {
         String message = messageText.getText();
         if(!message.equals("")){
-            sendMessage(message);
-            messageText.setText("");
+            //sendMessage(message);
+            //messageText.setText("");
+            chatDelegate.sendGlobalMessage(message);
+            addMessageChat("you: " + message);
+            clearInput();
         }
     }
 
@@ -44,8 +56,13 @@ public class ChatController implements ChatPresenter, UserPresenter{
         chatHistory.appendText(username + ": " + message + "\n");
     }
 
+
     public void addMessageChat(String message) {
         chatHistory.appendText(message + "\n");
+    }
+
+    public void clearInput(){
+        messageText.setText("");
     }
 
     /**
@@ -56,7 +73,7 @@ public class ChatController implements ChatPresenter, UserPresenter{
      */
     @Override
     public void globalMessageReceived(String message, String username) {
-
+        addMessageChat(message, username);
     }
 
     /**
@@ -88,7 +105,7 @@ public class ChatController implements ChatPresenter, UserPresenter{
      */
     @Override
     public void setChatDelegate(ChatPresenter.Delegate delegate) {
-
+        this.chatDelegate = delegate;
     }
 
     /**
@@ -96,7 +113,7 @@ public class ChatController implements ChatPresenter, UserPresenter{
      */
     @Override
     public void loginSucceeded() {
-        addMessageChat("Succesfully logged in!");
+        addMessageChat("Succesfully logged in as: " + userStore.getCurrentUser().getUsername());
         System.out.println("logged in");
     }
 
@@ -118,6 +135,6 @@ public class ChatController implements ChatPresenter, UserPresenter{
 
     @Override
     public void setUserDelegate(UserPresenter.Delegate delegate) {
-
+        this.userDelegate = delegate;
     }
 }
