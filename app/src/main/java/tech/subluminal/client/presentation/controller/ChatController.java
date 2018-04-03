@@ -42,14 +42,86 @@ public class ChatController implements ChatPresenter, UserPresenter{
     }
 
     public void sendMessage(ActionEvent actionEvent) {
-        String message = messageText.getText();
-        if(!message.equals("")){
-            //sendMessage(message);
-            //messageText.setText("");
+        String line = messageText.getText();
+        if(!line.equals("")){
+            char command = line.charAt(0);
+
+            if (command == '@') {
+                handleDirectedChatMessage(line);
+            } else if (command == '/') {
+                handleCommand(line);
+            } else {
+                //send @all
+                chatDelegate.sendGlobalMessage(line);
+                addMessageChat("you: " + line);
+                clearInput();
+            }
+        }
+    }
+
+    /**
+     * Handles all possible commands input by the user.
+     *
+     * @param line is the whole command input by the user.
+     */
+    private void handleCommand(String line) {
+        //send /cmd
+        String channel = getSpecifier(line);
+        if (channel.equals("logout")) {
+            userDelegate.logout();
+        } else if (channel.equals("changename")) {
+            handleNameChangeCmd(line, channel);
+            clearInput();
+        } else if (channel.equals("changelobby")) {
+            //TODO: add functionality to change lobby
+        }
+    }
+
+    private void handleNameChangeCmd(String line, String channel) {
+        String newUsername = extractMessageBody(line, channel);
+        //removes all whitespaces //TODO: may change later
+        String username = newUsername.replaceAll(" ", "");
+
+        if (username.equals("")) {
+            addMessageChat("You did not enter a new username, I got you covered, fam.");
+            username = "ThisisPatrick!";
+        }
+
+        userDelegate.changeUsername(username);
+    }
+
+    private void handleDirectedChatMessage(String line) {
+        String channel = getSpecifier(line);
+        String message = extractMessageBody(line, channel);
+
+        if (channel.equals("all") || channel.equals(("server"))) {
+            //send @all
+
             chatDelegate.sendGlobalMessage(message);
             addMessageChat("you: " + message);
             clearInput();
+        } else if (channel.equals("game")) {
+            //send @game
+            chatDelegate.sendGameMessage(message);
+            addMessageChat("you: " + message);
+            clearInput();
+        } else {
+            //send @player
+            if (userStore.getUserByUsername(channel) != null) {
+
+                chatDelegate.sendWhisperMessage(message, channel);
+                addMessageChat("you@"+channel+ ": " + message);
+                clearInput();
+            }
         }
+    }
+
+    private String getSpecifier(String line) {
+        return line.split(" ", 2)[0].substring(1).toLowerCase();
+    }
+
+    private String extractMessageBody(String line, String channel) {
+        return line.substring(channel.length() + 1);
     }
 
     public void addMessageChat(String message, String username) {
@@ -84,7 +156,7 @@ public class ChatController implements ChatPresenter, UserPresenter{
      */
     @Override
     public void whisperMessageReceived(String message, String username) {
-
+        addMessageChat(message, username);
     }
 
     /**
@@ -95,7 +167,7 @@ public class ChatController implements ChatPresenter, UserPresenter{
      */
     @Override
     public void gameMessageReceived(String message, String username) {
-
+        addMessageChat(message, username);
     }
 
     /**
@@ -122,7 +194,7 @@ public class ChatController implements ChatPresenter, UserPresenter{
      */
     @Override
     public void logoutSucceeded() {
-
+        addMessageChat("Successfully logged out!");
     }
 
     /**
@@ -130,7 +202,7 @@ public class ChatController implements ChatPresenter, UserPresenter{
      */
     @Override
     public void nameChangeSucceeded() {
-
+        addMessageChat("Your username got changed to: " + userStore.getCurrentUser().getUsername());
     }
 
     @Override
