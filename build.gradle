@@ -20,11 +20,12 @@ dependencies {
 }
 
 // Project Settings-------------------------
-group 'Bordeaux Ink.'
-version '0.3.0-beta1'
+group = 'Bordeaux Ink.'
+version = rootProject.file('VERSION').text.trim()
 sourceCompatibility = 1.8
 project.buildDir = 'app/build/'
 compileJava.options.fork = true
+mainClassName = 'tech.subluminal.main.Subluminal'
 
 def description = """
     Project: ${project.name}-
