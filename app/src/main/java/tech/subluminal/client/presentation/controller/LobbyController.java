@@ -43,30 +43,39 @@ public class LobbyController implements Initializable{
   public void initialize(URL location, ResourceBundle resources) {
 
     Group group = new Group();
-    spaceBackground.getChildren().add(group);
+
 
 
 
     Platform.runLater(() ->{
+      double widthX = spaceBackground.getWidth();
+      double heightY = spaceBackground.getHeight();
+
       for(int i = 0; i < 1000; i++) {
-        double x = Math.floor(Math.random() * spaceBackground.getWidth());
-        double y = Math.floor(Math.random() * spaceBackground.getHeight());
+        double angle = Math.random()*2*Math.PI;
+        double x = Math.sin(angle)*(widthX+heightY);
+        double y = Math.cos(angle)*(widthX+heightY);
         double radius = Math.floor(Math.random() * 3);
-        Circle star = new Circle(x, y, radius, Color.WHITE);
+        Circle star = new Circle(widthX/2, heightY/2, 1, Color.WHITE);
+        star.setOpacity(0.0);
 
         group.getChildren().add(star);
 
-        TranslateTransition timeline = new TranslateTransition(Duration.seconds(Math.floor(Math.random()*10)), star);
+        final TranslateTransition transTl = new TranslateTransition(Duration.seconds(Math.random()*8+2), star);
+        transTl.setToX(widthX/2 + x);
+        transTl.setToY(heightY/2 + y);
 
-        timeline.setFromX(x - Math.floor(Math.random()*100));
-        timeline.setToX(x);
-        timeline.setFromY(y - Math.floor(Math.random()*100));
-        timeline.setToY(y);
-        timeline.setCycleCount(TranslateTransition.INDEFINITE);
-        timeline.setAutoReverse(true);
-        timeline.play();
+        final FadeTransition fadeTl = new FadeTransition(Duration.seconds(2), star);
+        fadeTl.setFromValue(0);
+        fadeTl.setToValue(1);
+
+        final ParallelTransition mainTl = new ParallelTransition(transTl, fadeTl);
+
+        mainTl.setCycleCount(ParallelTransition.INDEFINITE);
+        mainTl.play();
       }
 
+      spaceBackground.getChildren().add(group);
 
     });
 

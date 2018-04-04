@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import tech.subluminal.client.logic.ChatManager;
 import tech.subluminal.client.logic.PingManager;
@@ -20,8 +21,6 @@ import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.messages.LogoutReq;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.net.SocketConnection;
-
-import static javafx.application.Application.launch;
 
 /**
  * Assembles the client-side architecture.
@@ -52,9 +51,6 @@ public class ClientInitializer extends Application{
     PingStore pingStore = new InMemoryPingStore();
 
     //ConsolePresenter presenter = new ConsolePresenter(System.in, System.out, userStore);
-    //initGui();
-    //controller.getChatController().addMessageChat("test");
-    System.out.println("test");
     ChatController presenter = controller.getChatController();
     presenter.setUserStore(userStore);
 
@@ -98,8 +94,9 @@ public class ClientInitializer extends Application{
 
     controller = (LobbyController)loader.getController();
 
-    primaryStage.setTitle("Subluminal Lobby");
+    primaryStage.setTitle("Subluminal - The Game");
     primaryStage.setScene(new Scene(root));
+    primaryStage.getIcons().add(new Image("/tech/subluminal/client/init/Game_Logo_1.png"));
     primaryStage.show();
 
     String[] cmd = getParameters().getRaw().toArray(new String[3]);
