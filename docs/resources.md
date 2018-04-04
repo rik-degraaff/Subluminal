@@ -39,3 +39,4 @@ Copy your entry into the category which best describes the resource. If necessar
 - Online .gitlab-ci.yml linter. [https://gitlab.com/ci/lint](https://gitlab.com/ci/lint).
 - Markdown Cheatsheet. [https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
 - Flaticon [2018]. [https://www.flaticon.com/](https://www.flaticon.com/)
+- A free e-book dedicated to game dev. [http://gameprogrammingpatterns.com/contents.html](http://gameprogrammingpatterns.com/contents.html)
