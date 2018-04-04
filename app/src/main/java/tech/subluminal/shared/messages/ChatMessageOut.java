@@ -18,7 +18,7 @@ public class ChatMessageOut implements SONRepresentable {
   private boolean global;
 
   /**
-   * ChatMessage object which is build by the sender.
+   * ChatMessage object which is built by the sender.
    *
    * @param message is the text to send.
    * @param global defines if a message is for the whole server or ingame.
