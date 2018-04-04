@@ -99,7 +99,8 @@ public class SON {
             son.put(listRes.result, keyRes.result);
             break;
           default:
-            throw new SONParsingError("Expected a value, but found no type identifier.");
+            throw new SONParsingError(
+                "Expected a value, but found no type identifier. Instead found: '" + typeID + "'");
         }
       } while (str.charAt(i) == ENTRY_DELIMITER);
 

@@ -260,7 +260,8 @@ public class SONList {
           } else if (v instanceof SONList) {
             return LIST_ID + ((SONList) v).asString();
           }
-          throw new RuntimeException(new SONParsingError("Encountered an unexpected type while printing a SONList: " + v.toString()));
+          throw new RuntimeException(new SONParsingError(
+              "Encountered an unexpected type while printing a SONList: " + v.toString()));
         })
         .flatMap(s -> Stream.of(ENTRY_DELIMITER, s))
         .skip(1)
@@ -283,13 +284,10 @@ public class SONList {
       if (str.charAt(start + 1) == LIST_RIGHTBRACE) {
         return new PartialParseResult<>(list, start + 2);
       }
-      int i = start + 1;
+      int i = start;
 
       do {
-        if (str.charAt(i++) != KEY_VALUE_DELIMITER) {
-          throw new SONParsingError("Expected a key-value pair, but found no colon.");
-        }
-
+        i++;
         char typeID = str.charAt(i++);
         switch (typeID) {
           case INTEGER_ID:
@@ -323,7 +321,8 @@ public class SONList {
             list.add(listRes.result);
             break;
           default:
-            throw new SONParsingError("Expected a value, but found no type identifier.");
+            throw new SONParsingError(
+                "Expected a value, but found no type identifier. Instead found: '" + typeID + "'");
         }
       } while (str.charAt(i) == ENTRY_DELIMITER);
 

@@ -188,8 +188,8 @@ public class SONParsing {
 
   private static String escapeString(String str) {
     return str
-        .replace("" + STRING_DELIMITER, "" + STRING_ESCAPE + STRING_DELIMITER)
-        .replace("" + STRING_ESCAPE, "" + STRING_ESCAPE + STRING_ESCAPE);
+        .replace("" + STRING_ESCAPE, "" + STRING_ESCAPE + STRING_ESCAPE)
+        .replace("" + STRING_DELIMITER, "" + STRING_ESCAPE + STRING_DELIMITER);
   }
 
   static class PartialParseResult<T> {
