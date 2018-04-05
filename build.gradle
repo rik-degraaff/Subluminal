@@ -76,7 +76,7 @@ jar {
     }
 }
 
-// Define new task -------------------------
+// Define new tasks -------------------------
 task info {
     doFirst{
         println "${description}"
@@ -93,11 +93,15 @@ javadoc {
 }
 
 test {
-    reports.html.destination = "$buildDir/reports/test"
+    reports.html.destination file("app/build/reports/test")
 }
 
 jacocoTestReport {
-    reports.html.destination = "$buildDir/reports/coverage"
+    reports.html.destination file("app/build/reports/coverage")
+}
+
+run {
+    standardInput = System.in
 }
 
 // task openBrowser(type:Exec) {

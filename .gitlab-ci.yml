@@ -1,7 +1,7 @@
-image: gradle:4.6.0-jdk8-alpine
+image: subluminalthegame/gradle:4.6.0-jdk8-openjfx-alpine
 
 before_script:
-  - echo "----- Start CI -----"
+  - echo "----- Start CI (NEW VERSION) -----"
   - pwd
   - export GRADLE_USER_HOME=`pwd`/.gradle
 
@@ -18,15 +18,19 @@ stages:
   - staging
   - deploy
 
+cache:
+  paths:
+    - .gradle
+
 checkstyle:
   stage: checkstyle
   script:
-    - gradle -q check
+    - gradle check
   tags:
     - cs108
   allow_failure: true
   artifacts:
-    name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
+    name: "$CI_JOB_NAME-$CI_COMMIT_SHA	"
     paths:
       - app/build/reports/checktyle/
   only:
@@ -47,25 +51,40 @@ build:java:
 test:
   stage: test
   script:
-    - gradle -q test
+    - gradle test
   tags:
     - cs108
   artifacts:
-    name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
+    name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     paths:
       - app/build/reports/test/
 
 coverage:java:
   stage: coverage
   script:
-    - gradle -q jacocoTestReport
+    - gradle jacocoTestReport
+    - cat app/build/reports/coverage/index.html
   tags:
     - cs108
   artifacts:
-    name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
+    name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     paths:
       - app/build/reports/coverage/
   
+<<<<<<< HEAD
+=======
+build:
+  stage: build
+  script:
+    - gradle build -x check -x test
+  tags:
+    - cs108
+  artifacts:
+    name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
+    paths:
+      - app/build/libs/*.jar
+      - app/out/
+>>>>>>> ft-buildtools-luc
 
 javadoc:
   stage: javadoc
@@ -75,9 +94,15 @@ javadoc:
     - cs108
   allow_failure: true
   artifacts:
-    name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
+    name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     paths:
+<<<<<<< HEAD
       - docs/javadoc/
+=======
+      - docs/javadocs/
+  only:
+    - /^rl-.*$/
+>>>>>>> ft-buildtools-luc
 
 staging:
   stage: staging
