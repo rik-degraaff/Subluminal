@@ -1,8 +1,9 @@
 package tech.subluminal.shared.stores.records.game;
 
-public class Ship extends GameObject {
+import java.util.List;
 
-  public Ship(Coordinates coordinates, String id) {
-    super(coordinates, id);
+public class Ship extends Movable {
+  public Ship(Coordinates coordinates, String id, List<String> targetIDs) {
+    super(coordinates, id, targetIDs);
   }
 }

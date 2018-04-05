@@ -38,6 +38,6 @@ public class InMemoryGameStore implements GameStore {
 
   @Override
   public void addPlayer(Player player) {
-    playerMap.use(map -> map.put(player.getId(), new Synchronized<>(player)))
+    playerMap.use(map -> map.put(player.getId(), new Synchronized<>(player)));
   }
 }

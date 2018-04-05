@@ -1,11 +1,13 @@
 package tech.subluminal.shared.stores.records.game;
 
-public class Fleet extends GameObject {
+import java.util.List;
+
+public class Fleet extends Movable {
 
   private int numberOfShips;
 
-  public Fleet(Coordinates coordinates, int numberOfShips, String id) {
-    super(coordinates, id);
+  public Fleet(Coordinates coordinates, int numberOfShips, String id, List<String> targetIDs) {
+    super(coordinates, id, targetIDs);
     this.numberOfShips = numberOfShips;
   }
 
