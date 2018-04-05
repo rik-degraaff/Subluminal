@@ -1,6 +1,5 @@
 package tech.subluminal.server.logic;
 
-import java.util.Optional;
 import tech.subluminal.server.stores.ReadOnlyUserStore;
 import tech.subluminal.shared.messages.ChatMessageIn;
 import tech.subluminal.shared.messages.ChatMessageIn.Channel;
@@ -36,16 +35,14 @@ public class ChatManager {
 
   private void chatMessageReceived(ChatMessageOut msg, String userID) {
     String receiver = msg.getReceiverID();
-    Optional<User> sender = Optional.empty();
-    synchronized (userStore) {
-      sender = userStore.getUserByID(userID);
-    }
-    sender.ifPresent(s -> {
-      if (receiver == null) {
-        sendMessage(s, msg.getMessage(), msg.isGlobal());
-      } else {
-        sendDirectMessage(s, msg.getMessage(), receiver);
-      }
+    userStore.getUserByID(userID).ifPresent(syncUser -> {
+      syncUser.consume(sender -> {
+        if (receiver == null) {
+          sendMessage(sender, msg.getMessage(), msg.isGlobal());
+        } else {
+          sendDirectMessage(sender, msg.getMessage(), receiver);
+        }
+      });
     });
   }
 
