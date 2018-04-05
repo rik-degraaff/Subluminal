@@ -76,7 +76,7 @@ jar {
     }
 }
 
-// Define new task -------------------------
+// Define new tasks -------------------------
 task info {
     doFirst{
         println "${description}"
@@ -85,6 +85,30 @@ task info {
 
 task wrapper(type: Wrapper) {
     gradleVersion = '4.6'
+}
+
+task runServer(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+  main = "tech.subluminal.main.Subluminal"
+  args "server", "1729"
+  standardInput = System.in
+}
+
+task runClient(type: JavaExec) {
+  classpath = sourceSets.main.runtimeClasspath
+  main = "tech.subluminal.main.Subluminal"
+  args "client", "localhost:1729"
+  standardInput = System.in
+}
+
+task newTestEnv(type: Exec) {
+    workingDir 'app/build/libs/'
+    commandLine 'java', '-jar', 'Subluminal-3.0.0.jar', 'server', '1790'
+}
+
+task runTestEnv(type: Exec) {
+    workingDir 'app/build/libs/'
+    commandLine 'java', '-jar', 'Subluminal-3.0.0.jar', 'client', 'localhost:1790'
 }
 
 // Task settings ---------------------------
@@ -98,6 +122,10 @@ test {
 
 jacocoTestReport {
     reports.html.destination = "$buildDir/reports/coverage"
+}
+
+run {
+    standardInput = System.in
 }
 
 // task openBrowser(type:Exec) {

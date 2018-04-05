@@ -1,4 +1,4 @@
-image: gradle:4.6.0-jdk8-alpine
+image: subluminalthegame/gradle:4.6.0-jdk8-openjfx-alpine
 
 before_script:
   - echo "----- Start CI -----"
@@ -48,6 +48,7 @@ coverage:
   stage: coverage
   script:
     - gradle -q jacocoTestReport
+    - cat app/build/reports/coverage/index.html
   tags:
     - cs108
   artifacts:

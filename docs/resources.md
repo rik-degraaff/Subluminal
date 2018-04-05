@@ -34,3 +34,5 @@ Copy your entry into the category which best describes the resourse. If necessar
 
 ## Other
 RegexOne. Learn Regular Expressions with simple, interactive exercises. [2018]. [https://regexone.com](https://regexone.com)
+Java, JavaFX, code coverage and GitLab CI. [2016]. [https://medium.com/@kaiwinter/javafx-and-code-coverage-on-gitlab-ci-29c690e03fd6](https://medium.com/@kaiwinter/javafx-and-code-coverage-on-gitlab-ci-29c690e03fd6)
+Scheduling recurring tasks in Java applications. [2003]. [https://www.ibm.com/developerworks/library/j-schedule/index.html](https://www.ibm.com/developerworks/library/j-schedule/index.html)
