@@ -1,7 +1,7 @@
 image: subluminalthegame/gradle:4.6.0-jdk8-openjfx-alpine
 
 before_script:
-  - echo "----- Start CI (NEW VERSION) -----"
+  - echo "----- Start CI -----"
   - pwd
   - export GRADLE_USER_HOME=`pwd`/.gradle
 
@@ -39,7 +39,7 @@ checkstyle:
 build:java:
   stage: build
   script:
-    - gradle -q build
+    - gradle build
   tags:
     - cs108
   artifacts:
@@ -71,8 +71,6 @@ coverage:java:
     paths:
       - app/build/reports/coverage/
   
-<<<<<<< HEAD
-=======
 build:
   stage: build
   script:
@@ -84,7 +82,6 @@ build:
     paths:
       - app/build/libs/*.jar
       - app/out/
->>>>>>> ft-buildtools-luc
 
 javadoc:
   stage: javadoc
@@ -96,13 +93,9 @@ javadoc:
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     paths:
-<<<<<<< HEAD
       - docs/javadoc/
-=======
-      - docs/javadocs/
   only:
     - /^rl-.*$/
->>>>>>> ft-buildtools-luc
 
 staging:
   stage: staging
