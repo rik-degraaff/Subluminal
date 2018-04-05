@@ -1,4 +1,4 @@
-package tech.subluminal.shared.records.game;
+package tech.subluminal.shared.stores.records.game;
 
 public class Coordinates {
   private double x;

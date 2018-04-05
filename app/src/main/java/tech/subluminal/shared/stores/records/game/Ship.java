@@ -1,6 +1,4 @@
-package tech.subluminal.shared.records.game;
-
-import tech.subluminal.shared.records.game.Coordinates;
+package tech.subluminal.shared.stores.records.game;
 
 public class Ship extends GameObject {
 

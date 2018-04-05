@@ -6,7 +6,7 @@ import tech.subluminal.shared.messages.ChatMessageIn;
 import tech.subluminal.shared.messages.ChatMessageIn.Channel;
 import tech.subluminal.shared.messages.ChatMessageOut;
 import tech.subluminal.shared.net.Connection;
-import tech.subluminal.shared.records.User;
+import tech.subluminal.shared.stores.records.User;
 
 /**
  * Manages the chat messages that are sent to and received from the clients.
