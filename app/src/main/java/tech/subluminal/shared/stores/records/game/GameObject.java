@@ -1,13 +1,14 @@
 package tech.subluminal.shared.stores.records.game;
 
-public abstract class GameObject {
+import tech.subluminal.shared.stores.records.Identifiable;
+
+public abstract class GameObject extends Identifiable {
 
   private Coordinates coordinates;
-  private String id;
 
   public GameObject(Coordinates coordinates, String id) {
+    super(id);
     this.coordinates = coordinates;
-    this.id = id;
   }
 
   /**
@@ -24,17 +25,4 @@ public abstract class GameObject {
     this.coordinates = coordinates;
   }
 
-  /**
-   * @return the ID representing this game object.
-   */
-  public String getId() {
-    return id;
-  }
-
-  /**
-   * @param id the ID to represent this game object.
-   */
-  public void setId(String id) {
-    this.id = id;
-  }
 }
