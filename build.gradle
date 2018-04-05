@@ -117,11 +117,11 @@ javadoc {
 }
 
 test {
-    reports.html.destination = "$buildDir/reports/test"
+    reports.html.destination file("$buildDir/reports/test")
 }
 
 jacocoTestReport {
-    reports.html.destination = "$buildDir/reports/coverage"
+    reports.html.destination file("$buildDir/reports/coverage")
 }
 
 run {
