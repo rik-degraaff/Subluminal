@@ -68,9 +68,10 @@ public class PingManager {
 
       Set<String> users;
       synchronized (userStore) {
-        users = userStore.getUsers().stream()
-            .map(User::getId)
-            .collect(Collectors.toCollection(HashSet::new));
+        users = userStore.getUsers().use(us ->
+            us.stream()
+            .map(syncUser -> syncUser.use(User::getId))
+            .collect(Collectors.toCollection(HashSet::new)));
       }
 
       synchronized (pingStore) {

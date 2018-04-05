@@ -1,5 +1,6 @@
 package tech.subluminal.shared.util;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class Synchronized<T> {
@@ -13,6 +14,12 @@ public class Synchronized<T> {
   public Synchronized(T value, Object lock) {
     this.value = value;
     this.lock = lock;
+  }
+
+  public void consume(Consumer<T> action) {
+    synchronized (lock) {
+      action.accept(value);
+    }
   }
 
   public <R> R use(Function<T, R> action) {
