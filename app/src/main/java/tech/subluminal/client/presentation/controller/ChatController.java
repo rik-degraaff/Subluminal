@@ -23,11 +23,9 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     @FXML
     private VBox chatBox;
     @FXML
-    private VBox chatHistory;
+    private ListView<Label> chatHistory;
     @FXML
     private TextField messageText;
-    @FXML
-    private ScrollPane chatHistoryWrapper;
     @FXML
     private CheckBox isGlobalShown;
 
@@ -50,20 +48,21 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     public void addMessageChat(String message, Channel channel) {
         Platform.runLater(() -> {
             Label msg = new Label(message);
+            msg.setWrapText(true);
             historyMessages.add(msg);
 
             //only store global messages to remove them later
             if (channel == Channel.GLOBAL) {
                 globalMessages.add(msg);
             }
-            msg.getStyleClass().add(channel.toString() + "-message");
+            msg.getStyleClass().add(channel.toString().toLowerCase() + "-message");
             //add only to chat if user selects to do so
             if (isGlobalShown.isSelected()) {
-                chatHistory.getChildren().add(msg);
+                chatHistory.getItems().add(msg);
             }
 
-            //lock scrollbar on the bottom
-            chatHistoryWrapper.setVvalue(1.0);
+            scrollToBottom();
+
         });
     }
 
@@ -76,15 +75,19 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
             globalMessages.forEach(msg -> {
                 //remove global messages if checkbox is not selected
                 if (!isGlobalShown.isSelected()) {
-                    chatHistory.getChildren().remove(msg);
+                    chatHistory.getItems().remove(msg);
                 } else {
-                    chatHistory.getChildren().clear();
-                    chatHistory.getChildren().addAll(historyMessages);
+                    chatHistory.getItems().clear();
+                    chatHistory.getItems().addAll(historyMessages);
+                    scrollToBottom();
                 }
-                chatHistoryWrapper.setVvalue(1.0);
             });
         });
 
+    }
+
+    private void scrollToBottom() {
+        chatHistory.scrollTo(chatHistory.getItems().size()-1);
     }
 
     public void sendMessage(ActionEvent actionEvent) {
@@ -249,8 +252,6 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //remove bottom scrollbar
-        chatHistoryWrapper.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        chatHistoryWrapper.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+
     }
 }

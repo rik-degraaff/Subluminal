@@ -15,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
+import tech.subluminal.client.presentation.customElements.ChatComponent;
 
 public class LobbyController implements Initializable{
 
@@ -25,12 +26,20 @@ public class LobbyController implements Initializable{
   private ChatController chatViewController;
 
   @FXML
+  private Parent userListView;
+  @FXML
+  private UserListController userListController;
+
+  @FXML
   private TextArea chatHistory;
   @FXML
   private TextField messageText;
 
   @FXML
   private AnchorPane spaceBackground;
+
+  @FXML
+  private AnchorPane chatDock;
 
   @FXML
   private AnchorPane window;
@@ -42,6 +51,8 @@ public class LobbyController implements Initializable{
 
 
   }
+
+
 
   private void generateBackground() {
     Group group = new Group();
