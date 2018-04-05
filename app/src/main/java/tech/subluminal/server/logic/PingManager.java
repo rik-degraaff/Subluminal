@@ -66,12 +66,11 @@ public class PingManager {
       String id = generateId(6);
       Ping ping = new Ping(id);
 
-      Set<String> users;
-      synchronized (userStore) {
-        users = userStore.getUsers().stream()
-            .map(User::getId)
-            .collect(Collectors.toCollection(HashSet::new));
-      }
+      Set<String> users = userStore.getUsers().use(us ->
+          us.stream()
+          .map(syncUser -> syncUser.use(User::getId))
+          .collect(Collectors.toCollection(HashSet::new))
+      );
 
       synchronized (pingStore) {
         pingStore.getUsersWithPings().forEach(toCloseID -> distributor.closeConnection(toCloseID));
