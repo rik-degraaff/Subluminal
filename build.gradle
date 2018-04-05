@@ -87,41 +87,17 @@ task wrapper(type: Wrapper) {
     gradleVersion = '4.6'
 }
 
-task runServer(type: JavaExec) {
-  classpath = sourceSets.main.runtimeClasspath
-  main = "tech.subluminal.main.Subluminal"
-  args "server", "1729"
-  standardInput = System.in
-}
-
-task runClient(type: JavaExec) {
-  classpath = sourceSets.main.runtimeClasspath
-  main = "tech.subluminal.main.Subluminal"
-  args "client", "localhost:1729"
-  standardInput = System.in
-}
-
-task newTestEnv(type: Exec) {
-    workingDir 'app/build/libs/'
-    commandLine 'java', '-jar', 'Subluminal-3.0.0.jar', 'server', '1790'
-}
-
-task runTestEnv(type: Exec) {
-    workingDir 'app/build/libs/'
-    commandLine 'java', '-jar', 'Subluminal-3.0.0.jar', 'client', 'localhost:1790'
-}
-
 // Task settings ---------------------------
 javadoc {
     setDestinationDir(file("docs/javadoc"))
 }
 
 test {
-    reports.html.destination file("$buildDir/reports/test")
+    reports.html.destination file("app/build/reports/test")
 }
 
 jacocoTestReport {
-    reports.html.destination file("$buildDir/reports/coverage")
+    reports.html.destination file("app/build/reports/coverage")
 }
 
 run {
