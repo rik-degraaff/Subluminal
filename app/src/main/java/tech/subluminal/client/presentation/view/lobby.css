@@ -10,13 +10,18 @@
 }
 
 .root {
-  -fx-background-color: #171717;
+  -fx-background-color: #07152b;
   -fx-font-family: "PxPlus IBM VGA9";
   -fx-font-size: 20px;
 }
 
+.hide {
+  -fx-font-scale: 2;
+}
+
 .label {
   -fx-text-fill: #59FF00;
+  -fx-background-color: black;
 }
 
 .button{
@@ -33,19 +38,19 @@
   -fx-background-color: black;
 }
 
-.text-area {
+.vbox {
   -fx-background-insets: 0;
   -fx-background-color: black;
   -fx-text-fill: #59FF00;
 }
 
-.text-area .content {
+.vbox .content {
   -fx-background-color: black;
   -fx-background-radius: 0 ;
   -fx-text-fill: #59FF00;
 }
 
-.text-area:focused .content {
+.vbox:focused .content {
   -fx-background-color: black;
 }
 
@@ -59,21 +64,25 @@
   -fx-background-color: transparent;
 }
 
-.text-area .scroll-bar:horizontal .thumb,
-.text-area .scroll-bar:vertical .thumb
+.scroll-pane{
+  -fx-background-color: black;
+}
+
+.scroll-pane .scroll-bar:horizontal .thumb,
+.scroll-pane .scroll-bar:vertical .thumb
 {
   -fx-background-color: #59FF00;
   -fx-background-insets: 2, 0, 0;
 }
 
-.text-area .increment-button,
-.text-area .decrement-button{
+.scroll-pane .increment-button,
+.scroll-pane .decrement-button{
   -fx-background-radius: 0em;
   -fx-padding:0 0 10 0;
 }
 
-.text-area .increment-arrow,
-.text-area .decrement-arrow{
+.scroll-pane .increment-arrow,
+.scroll-pane .decrement-arrow{
   -fx-background-color: #59FF00;
   -fx-shape: " ";
   -fx-padding:0;

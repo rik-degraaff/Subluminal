@@ -1,5 +1,6 @@
 package tech.subluminal.shared.messages;
 
+import tech.subluminal.shared.records.Channel;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
@@ -92,7 +93,4 @@ public class ChatMessageIn implements SONRepresentable {
         .put(channel.toString(), CHANNEL_KEY);
   }
 
-  public static enum Channel {
-    WHISPER, GAME, GLOBAL
-  }
 }

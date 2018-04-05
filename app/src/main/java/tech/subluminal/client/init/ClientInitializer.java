@@ -103,7 +103,15 @@ public class ClientInitializer extends Application{
 
     init(cmd[0],Integer.parseInt(cmd[1]),cmd[2]);
 
-    //controller.getChatController().addMessageChat("hello my little bitch");
+    primaryStage.widthProperty().addListener((v, oldV, newV) -> {
+      int diff = oldV.intValue() - newV.intValue();
+      controller.onWindowResize(diff, 0);
+    });
+
+    primaryStage.heightProperty().addListener((v, oldV, newV) -> {
+      int diff = oldV.intValue() - newV.intValue();
+      controller.onWindowResize(0, diff);
+    });
   }
 
 }
