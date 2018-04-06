@@ -11,8 +11,8 @@ import tech.subluminal.shared.logic.PingResponder;
 import tech.subluminal.shared.messages.Ping;
 import tech.subluminal.shared.messages.Pong;
 import tech.subluminal.shared.net.Connection;
-import tech.subluminal.shared.records.SentPing;
-import tech.subluminal.shared.records.User;
+import tech.subluminal.shared.stores.records.SentPing;
+import tech.subluminal.shared.stores.records.User;
 
 /**
  * Manages the pings that are sent to and received from the clients.

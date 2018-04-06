@@ -2,7 +2,7 @@ package tech.subluminal.server.stores;
 
 import java.util.Collection;
 import java.util.Optional;
-import tech.subluminal.shared.records.User;
+import tech.subluminal.shared.stores.records.User;
 import tech.subluminal.shared.util.Synchronized;
 
 /**

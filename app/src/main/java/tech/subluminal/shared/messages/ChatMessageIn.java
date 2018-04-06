@@ -52,7 +52,7 @@ public class ChatMessageIn implements SONRepresentable {
       channel = son.getString(CHANNEL_KEY).map(Channel::valueOf)
           .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, CHANNEL_KEY));
     } catch (IllegalArgumentException e) {
-      throw new SONConversionError("Message was send with an invalid channel.");
+      throw new SONConversionError("Message was sent with an invalid channel.");
     }
 
     return new ChatMessageIn(message, username, channel);

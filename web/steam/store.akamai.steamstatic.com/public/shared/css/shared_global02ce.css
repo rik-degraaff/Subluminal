@@ -47,7 +47,7 @@
 .avatar_block_status_online img {
 	background: -webkit-linear-gradient( top, #41778f 5%, #3d697b 95%);background: linear-gradient( to bottom, #41778f 5%, #3d697b 95%);}
 
-/* In-Game State */
+/* In-game State */
 .playerAvatar.in-game,
 .friend_block_holder.friend_status_in-game .friend_block_avatar,
 .friend_activity.friend_status_in-game .friend_block_avatar,
