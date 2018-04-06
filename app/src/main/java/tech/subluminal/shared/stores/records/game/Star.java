@@ -51,23 +51,28 @@ public class Star extends GameObject implements SONRepresentable {
   }
 
   public SON asSON() {
-    return new SON()
-        .put(ownerID, OWNER_ID_KEY)
+    SON son = new SON()
         .put(possession, POSSESSION_KEY)
         .put(super.asSON(), GAME_OBJECT_KEY);
+
+    if (ownerID != null) {
+      son.put(ownerID, OWNER_ID_KEY);
+    }
+
+    return son;
   }
 
   public static Star fromSON(SON son) throws SONConversionError {
-    String ownerID = son.getString(OWNER_ID_KEY)
-        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, OWNER_ID_KEY));
+    String ownerID = son.getString(OWNER_ID_KEY).orElse(null);
 
     double possession = son.getDouble(POSSESSION_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, POSSESSION_KEY));
 
+    Star star = new Star(ownerID, possession, null, null);
+
     SON gameObject = son.getObject(GAME_OBJECT_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, GAME_OBJECT_KEY));
 
-    Star star = new Star(ownerID, possession, null, null);
     star.loadFromSON(gameObject);
 
     return star;
