@@ -37,6 +37,15 @@ public class SONList {
   private List<Object> list = new ArrayList<>();
 
   /**
+   * Returns the number of elements this SONList contains.
+   *
+   * @return the number of elements in this SONList.
+   */
+  public int size() {
+    return list.size();
+  }
+
+  /**
    * Adds a value to the end of the list.
    *
    * @param value the integer value to add.

@@ -1,10 +1,10 @@
 # Resources
 Collection of pointers to online resources for this project to get everyone on the same page about technical stuff.
-Copy your entry into the category which best describes the resourse. If necessary create a new one or a subcategory. Please put at least the title infront of your reference, not just the blank link.
+Copy your entry into the category which best describes the resource. If necessary create a new one or a subcategory. Please put at least the title in front of your reference, not just the blank link.
 
 ## Java
 ### Networking
-- TCP - On Keepalive (hearbeat) packets. [2012]. [https://stackoverflow.com/questions/10702517/in-a-tcp-connection-java-packets](https://stackoverflow.com/questions/10702517/in-a-tcp-connection-java-packets).
+- TCP - On Keepalive (heartbeat) packets. [2012]. [https://stackoverflow.com/questions/10702517/in-a-tcp-connection-java-packets](https://stackoverflow.com/questions/10702517/in-a-tcp-connection-java-packets).
 - Java TCP Sockets and Swing Tutorial. [2011]. [http://ashishmyles.com/tutorials/tcpchat/index.html](http://ashishmyles.com/tutorials/tcpchat/index.html).
 
 ### Software Architecture
@@ -35,10 +35,9 @@ Copy your entry into the category which best describes the resourse. If necessar
 - none
 
 ## Other
-- RegexOne. Learn Regular Expressions with simple, interactive exercises. [2018]. [https://regexone.com](https://regexone.com).  
-- Java, JavaFX, code coverage and GitLab CI. [2016]. [https://medium.com/@kaiwinter/javafx-and-code-coverage-on-gitlab-ci-29c690e03fd6](https://medium.com/@kaiwinter/javafx-and-code-coverage-on-gitlab-ci-29c690e03fd6).  
-- Scheduling recurring tasks in Java applications. [2003]. [https://www.ibm.com/developerworks/library/j-schedule/index.html](https://www.ibm.com/developerworks/library/j-schedule/index.html).  
-- Essential Git. [https://nhs.io/git/](https://gitlab.com/ci/lint).  
-- Online .gitlab-ci.yml linter. [https://gitlab.com/ci/lint](https://gitlab.com/ci/lint).  
-- Markdown Cheatsheet. [https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).  
-
+- RegexOne. Learn Regular Expressions with simple, interactive exercises. [2018]. [https://regexone.com](https://regexone.com)
+- Essential Git. [https://nhs.io/git/](https://gitlab.com/ci/lint).
+- Online .gitlab-ci.yml linter. [https://gitlab.com/ci/lint](https://gitlab.com/ci/lint).
+- Markdown Cheatsheet. [https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
+- Flaticon [2018]. [https://www.flaticon.com/](https://www.flaticon.com/)
+- A free e-book dedicated to game dev. [http://gameprogrammingpatterns.com/contents.html](http://gameprogrammingpatterns.com/contents.html)

@@ -181,7 +181,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
    */
   @Override
   public void gameMessageReceived(String message, String username) {
-    out.println("Game|" + username + ": " + message);
+    out.println("game|" + username + ": " + message);
   }
 
 
