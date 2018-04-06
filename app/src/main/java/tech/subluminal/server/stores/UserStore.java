@@ -1,6 +1,6 @@
 package tech.subluminal.server.stores;
 
-import tech.subluminal.shared.records.User;
+import tech.subluminal.shared.stores.records.User;
 
 /**
  * Stores server-side information about the users.
@@ -13,13 +13,6 @@ public interface UserStore extends ReadOnlyUserStore {
    * @param user the user to add.
    */
   void addUser(User user);
-
-  /**
-   * Updates the user identified by user.userID.
-   *
-   * @param user the user to update.
-   */
-  void updateUser(User user);
 
   /**
    * Remooves a user identified by a given id from the user store.

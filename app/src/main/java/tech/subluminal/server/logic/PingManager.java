@@ -11,8 +11,8 @@ import tech.subluminal.shared.logic.PingResponder;
 import tech.subluminal.shared.messages.Ping;
 import tech.subluminal.shared.messages.Pong;
 import tech.subluminal.shared.net.Connection;
-import tech.subluminal.shared.records.SentPing;
-import tech.subluminal.shared.records.User;
+import tech.subluminal.shared.stores.records.SentPing;
+import tech.subluminal.shared.stores.records.User;
 
 /**
  * Manages the pings that are sent to and received from the clients.
@@ -66,12 +66,11 @@ public class PingManager {
       String id = generateId(6);
       Ping ping = new Ping(id);
 
-      Set<String> users;
-      synchronized (userStore) {
-        users = userStore.getUsers().stream()
-            .map(User::getId)
-            .collect(Collectors.toCollection(HashSet::new));
-      }
+      Set<String> users = userStore.getUsers().use(us ->
+          us.stream()
+          .map(syncUser -> syncUser.use(User::getId))
+          .collect(Collectors.toCollection(HashSet::new))
+      );
 
       synchronized (pingStore) {
         pingStore.getUsersWithPings().forEach(toCloseID -> distributor.closeConnection(toCloseID));

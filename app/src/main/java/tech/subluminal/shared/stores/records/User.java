@@ -1,4 +1,4 @@
-package tech.subluminal.shared.records;
+package tech.subluminal.shared.stores.records;
 
 /**
  * Record that represents a user.
@@ -47,6 +47,7 @@ public class User {
   }
 
   /**
+   *
    * Sets the id of the user.
    *
    * @param id to be set as user id.

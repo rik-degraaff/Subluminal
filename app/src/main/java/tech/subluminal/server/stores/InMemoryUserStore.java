@@ -4,14 +4,15 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import tech.subluminal.shared.records.User;
+import tech.subluminal.shared.stores.records.User;
+import tech.subluminal.shared.util.Synchronized;
 
 /**
  * Stores server-side information about the users in memory.
  */
 public class InMemoryUserStore implements UserStore {
 
-  private Map<String, User> userMap = new HashMap<>();
+  private Synchronized<Map<String, Synchronized<User>>> userMap = new Synchronized<>(new HashMap<>());
 
   /**
    * Returns the users that are connected to the server.
@@ -19,8 +20,8 @@ public class InMemoryUserStore implements UserStore {
    * @return all the users that are connected to the server.
    */
   @Override
-  public Collection<User> getUsers() {
-    return userMap.values();
+  public Synchronized<Collection<Synchronized<User>>> getUsers() {
+    return userMap.map(Map::values);
   }
 
   /**
@@ -30,7 +31,7 @@ public class InMemoryUserStore implements UserStore {
    */
   @Override
   public void addUser(User user) {
-    userMap.put(user.getId(), user);
+    userMap.use(map -> map.put(user.getId(), new Synchronized<>(user)));
   }
 
   /**
@@ -40,18 +41,8 @@ public class InMemoryUserStore implements UserStore {
    * @return the user, empty when not found.
    */
   @Override
-  public Optional<User> getUserByID(String id) {
-    return Optional.ofNullable(userMap.get(id));
-  }
-
-  /**
-   * Updates the user identified by user.userID.
-   *
-   * @param user the user to update.
-   */
-  @Override
-  public void updateUser(User user) {
-    userMap.replace(user.getId(), user);
+  public Optional<Synchronized<User>> getUserByID(String id) {
+    return Optional.ofNullable(userMap.use(map -> map.get(id)));
   }
 
   /**
@@ -61,6 +52,6 @@ public class InMemoryUserStore implements UserStore {
    */
   @Override
   public void removeUserByID(String id) {
-    userMap.remove(id);
+    userMap.use(map -> map.remove(id));
   }
 }
