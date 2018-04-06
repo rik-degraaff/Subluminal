@@ -52,7 +52,7 @@ public class UserManager implements UserPresenter.Delegate {
 
   private void onUsernameChanged(UsernameRes res) {
     synchronized (userStore) {
-      userStore.setCurrentUser(new User(res.getUsername(), userStore.getCurrentUser().getId()));
+      userStore.setCurrentUser(new User(res.getUsername(), userStore.getCurrentUser().getID()));
     }
     userPresenter.nameChangeSucceeded();
   }

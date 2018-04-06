@@ -39,4 +39,10 @@ public class Synchronized<T> {
       return new Synchronized<>(mapper.apply(value), lock);
     }
   }
+
+  public void sync(Runnable action) {
+    synchronized (lock) {
+      action.run();
+    }
+  }
 }

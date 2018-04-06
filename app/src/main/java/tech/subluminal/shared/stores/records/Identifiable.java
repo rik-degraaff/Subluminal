@@ -11,14 +11,14 @@ public class Identifiable {
   /**
    * @return the ID representing this game object.
    */
-  public String getId() {
+  public String getID() {
     return id;
   }
 
   /**
    * @param id the ID to represent this game object.
    */
-  public void setId(String id) {
+  public void setID(String id) {
     this.id = id;
   }
 }

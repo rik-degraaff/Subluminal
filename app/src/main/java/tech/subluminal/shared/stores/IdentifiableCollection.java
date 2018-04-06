@@ -29,7 +29,7 @@ public class IdentifiableCollection<E extends Identifiable> implements
    * @param e the user to add.
    */
   public void add(E e) {
-    syncMap.use(map -> map.put(e.getId(), new Synchronized<>(e)));
+    syncMap.use(map -> map.put(e.getID(), new Synchronized<>(e)));
   }
 
   /**
@@ -53,10 +53,20 @@ public class IdentifiableCollection<E extends Identifiable> implements
   }
 
   /**
+   * Executes an action in a synchronized block that guarantees that it cannot be interrupted by
+   * another thread that also uses the collection.
+   *
+   * @param action the action to be performed.
+   */
+  public void sync(Runnable action) {
+    syncMap.sync(action);
+  }
+
+  /**
    * Returns all entries from the collection that satisfy a given condition.
    *
    * @param predicate the condition the entries must satisfy
-   * @return all entries that satify teh condition.
+   * @return all entries that satify the condition.
    */
   protected Synchronized<Collection<Synchronized<E>>> getWithPredicate(Predicate<E> predicate) {
     return syncMap.map(map ->
