@@ -6,10 +6,21 @@ import java.util.List;
 import java.util.Map;
 import tech.subluminal.client.stores.records.game.Player;
 import tech.subluminal.shared.son.SON;
+import tech.subluminal.shared.son.SONConversionError;
+import tech.subluminal.shared.son.SONList;
 import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.game.Star;
 
 public class GameStateDelta implements SONRepresentable {
+  public static final String PLAYERS_KEY = "players";
+  public static final String STARS_KEY = "stars";
+  public static final String REMOVED_PLAYERS_KEY = "removedPlayers";
+  public static final String REMOVED_FLEETS_KEY = "removedFleets";
+  private static final String CLASS_NAME = GameStateDelta.class.getSimpleName();
+  public static final String KEY = "key";
+  public static final String VALUE = "value";
+
+
   private List<Player> players = new LinkedList<>();
   private List<Star> stars = new LinkedList<>();
   private List<String> removedPlayers = new LinkedList<>();
@@ -59,10 +70,35 @@ public class GameStateDelta implements SONRepresentable {
    */
   @Override
   public SON asSON() {
-    return null;
+    SONList playerList = new SONList();
+    SONList starList = new SONList();
+    SONList removedPlayersList = new SONList();
+    removedPlayers.forEach(removedPlayersList::add);
+
+    SONList removedFleetsList = new SONList();
+    removedFleets.keySet().forEach(k -> {
+      SONList fleets = new SONList();
+      removedFleets.get(k).forEach(fleets::add);
+      removedFleetsList.add(
+          new SON()
+            .put(k, KEY)
+            .put(fleets, VALUE)
+      );
+    });
+
+
+    return new SON().put(playerList, PLAYERS_KEY)
+      .put(starList, STARS_KEY)
+      .put(removedPlayersList, REMOVED_PLAYERS_KEY)
+      .put(removedFleetsList, REMOVED_FLEETS_KEY); // # DONE
   }
 
-  public static GameStateDelta fromSON(SON son) {
-
+  public static GameStateDelta fromSON(SON son) throws SONConversionError {
+    GameStateDelta delta = new GameStateDelta();
+    SONList playerList = son.getList(PLAYERS_KEY).orElseThrow(() -> SONRepresentable.error(CLASS_NAME, PLAYERS_KEY));
+    for (int i = 0; i < playerList.size(); i++) {
+     // delta.addPlayer(playerList.getObject(i));
+    }
+    return delta;
   }
 }
