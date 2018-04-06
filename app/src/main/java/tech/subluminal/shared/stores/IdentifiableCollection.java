@@ -15,6 +15,9 @@ public class IdentifiableCollection<E extends Identifiable> implements
 
   private Synchronized<Map<String, Synchronized<E>>> syncMap = new Synchronized<>(new HashMap<>());
 
+  /**
+   * @return a synchronized collection of synchronized entities which are stored in this collection.
+   */
   @Override
   public Synchronized<Collection<Synchronized<E>>> getAll() {
     return syncMap.map(Map::values);
@@ -29,6 +32,12 @@ public class IdentifiableCollection<E extends Identifiable> implements
     syncMap.use(map -> map.put(e.getId(), new Synchronized<>(e)));
   }
 
+  /**
+   * Returns an entry from the collection identified by a given id.
+   *
+   * @param id the id of the requested entity.
+   * @return the requested item, empty if not found.
+   */
   @Override
   public Optional<Synchronized<E>> getByID(String id) {
     return Optional.ofNullable(syncMap.use(map -> map.get(id)));
@@ -43,11 +52,17 @@ public class IdentifiableCollection<E extends Identifiable> implements
     syncMap.use(map -> map.remove(id));
   }
 
+  /**
+   * Returns all entries from the collection that satisfy a given condition.
+   *
+   * @param predicate the condition the entries must satisfy
+   * @return all entries that satify teh condition.
+   */
   protected Synchronized<Collection<Synchronized<E>>> getWithPredicate(Predicate<E> predicate) {
     return syncMap.map(map ->
         map.values().stream()
-          .filter(syncUser -> syncUser.use(u -> predicate.test(u)))
-        .collect(Collectors.toCollection(ArrayList::new))
+            .filter(syncUser -> syncUser.use(u -> predicate.test(u)))
+            .collect(Collectors.toCollection(ArrayList::new))
     );
   }
 }
