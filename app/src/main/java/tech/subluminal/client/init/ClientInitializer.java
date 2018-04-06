@@ -13,7 +13,7 @@ import tech.subluminal.client.logic.ChatManager;
 import tech.subluminal.client.logic.PingManager;
 import tech.subluminal.client.logic.UserManager;
 import tech.subluminal.client.presentation.controller.ChatController;
-import tech.subluminal.client.presentation.controller.LobbyController;
+import tech.subluminal.client.presentation.controller.MainController;
 import tech.subluminal.client.stores.InMemoryPingStore;
 import tech.subluminal.client.stores.InMemoryUserStore;
 import tech.subluminal.client.stores.PingStore;
@@ -27,7 +27,7 @@ import tech.subluminal.shared.net.SocketConnection;
  */
 public class ClientInitializer extends Application{
 
-  public static LobbyController controller;
+  public static MainController controller;
   public FXMLLoader loader;
   /**
    * Initializes the assembling.
@@ -87,12 +87,12 @@ public class ClientInitializer extends Application{
   @Override
   public void start(Stage primaryStage) throws Exception {
     loader = new FXMLLoader();
-    loader.setLocation(getClass().getResource("/tech/subluminal/client/presentation/view/LobbyView.fxml"));
-    //loader.setController(new LobbyController());
+    loader.setLocation(getClass().getResource("/tech/subluminal/client/presentation/view/MainView.fxml"));
+    //loader.setController(new MainController());
     Parent root = loader.load();
     root.getStylesheets().add(getClass().getResource("/tech/subluminal/client/presentation/view/lobby.css").toExternalForm());
 
-    controller = (LobbyController)loader.getController();
+    controller = (MainController)loader.getController();
 
     primaryStage.setTitle("Subluminal - The Game");
     primaryStage.setScene(new Scene(root));

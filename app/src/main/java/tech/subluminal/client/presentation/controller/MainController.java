@@ -19,9 +19,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
-import tech.subluminal.client.presentation.customElements.ChatComponent;
+import tech.subluminal.client.presentation.customElements.MenuComponent;
 
-public class LobbyController implements Initializable{
+public class MainController implements Initializable{
 
   public static final int STAR_AMOUNT = 2000;
   @FXML
@@ -35,70 +35,19 @@ public class LobbyController implements Initializable{
   private UserListController userListController;
 
   @FXML
-  private TextArea chatHistory;
-  @FXML
-  private TextField messageText;
-
-  @FXML
   private AnchorPane spaceBackground;
 
   @FXML
   private AnchorPane chatDock;
 
   @FXML
-  private AnchorPane window;
+  private AnchorPane menuDock;
 
-  @FXML
-  private ImageView logoDock;
-
-  @FXML
-  private VBox menuDock;
-
-  @FXML
-  private HBox menuButtonDock;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     generateBackground();
-    generateLogo();
-  }
-
-  private void generateLogo() {
-    Platform.runLater(() ->{
-      Image logo = new Image("/tech/subluminal/resources/subluminal_logo.png");
-      logoDock.setImage(logo);
-
-      PauseTransition pauseTl = new PauseTransition(Duration.seconds(3));
-
-      ScaleTransition scaleTl = new ScaleTransition(Duration.seconds(5), menuDock);
-      scaleTl.setFromX(0);
-      scaleTl.setFromY(0);
-      scaleTl.setToX(1);
-      scaleTl.setByY(1);
-
-      SequentialTransition seqTl = new SequentialTransition();
-
-      FadeTransition fadeTl = new FadeTransition(Duration.seconds(0.7), menuButtonDock);
-      //fadeTl.setFromValue(0);
-      fadeTl.setToValue(1);
-      //fadeTl.setCycleCount(3);
-      seqTl.getChildren().addAll(pauseTl,scaleTl);
-
-      ScaleTransition scaleMainTl = new ScaleTransition(Duration.seconds(4), logoDock);
-      scaleMainTl.setFromX(1);
-      scaleMainTl.setFromY(1);
-      scaleMainTl.setToX(1.1);
-      scaleMainTl.setToY(1.1);
-
-      scaleMainTl.setCycleCount(ScaleTransition.INDEFINITE);
-      scaleMainTl.setAutoReverse(true);
-
-      SequentialTransition seqMainTl = new SequentialTransition();
-      seqMainTl.getChildren().addAll(seqTl, scaleMainTl);
-      seqMainTl.play();
-    });
-
-
+    menuDock.getChildren().add(new MenuComponent());
   }
 
 
@@ -175,7 +124,7 @@ public class LobbyController implements Initializable{
 
   }
 
-  public LobbyController getController(){
+  public MainController getController(){
     return this;
   }
 
