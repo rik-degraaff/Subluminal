@@ -1,4 +1,4 @@
-package tech.subluminal.shared.records;
+package tech.subluminal.shared.stores.records;
 
 /**
  * Represents a ping that was sent to the server/client.
