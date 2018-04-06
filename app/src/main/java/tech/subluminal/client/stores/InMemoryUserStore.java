@@ -18,7 +18,7 @@ public class InMemoryUserStore implements UserStore {
   @Override
   public User getCurrentUser() {
     synchronized (currentUserLock) {
-      return new User(currentUser.getUsername(), currentUser.getId());
+      return new User(currentUser.getUsername(), currentUser.getID());
     }
   }
 

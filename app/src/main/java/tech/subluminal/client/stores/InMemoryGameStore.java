@@ -23,7 +23,7 @@ public class InMemoryGameStore implements GameStore {
 
   @Override
   public void addStar(Star star) {
-    starMap.use(map -> map.put(star.getId(), new Synchronized<>(star)));
+    starMap.use(map -> map.put(star.getID(), new Synchronized<>(star)));
   }
 
   @Override
@@ -38,6 +38,6 @@ public class InMemoryGameStore implements GameStore {
 
   @Override
   public void addPlayer(Player player) {
-    playerMap.use(map -> map.put(player.getId(), new Synchronized<>(player)));
+    playerMap.use(map -> map.put(player.getID(), new Synchronized<>(player)));
   }
 }
