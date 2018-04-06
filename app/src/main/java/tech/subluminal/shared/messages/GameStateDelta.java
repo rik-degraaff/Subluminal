@@ -71,7 +71,11 @@ public class GameStateDelta implements SONRepresentable {
   @Override
   public SON asSON() {
     SONList playerList = new SONList();
+    players.stream().map(Player::asSON).forEach(playerList::add);
+
     SONList starList = new SONList();
+    stars.stream().map(Star::asSON).forEach(starList::add);
+
     SONList removedPlayersList = new SONList();
     removedPlayers.forEach(removedPlayersList::add);
 
@@ -90,7 +94,7 @@ public class GameStateDelta implements SONRepresentable {
     return new SON().put(playerList, PLAYERS_KEY)
       .put(starList, STARS_KEY)
       .put(removedPlayersList, REMOVED_PLAYERS_KEY)
-      .put(removedFleetsList, REMOVED_FLEETS_KEY); // # DONE
+      .put(removedFleetsList, REMOVED_FLEETS_KEY);
   }
 
   public static GameStateDelta fromSON(SON son) throws SONConversionError {

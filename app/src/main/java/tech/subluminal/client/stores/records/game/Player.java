@@ -1,6 +1,7 @@
 package tech.subluminal.client.stores.records.game;
 
 import java.util.List;
+import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.stores.records.Identifiable;
 import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.Ship;
@@ -29,5 +30,9 @@ public class Player extends Identifiable {
 
   public void setFleets(List<Fleet> fleets) {
     this.fleets = fleets;
+  }
+
+  public SON asSON() {
+    return null;
   }
 }

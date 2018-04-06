@@ -1,9 +1,14 @@
 package tech.subluminal.shared.stores.records.game;
 
+import tech.subluminal.shared.son.SON;
+
 public class Star extends GameObject {
 
   private String ownerID;
   private double possession;
+
+  private static final String OWNER_ID_KEY = "ownerID";
+  private static final String POSSESSION_KEY = "possession";
 
   public Star(String ownerID, double possession,
       Coordinates coordinates, String id) {
@@ -38,5 +43,9 @@ public class Star extends GameObject {
    */
   public void setPossession(double possession) {
     this.possession = possession;
+  }
+
+  public SON asSON() {
+    return null;
   }
 }
