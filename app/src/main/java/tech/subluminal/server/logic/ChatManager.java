@@ -35,7 +35,7 @@ public class ChatManager {
 
   private void chatMessageReceived(ChatMessageOut msg, String userID) {
     String receiver = msg.getReceiverID();
-    userStore.getUserByID(userID).ifPresent(syncUser -> {
+    userStore.connectedUsers().getByID(userID).ifPresent(syncUser -> {
       syncUser.consume(sender -> {
         if (receiver == null) {
           sendMessage(sender, msg.getMessage(), msg.isGlobal());

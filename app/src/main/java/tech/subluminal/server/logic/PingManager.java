@@ -66,7 +66,7 @@ public class PingManager {
       String id = generateId(6);
       Ping ping = new Ping(id);
 
-      Set<String> users = userStore.getUsers().use(us ->
+      Set<String> users = userStore.connectedUsers().getAll().use(us ->
           us.stream()
           .map(syncUser -> syncUser.use(User::getId))
           .collect(Collectors.toCollection(HashSet::new))

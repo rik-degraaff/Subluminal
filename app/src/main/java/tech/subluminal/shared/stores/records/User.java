@@ -3,10 +3,9 @@ package tech.subluminal.shared.stores.records;
 /**
  * Record that represents a user.
  */
-public class User {
+public class User extends Identifiable {
 
   private String username;
-  private String id;
 
   /**
    * Creates a user.
@@ -15,8 +14,8 @@ public class User {
    * @param id to record for a specified user
    */
   public User(String username, String id) {
+    super(id);
     this.username = username;
-    this.id = id;
   }
 
   /**
@@ -35,24 +34,5 @@ public class User {
    */
   public void setUsername(String username) {
     this.username = username;
-  }
-
-  /**
-   * Gets the id of the user.
-   *
-   * @return the user id.
-   */
-  public String getId() {
-    return id;
-  }
-
-  /**
-   *
-   * Sets the id of the user.
-   *
-   * @param id to be set as user id.
-   */
-  public void setId(String id) {
-    this.id = id;
   }
 }
