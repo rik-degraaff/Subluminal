@@ -1,5 +1,5 @@
 # Resources
-Collection of pointers to online resources for this project to get everyone on the same page about technical stuff.
+Collection of pointers to online tech.subluminal.resources for this project to get everyone on the same page about technical stuff.
 Copy your entry into the category which best describes the resourse. If necessary create a new one or a subcategory. Please put at least the title infront of your reference, not just the blank link.
 
 ## Java

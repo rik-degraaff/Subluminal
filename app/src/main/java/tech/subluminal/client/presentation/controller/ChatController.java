@@ -1,6 +1,10 @@
 package tech.subluminal.client.presentation.controller;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableListBase;
+import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -34,8 +38,9 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     private UserPresenter.Delegate userDelegate;
 
     private List<Label> historyMessages = new LinkedList<>();
-    private List<Label> globalMessages = new LinkedList<>();
 
+    private ObservableList<Label> chatList = FXCollections.observableArrayList();
+    private FilteredList<Label> filteredList = new FilteredList<>(chatList);
 
     public ChatController getController() {
         return this;
@@ -49,17 +54,10 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
         Platform.runLater(() -> {
             Label msg = new Label(message);
             msg.setWrapText(true);
-            historyMessages.add(msg);
 
-            //only store global messages to remove them later
-            if (channel == Channel.GLOBAL) {
-                globalMessages.add(msg);
-            }
             msg.getStyleClass().add(channel.toString().toLowerCase() + "-message");
-            //add only to chat if user selects to do so
-            if (isGlobalShown.isSelected()) {
-                chatHistory.getItems().add(msg);
-            }
+            chatList.add(msg);
+
 
             scrollToBottom();
 
@@ -71,18 +69,11 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     }
 
     public void updateFilter(ActionEvent e) {
-        Platform.runLater(() -> {
-            globalMessages.forEach(msg -> {
-                //remove global messages if checkbox is not selected
-                if (!isGlobalShown.isSelected()) {
-                    chatHistory.getItems().remove(msg);
-                } else {
-                    chatHistory.getItems().clear();
-                    chatHistory.getItems().addAll(historyMessages);
-                    scrollToBottom();
-                }
-            });
-        });
+        if(isGlobalShown.isSelected()){
+            filteredList.setPredicate(l -> true);
+        }else{
+            filteredList.setPredicate(l -> !l.getStyleClass().contains("global-message"));
+        }
 
     }
 
@@ -252,6 +243,6 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        chatHistory.setItems(filteredList);
     }
 }

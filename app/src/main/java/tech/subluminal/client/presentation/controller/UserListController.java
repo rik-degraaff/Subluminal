@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
@@ -23,6 +24,8 @@ public class UserListController implements Initializable {
     private ListView<Label> playerBoard;
     @FXML
     private VBox playerBoardWrapper;
+    @FXML
+    private Button updaterPlayerBoard;
 
     private LinkedList<Label> players;
 
@@ -92,9 +95,11 @@ public class UserListController implements Initializable {
         if(isBoardShown){
             playerBoard.setVisible(false);
             isBoardShown = false;
+            updaterPlayerBoard.setText("Show Players");
         }else {
             playerBoard.setVisible(true);
             isBoardShown = true;
+            updaterPlayerBoard.setText("Hide Players");
         }
 
     }

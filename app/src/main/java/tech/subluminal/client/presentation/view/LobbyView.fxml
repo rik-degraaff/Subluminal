@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
@@ -17,43 +18,41 @@
 <AnchorPane fx:id="window" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.subluminal.client.presentation.controller.LobbyController">
   <children>
       <AnchorPane fx:id="playArea" prefHeight="547.0" prefWidth="807.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-      <AnchorPane fx:id="spaceBackground" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-
-      <AnchorPane prefHeight="51.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <GridPane prefHeight="90.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
+            <HBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <HBox prefHeight="78.0" prefWidth="800.0" GridPane.columnIndex="1">
+                  <VBox fx:id="menuDock" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
                      <children>
-        <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="134.0" text="Join" textAlignment="CENTER">
-                           <font>
-                              <Font size="12.0" />
-                           </font>
-                        </Button>
-        <Button contentDisplay="CENTER" mnemonicParsing="false" prefHeight="102.0" prefWidth="138.0" text="Host" textAlignment="CENTER">
-                           <font>
-                              <Font size="12.0" />
-                           </font>
-                        </Button>
-        <Button mnemonicParsing="false" prefHeight="101.0" prefWidth="152.0" text="Settings" textAlignment="CENTER">
-                           <font>
-                              <Font size="12.0" />
-                           </font>
-                        </Button>
+                        <ImageView fx:id="logoDock" fitHeight="301.0" fitWidth="703.0" pickOnBounds="true" preserveRatio="true">
+
+            </ImageView>
+                        <HBox fx:id="menuButtonsDock" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                           <children>
+              <Button alignment="CENTER" mnemonicParsing="false" prefHeight="100.0" prefWidth="134.0" text="Join" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Button>
+              <Button contentDisplay="CENTER" mnemonicParsing="false" prefHeight="102.0" prefWidth="138.0" text="Host" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Button>
+              <Button mnemonicParsing="false" prefHeight="101.0" prefWidth="152.0" text="Settings" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="12.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </HBox>
                      </children>
-                  </HBox>
+                  </VBox>
                </children>
-            </GridPane>
+            </HBox>
          </children>
       </AnchorPane>
+      <AnchorPane fx:id="spaceBackground" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <AnchorPane fx:id="chatDock" prefHeight="300.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
              <fx:include fx:id="chatView" source="ChatView.fxml" />
