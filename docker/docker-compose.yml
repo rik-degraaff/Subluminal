@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  subluminal:
+    build: .
+    ports:
+    - "1790:1790/tcp"
+    restart_policy:
+      condition: on-failure

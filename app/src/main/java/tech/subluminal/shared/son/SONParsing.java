@@ -71,7 +71,7 @@ public class SONParsing {
     return stringString(key) + KEY_VALUE_DELIMITER + LIST_ID + value.asString();
   }
 
-  private static String integerString(Integer value) {
+  static String integerString(Integer value) {
     return value.toString();
   }
 
@@ -100,7 +100,7 @@ public class SONParsing {
     }
   }
 
-  private static String doubleString(Double value) {
+  static String doubleString(Double value) {
     return value.toString();
   }
 
@@ -130,7 +130,7 @@ public class SONParsing {
     }
   }
 
-  private static String booleanString(Boolean value) {
+  static String booleanString(Boolean value) {
     return value.toString();
   }
 
@@ -150,7 +150,7 @@ public class SONParsing {
     throw new SONParsingError("Invalid boolean value.");
   }
 
-  private static String stringString(String str) {
+  static String stringString(String str) {
     return STRING_DELIMITER + escapeString(str) + STRING_DELIMITER;
   }
 
@@ -188,8 +188,8 @@ public class SONParsing {
 
   private static String escapeString(String str) {
     return str
-        .replace("" + STRING_DELIMITER, "" + STRING_ESCAPE + STRING_DELIMITER)
-        .replace("" + STRING_ESCAPE, "" + STRING_ESCAPE + STRING_ESCAPE);
+        .replace("" + STRING_ESCAPE, "" + STRING_ESCAPE + STRING_ESCAPE)
+        .replace("" + STRING_DELIMITER, "" + STRING_ESCAPE + STRING_DELIMITER);
   }
 
   static class PartialParseResult<T> {
