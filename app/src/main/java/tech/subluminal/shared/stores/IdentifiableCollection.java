@@ -1,9 +1,12 @@
 package tech.subluminal.shared.stores;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import tech.subluminal.shared.stores.records.Identifiable;
 import tech.subluminal.shared.util.Synchronized;
 
@@ -38,5 +41,13 @@ public class IdentifiableCollection<E extends Identifiable> implements
    */
   public void removeByID(String id) {
     syncMap.use(map -> map.remove(id));
+  }
+
+  protected Synchronized<Collection<Synchronized<E>>> getWithPredicate(Predicate<E> predicate) {
+    return syncMap.map(map ->
+        map.values().stream()
+          .filter(syncUser -> syncUser.use(u -> predicate.test(u)))
+        .collect(Collectors.toCollection(ArrayList::new))
+    );
   }
 }
