@@ -1,18 +1,15 @@
 package tech.subluminal.shared.records;
 
-//TODO: Imports
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Represents a player lobby on the server.
  */
-public class Lobby {
+public class Lobby extends SlimLobby {
 
-  // Lobby properties
-  private String id;
-  private String name;
-  private InMemoryLobbyUserStore store;
-  private boolean allReady;
-  private String adminID;
+  private Map<String, Boolean> users = new HashMap<>();
   //TODO: Make lobbies password protected
   //private boolean pwProtected;
   //private String password;
@@ -20,8 +17,6 @@ public class Lobby {
   // Game Settings
   private double gameSpeed = 1.0f;
   private double mapSize = 2.0f;
-  private int minPlayers = 2;
-  private int maxPlayers = 8;
 
   /**
    *
@@ -29,16 +24,43 @@ public class Lobby {
    * @param name is the common name of the lobby.
    * @param adminID points to the user who has created the lobby and can change its settings.
    */
-  //TODO: Overloaded constructor for UserStore od Optional? @rik
   public Lobby(String id, String name, String adminID) {
-    this.id = id;
-    this.name = name;
-    this.store = new InMemoryLobbyUserStore();
-    this.allReady = false;
-    this.adminID = adminID;
+    super(id, name, adminID);
+    users.put(adminID, false);
     //this.pwProtected = false;
     //this.password = null;
   }
 
-  //TODO: Getters and setters
+  public void addPlayer(String id) {
+    users.put(id, false);
+  }
+
+  public void removePlayer(String id) {
+    users.remove(id);
+  }
+
+  public int getPlayerCount() {
+    return users.size();
+  }
+
+  public double getGameSpeed() {
+    return gameSpeed;
+  }
+
+  public void setGameSpeed(double gameSpeed) {
+    this.gameSpeed = gameSpeed;
+  }
+
+  public double getMapSize() {
+    return mapSize;
+  }
+
+  public void setMapSize(double mapSize) {
+    this.mapSize = mapSize;
+  }
+
+  public Set<String> getPlayers() {
+    return users.keySet();
+  }
+
 }
