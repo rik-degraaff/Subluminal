@@ -1,6 +1,6 @@
 package tech.subluminal.server.stores;
 
-import tech.subluminal.server.logic.Lobby;
+import tech.subluminal.shared.records.Lobby;
 
 /**
  * Saves server-side information about open lobbies.

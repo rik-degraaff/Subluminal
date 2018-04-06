@@ -1,6 +1,7 @@
-package tech.subluminal.server.logic;
+package tech.subluminal.client.logic;
 
 import static tech.subluminal.shared.util.IdUtils.generateId;
+
 import tech.subluminal.server.stores.InMemoryLobbyStore;
 import tech.subluminal.shared.records.Lobby;
 

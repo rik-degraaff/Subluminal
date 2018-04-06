@@ -10,9 +10,7 @@ import tech.subluminal.shared.son.SONRepresentable;
    */
   public class LobbyJoinRes implements SONRepresentable {
 
-    private static final String ID_KEY = "id";
     private static final String LOBBY_USERS_KEY = "lobbyusers";
-    private String id;
     private LobbyUserStore store;
 
   /**
@@ -20,8 +18,7 @@ import tech.subluminal.shared.son.SONRepresentable;
    *
    * @param id the id of the lobby.
    */
-  public LobbyJoinRes(String id, LobbyUserStore store) {
-    this.id = id;
+  public LobbyJoinRes(LobbyUserStore store) {
     this.store = store;
   }
 
@@ -33,25 +30,13 @@ import tech.subluminal.shared.son.SONRepresentable;
    * @throws SONConversionError when the conversion fails.
    */
   public static LobbyJoinRes fromSON(SON son) throws SONConversionError {
-    String id = son.getString(ID_KEY)
-        .orElseThrow(() -> new SONConversionError(
-            "Response did not contain valid lobby ID " + id + "."));
-    LobbyUserStore store = son.getNested(LOBBY_USERS_KEY)
+    LobbyUserStore store = son.getObject(LOBBY_USERS_KEY)
         .orElseThrow(() -> new SONConversionError(
             "Response did contain a valid lobby user store " + store + "."));
-    return new LobbyJoinRes(id, store);
+    return new LobbyJoinRes(store);
   }
 
-  /**
-   * Returns the id of the ping message.
-   *
-   * @return the id of the lobby.
-   */
-  public String getId() {
-    return id;
-  }
-
-  /**
+   /**
    * Returns the user store for the lobby.
    *
    * @return the user store of the lobby.

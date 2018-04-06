@@ -2,8 +2,7 @@ package tech.subluminal.server.stores;
 
 import java.util.HashMap;
 import java.util.Map;
-import tech.subluminal.server.stores.LobbyStore;
-import tech.subluminal.server.logic.Lobby;
+import tech.subluminal.shared.records.Lobby;
 
 
 /**
