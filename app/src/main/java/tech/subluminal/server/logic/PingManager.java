@@ -46,14 +46,12 @@ public class PingManager {
   }
 
   private void attachHandlers(String id, Connection connection) {
-    connection.registerHandler(Pong.class, Pong::fromSON, pong -> pongReceived(pong, id));
+    connection.registerHandler(Pong.class, Pong::fromSON, pong -> pongReceived(pong));
     pingResponder.attachHandlers(connection);
   }
 
-  private void pongReceived(Pong pong, String userID) {
-    synchronized (userStore) {
-      pingStore.removePing(userID, pong.getId());
-    }
+  private void pongReceived(Pong pong) {
+    pingStore.sentPings().removeByID(pong.getId());
   }
 
   private void pingLoop() {
@@ -63,22 +61,22 @@ public class PingManager {
       } catch (InterruptedException e) {
         e.printStackTrace(); // TODO: do something sensible
       }
-      String id = generateId(6);
-      Ping ping = new Ping(id);
 
-      Set<String> users = userStore.connectedUsers().getAll().use(us ->
+      Set<SentPing> pings = userStore.connectedUsers().getAll().use(us ->
           us.stream()
-          .map(syncUser -> syncUser.use(User::getId))
-          .collect(Collectors.toCollection(HashSet::new))
+              .map(syncUser -> syncUser.use(User::getID))
+              .map(id -> new SentPing(System.currentTimeMillis(), id, generateId(8)))
+              .collect(Collectors.toCollection(HashSet::new))
       );
 
-      synchronized (pingStore) {
-        pingStore.getUsersWithPings().forEach(toCloseID -> distributor.closeConnection(toCloseID));
-        SentPing sentPing = new SentPing(System.currentTimeMillis(), id);
-        users.forEach(userId -> pingStore.addPing(userId, sentPing));
-      }
+      pings.forEach(p -> distributor.sendMessage(new Ping(p.getID()), p.getUserID()));
 
-      distributor.broadcast(ping);
+      pingStore.sentPings().sync(() -> {
+        pingStore.sentPings()
+            .getUsersWithPings()
+            .forEach(toCloseID -> distributor.closeConnection(toCloseID));
+        pings.forEach(pingStore.sentPings()::add);
+      });
     }
   }
 }

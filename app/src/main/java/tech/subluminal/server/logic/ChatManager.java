@@ -55,7 +55,7 @@ public class ChatManager {
     if (global) {
       distributor
           .sendMessageToAllExcept(new ChatMessageIn(message, sender.getUsername(), Channel.GLOBAL),
-              sender.getId());
+              sender.getID());
     } else {
       // TODO: implement game channel messaging
     }

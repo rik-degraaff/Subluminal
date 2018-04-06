@@ -67,7 +67,6 @@ public class UserManager {
         .ifPresent(syncUser -> syncUser.update(u -> new User(username, id)));
 
     connection.sendMessage(new UsernameRes(username));
-
   }
 
   /**
