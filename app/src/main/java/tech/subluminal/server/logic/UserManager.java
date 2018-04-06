@@ -33,9 +33,7 @@ public class UserManager {
   }
 
   private void onConnectionClosed(String id) {
-    synchronized (userStore) {
-      userStore.removeUserByID(id);
-    }
+    userStore.removeUserByID(id);
   }
 
   private void attachHandlers(String id, Connection connection) {
@@ -63,10 +61,10 @@ public class UserManager {
    * @param usernameReq the username change request sent by the user.
    */
   private void onUsernameChange(String id, Connection connection, UsernameReq usernameReq) {
-    String username = usernameReq.getUsername();
-
-    username = getUnusedUsername(username);
-    userStore.updateUser(new User(username, id));
+    String oldUsername = usernameReq.getUsername();
+    final String username = getUnusedUsername(oldUsername);
+    userStore.getUserByID(id)
+        .ifPresent(syncUser -> syncUser.update(u -> new User(username, id)));
 
     connection.sendMessage(new UsernameRes(username));
 
@@ -89,10 +87,10 @@ public class UserManager {
   }
 
   private String getUnusedUsername(String requestedUsername) {
-    Set<String> users = userStore.getUsers()
-        .stream()
-        .map(User::getUsername)
-        .collect(Collectors.toSet());
+    Set<String> users = userStore.getUsers().use(us ->
+        us.stream()
+        .map(syncUser -> syncUser.use(User::getUsername))
+        .collect(Collectors.toSet()));
 
     String username = requestedUsername;
     int i = 1;

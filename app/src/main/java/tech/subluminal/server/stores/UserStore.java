@@ -15,13 +15,6 @@ public interface UserStore extends ReadOnlyUserStore {
   void addUser(User user);
 
   /**
-   * Updates the user identified by user.userID.
-   *
-   * @param user the user to update.
-   */
-  void updateUser(User user);
-
-  /**
    * Remooves a user identified by a given id from the user store.
    *
    * @param id the id of the user that should be removed.
