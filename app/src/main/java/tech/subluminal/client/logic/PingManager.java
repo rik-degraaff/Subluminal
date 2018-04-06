@@ -9,7 +9,7 @@ import tech.subluminal.shared.messages.LogoutReq;
 import tech.subluminal.shared.messages.Ping;
 import tech.subluminal.shared.messages.Pong;
 import tech.subluminal.shared.net.Connection;
-import tech.subluminal.shared.records.SentPing;
+import tech.subluminal.shared.stores.records.SentPing;
 
 
 public class PingManager {

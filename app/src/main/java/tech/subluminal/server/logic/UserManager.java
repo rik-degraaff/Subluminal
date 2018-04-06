@@ -10,7 +10,7 @@ import tech.subluminal.shared.messages.LogoutReq;
 import tech.subluminal.shared.messages.UsernameReq;
 import tech.subluminal.shared.messages.UsernameRes;
 import tech.subluminal.shared.net.Connection;
-import tech.subluminal.shared.records.User;
+import tech.subluminal.shared.stores.records.User;
 
 /**
  * Manages the information of connected users.

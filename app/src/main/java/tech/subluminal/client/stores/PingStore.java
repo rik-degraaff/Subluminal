@@ -1,6 +1,6 @@
 package tech.subluminal.client.stores;
 
-import tech.subluminal.shared.records.SentPing;
+import tech.subluminal.shared.stores.records.SentPing;
 
 public interface PingStore {
 

@@ -1,6 +1,6 @@
 package tech.subluminal.client.stores;
 
-import tech.subluminal.shared.records.User;
+import tech.subluminal.shared.stores.records.User;
 
 /**
  * Stores client-side information about the users.
@@ -8,7 +8,7 @@ import tech.subluminal.shared.records.User;
 public interface UserStore extends ReadOnlyUserStore {
 
   /**
-   * Set the current user.
+   * Sets the current user.
    *
    * @param user to be set as current user.
    */

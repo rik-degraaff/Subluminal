@@ -1,6 +1,6 @@
 package tech.subluminal.client.stores;
 
-import tech.subluminal.shared.records.User;
+import tech.subluminal.shared.stores.records.User;
 
 /**
  * Stores client-side information about the users in memory.
