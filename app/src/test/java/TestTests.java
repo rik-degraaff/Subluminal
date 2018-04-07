@@ -2,12 +2,16 @@ import java.util.Arrays;
 import org.junit.Test;
 import tech.subluminal.client.stores.records.game.Player;
 import tech.subluminal.shared.messages.GameStateDelta;
+import tech.subluminal.shared.son.SON;
+import tech.subluminal.shared.son.SONConversionError;
+import tech.subluminal.shared.son.SONParsingError;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.stores.records.game.Star;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class TestTests  {
   
@@ -37,6 +41,15 @@ public class TestTests  {
 
     delta.addRemovedPlayer("ftdq");
 
-    System.out.println(delta.asSON().asString());
+    String msg = delta.asSON().asString();
+    try {
+      GameStateDelta parsedDelta = GameStateDelta.fromSON(SON.parse(msg));
+      assertNotNull(parsedDelta);
+    } catch (SONConversionError sonConversionError) {
+      sonConversionError.printStackTrace();
+    } catch (SONParsingError sonParsingError) {
+      sonParsingError.printStackTrace();
+    }
+    System.out.println(msg);
   }
 }
