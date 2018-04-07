@@ -6,13 +6,17 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
-public class MenuController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MenuController implements Initializable{
     @FXML
     private ImageView logoDock;
 
@@ -24,12 +28,11 @@ public class MenuController {
 
     private void generateLogo() {
         Platform.runLater(() ->{
-            Image logo = new Image("/tech/subluminal/resources/subluminal_logo.png");
-            logoDock.setImage(logo);
+
 
             PauseTransition pauseTl = new PauseTransition(Duration.seconds(3));
 
-            ScaleTransition scaleTl = new ScaleTransition(Duration.seconds(5), menuDock);
+            ScaleTransition scaleTl = new ScaleTransition(Duration.seconds(5), logoDock);
             scaleTl.setFromX(0);
             scaleTl.setFromY(0);
             scaleTl.setToX(1);
@@ -58,5 +61,12 @@ public class MenuController {
         });
 
 
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        Image logo = new Image("/tech/subluminal/resources/subluminal_logo.png");
+        logoDock.setImage(logo);
+        generateLogo();
     }
 }
