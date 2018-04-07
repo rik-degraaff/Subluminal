@@ -105,12 +105,12 @@ public class ClientInitializer extends Application{
 
     primaryStage.widthProperty().addListener((v, oldV, newV) -> {
       int diff = oldV.intValue() - newV.intValue();
-      controller.onWindowResize(diff, 0);
+      controller.onWindowResizeHandle(diff, 0);
     });
 
     primaryStage.heightProperty().addListener((v, oldV, newV) -> {
       int diff = oldV.intValue() - newV.intValue();
-      controller.onWindowResize(0, diff);
+      controller.onWindowResizeHandle(0, diff);
     });
   }
 

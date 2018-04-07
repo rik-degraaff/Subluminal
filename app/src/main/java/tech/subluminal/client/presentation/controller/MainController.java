@@ -3,27 +3,16 @@ package tech.subluminal.client.presentation.controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javafx.animation.*;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.util.Duration;
+import tech.subluminal.client.presentation.customElements.BackgroundComponent;
 import tech.subluminal.client.presentation.customElements.MenuComponent;
 
 public class MainController implements Initializable{
 
-  public static final int STAR_AMOUNT = 2000;
   @FXML
   private Parent chatView;
   @FXML
@@ -35,7 +24,7 @@ public class MainController implements Initializable{
   private UserListController userListController;
 
   @FXML
-  private AnchorPane spaceBackground;
+  private AnchorPane spaceBackgroundDock;
 
   @FXML
   private AnchorPane chatDock;
@@ -43,86 +32,15 @@ public class MainController implements Initializable{
   @FXML
   private AnchorPane menuDock;
 
+  private BackgroundComponent background;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    generateBackground();
+    background = new BackgroundComponent(2000);
+    spaceBackgroundDock.getChildren().add(background);
     menuDock.getChildren().add(new MenuComponent());
   }
 
-
-  private void generateBackground() {
-    Group group = new Group();
-
-
-    Platform.runLater(() ->{
-      System.out.println(spaceBackground.getChildren().toString());
-
-      //remove old star animation if it exists
-      spaceBackground.getChildren().clear();
-      System.out.println(spaceBackground.getChildren().toString());
-
-      double widthX = spaceBackground.getWidth();
-      double heightY = spaceBackground.getHeight();
-
-      for(int i = 0; i < STAR_AMOUNT; i++) {
-        double angle = Math.random()*2*Math.PI;
-        double x = Math.sin(angle)*(widthX+heightY);
-        double y = Math.cos(angle)*(widthX+heightY);
-        double radius = Math.floor(Math.random() * 3);
-        Circle star = new Circle(0, 0, 1, Color.WHITE);
-        star.setOpacity(0.0);
-
-        group.getChildren().add(star);
-
-        final PauseTransition pauseTl = new PauseTransition(Duration.seconds(Math.floor(Math.random()*10)));
-
-        final Timeline timeline = new Timeline();
-        KeyValue startKvX = new KeyValue(star.centerXProperty(), x, Interpolator.EASE_IN);
-        KeyValue startKvY = new KeyValue(star.centerYProperty(), y, Interpolator.EASE_IN);
-        KeyFrame startKf = new KeyFrame(Duration.seconds(Math.random()*12+3),startKvX,startKvY);
-
-        timeline.getKeyFrames().add(startKf);
-
-        final FadeTransition fadeTl = new FadeTransition(Duration.seconds(6), star);
-        fadeTl.setFromValue(0);
-        fadeTl.setToValue(1);
-
-        final ScaleTransition scaleTl = new ScaleTransition(Duration.seconds(Math.random()*12+3), star);
-        scaleTl.setFromX(0.3);
-        scaleTl.setFromY(0.3);
-        scaleTl.setToX(Math.sqrt(radius*2));
-        scaleTl.setToY(Math.sqrt(radius*2));
-
-        ParallelTransition paraTl = new ParallelTransition(timeline, fadeTl,scaleTl);
-
-        paraTl.setCycleCount(ParallelTransition.INDEFINITE);
-
-        SequentialTransition mainTl = new SequentialTransition();
-        mainTl.getChildren().addAll(pauseTl,paraTl);
-        mainTl.play();
-      }
-
-      spaceBackground.getChildren().add(group);
-
-      spaceBackground.setTranslateX(widthX/2);
-      spaceBackground.setTranslateY(heightY/2);
-
-    });
-  }
-
-  /**
-   * Handler to call, when a window gets resized.
-   * @param diffX
-   */
-  public void onWindowResize(int diffX, int diffY){
-    //generateBackground();
-    Platform.runLater(() ->{
-      spaceBackground.setTranslateX(spaceBackground.getWidth()/2);
-      spaceBackground.setTranslateY(spaceBackground.getHeight()/2);
-    });
-
-  }
 
   public MainController getController(){
     return this;
@@ -132,4 +50,11 @@ public class MainController implements Initializable{
     return this.chatViewController;
   }
 
+  public void onWindowResizeHandle(int diffX, int diffY) {
+    background.onWindowResize(diffX,diffY);
+  }
+
+  public void onJoinPressed() {
+    System.out.println("here");
+  }
 }

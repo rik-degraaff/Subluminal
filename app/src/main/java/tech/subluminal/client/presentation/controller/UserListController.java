@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 
 public class UserListController implements Initializable {
     @FXML
-    private ListView<Label> playerBoard;
+    private ListView<PlayerStatus> playerBoard;
     @FXML
     private VBox playerBoardWrapper;
     @FXML
@@ -39,40 +39,25 @@ public class UserListController implements Initializable {
 
 
         addPlayerStatus("test", Status.INGAME);
-        updatePlayerStatus("test", Status.INGAME);
+        //updatePlayerStatus("test", Status.INGAME);
         //removePlayerStatus("test");
     }
 
     public void addPlayerStatus(String username, Status status){
-        Label playerTag = new Label(username);
 
-        playerTag.setTextFill(Color.web(getStatusColor(status)));
+        PlayerStatus playerStatus = new PlayerStatus("test", Status.INGAME);
+        PlayerStatus playerStatus1 = new PlayerStatus("test", Status.INGAME);
+        playerStatus1.updateStatus(Status.ONLINE);
 
-        playerBoard.getItems().add(playerTag);
+        //playerBoard.getItems().add(playerTag);
+        playerBoard.getItems().add(playerStatus);
+        playerBoard.getItems().add(playerStatus1);
         //players.add(playerTag);
     }
 
-    private String getStatusColor(Status status) {
-        String color;
 
-        switch (status){
-            case INGAME:
-                color = "red";
-                break;
-            case ONLINE:
-                color = "green";
-                break;
-            case INLOBBY:
-                color = "yellow";
-                break;
-            default:
-                color = "grey";
-        }
-        return color;
-    }
-
-    private void removePlayerStatus(String username){
-        for(Label player: playerBoard.getItems()){
+/**    private void removePlayerStatus(String username){
+        for(PlayerStatus player: playerBoard.getItems()){
             if(player.getText().equals(username)){
                 Platform.runLater(() ->{
                     playerBoard.getItems().remove(player);
@@ -81,15 +66,15 @@ public class UserListController implements Initializable {
                 break;
             }
         }
-    }
+    }**/
 
-    public void updatePlayerStatus(String username, Status status){
+ /**   public void updatePlayerStatus(String username, Status status){
         for(Label player: playerBoard.getItems()){
             if(player.getText().equals(username)){
                 player.setTextFill(Color.web(getStatusColor(status)));
             }
         }
-    }
+    }**/
 
     public void switchPlayerBoard(ActionEvent actionEvent) {
         if(isBoardShown){
