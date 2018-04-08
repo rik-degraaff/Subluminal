@@ -1,7 +1,6 @@
 package tech.subluminal.client.stores.records.game;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
@@ -10,7 +9,6 @@ import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.Identifiable;
 import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.Ship;
-import tech.subluminal.shared.stores.records.game.Star;
 
 public class Player extends Identifiable implements SONRepresentable {
 
@@ -80,7 +78,7 @@ public class Player extends Identifiable implements SONRepresentable {
   }
 
   public void updateFleet(Fleet fleet) {
-    fleets.removeIf(f -> f.getId().equals(fleet.getId()));
+    fleets.removeIf(f -> f.getID().equals(fleet.getID()));
     fleets.add(fleet);
   }
 }
