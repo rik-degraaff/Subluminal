@@ -345,28 +345,46 @@ public class SONList {
     }
   }
 
+  /**
+   * @return a streamable containing all the integers in this list in order.
+   */
   public Streamable<Integer> ints() {
     return streamable(this::getInt);
   }
 
+  /**
+   * @return a streamable containing all the doubles in this list in order.
+   */
   public Streamable<Double> doubles() {
     return streamable(this::getDouble);
   }
 
+  /**
+   * @return a streamable containing all the booleans in this list in order.
+   */
   public Streamable<Boolean> booleans() {
     return streamable(this::getBoolean);
   }
 
+  /**
+   * @return a streamable containing all the strings in this list in order.
+   */
   public Streamable<String> strings() {
     return streamable(this::getString);
   }
 
-  public Streamable<SONList> lists() {
-    return streamable(this::getList);
-  }
-
+  /**
+   * @return a streamable containing all the objects in this list in order.
+   */
   public Streamable<SON> objects() {
     return streamable(this::getObject);
+  }
+
+  /**
+   * @return a streamable containing all the lists in this list in order.
+   */
+  public Streamable<SONList> lists() {
+    return streamable(this::getList);
   }
 
   private <E> Streamable<E> streamable(IntFunction<Optional<E>> getter) {
