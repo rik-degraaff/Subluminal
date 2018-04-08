@@ -79,4 +79,8 @@ public class Player extends Identifiable implements SONRepresentable {
     return player;
   }
 
+  public void updateFleet(Fleet fleet) {
+    fleets.removeIf(f -> f.getId().equals(fleet.getId()));
+    fleets.add(fleet);
+  }
 }
