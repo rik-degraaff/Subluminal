@@ -12,6 +12,7 @@ import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.game.Star;
 
 public class GameStateDelta implements SONRepresentable {
+
   public static final String PLAYERS_KEY = "players";
   public static final String STARS_KEY = "stars";
   public static final String REMOVED_PLAYERS_KEY = "removedPlayers";
@@ -71,7 +72,11 @@ public class GameStateDelta implements SONRepresentable {
   @Override
   public SON asSON() {
     SONList playerList = new SONList();
+    players.stream().map(Player::asSON).forEach(playerList::add);
+
     SONList starList = new SONList();
+    stars.stream().map(Star::asSON).forEach(starList::add);
+
     SONList removedPlayersList = new SONList();
     removedPlayers.forEach(removedPlayersList::add);
 
@@ -81,24 +86,74 @@ public class GameStateDelta implements SONRepresentable {
       removedFleets.get(k).forEach(fleets::add);
       removedFleetsList.add(
           new SON()
-            .put(k, KEY)
-            .put(fleets, VALUE)
+              .put(k, KEY)
+              .put(fleets, VALUE)
       );
     });
 
-
-    return new SON().put(playerList, PLAYERS_KEY)
-      .put(starList, STARS_KEY)
-      .put(removedPlayersList, REMOVED_PLAYERS_KEY)
-      .put(removedFleetsList, REMOVED_FLEETS_KEY); // # DONE
+    return new SON()
+        .put(playerList, PLAYERS_KEY)
+        .put(starList, STARS_KEY)
+        .put(removedPlayersList, REMOVED_PLAYERS_KEY)
+        .put(removedFleetsList, REMOVED_FLEETS_KEY);
   }
 
   public static GameStateDelta fromSON(SON son) throws SONConversionError {
     GameStateDelta delta = new GameStateDelta();
-    SONList playerList = son.getList(PLAYERS_KEY).orElseThrow(() -> SONRepresentable.error(CLASS_NAME, PLAYERS_KEY));
-    for (int i = 0; i < playerList.size(); i++) {
-     // delta.addPlayer(playerList.getObject(i));
+
+    SONList starList = son.getList(STARS_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, STARS_KEY));
+
+    for (int i = 0; i < starList.size(); i++) {
+      int ii = i;
+      SON star = starList.getObject(i)
+          .orElseThrow(() -> SONRepresentable.error(STARS_KEY, Integer.toString(ii)));
+
+      delta.addStar(Star.fromSON(star));
     }
+
+    SONList playerList = son.getList(PLAYERS_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, PLAYERS_KEY));
+
+    for (int i = 0; i < playerList.size(); i++) {
+      int ii = i;
+      SON player = playerList.getObject(i)
+          .orElseThrow(() -> SONRepresentable.error(PLAYERS_KEY, Integer.toString(ii)));
+
+      delta.addPlayer(Player.fromSON(player));
+    }
+
+    SONList removedPlayersList = son.getList(REMOVED_PLAYERS_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, REMOVED_PLAYERS_KEY));
+
+    for (int i = 0; i < removedPlayersList.size(); i++) {
+      int ii = i;
+      String player = removedPlayersList.getString(i)
+          .orElseThrow(() -> SONRepresentable.error(REMOVED_PLAYERS_KEY, Integer.toString(ii)));
+
+      delta.addRemovedPlayer(player);
+    }
+
+    SONList removedFleetsList = son.getList(REMOVED_FLEETS_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, REMOVED_FLEETS_KEY));
+
+    for (int i = 0; i < removedFleetsList.size(); i++) {
+      int ii = i;
+      SON playerFleets = removedFleetsList.getObject(i)
+          .orElseThrow(() -> SONRepresentable.error(REMOVED_FLEETS_KEY, Integer.toString(ii)));
+      String id = playerFleets.getString(KEY)
+          .orElseThrow(() -> SONRepresentable.error(REMOVED_FLEETS_KEY + "[" + ii + "]", KEY));
+      SONList fleets = playerFleets.getList(VALUE)
+          .orElseThrow(() -> SONRepresentable.error(REMOVED_FLEETS_KEY + "[" + ii + "]", VALUE));
+      for (int j = 0; j < fleets.size(); j++) {
+        int jj = j;
+        String fleet = fleets.getString(j)
+            .orElseThrow(() -> SONRepresentable
+                .error(REMOVED_FLEETS_KEY + "[" + ii + "]." + VALUE, Integer.toString(jj)));
+        delta.addRemovedFleet(id, fleet);
+      }
+    }
+
     return delta;
   }
 }

@@ -3,20 +3,22 @@ package tech.subluminal.shared.stores.records;
 /**
  * Represents a ping that was sent to the server/client.
  */
-public class SentPing {
+public class SentPing extends Identifiable {
 
   private long sentTime;
-  private String id;
+  private String userID;
 
   /**
-   * Creates a ping sent record with a sent time and an id.
+   * Creates a ping sent record with a sent time a user id and an id.
    *
-   * @param sentTime the time (currentmillis) when the ping was sent
-   * @param id the id of the ping that was sent
+   * @param sentTime the time (currentmillis) when the ping was sent.
+   * @param userID the id of the user this ping was sent to.
+   * @param id the id of the ping that was sent.
    */
-  public SentPing(long sentTime, String id) {
+  public SentPing(long sentTime, String userID, String id) {
+    super(id);
     this.sentTime = sentTime;
-    this.id = id;
+    this.userID = userID;
   }
 
   /**
@@ -38,20 +40,16 @@ public class SentPing {
   }
 
   /**
-   * Returns the id of a sent ping.
-   *
-   * @return the id of the sent ping.
+   * @return the id of the user the ping was sent to.
    */
-  public String getId() {
-    return id;
+  public String getUserID() {
+    return userID;
   }
 
   /**
-   * Sets the id of a sent ping.
-   *
-   * @param id the id of the sent ping.
+   * @param userID the id of the user the ping was sent to.
    */
-  public void setId(String id) {
-    this.id = id;
+  public void setUserID(String userID) {
+    this.userID = userID;
   }
 }

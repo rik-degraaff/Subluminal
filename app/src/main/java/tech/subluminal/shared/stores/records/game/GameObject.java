@@ -1,8 +1,15 @@
 package tech.subluminal.shared.stores.records.game;
 
+import tech.subluminal.shared.son.SON;
+import tech.subluminal.shared.son.SONConversionError;
+import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.Identifiable;
 
 public abstract class GameObject extends Identifiable {
+
+  private static final String CLASS_NAME = GameObject.class.getSimpleName();
+  private static final String COORDINATES_KEY = "coordinates";
+  private static final String IDENTIFIABLE_KEY = "identifiable";
 
   private Coordinates coordinates;
 
@@ -23,6 +30,23 @@ public abstract class GameObject extends Identifiable {
    */
   public void setCoordinates(Coordinates coordinates) {
     this.coordinates = coordinates;
+  }
+
+  protected void loadFromSON(SON son) throws SONConversionError {
+    SON identifiable = son.getObject(IDENTIFIABLE_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, IDENTIFIABLE_KEY));
+    super.loadFromSON(identifiable);
+
+    SON coords = son.getObject(COORDINATES_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, COORDINATES_KEY));
+
+    this.coordinates = Coordinates.fromSON(coords);
+  }
+
+  protected SON asSON() {
+    return new SON()
+        .put(super.asSON(), IDENTIFIABLE_KEY)
+        .put(coordinates.asSON(), COORDINATES_KEY);
   }
 
 }

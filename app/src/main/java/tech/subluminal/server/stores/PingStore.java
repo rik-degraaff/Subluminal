@@ -9,33 +9,7 @@ import tech.subluminal.shared.stores.records.SentPing;
 public interface PingStore {
 
   /**
-   * Adds a ping record to te store for a given user.
-   *
-   * @param userId the user the ping was sent to.
-   * @param ping the ping that was sent.
+   * @return an IdentifiableCollection containing all sent pings that haven't been replied to yet.
    */
-  void addPing(String userId, SentPing ping);
-
-  /**
-   * Removes a ping record from the store.
-   *
-   * @param userId the id of the user the ping to be removed was sent to.
-   * @param pingId the id of the ping to be removed.
-   */
-  void removePing(String userId, String pingId);
-
-  /**
-   * Returns all the open pings that were sent to a user.
-   *
-   * @param userId the id of the user whose pings should be retrieved.
-   * @return all the pings that were sent to this client.
-   */
-  Collection<SentPing> getPings(String userId);
-
-  /**
-   * Returns the id's of users with open pings they have not responded to yet.
-   *
-   * @return the id's of users that have open pings that they haven't responded to yet.
-   */
-  Collection<String> getUsersWithPings();
+  PingCollection sentPings();
 }
