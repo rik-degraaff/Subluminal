@@ -4,11 +4,8 @@ import static tech.subluminal.shared.son.SONParsing.BOOLEAN_ID;
 import static tech.subluminal.shared.son.SONParsing.DOUBLE_ID;
 import static tech.subluminal.shared.son.SONParsing.ENTRY_DELIMITER;
 import static tech.subluminal.shared.son.SONParsing.INTEGER_ID;
-import static tech.subluminal.shared.son.SONParsing.KEY_VALUE_DELIMITER;
 import static tech.subluminal.shared.son.SONParsing.LIST_ID;
 import static tech.subluminal.shared.son.SONParsing.OBJECT_ID;
-import static tech.subluminal.shared.son.SONParsing.OBJECT_LEFTBRACE;
-import static tech.subluminal.shared.son.SONParsing.OBJECT_RIGHTBRACE;
 import static tech.subluminal.shared.son.SONParsing.STRING_ID;
 import static tech.subluminal.shared.son.SONParsing.integerString;
 import static tech.subluminal.shared.son.SONParsing.doubleString;
@@ -22,10 +19,13 @@ import static tech.subluminal.shared.son.SONParsing.LIST_LEFTBRACE;
 import static tech.subluminal.shared.son.SONParsing.LIST_RIGHTBRACE;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.IntFunction;
 import java.util.stream.Stream;
 import tech.subluminal.shared.son.SONParsing.PartialParseResult;
+import tech.subluminal.shared.util.Streamable;
 
 /**
  * Subluminal Object Notation List:
@@ -343,5 +343,58 @@ public class SONList {
     } catch (IndexOutOfBoundsException e) {
       throw new SONParsingError("SON list was not terminated.");
     }
+  }
+
+  public Streamable<Integer> ints() {
+    return streamable(this::getInt);
+  }
+
+  public Streamable<Double> doubles() {
+    return streamable(this::getDouble);
+  }
+
+  public Streamable<Boolean> booleans() {
+    return streamable(this::getBoolean);
+  }
+
+  public Streamable<String> strings() {
+    return streamable(this::getString);
+  }
+
+  public Streamable<SONList> lists() {
+    return streamable(this::getList);
+  }
+
+  public Streamable<SON> objects() {
+    return streamable(this::getObject);
+  }
+
+  private <E> Streamable<E> streamable(IntFunction<Optional<E>> getter) {
+    return () -> new Iterator<E>() {
+      int i = 0;
+
+      @Override
+      public boolean hasNext() {
+        if (i >= size()) {
+          return false;
+        }
+
+        while (!getter.apply(i).isPresent()) {
+          i++;
+          if (i >= size()) {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      @Override
+      public E next() {
+        while (!getter.apply(i).isPresent()) {
+          i++;
+        }
+        return getter.apply(i++).get();
+      }
+    };
   }
 }
