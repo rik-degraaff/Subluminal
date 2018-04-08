@@ -73,18 +73,6 @@ coverage:java:
     paths:
       - app/build/
       - app/out
-  
-build:
-  stage: build
-  script:
-    - gradle build -x check -x test
-  tags:
-    - cs108
-  artifacts:
-    name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
-    paths:
-      - app/build/
-      - app/out
 
 javadoc:
   stage: javadoc
