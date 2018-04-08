@@ -9,6 +9,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import tech.subluminal.client.presentation.customElements.BackgroundComponent;
+import tech.subluminal.client.presentation.customElements.LobbyListComponent;
 import tech.subluminal.client.presentation.customElements.MenuComponent;
 
 public class MainController implements Initializable{
@@ -34,11 +35,19 @@ public class MainController implements Initializable{
 
   private BackgroundComponent background;
 
+  private MenuComponent menu;
+
+  private LobbyListComponent lobbyList;
+
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     background = new BackgroundComponent(2000);
     spaceBackgroundDock.getChildren().add(background);
-    menuDock.getChildren().add(new MenuComponent());
+
+    menu = new MenuComponent(this);
+    lobbyList = new LobbyListComponent(this);
+
+    menuDock.getChildren().add(menu);
   }
 
 
@@ -54,7 +63,23 @@ public class MainController implements Initializable{
     background.onWindowResize(diffX,diffY);
   }
 
-  public void onJoinPressed() {
-    System.out.println("here");
+  public void onJoinHandle() {
+    menuDock.getChildren().remove(menu);
+
+    menuDock.getChildren().add(lobbyList);
+  }
+
+  public void onHostHandle() {
+
+  }
+
+  public void onSettingHandle() {
+
+  }
+
+  public void onLobbyListClose(){
+    menuDock.getChildren().remove(lobbyList);
+
+    menuDock.getChildren().add(menu);
   }
 }

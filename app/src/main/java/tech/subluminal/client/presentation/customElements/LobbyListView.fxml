@@ -6,12 +6,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.subluminal.client.presentation.controller.LobbyListController">
-   <children>
-      <VBox alignment="CENTER" layoutX="208.0" layoutY="-11.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <ListView fx:id="lobbyList" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: grey; -fx-opacity: 0.2;" />
-         </children>
-      </VBox>
-   </children>
-</AnchorPane>
+<fx:root prefHeight="400.0" prefWidth="600.0" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.subluminal.client.presentation.controller.LobbyListController">
+    <children>
+        <VBox alignment="CENTER" layoutX="208.0" layoutY="-11.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+            <ToolBar prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: black;">
+              <items>
+                  <Label text="Lobbies" />
+                  <Pane HBox.hgrow="ALWAYS"/>
+                <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#closePressed" text="Close" />
+              </items>
+            </ToolBar>
+                <ListView fx:id="lobbyList" prefHeight="200.0" prefWidth="600.0" style="-fx-background-color: grey;" />
+            </children>
+        </VBox>
+    </children>
+</fx:root>

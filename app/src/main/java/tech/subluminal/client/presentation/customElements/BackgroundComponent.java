@@ -26,8 +26,8 @@ public class BackgroundComponent extends AnchorPane {
             this.getChildren().clear();
             System.out.println(this.getChildren().toString());
 
-            double widthX = ((AnchorPane)this.getParent()).getWidth();
-            double heightY = ((AnchorPane)this.getParent()).getHeight();
+            double widthX = this.getScene().getWidth();
+            double heightY = this.getScene().getHeight();
 
             for(int i = 0; i < stars; i++) {
                 double angle = Math.random()*2*Math.PI;

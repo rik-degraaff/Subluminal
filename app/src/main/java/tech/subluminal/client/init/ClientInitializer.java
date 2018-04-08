@@ -114,4 +114,12 @@ public class ClientInitializer extends Application{
     });
   }
 
+  /**
+   * Gets called when the window is closed.
+   */
+  public void stop(){
+    //TODO: Log out
+    //System.exit(0);
+  }
+
 }
