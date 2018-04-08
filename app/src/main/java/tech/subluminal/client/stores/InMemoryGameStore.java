@@ -8,6 +8,7 @@ import tech.subluminal.shared.stores.records.game.Star;
 import tech.subluminal.shared.util.Synchronized;
 
 public class InMemoryGameStore implements GameStore {
+
   private Synchronized<Map<String, Synchronized<Star>>> starMap;
   private Synchronized<Map<String, Synchronized<Player>>> playerMap;
 
