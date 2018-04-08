@@ -21,19 +21,19 @@
         <HBox fx:id="menuButtonsDock" alignment="CENTER" prefHeight="100.0" prefWidth="200.0"
               spacing="20.0">
             <children>
-                <Button onAction="#joinPressed" alignment="CENTER" mnemonicParsing="false" prefHeight="100.0"
+                <Button onAction="#joinPressed" contentDisplay="CENTER" alignment="CENTER" mnemonicParsing="false" prefHeight="100.0"
                         prefWidth="134.0" text="Join" textAlignment="CENTER">
                     <font>
                         <Font size="12.0"/>
                     </font>
                 </Button>
-                <Button onAction="#hostPressed" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="102.0"
+                <Button onAction="#hostPressed" contentDisplay="CENTER" alignment="CENTER" mnemonicParsing="false" prefHeight="102.0"
                         prefWidth="138.0" text="Host" textAlignment="CENTER">
                     <font>
                         <Font size="12.0"/>
                     </font>
                 </Button>
-                <Button onAction="#settingPressed" mnemonicParsing="false" prefHeight="101.0" prefWidth="152.0"
+                <Button onAction="#settingPressed" contentDisplay="CENTER" alignment="CENTER" mnemonicParsing="false" prefHeight="101.0" prefWidth="152.0"
                         text="Settings" textAlignment="CENTER">
                     <font>
                         <Font size="12.0"/>

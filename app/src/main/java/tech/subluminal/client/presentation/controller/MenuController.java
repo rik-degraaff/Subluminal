@@ -96,6 +96,7 @@ public class MenuController implements Initializable {
     @FXML
     private void joinPressed(ActionEvent e){
         System.out.println("pressed");
+
     }
 
     @FXML
@@ -107,4 +108,5 @@ public class MenuController implements Initializable {
     private void settingPressed(ActionEvent e){
         System.out.println("pressed");
     }
+
 }
