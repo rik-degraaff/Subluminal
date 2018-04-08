@@ -6,13 +6,23 @@
 **LUC** = Luc Kury  
 **RIK** = Rik de Graaff  
 
+### Wednesday, April 4th, 2018 (all)
+##### Decisions:
+- A game store will store the the game state.
+- A game manager will listen to game state deltas which contain the features that need to be updated. The game manager then updates these features. It will also take care of the information delay, which is a key feature in our game. 
+- The mentioned game state delta message will contain the changes to be made to the game state.
+- The game lobby view will be a dynamic outer space view which makes the viewer feel like he or she is in a cockpit of a space ship, travelling at a really high speed. The lobby chat window will be at the bottom right corner of the window, in a command line-like design.
+
+
 ### Saturday, March 31st, 2018 (all)
 ##### Decisions:
-- We are going to define Lobby-Stores because it is easier to store Users and Lobbies separately
+- We are going to define Lobby-Stores because it is easier to store Users and Lobbies separately.
+- **DAV** and **LUC** are going to be working on the client and server lobby functionality and GUI.
+- **LGK** and **RIK** are goind to be working on the client and server game logic.
 - For the reconnection procedure we need later, our current idea is: If a player loses connection to the game, a cookie file is generated and temporarily stored on the client. This file contains data the client needs to send a reconnection request to the server.
 - Name changing during a game shall not be possible. However, this issue has a low priority.
 - Nice-to-haves:
-    - ship fleets are represented as swarms
+    - ship fleets are represented by swarms
     - game speed settings
     - reconnection to lobby with password
     - reconnection to game via user ID
@@ -34,7 +44,7 @@ gameState
         |
         |__<Star_Y>
         |       |__coordinates
-        .       |__owner possession %
+        .       |__owner possession
         .       |__owner ID (may be null)
         . 
 ```    
@@ -46,8 +56,8 @@ gameState
   - to fix the NetCat-Situation of M2 (to be specified)
   - to fix the faulty parsing of double quotes in strings
   - to improve the reaction logic of the server when it doesn't get the client's pong message anymore
-  - to overwork the QA plan: instead of the latency time we want to track the client and server tick rates and achieve certain rates (which yet are to be set)
-- Log4J and Mockito are external libraries we are going to use until M3
+  - To overwork the QA plan: Instead of the latency time, we want to track the client and server tick rates and achieve certain rates (which yet are to be set).
+- Log4J and Mockito are external libraries we are going to use until M3.
 ### Sunday, March 25th, 2018 (DAV, LGK, LUC)
 - Logout functionality implementation was finished.
 - Protocol document was created.
@@ -154,13 +164,13 @@ In this meeting we decided about most of the rules of our game. They are:
 
 ## Sunday, March 4th, 2018 (DAV, LUC, LGK)
 ##### Decisions/ideas:
-- The language for all documents concerning the programming project will be English
-- The game concept will be concreted on Monday, March 5th
-- On Monday we will also make a final decision if the game is going to be round-based or in real time
+- The language for all documents concerning the programming project will be English.
+- The game concept will be concreted on Monday, March 5th.
+- On Monday we will also make a final decision if the game is going to be round-based or in real time.
 
 ##### Task division
-LUC: Definition of our software requirements for the project; brainstorming/design of our repository and branch structure and of our IntelliJ configuration  
-DAV: Setup of a rudimentary merchandise website as a gag for the first milestone
+**LUC**: Definition of our software requirements for the project; brainstorming/design of our repository and branch structure and of our IntelliJ configuration  
+**DAV**: Setup of a rudimentary merchandise website as a gag for the first milestone
 
 ### Friday, March 2nd, 2018 (RIK, DAV, LGK)
 ##### Decisions/ideas:
@@ -169,7 +179,7 @@ DAV: Setup of a rudimentary merchandise website as a gag for the first milestone
 - **Basic game principle**: The game happens on an outer space map with stars. In the beginning every player has his main ship placed in a random planet system and produces his fleet of smaller ships with the resources that his planets offer. The goal is to conquer the biggest number of planet systems. The players can inform themselves about the position of their adversaries and in which state of colonization other planet systems are by sending out requests. The twist is that the messenger ships take some time to get to their target and back, so when they are back the information is already not the latest anymore and the player has to make decisions upon outdated information.
 
 ##### Task division:  
-DAV: Mock-ups; graphical sketches  
-RIK: Division client/server; definition of the network protocol  
-LGK: Planning of the presentation; definition of the style and structure of upcoming presentations  
-LUC: (Create a git-repository;) Planning of the structure of the git-repository; decision if we should use the IntelliJ-plugin for git
+**DAV**: Mock-ups; graphical sketches  
+**RIK**: Division client/server; definition of the network protocol  
+**LGK**: Planning of the presentation; definition of the style and structure of upcoming presentations  
+**LUC**: (Create a git-repository;) Planning of the structure of the git-repository; decision if we should use the IntelliJ-plugin for git
