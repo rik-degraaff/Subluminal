@@ -40,11 +40,11 @@ checkstyle:
 build:java:
   stage: build
   script:
-    - gradle build
+    - gradle build -x check -x test
   tags:
     - cs108
   artifacts:
-    name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
+    name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     paths:
       - app/build/
       - app/out
