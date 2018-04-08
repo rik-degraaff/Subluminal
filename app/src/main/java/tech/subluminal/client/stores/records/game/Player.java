@@ -12,6 +12,9 @@ import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.stores.records.game.Star;
 
+/**
+ * Represents a player participating in the game.
+ */
 public class Player extends Identifiable implements SONRepresentable {
 
   private static final String CLASS_NAME = Player.class.getSimpleName();
@@ -22,28 +25,55 @@ public class Player extends Identifiable implements SONRepresentable {
   private Ship motherShip;
   private List<Fleet> fleets;
 
+  /**
+   *
+   * @param id the ID of the player.
+   * @param motherShip the mother ship of the player.
+   * @param fleets a list containing all the fleets a player possesses.
+   */
   public Player(String id, Ship motherShip, List<Fleet> fleets) {
     super(id);
     this.motherShip = motherShip;
     this.fleets = fleets;
   }
 
+  /**
+   *
+   * @return the mother ship of the player.
+   */
   public Ship getMotherShip() {
     return motherShip;
   }
 
+  /**
+   *
+   * @param motherShip the mother ship of the player.
+   */
   public void setMotherShip(Ship motherShip) {
     this.motherShip = motherShip;
   }
 
+  /**
+   *
+   * @return a list containing all the fleets of a player.
+   */
   public List<Fleet> getFleets() {
     return fleets;
   }
 
+  /**
+   *
+   * @param fleets a list containing all the fleets of a player.
+   */
   public void setFleets(List<Fleet> fleets) {
     this.fleets = fleets;
   }
 
+  /**
+   * Produces the SON representation of a player.
+   *
+   * @return the SON representation of a player.
+   */
   public SON asSON() {
     SONList fleetList = new SONList();
     fleets.stream().map(Fleet::asSON).forEach(fleetList::add);
@@ -54,6 +84,12 @@ public class Player extends Identifiable implements SONRepresentable {
         .put(fleetList, FLEETS_KEY);
   }
 
+  /**
+   *
+   * @param son the SON representation of a player.
+   * @return a player.
+   * @throws SONConversionError when the conversion fails.
+   */
   public static Player fromSON(SON son) throws SONConversionError {
     SON motherShip = son.getObject(MOTHERS_SHIP_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, MOTHERS_SHIP_KEY));
@@ -79,6 +115,11 @@ public class Player extends Identifiable implements SONRepresentable {
     return player;
   }
 
+  /**
+   * Refreshes the status of a fleet of a player.
+   *
+   * @param fleet the fleet to be updated.
+   */
   public void updateFleet(Fleet fleet) {
     fleets.removeIf(f -> f.getId().equals(fleet.getId()));
     fleets.add(fleet);
