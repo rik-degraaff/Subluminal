@@ -105,7 +105,7 @@ public class MenuController implements Initializable, Observer {
 
     @FXML
     private void settingPressed(ActionEvent e){
-        main.onSettingHandle();
+        main.onSettingOpen();
     }
 
     @Override

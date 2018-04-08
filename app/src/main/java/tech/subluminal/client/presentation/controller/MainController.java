@@ -3,6 +3,7 @@ package tech.subluminal.client.presentation.controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -11,6 +12,7 @@ import javafx.scene.layout.AnchorPane;
 import tech.subluminal.client.presentation.customElements.BackgroundComponent;
 import tech.subluminal.client.presentation.customElements.LobbyListComponent;
 import tech.subluminal.client.presentation.customElements.MenuComponent;
+import tech.subluminal.client.presentation.customElements.SettingsComponent;
 
 public class MainController implements Initializable{
 
@@ -39,6 +41,9 @@ public class MainController implements Initializable{
 
   private LobbyListComponent lobbyList;
 
+  private SettingsComponent settings;
+
+
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     background = new BackgroundComponent(2000);
@@ -46,6 +51,7 @@ public class MainController implements Initializable{
 
     menu = new MenuComponent(this);
     lobbyList = new LobbyListComponent(this);
+    settings = new SettingsComponent(this);
 
     menuDock.getChildren().add(menu);
   }
@@ -73,8 +79,17 @@ public class MainController implements Initializable{
 
   }
 
-  public void onSettingHandle() {
+  public void onSettingOpen() {
+    menuDock.getChildren().forEach(i -> i.setVisible(false));
 
+
+    menuDock.getChildren().add(settings);
+  }
+
+  public void onSettingsClose() {
+    menuDock.getChildren().remove(settings);
+
+    menuDock.getChildren().forEach(i -> i.setVisible(true));
   }
 
   public void onLobbyListClose(){

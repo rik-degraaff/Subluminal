@@ -96,7 +96,7 @@ public class ClientInitializer extends Application{
 
     primaryStage.setTitle("Subluminal - The Game");
     primaryStage.setScene(new Scene(root));
-    primaryStage.getIcons().add(new Image("/tech/subluminal/client/init/Game_Logo_1.png"));
+    primaryStage.getIcons().add(new Image("/tech/subluminal/resources/Game_Logo_1.png"));
     primaryStage.show();
 
     String[] cmd = getParameters().getRaw().toArray(new String[3]);
