@@ -26,16 +26,16 @@ public class GameManager {
     //delta.getRemovedPlayers().forEach(gameStore::removePlayer);
     gameStore.getPlayers().consume(players -> {
       players.forEach(syncPlayer -> syncPlayer.consume(player -> {
-        List<String> removedFleets = delta.getRemovedFleets().get(player.getId());
+        List<String> removedFleets = delta.getRemovedFleets().get(player.getID());
         player.getFleets().removeAll(removedFleets);
       }));
     });
 
     delta.getPlayers().forEach(playerDelta -> {
-      Optional<Synchronized<Player>> optPlayer = gameStore.getPlayerByID(playerDelta.getId());
+      Optional<Synchronized<Player>> optPlayer = gameStore.getPlayerByID(playerDelta.getID());
       if (!optPlayer.isPresent()) {
         gameStore.addPlayer(
-            new Player(playerDelta.getId(), playerDelta.getMotherShip(), playerDelta.getFleets()));
+            new Player(playerDelta.getID(), playerDelta.getMotherShip(), playerDelta.getFleets()));
       } else {
         optPlayer.get().consume(player -> {
           playerDelta.getFleets().forEach(player::updateFleet);
@@ -45,7 +45,7 @@ public class GameManager {
     });
 
     delta.getStars().forEach(star -> {
-      Optional<Synchronized<Star>> optStar = gameStore.getStarByID(star.getId());
+      Optional<Synchronized<Star>> optStar = gameStore.getStarByID(star.getID());
       if (!optStar.isPresent()) {
         gameStore.addStar(star);
       } else {

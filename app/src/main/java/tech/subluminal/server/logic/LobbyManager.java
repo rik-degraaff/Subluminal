@@ -8,7 +8,7 @@ import tech.subluminal.server.stores.ReadOnlyUserStore;
 import tech.subluminal.shared.messages.LobbyJoinReq;
 import tech.subluminal.shared.messages.LobbyLeaveReq;
 import tech.subluminal.shared.net.Connection;
-import tech.subluminal.shared.records.Lobby;
+import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.util.Synchronized;
 
 /**
@@ -51,7 +51,7 @@ public class LobbyManager {
         //TODO: Send message to client: Lobby full
         return l;
       }
-      l.addPlayer(userID);
+      l.addPlayer(userID, false);
       //TODO: Send message to client: Successfully joined lobby
       return l;
     });
