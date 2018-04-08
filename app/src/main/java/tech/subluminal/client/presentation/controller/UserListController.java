@@ -1,18 +1,14 @@
 package tech.subluminal.client.presentation.controller;
 
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import tech.subluminal.client.presentation.customElements.PlayerStatus;
-import tech.subluminal.shared.records.Channel;
-import tech.subluminal.shared.records.Status;
+import tech.subluminal.client.presentation.customElements.PlayerStatusComponent;
+import tech.subluminal.shared.records.PlayerStatus;
 
 import java.net.URL;
 import java.util.LinkedList;
@@ -21,7 +17,7 @@ import java.util.ResourceBundle;
 
 public class UserListController implements Initializable {
     @FXML
-    private ListView<PlayerStatus> playerBoard;
+    private ListView<PlayerStatusComponent> playerBoard;
     @FXML
     private VBox playerBoardWrapper;
     @FXML
@@ -38,16 +34,16 @@ public class UserListController implements Initializable {
         }
 
 
-        addPlayerStatus("test", Status.INGAME);
-        //updatePlayerStatus("test", Status.INGAME);
+        addPlayerStatus("test", PlayerStatus.INGAME);
+        //updatePlayerStatus("test", PlayerStatusComponent.INGAME);
         //removePlayerStatus("test");
     }
 
-    public void addPlayerStatus(String username, Status status){
+    public void addPlayerStatus(String username, PlayerStatus status){
 
-        PlayerStatus playerStatus = new PlayerStatus("test", Status.INGAME);
-        PlayerStatus playerStatus1 = new PlayerStatus("test", Status.INGAME);
-        playerStatus1.updateStatus(Status.ONLINE);
+        PlayerStatusComponent playerStatus = new PlayerStatusComponent("test", PlayerStatus.INGAME);
+        PlayerStatusComponent playerStatus1 = new PlayerStatusComponent("test", PlayerStatus.INGAME);
+        playerStatus1.updateStatus(PlayerStatus.ONLINE);
 
         //playerBoard.getItems().add(playerTag);
         playerBoard.getItems().add(playerStatus);
@@ -57,7 +53,7 @@ public class UserListController implements Initializable {
 
 
 /**    private void removePlayerStatus(String username){
-        for(PlayerStatus player: playerBoard.getItems()){
+        for(PlayerStatusComponent player: playerBoard.getItems()){
             if(player.getText().equals(username)){
                 Platform.runLater(() ->{
                     playerBoard.getItems().remove(player);
@@ -68,7 +64,7 @@ public class UserListController implements Initializable {
         }
     }**/
 
- /**   public void updatePlayerStatus(String username, Status status){
+ /**   public void updatePlayerStatus(String username, PlayerStatusComponent status){
         for(Label player: playerBoard.getItems()){
             if(player.getText().equals(username)){
                 player.setTextFill(Color.web(getStatusColor(status)));
