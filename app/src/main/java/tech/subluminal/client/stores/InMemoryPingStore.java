@@ -1,18 +1,17 @@
 package tech.subluminal.client.stores;
 
 import tech.subluminal.shared.stores.records.SentPing;
+import tech.subluminal.shared.stores.records.SingleEntity;
 
 public class InMemoryPingStore implements PingStore {
 
-  private SentPing ping;
+  private SingleEntity<SentPing> lastPing = new SingleEntity<>();
 
+  /**
+   * @return the last ping that was last sent to the server.
+   */
   @Override
-  public SentPing getPing() {
-    return ping;
-  }
-
-  @Override
-  public void setPing(SentPing ping) {
-    this.ping = ping;
+  public SingleEntity<SentPing> lastPing() {
+    return lastPing;
   }
 }

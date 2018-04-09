@@ -15,6 +15,8 @@ Copy your entry into the category which best describes the resource. If necessar
 ### JFX
 - MVC Pattern. [2017]. [http://griffon-framework.org/tutorials/5_mvc_patterns.html] (http://griffon-framework.org/tutorials/5_mvc_patterns.html)
 - JavaFX Tutorial. [2015]. [https://www.tutorialspoint.com/javafx/index.htm] (https://www.tutorialspoint.com/javafx/index.htm)
+- Preparing JavaFX for Intellij IDEA. [2017]. [https://www.jetbrains.com/help/idea/preparing-for-javafx-application-development.html#path_to_scene_builder] (https://www.jetbrains.com/help/idea/preparing-for-javafx-application-development.html#path_to_scene_builder)
+- JavaFX 8 Tutorial.(MVC) [2017]. [http://code.makery.ch/library/javafx-8-tutorial/part1/] (http://code.makery.ch/library/javafx-8-tutorial/part1/)
 
 ## GitLab
 ### CI/CD
@@ -35,9 +37,11 @@ Copy your entry into the category which best describes the resource. If necessar
 - none
 
 ## Other
-- RegexOne. Learn Regular Expressions with simple, interactive exercises. [2018]. [https://regexone.com](https://regexone.com)
-- Essential Git. [https://nhs.io/git/](https://gitlab.com/ci/lint).
-- Online .gitlab-ci.yml linter. [https://gitlab.com/ci/lint](https://gitlab.com/ci/lint).
-- Markdown Cheatsheet. [https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
-- Flaticon [2018]. [https://www.flaticon.com/](https://www.flaticon.com/)
+- RegexOne. Learn Regular Expressions with simple, interactive exercises. [2018]. [https://regexone.com](https://regexone.com).  
+- Java, JavaFX, code coverage and GitLab CI. [2016]. [https://medium.com/@kaiwinter/javafx-and-code-coverage-on-gitlab-ci-29c690e03fd6](https://medium.com/@kaiwinter/javafx-and-code-coverage-on-gitlab-ci-29c690e03fd6).  
+- Scheduling recurring tasks in Java applications. [2003]. [https://www.ibm.com/developerworks/library/j-schedule/index.html](https://www.ibm.com/developerworks/library/j-schedule/index.html).  
+- Essential Git. [https://nhs.io/git/](https://gitlab.com/ci/lint).  
+- Online .gitlab-ci.yml linter. [https://gitlab.com/ci/lint](https://gitlab.com/ci/lint).  
+- Markdown Cheatsheet. [https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).  
+- Flaticon [2018]. [https://www.flaticon.com/](https://www.flaticon.com/)  
 - A free e-book dedicated to game dev. [http://gameprogrammingpatterns.com/contents.html](http://gameprogrammingpatterns.com/contents.html)

@@ -2,9 +2,14 @@ package tech.subluminal.shared.son;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.hamcrest.CoreMatchers.*;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.Test;
 
@@ -182,5 +187,74 @@ public class SONTest {
       fail("Failed to parse " + sonType + ", error: " + sonParsingError.getMessage());
     }
     return null;
+  }
+
+  @Test
+  public void iterateOverSONList() {
+    for (int i = 0; i < 10; i++) {
+      SONList list = new SONList();
+
+      List<Integer> intList = Arrays.asList(1, 2, 3, 4, 5, 6);
+      List<String> stringList = Arrays.asList("1", "2", "3", "4", "5", "6");
+      List<Boolean> boolList = Arrays.asList(true, true, false, true, false, false);
+      List<Double> doubleList = Arrays.asList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
+      List<SON> sonList = Arrays.asList(new SON(), new SON(), new SON(), new SON(), new SON());
+      List<SONList> listList = Arrays.asList(new SONList(), new SONList(), new SONList());
+
+      List<Thread> threads = Arrays.asList(
+          new Thread(() -> intList.forEach(x -> {
+            synchronized (list) {
+              list.add(x);
+            }
+            Thread.yield();
+          })),
+          new Thread(() -> stringList.forEach(x -> {
+            synchronized (list) {
+              list.add(x);
+            }
+            Thread.yield();
+          })),
+          new Thread(() -> boolList.forEach(x -> {
+            synchronized (list) {
+              list.add(x);
+            }
+            Thread.yield();
+          })),
+          new Thread(() -> doubleList.forEach(x -> {
+            synchronized (list) {
+              list.add(x);
+            }
+            Thread.yield();
+          })),
+          new Thread(() -> sonList.forEach(x -> {
+            synchronized (list) {
+              list.add(x);
+            }
+            Thread.yield();
+          })),
+          new Thread(() -> listList.forEach(x -> {
+            synchronized (list) {
+              list.add(x);
+            }
+            Thread.yield();
+          }))
+      );
+
+      threads.forEach(Thread::start);
+      try {
+        for (Thread thread : threads) {
+          thread.join();
+        }
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+
+      assertEquals(intList, list.ints().stream().collect(Collectors.toList()));
+      assertEquals(stringList, list.strings().stream().collect(Collectors.toList()));
+      assertEquals(doubleList, list.doubles().stream().collect(Collectors.toList()));
+      assertEquals(boolList, list.booleans().stream().collect(Collectors.toList()));
+      assertEquals(sonList, list.objects().stream().collect(Collectors.toList()));
+      assertEquals(listList, list.lists().stream().collect(Collectors.toList()));
+    }
   }
 }

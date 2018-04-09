@@ -31,7 +31,7 @@ public class LobbyJoinReq implements SONRepresentable {
   public static LobbyJoinReq fromSON(SON son) throws SONConversionError {
     String id = son.getString(ID_KEY)
         .orElseThrow(() -> new SONConversionError(
-            "Request did not contain valid lobby ID " + id + "."));
+            "Request did not contain valid lobby " + ID_KEY + "."));
     return new LobbyJoinReq(id);
   }
 
