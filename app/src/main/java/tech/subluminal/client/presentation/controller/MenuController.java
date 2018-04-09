@@ -35,8 +35,6 @@ public class MenuController implements Initializable, Observer {
 
     private void generateLogo() {
         Platform.runLater(() -> {
-
-
             PauseTransition pauseTl = new PauseTransition(Duration.seconds(1));
 
             ScaleTransition scaleTl = new ScaleTransition(Duration.seconds(3), menuContainer);

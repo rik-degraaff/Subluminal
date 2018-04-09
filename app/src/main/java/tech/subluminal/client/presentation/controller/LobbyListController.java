@@ -1,5 +1,6 @@
 package tech.subluminal.client.presentation.controller;
 
+import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,13 +21,25 @@ public class LobbyListController implements Initializable, Observer {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        ScaleTransition scaleTl = new ScaleTransition(Duration.seconds(0.2), lobbyList);
-        scaleTl.setFromY(0);
-        scaleTl.setToY(1);
-        scaleTl.play();
+        openWindow();
 
         lobbyList.getItems().add(new LobbyStatusComponent("testLobby", "wefwef", 3, 8, LobbyStatus.OPEN));
 
+    }
+
+    public void openWindow() {
+        ScaleTransition scaleTlX = new ScaleTransition(Duration.seconds(0.2), lobbyList.getParent());
+        scaleTlX.setFromX(0);
+        scaleTlX.setToX(1);
+
+        ScaleTransition scaleTlY = new ScaleTransition(Duration.seconds(0.5), lobbyList.getParent());
+        scaleTlY.setFromY(0);
+        scaleTlY.setToY(1);
+
+        ParallelTransition paraTl = new ParallelTransition();
+
+        paraTl.getChildren().addAll(scaleTlX, scaleTlY);
+        paraTl.play();
     }
 
     @FXML

@@ -71,6 +71,7 @@ public class MainController implements Initializable {
         menuDock.getChildren().remove(menu);
 
         menuDock.getChildren().add(lobbyList);
+        lobbyList.onWindowOpen();
     }
 
     public void onHostHandle() {
