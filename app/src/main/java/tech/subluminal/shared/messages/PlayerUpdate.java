@@ -11,6 +11,14 @@ public class PlayerUpdate implements SONRepresentable {
     private final String username;
     private final String id;
 
+    public String getUsername() {
+        return username;
+    }
+
+    public String getId() {
+        return id;
+    }
+
     public PlayerUpdate(String id, String username){
         this.id = id;
         this.username = username;

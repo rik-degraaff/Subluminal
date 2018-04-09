@@ -11,6 +11,10 @@ public class PlayerLeave implements SONRepresentable {
     private String id;
     private static String USER_ID_KEY = "id";
 
+    public String getId() {
+        return id;
+    }
+
     public PlayerLeave(String id){
         this.id = id;
     }

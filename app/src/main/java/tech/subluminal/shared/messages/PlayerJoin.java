@@ -10,6 +10,10 @@ public class PlayerJoin implements SONRepresentable {
     private static final String USER_KEY = "user";
     private User user;
 
+    public User getUser() {
+        return user;
+    }
+
     public PlayerJoin(User user) {
         this.user = user;
     }

@@ -45,7 +45,36 @@ public class UserManager implements UserPresenter.Delegate {
     private void attachHandlers() {
         connection.registerHandler(LoginRes.class, LoginRes::fromSON, this::onLogin);
         connection.registerHandler(UsernameRes.class, UsernameRes::fromSON, this::onUsernameChanged);
-        //TODO: implement this
+        connection.registerHandler(PlayerJoin.class, PlayerJoin::fromSON, this::onPlayerJoin);
+        connection.registerHandler(PlayerLeave.class, PlayerLeave::fromSON, this::onPlayerLeave);
+        connection.registerHandler(PlayerUpdate.class, PlayerUpdate::fromSON, this::onPlayerUpdate);
+    }
+
+    private void onPlayerUpdate(PlayerUpdate res) {
+        String id = res.getId();
+        String oldUsername = userStore.users().getByID(id).get().use(user -> user.getUsername());
+        String newUsername = res.getUsername();
+
+        userStore.users().getByID(id).ifPresent(syncUser -> syncUser.update(user -> new User(newUsername, id)));
+
+        userPresenter.onPlayerUpdate(oldUsername, newUsername);
+
+    }
+
+    private void onPlayerLeave(PlayerLeave res) {
+        String id = res.getId();
+        String username = userStore.users().getByID(id).get().use(user -> user.getUsername());
+        userStore.users().removeByID(id);
+
+        userPresenter.onPlayerLeave(username);
+    }
+
+    private void onPlayerJoin(PlayerJoin res) {
+        User user = res.getUser();
+        String username = user.getUsername();
+        userStore.users().add(user);
+
+        userPresenter.onPlayerJoin(username);
     }
 
     private String getCurrentId() {

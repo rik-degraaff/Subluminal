@@ -257,6 +257,21 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     }
 
     @Override
+    public void onPlayerJoin(String username) {
+        addMessageChat(username+" joined.", Channel.SERVER);
+    }
+
+    @Override
+    public void onPlayerLeave(String username) {
+        addMessageChat(username + " left.", Channel.SERVER);
+    }
+
+    @Override
+    public void onPlayerUpdate(String oldUsername, String newUsername) {
+        addMessageChat(oldUsername + " changed his name to: " + newUsername + ".", Channel.SERVER);
+    }
+
+    @Override
     public void initialize(URL location, ResourceBundle resources) {
         chatHistory.setItems(filteredList);
     }
