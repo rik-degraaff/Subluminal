@@ -32,7 +32,7 @@ public interface UserPresenter {
     /**
      * Delegate the UserStore can subscribe to.
      */
-    public static interface Delegate {
+    interface Delegate {
 
         /**
          * Fired when a user tries to change his name.

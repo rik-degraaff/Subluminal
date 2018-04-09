@@ -1,10 +1,5 @@
 package tech.subluminal.client.presentation.controller;
 
-import java.net.URL;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ResourceBundle;
-
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,7 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-
 import tech.subluminal.client.presentation.ChatPresenter;
 import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.stores.ReadOnlyUserStore;
@@ -25,6 +19,10 @@ import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.records.Channel;
 import tech.subluminal.shared.stores.records.User;
 
+import java.net.URL;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 
 public class ChatController implements ChatPresenter, UserPresenter, Initializable {
@@ -258,7 +256,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
     @Override
     public void onPlayerJoin(String username) {
-        addMessageChat(username+" joined.", Channel.SERVER);
+        addMessageChat(username + " joined.", Channel.SERVER);
     }
 
     @Override

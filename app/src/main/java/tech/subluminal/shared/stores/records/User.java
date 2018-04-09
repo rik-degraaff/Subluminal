@@ -55,6 +55,8 @@ public class User extends Identifiable implements SONRepresentable {
 
     @Override
     public SON asSON() {
-        return new SON().put(username, USERNAME_KEY);
+        return new SON()
+                .put(username, USERNAME_KEY)
+                .put(super.asSON(), IDENTIFIABLE_KEY);
     }
 }

@@ -4,9 +4,12 @@ import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.messages.*;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.User;
+import tech.subluminal.shared.util.Synchronized;
 
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * Manages the information of the active user.
@@ -48,14 +51,22 @@ public class UserManager implements UserPresenter.Delegate {
         connection.registerHandler(PlayerJoin.class, PlayerJoin::fromSON, this::onPlayerJoin);
         connection.registerHandler(PlayerLeave.class, PlayerLeave::fromSON, this::onPlayerLeave);
         connection.registerHandler(PlayerUpdate.class, PlayerUpdate::fromSON, this::onPlayerUpdate);
+        connection.registerHandler(InitialUsers.class, InitialUsers::fromSON, this::onInitialUsers);
+    }
+
+    private void onInitialUsers(InitialUsers initialUsers) {
+        userStore.users().sync(() -> {
+            initialUsers.getUsers().forEach(userStore.users()::add);
+        });
     }
 
     private void onPlayerUpdate(PlayerUpdate res) {
         String id = res.getId();
         String oldUsername = userStore.users().getByID(id).get().use(user -> user.getUsername());
         String newUsername = res.getUsername();
+        System.out.println(oldUsername);
 
-        userStore.users().getByID(id).ifPresent(syncUser -> syncUser.update(user -> new User(newUsername, id)));
+        userStore.users().getByID(id).ifPresent(syncUser -> syncUser.update(user -> new User(newUsername,id)));
 
         userPresenter.onPlayerUpdate(oldUsername, newUsername);
 

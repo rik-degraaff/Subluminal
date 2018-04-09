@@ -35,7 +35,7 @@ public class SocketConnection implements Connection {
       handler.accept(converter.convert(son));
     } catch (SONConversionError sonConversionError) {
       System.err.println(
-          "Structure of " + sonConversionError.getMessage() + "packets was incorrect, son.");
+          "Structure of " + sonConversionError.getMessage() + " packets was incorrect, son.");
     }
   }
 
@@ -146,6 +146,7 @@ public class SocketConnection implements Connection {
    */
   @Override
   public void close() throws IOException {
+    Thread.dumpStack();
     stop = true;
     readThread.interrupt();
   }
