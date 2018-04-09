@@ -51,7 +51,6 @@ public class ClientInitializer extends Application {
         UserStore userStore = new InMemoryUserStore();
         PingStore pingStore = new InMemoryPingStore();
 
-        //ConsolePresenter presenter = new ConsolePresenter(System.in, System.out, userStore);
         ChatController presenter = controller.getChatController();
         presenter.setUserStore(userStore);
 

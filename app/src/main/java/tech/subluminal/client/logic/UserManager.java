@@ -47,17 +47,20 @@ public class UserManager implements UserPresenter.Delegate {
         connection.registerHandler(UsernameRes.class, UsernameRes::fromSON, this::onUsernameChanged);
     }
 
+    private String getCurrentId() {
+        return userStore.currentUser().get().use(user -> user.map(User::getID))
+                .orElseThrow(() -> new IllegalStateException("Current User is not in the Userstore."));
+    }
+
     private void onUsernameChanged(UsernameRes res) {
-        synchronized (userStore) {
-            userStore.setCurrentUser(new User(res.getUsername(), userStore.getCurrentUser().getID()));
-        }
+        userStore.currentUser().set(new User(res.getUsername(), getCurrentId()));
+
         userPresenter.nameChangeSucceeded();
     }
 
     private void onLogin(LoginRes res) {
-        synchronized (userStore) {
-            userStore.setCurrentUser(new User(res.getUsername(), res.getUserID()));
-        }
+        userStore.currentUser().set(new User(res.getUsername(), res.getUserID()));
+
         userPresenter.loginSucceeded();
     }
 

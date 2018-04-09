@@ -1,15 +1,16 @@
-package tech.subluminal.shared.stores.records;
+package tech.subluminal.shared.stores;
 
 import java.util.Optional;
 import tech.subluminal.shared.util.Synchronized;
 
-public class SingleEntity<E> {
+public class SingleEntity<E> implements ReadOnlySingleEntity<E> {
 
   private Synchronized<Optional<E>> syncEntity = new Synchronized<>(Optional.empty());
 
   /**
    * @return a synchonized optional containing the saved entity.
    */
+  @Override
   public Synchronized<Optional<E>> get() {
     return syncEntity;
   }

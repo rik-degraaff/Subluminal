@@ -17,6 +17,7 @@ import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.stores.ReadOnlyUserStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.records.Channel;
+import tech.subluminal.shared.stores.records.User;
 
 import java.net.URL;
 import java.util.LinkedList;
@@ -148,7 +149,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
             clearInput();
         } else {
             //send @player
-            if (userStore.getUserByUsername(channel) != null) {
+            if (userStore.users().getByUsername(channel).use(users -> !users.isEmpty())) {
 
                 chatDelegate.sendWhisperMessage(message, channel);
                 addMessageChat("you@" + channel + ": " + message, Channel.WHISPER);
@@ -168,6 +169,11 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
     public void clearInput() {
         messageText.setText("");
+    }
+
+    @Override
+    public void displaySystemMessage(String message) {
+        addMessageChat(message, Channel.SYSTEM);
     }
 
     /**
@@ -218,7 +224,12 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
      */
     @Override
     public void loginSucceeded() {
-        addMessageChat("Succesfully logged in as: " + userStore.getCurrentUser().getUsername(), Channel.SERVER);
+        addMessageChat("Succesfully logged in as: " + getCurrentUsername(), Channel.SERVER);
+    }
+
+    private String getCurrentUsername() {
+        return userStore.currentUser().get().use(user -> user.map(User::getUsername))
+                .orElseThrow(() -> new IllegalStateException("Current User is not in the Userstore."));
     }
 
     /**
@@ -234,7 +245,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
      */
     @Override
     public void nameChangeSucceeded() {
-        addMessageChat("Your username got changed to: " + userStore.getCurrentUser().getUsername(), Channel.SERVER);
+        addMessageChat("Your username got changed to: " + getCurrentUsername(), Channel.SERVER);
     }
 
     @Override

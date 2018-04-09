@@ -5,5 +5,5 @@ package tech.subluminal.shared.records;
  */
 public enum Channel {
   //SERVER can not be muted and is only used by the server.
-  WHISPER, GAME, GLOBAL, SERVER
+  WHISPER, GAME, GLOBAL, SERVER, SYSTEM
 }

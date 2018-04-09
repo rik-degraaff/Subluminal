@@ -59,7 +59,11 @@ public class ChatManager implements ChatPresenter.Delegate {
     @Override
     public void sendWhisperMessage(String message, String username) {
         //TODO: handle error
-        connection.sendMessage(
-                new ChatMessageOut(message, userStore.getUserByUsername(username).getUsername(), false));
+        if (userStore.users().getByUsername(username).use(users -> !users.isEmpty())) {
+            connection.sendMessage(new ChatMessageOut(message, username, false));
+        }else{
+            chatPresenter.displaySystemMessage(username + " does not exist or is not online.");
+        }
+
     }
 }
