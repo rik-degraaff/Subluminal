@@ -64,7 +64,7 @@ public class SocketConnection implements Connection {
         } catch (NoSuchElementException e) {
           System.out.println("Socket was forcefully closed.");
           stop = true;
-          System.exit(0); //FIXME: cleaner way
+          //System.exit(0); //FIXME: cleaner way
         }
       }
     } catch (IOException e) {
@@ -147,6 +147,7 @@ public class SocketConnection implements Connection {
   @Override
   public void close() throws IOException {
     stop = true;
+    socket.close();
     readThread.interrupt();
   }
 }
