@@ -5,6 +5,10 @@ import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.messages.ChatMessageIn;
 import tech.subluminal.shared.messages.ChatMessageOut;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.stores.records.User;
+import tech.subluminal.shared.util.Synchronized;
+
+import java.util.Collection;
 
 public class ChatManager implements ChatPresenter.Delegate {
 
@@ -58,9 +62,12 @@ public class ChatManager implements ChatPresenter.Delegate {
 
     @Override
     public void sendWhisperMessage(String message, String username) {
-        //TODO: handle error
         if (userStore.users().getByUsername(username).use(users -> !users.isEmpty())) {
-            connection.sendMessage(new ChatMessageOut(message, username, false));
+            Synchronized<Collection<Synchronized<User>>> users = userStore.users().getByUsername(username);
+            String id = users.use(user -> user.stream().map(syncUser -> syncUser.use(User::getID)));
+            //TODO: FIX THIS
+
+            connection.sendMessage(new ChatMessageOut(message, id, false));
         }else{
             chatPresenter.displaySystemMessage(username + " does not exist or is not online.");
         }
