@@ -1,12 +1,9 @@
 package tech.subluminal.client.presentation.controller;
 
 import javafx.animation.ScaleTransition;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import tech.subluminal.client.presentation.customElements.LobbyStatusComponent;
 import tech.subluminal.shared.records.LobbyStatus;
@@ -28,12 +25,12 @@ public class LobbyListController implements Initializable, Observer {
         scaleTl.setToY(1);
         scaleTl.play();
 
-        lobbyList.getItems().add(new LobbyStatusComponent("testLobby", "wefwef", 3,8, LobbyStatus.OPEN));
+        lobbyList.getItems().add(new LobbyStatusComponent("testLobby", "wefwef", 3, 8, LobbyStatus.OPEN));
 
     }
 
     @FXML
-    public void closePressed(){
+    public void closePressed() {
         main.onLobbyListClose();
     }
 

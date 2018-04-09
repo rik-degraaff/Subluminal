@@ -29,7 +29,7 @@ public class UserListController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if(!isBoardShown){
+        if (!isBoardShown) {
             playerBoard.setVisible(false);
         }
 
@@ -39,7 +39,7 @@ public class UserListController implements Initializable {
         //removePlayerStatus("test");
     }
 
-    public void addPlayerStatus(String username, PlayerStatus status){
+    public void addPlayerStatus(String username, PlayerStatus status) {
 
         PlayerStatusComponent playerStatus = new PlayerStatusComponent("test", PlayerStatus.INGAME);
         PlayerStatusComponent playerStatus1 = new PlayerStatusComponent("test", PlayerStatus.INGAME);
@@ -53,31 +53,33 @@ public class UserListController implements Initializable {
 
 
 /**    private void removePlayerStatus(String username){
-        for(PlayerStatusComponent player: playerBoard.getItems()){
-            if(player.getText().equals(username)){
-                Platform.runLater(() ->{
-                    playerBoard.getItems().remove(player);
+ for(PlayerStatusComponent player: playerBoard.getItems()){
+ if(player.getText().equals(username)){
+ Platform.runLater(() ->{
+ playerBoard.getItems().remove(player);
 
-                });
-                break;
-            }
-        }
-    }**/
+ });
+ break;
+ }
+ }
+ }**/
 
- /**   public void updatePlayerStatus(String username, PlayerStatusComponent status){
-        for(Label player: playerBoard.getItems()){
-            if(player.getText().equals(username)){
-                player.setTextFill(Color.web(getStatusColor(status)));
-            }
-        }
-    }**/
+    /**
+     * public void updatePlayerStatus(String username, PlayerStatusComponent status){
+     * for(Label player: playerBoard.getItems()){
+     * if(player.getText().equals(username)){
+     * player.setTextFill(Color.web(getStatusColor(status)));
+     * }
+     * }
+     * }
+     **/
 
     public void switchPlayerBoard(ActionEvent actionEvent) {
-        if(isBoardShown){
+        if (isBoardShown) {
             playerBoard.setVisible(false);
             isBoardShown = false;
             updaterPlayerBoard.setText("Show Players");
-        }else {
+        } else {
             playerBoard.setVisible(true);
             isBoardShown = true;
             updaterPlayerBoard.setText("Hide Players");

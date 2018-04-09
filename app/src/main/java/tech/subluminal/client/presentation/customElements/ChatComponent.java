@@ -10,7 +10,7 @@ public class ChatComponent extends AnchorPane {
 
     private ChatController controller;
 
-    public ChatComponent(){
+    public ChatComponent() {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(
                 "tech.subluminal.client.presentation.view.ChatView.fxml"));
         fxmlLoader.setRoot(this);
@@ -23,7 +23,7 @@ public class ChatComponent extends AnchorPane {
         }
     }
 
-    public ChatController getController(){
+    public ChatController getController() {
         return controller;
     }
 }

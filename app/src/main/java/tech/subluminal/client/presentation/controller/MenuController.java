@@ -93,18 +93,18 @@ public class MenuController implements Initializable, Observer {
     }
 
     @FXML
-    private void joinPressed(ActionEvent e){
+    private void joinPressed(ActionEvent e) {
         main.onJoinHandle();
 
     }
 
     @FXML
-    private void hostPressed(ActionEvent e){
+    private void hostPressed(ActionEvent e) {
         main.onHostHandle();
     }
 
     @FXML
-    private void settingPressed(ActionEvent e){
+    private void settingPressed(ActionEvent e) {
         main.onSettingOpen();
     }
 

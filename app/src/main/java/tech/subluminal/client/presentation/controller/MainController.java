@@ -1,12 +1,7 @@
 package tech.subluminal.client.presentation.controller;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import tech.subluminal.client.presentation.customElements.BackgroundComponent;
@@ -14,87 +9,90 @@ import tech.subluminal.client.presentation.customElements.LobbyListComponent;
 import tech.subluminal.client.presentation.customElements.MenuComponent;
 import tech.subluminal.client.presentation.customElements.SettingsComponent;
 
-public class MainController implements Initializable{
+import java.net.URL;
+import java.util.ResourceBundle;
 
-  @FXML
-  private Parent chatView;
-  @FXML
-  private ChatController chatViewController;
+public class MainController implements Initializable {
 
-  @FXML
-  private Parent userListView;
-  @FXML
-  private UserListController userListController;
+    @FXML
+    private Parent chatView;
+    @FXML
+    private ChatController chatViewController;
 
-  @FXML
-  private AnchorPane spaceBackgroundDock;
+    @FXML
+    private Parent userListView;
+    @FXML
+    private UserListController userListController;
 
-  @FXML
-  private AnchorPane chatDock;
+    @FXML
+    private AnchorPane spaceBackgroundDock;
 
-  @FXML
-  private AnchorPane menuDock;
+    @FXML
+    private AnchorPane chatDock;
 
-  private BackgroundComponent background;
+    @FXML
+    private AnchorPane menuDock;
 
-  private MenuComponent menu;
+    private BackgroundComponent background;
 
-  private LobbyListComponent lobbyList;
+    private MenuComponent menu;
 
-  private SettingsComponent settings;
+    private LobbyListComponent lobbyList;
 
-
-  @Override
-  public void initialize(URL location, ResourceBundle resources) {
-    background = new BackgroundComponent(2000);
-    spaceBackgroundDock.getChildren().add(background);
-
-    menu = new MenuComponent(this);
-    lobbyList = new LobbyListComponent(this);
-    settings = new SettingsComponent(this);
-
-    menuDock.getChildren().add(menu);
-  }
+    private SettingsComponent settings;
 
 
-  public MainController getController(){
-    return this;
-  }
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        background = new BackgroundComponent(2000);
+        spaceBackgroundDock.getChildren().add(background);
 
-  public ChatController getChatController() {
-    return this.chatViewController;
-  }
+        menu = new MenuComponent(this);
+        lobbyList = new LobbyListComponent(this);
+        settings = new SettingsComponent(this);
 
-  public void onWindowResizeHandle(int diffX, int diffY) {
-    background.onWindowResize(diffX,diffY);
-  }
-
-  public void onJoinHandle() {
-    menuDock.getChildren().remove(menu);
-
-    menuDock.getChildren().add(lobbyList);
-  }
-
-  public void onHostHandle() {
-
-  }
-
-  public void onSettingOpen() {
-    menuDock.getChildren().forEach(i -> i.setVisible(false));
+        menuDock.getChildren().add(menu);
+    }
 
 
-    menuDock.getChildren().add(settings);
-  }
+    public MainController getController() {
+        return this;
+    }
 
-  public void onSettingsClose() {
-    menuDock.getChildren().remove(settings);
+    public ChatController getChatController() {
+        return this.chatViewController;
+    }
 
-    menuDock.getChildren().forEach(i -> i.setVisible(true));
-  }
+    public void onWindowResizeHandle(int diffX, int diffY) {
+        background.onWindowResize(diffX, diffY);
+    }
 
-  public void onLobbyListClose(){
-    menuDock.getChildren().remove(lobbyList);
+    public void onJoinHandle() {
+        menuDock.getChildren().remove(menu);
 
-    menuDock.getChildren().add(menu);
-  }
+        menuDock.getChildren().add(lobbyList);
+    }
+
+    public void onHostHandle() {
+
+    }
+
+    public void onSettingOpen() {
+        menuDock.getChildren().forEach(i -> i.setVisible(false));
+
+
+        menuDock.getChildren().add(settings);
+    }
+
+    public void onSettingsClose() {
+        menuDock.getChildren().remove(settings);
+
+        menuDock.getChildren().forEach(i -> i.setVisible(true));
+    }
+
+    public void onLobbyListClose() {
+        menuDock.getChildren().remove(lobbyList);
+
+        menuDock.getChildren().add(menu);
+    }
 }

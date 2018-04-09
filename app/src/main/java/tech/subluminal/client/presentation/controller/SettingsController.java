@@ -6,7 +6,7 @@ import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class SettingsController implements Observer,Initializable {
+public class SettingsController implements Observer, Initializable {
 
     private MainController main;
 

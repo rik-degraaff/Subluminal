@@ -2,14 +2,13 @@ package tech.subluminal.client.presentation.customElements;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
-import tech.subluminal.client.presentation.controller.LobbyListController;
 import tech.subluminal.client.presentation.controller.MainController;
 import tech.subluminal.client.presentation.controller.SettingsController;
 
 import java.io.IOException;
 
 public class SettingsComponent extends AnchorPane {
-    public SettingsComponent(MainController mainController){
+    public SettingsComponent(MainController mainController) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("SettingsView.fxml"));
         fxmlLoader.setRoot(this);
         //fxmlLoader.setController(this);

@@ -8,16 +8,16 @@ import tech.subluminal.shared.net.Connection;
  */
 public class LobbyManager {
 
-  private final LobbyStore lobbyStore;
-  private final Connection connection;
+    private final LobbyStore lobbyStore;
+    private final Connection connection;
 
-  public LobbyManager(LobbyStore lobbyStore, Connection connection) {
-    this.lobbyStore = lobbyStore;
-    this.connection = connection;
-  }
+    public LobbyManager(LobbyStore lobbyStore, Connection connection) {
+        this.lobbyStore = lobbyStore;
+        this.connection = connection;
+    }
 
-  //TODO: React to packeage from connection
-  //TODO: Presenter/Delegate: UserMangager
-  //TODO: Take requests from Presenter
+    //TODO: React to packeage from connection
+    //TODO: Presenter/Delegate: UserMangager
+    //TODO: Take requests from Presenter
 
 }

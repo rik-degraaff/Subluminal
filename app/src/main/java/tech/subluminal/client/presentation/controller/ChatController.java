@@ -3,24 +3,25 @@ package tech.subluminal.client.presentation.controller;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableListBase;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-
-import java.net.URL;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ResourceBundle;
-
 import tech.subluminal.client.presentation.ChatPresenter;
 import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.stores.ReadOnlyUserStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.records.Channel;
+
+import java.net.URL;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 public class ChatController implements ChatPresenter, UserPresenter, Initializable {
 
@@ -69,16 +70,16 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     }
 
     public void updateFilter(ActionEvent e) {
-        if(isGlobalShown.isSelected()){
+        if (isGlobalShown.isSelected()) {
             filteredList.setPredicate(l -> true);
-        }else{
+        } else {
             filteredList.setPredicate(l -> !l.getStyleClass().contains("global-message"));
         }
 
     }
 
     private void scrollToBottom() {
-        chatHistory.scrollTo(chatHistory.getItems().size()-1);
+        chatHistory.scrollTo(chatHistory.getItems().size() - 1);
     }
 
     public void sendMessage(ActionEvent actionEvent) {

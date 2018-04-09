@@ -7,36 +7,36 @@ import tech.subluminal.shared.stores.records.User;
  */
 public class InMemoryUserStore implements UserStore {
 
-  private final Object currentUserLock = new Object();
-  private User currentUser;
+    private final Object currentUserLock = new Object();
+    private User currentUser;
 
-  /**
-   * Grabs the current User.
-   *
-   * @return the current user.
-   */
-  @Override
-  public User getCurrentUser() {
-    synchronized (currentUserLock) {
-      return new User(currentUser.getUsername(), currentUser.getID());
+    /**
+     * Grabs the current User.
+     *
+     * @return the current user.
+     */
+    @Override
+    public User getCurrentUser() {
+        synchronized (currentUserLock) {
+            return new User(currentUser.getUsername(), currentUser.getID());
+        }
     }
-  }
 
-  /**
-   * Sets the current User.
-   *
-   * @param user to be set as current user.
-   */
-  @Override
-  public void setCurrentUser(User user) {
-    synchronized (currentUserLock) {
-      currentUser = user;
+    /**
+     * Sets the current User.
+     *
+     * @param user to be set as current user.
+     */
+    @Override
+    public void setCurrentUser(User user) {
+        synchronized (currentUserLock) {
+            currentUser = user;
+        }
     }
-  }
 
-  @Override
-  public User getUserByUsername(String username) {
-    //TODO implement this
-    return null;
-  }
+    @Override
+    public User getUserByUsername(String username) {
+        //TODO implement this
+        return null;
+    }
 }

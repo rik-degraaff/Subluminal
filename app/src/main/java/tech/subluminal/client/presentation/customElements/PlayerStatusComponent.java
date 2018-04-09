@@ -3,7 +3,6 @@ package tech.subluminal.client.presentation.customElements;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import tech.subluminal.shared.records.PlayerStatus;
 
@@ -17,10 +16,11 @@ public class PlayerStatusComponent extends HBox {
 
     /**
      * Custom Compenent to render the player status.
+     *
      * @param username is the name of the player.
-     * @param status is the active status of the player.
+     * @param status   is the active status of the player.
      */
-    public PlayerStatusComponent(String username, PlayerStatus status){
+    public PlayerStatusComponent(String username, PlayerStatus status) {
         HBox hbox = new HBox();
 
         statusBox = new Rectangle();
@@ -40,9 +40,10 @@ public class PlayerStatusComponent extends HBox {
 
     /**
      * Updates the status of a Player on request.
+     *
      * @param status
      */
-    public void updateStatus(PlayerStatus status){
+    public void updateStatus(PlayerStatus status) {
         statusBox.setFill(status.getColor());
     }
 

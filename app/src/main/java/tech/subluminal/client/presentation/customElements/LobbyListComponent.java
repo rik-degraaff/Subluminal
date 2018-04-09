@@ -2,14 +2,13 @@ package tech.subluminal.client.presentation.customElements;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
-import sun.applet.Main;
 import tech.subluminal.client.presentation.controller.LobbyListController;
 import tech.subluminal.client.presentation.controller.MainController;
 
 import java.io.IOException;
 
 public class LobbyListComponent extends AnchorPane {
-    public LobbyListComponent(MainController mainController){
+    public LobbyListComponent(MainController mainController) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LobbyListView.fxml"));
         fxmlLoader.setRoot(this);
         //fxmlLoader.setController(this);
