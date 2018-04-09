@@ -45,6 +45,7 @@ public class UserManager implements UserPresenter.Delegate {
     private void attachHandlers() {
         connection.registerHandler(LoginRes.class, LoginRes::fromSON, this::onLogin);
         connection.registerHandler(UsernameRes.class, UsernameRes::fromSON, this::onUsernameChanged);
+        //TODO: implement this
     }
 
     private String getCurrentId() {
