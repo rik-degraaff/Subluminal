@@ -1,7 +1,10 @@
+package tech.subluminal.shared.messages;
+
+import static org.junit.Assert.assertNotNull;
+
 import java.util.Arrays;
 import org.junit.Test;
 import tech.subluminal.client.stores.records.game.Player;
-import tech.subluminal.shared.messages.GameStateDelta;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONParsingError;
@@ -10,15 +13,10 @@ import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.stores.records.game.Star;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+public class GameStateDeltaTest {
 
-public class TestTests  {
-  
   @Test
-  public void StringTest() {
-    String s = "Test";
-    assertEquals(s, "Test");
+  public void stringifyAndParseGameStateDelta() {
     GameStateDelta delta = new GameStateDelta();
     delta.addPlayer(new Player("1234",
         new Ship(new Coordinates(1.0, 2.3), "4321", Arrays.asList("1", "2", "3")),

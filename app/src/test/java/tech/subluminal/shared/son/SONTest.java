@@ -191,56 +191,70 @@ public class SONTest {
 
   @Test
   public void iterateOverSONList() {
-    SONList list = new SONList();
+    for (int i = 0; i < 10; i++) {
+      SONList list = new SONList();
 
-    List<Integer> intList = Arrays.asList(1, 2, 3, 4, 5, 6);
-    List<String> stringList = Arrays.asList("1", "2", "3", "4", "5", "6");
-    List<Boolean> boolList = Arrays.asList(true, true, false, true, false, false);
-    List<Double> doubleList = Arrays.asList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
-    List<SON> sonList = Arrays.asList(new SON(), new SON(), new SON(), new SON(), new SON());
-    List<SONList> listList = Arrays.asList(new SONList(), new SONList(), new SONList());
+      List<Integer> intList = Arrays.asList(1, 2, 3, 4, 5, 6);
+      List<String> stringList = Arrays.asList("1", "2", "3", "4", "5", "6");
+      List<Boolean> boolList = Arrays.asList(true, true, false, true, false, false);
+      List<Double> doubleList = Arrays.asList(1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
+      List<SON> sonList = Arrays.asList(new SON(), new SON(), new SON(), new SON(), new SON());
+      List<SONList> listList = Arrays.asList(new SONList(), new SONList(), new SONList());
 
-    List<Thread> threads = Arrays.asList(
-        new Thread(() -> intList.forEach(x -> {
-          list.add(x);
-          Thread.yield();
-        })),
-        new Thread(() -> stringList.forEach(x -> {
-          list.add(x);
-          Thread.yield();
-        })),
-        new Thread(() -> boolList.forEach(x -> {
-          list.add(x);
-          Thread.yield();
-        })),
-        new Thread(() -> doubleList.forEach(x -> {
-          list.add(x);
-          Thread.yield();
-        })),
-        new Thread(() -> sonList.forEach(x -> {
-          list.add(x);
-          Thread.yield();
-        })),
-        new Thread(() -> listList.forEach(x -> {
-          list.add(x);
-          Thread.yield();
-        }))
-    );
+      List<Thread> threads = Arrays.asList(
+          new Thread(() -> intList.forEach(x -> {
+            synchronized (list) {
+              list.add(x);
+            }
+            Thread.yield();
+          })),
+          new Thread(() -> stringList.forEach(x -> {
+            synchronized (list) {
+              list.add(x);
+            }
+            Thread.yield();
+          })),
+          new Thread(() -> boolList.forEach(x -> {
+            synchronized (list) {
+              list.add(x);
+            }
+            Thread.yield();
+          })),
+          new Thread(() -> doubleList.forEach(x -> {
+            synchronized (list) {
+              list.add(x);
+            }
+            Thread.yield();
+          })),
+          new Thread(() -> sonList.forEach(x -> {
+            synchronized (list) {
+              list.add(x);
+            }
+            Thread.yield();
+          })),
+          new Thread(() -> listList.forEach(x -> {
+            synchronized (list) {
+              list.add(x);
+            }
+            Thread.yield();
+          }))
+      );
 
-    threads.forEach(Thread::start);
-    try {
-      for (Thread thread : threads) {
-        thread.join();
+      threads.forEach(Thread::start);
+      try {
+        for (Thread thread : threads) {
+          thread.join();
+        }
+      } catch (InterruptedException e) {
+        e.printStackTrace();
       }
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
 
-    assertEquals(list.ints().stream().collect(Collectors.toList()), intList);
-    assertEquals(list.strings().stream().collect(Collectors.toList()), stringList);
-    assertEquals(list.doubles().stream().collect(Collectors.toList()), doubleList);
-    assertEquals(list.booleans().stream().collect(Collectors.toList()), boolList);
-    assertEquals(list.objects().stream().collect(Collectors.toList()), sonList);
-    assertEquals(list.lists().stream().collect(Collectors.toList()), listList);
+      assertEquals(intList, list.ints().stream().collect(Collectors.toList()));
+      assertEquals(stringList, list.strings().stream().collect(Collectors.toList()));
+      assertEquals(doubleList, list.doubles().stream().collect(Collectors.toList()));
+      assertEquals(boolList, list.booleans().stream().collect(Collectors.toList()));
+      assertEquals(sonList, list.objects().stream().collect(Collectors.toList()));
+      assertEquals(listList, list.lists().stream().collect(Collectors.toList()));
+    }
   }
 }
