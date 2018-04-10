@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.net.ConnectionManager;
 import tech.subluminal.shared.net.SocketConnection;
@@ -33,6 +34,7 @@ public class SocketConnectionManager implements ConnectionManager {
   private void portListenLoop() {
     try {
       System.out.println("Waiting for connection on port " + serverSocket.getLocalPort() + "...");
+      Logger.info("Waiting for connection on port " + serverSocket.getLocalPort() + "...");
 
       while (!stop) {
         Socket socket = serverSocket.accept();

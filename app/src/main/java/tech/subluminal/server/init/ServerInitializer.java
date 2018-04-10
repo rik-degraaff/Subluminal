@@ -1,5 +1,6 @@
 package tech.subluminal.server.init;
 
+import org.pmw.tinylog.Logger;
 import tech.subluminal.server.logic.ChatManager;
 import tech.subluminal.server.logic.ConnectionMessageDistributor;
 import tech.subluminal.server.logic.MessageDistributor;
@@ -23,6 +24,8 @@ public class ServerInitializer {
    * @param port to bind the server to.
    */
   public static void init(int port) {
+    Logger.info("Starting server ...");
+
     ConnectionManager connectionManager = new SocketConnectionManager(port);
 
     MessageDistributor messageDistributor = new ConnectionMessageDistributor(connectionManager);

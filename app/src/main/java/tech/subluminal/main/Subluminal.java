@@ -3,6 +3,7 @@ package tech.subluminal.main;
 import javafx.application.Application;
 import tech.subluminal.client.init.ClientInitializer;
 import tech.subluminal.server.init.ServerInitializer;
+import org.pmw.tinylog.Logger;
 
 /**
  * The main class of the Subluminal project containing the main function which starts the program.
@@ -14,6 +15,8 @@ public class Subluminal{
    * @param args are the command line arguments.
    */
   public static void main(String[] args) {
+    Logger.info("Starting application ...");
+
     if (args.length < 2) {
       invalidArguments();
     }

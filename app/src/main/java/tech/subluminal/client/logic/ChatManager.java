@@ -1,5 +1,6 @@
 package tech.subluminal.client.logic;
 
+import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.ChatPresenter;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.messages.ChatMessageIn;
@@ -43,6 +44,7 @@ public class ChatManager implements ChatPresenter.Delegate {
         break;
       default:
         System.err.println("The object did not contain a valid channel.");
+        Logger.error("The object did not contain a valid channel.");
     }
   }
 

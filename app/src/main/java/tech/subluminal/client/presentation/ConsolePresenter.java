@@ -3,6 +3,7 @@ package tech.subluminal.client.presentation;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.client.stores.ReadOnlyUserStore;
 
 /**
@@ -123,6 +124,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
 
     synchronized (out) {
       out.println("Successfully logged in as " + username);
+      Logger.info("Successfully logged in as " + username);
     }
   }
 
@@ -130,6 +132,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
   public void logoutSucceeded() {
     synchronized (out) {
       out.println("Successfully logged out.");
+      Logger.info("Successfully logged out.");
     }
     keepRunning = false;
   }
@@ -140,6 +143,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
 
     synchronized (out) {
       out.println("Successfully changed name to " + username);
+      Logger.info("Successfully changed name to " + username);
     }
   }
 
@@ -160,6 +164,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
   @Override
   public void globalMessageReceived(String message, String username) {
     out.println("Server|" + username + ": " + message);
+    Logger.trace("Server|" + username + ": " + message);
   }
 
   /**
@@ -171,6 +176,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
   @Override
   public void whisperMessageReceived(String message, String username) {
     out.println(username + "@you" + ": " + message);
+    Logger.trace(username + "@you" + ": " + message);
   }
 
   /**
@@ -182,6 +188,7 @@ public class ConsolePresenter implements UserPresenter, ChatPresenter {
   @Override
   public void gameMessageReceived(String message, String username) {
     out.println("game|" + username + ": " + message);
+    Logger.trace("game|" + username + ": " + message);
   }
 
 

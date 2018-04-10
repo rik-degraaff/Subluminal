@@ -9,6 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.client.logic.ChatManager;
 import tech.subluminal.client.logic.PingManager;
 import tech.subluminal.client.logic.UserManager;
@@ -37,6 +38,8 @@ public class ClientInitializer extends Application{
    * @param username initial username to request from the server.
    */
   public static void init(String server, int port, String username) {
+    Logger.info("Starting client ...");
+
     Socket socket = null;
     try {
       socket = new Socket(server, port);

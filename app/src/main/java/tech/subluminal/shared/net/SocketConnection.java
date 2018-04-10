@@ -11,6 +11,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.function.Consumer;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONConverter;
@@ -34,8 +35,9 @@ public class SocketConnection implements Connection {
     try {
       handler.accept(converter.convert(son));
     } catch (SONConversionError sonConversionError) {
-      System.err.println(
-          "Structure of " + sonConversionError.getMessage() + "packets was incorrect, son.");
+      //System.err.println(
+      //    "Structure of " + sonConversionError.getMessage() + "packets was incorrect, son.");
+      Logger.warn("Structure of " + sonConversionError.getMessage() + "packets was incorrect, son.");
     }
   }
 
@@ -60,9 +62,11 @@ public class SocketConnection implements Connection {
           }
         } catch (SONParsingError e) {
           //wrong format
-          System.out.println("Parsing of " + e.getMessage() + "failed"); //TODO: log better
+          //System.out.println("Parsing of " + e.getMessage() + "failed");
+          Logger.warn("Parsing of " + e.getMessage() + "failed");
         } catch (NoSuchElementException e) {
           System.out.println("Socket was forcefully closed.");
+          Logger.warn("Socket was forcefully closed.");
           stop = true;
           System.exit(0); //FIXME: cleaner way
         }
@@ -70,6 +74,7 @@ public class SocketConnection implements Connection {
     } catch (IOException e) {
       //TODO: Handle client disconnect
       System.err.println(e.toString());
+      Logger.error(e);
       System.exit(1);
     }
     closeListeners.forEach(Runnable::run);
@@ -109,6 +114,7 @@ public class SocketConnection implements Connection {
       synchronized (out) {
         //concatenate type and message and send on a journey
         new PrintStream(out).println(typeName + " " + msg);
+        Logger.debug(typeName + " " + msg);
       }
     } catch (IOException e) {
       e.printStackTrace();
