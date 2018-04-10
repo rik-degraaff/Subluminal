@@ -13,7 +13,7 @@ import tech.subluminal.shared.util.Synchronized;
 public class IdentifiableCollection<E extends Identifiable> implements
     ReadOnlyIdentifiableCollection<E> {
 
-  private Synchronized<Map<String, Synchronized<E>>> syncMap = new Synchronized<>(new HashMap<>());
+  protected Synchronized<Map<String, Synchronized<E>>> syncMap = new Synchronized<>(new HashMap<>());
 
   /**
    * @return a synchronized collection of synchronized entities which are stored in this collection.
