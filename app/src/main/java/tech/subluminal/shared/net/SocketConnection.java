@@ -50,7 +50,6 @@ public class SocketConnection implements Connection {
         try {
           //Get the next message and separate type and SON
           String message = scanner.nextLine();
-          System.out.println(message);
           String[] parts = message.split(" ", 2);
           if (parts.length == 2) {
             //parse in the message to SON
