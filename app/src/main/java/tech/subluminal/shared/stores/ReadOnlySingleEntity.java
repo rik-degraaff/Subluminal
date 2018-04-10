@@ -1,5 +1,6 @@
 package tech.subluminal.shared.stores;
 
+import java.util.function.Function;
 import tech.subluminal.shared.util.Synchronized;
 
 import java.util.Optional;
