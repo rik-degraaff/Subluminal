@@ -3,12 +3,13 @@ package tech.subluminal.main;
 import javafx.application.Application;
 import tech.subluminal.client.init.ClientInitializer;
 import tech.subluminal.server.init.ServerInitializer;
+import picocli.CommandLine.Option;
+import picocli.CommandLine.Parameters;
 
 /**
  * The main class of the Subluminal project containing the main function which starts the program.
  */
 public class Subluminal{
-
   /**
    * Parses the command line arguments and calls the relevant packages.
    * @param args are the command line arguments.
