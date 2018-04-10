@@ -5,15 +5,18 @@ import tech.subluminal.client.init.ClientInitializer;
 import tech.subluminal.server.init.ServerInitializer;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
+import picocli.CommandLine.Command;
 
 /**
  * The main class of the Subluminal project containing the main function which starts the program.
  */
 public class Subluminal{
+  @Option()
   /**
    * Parses the command line arguments and calls the relevant packages.
    * @param args are the command line arguments.
    */
+
   public static void main(String[] args) {
     if (args.length < 2) {
       invalidArguments();
