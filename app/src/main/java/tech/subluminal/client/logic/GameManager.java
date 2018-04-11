@@ -9,11 +9,20 @@ import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.stores.records.game.Star;
 import tech.subluminal.shared.util.Synchronized;
 
+/**
+ * Listens to game state delta messages and updates the game state accordingly.
+ */
 public class GameManager {
 
   private final GameStore gameStore;
   private final Connection connection;
 
+  /**
+   * Creates a new game manager with a specified game store and connection.
+   *
+   * @param gameStore the game store to update.
+   * @param connection the connection with which the game manager communicates.
+   */
   public GameManager(GameStore gameStore, Connection connection) {
     this.gameStore = gameStore;
     this.connection = connection;
