@@ -32,6 +32,17 @@ public abstract class GameObject extends Identifiable {
     this.coordinates = coordinates;
   }
 
+  /**
+   * Calculates the Euclidian distance between this object and another game object.
+   *
+   * @param other the other object to calculate the distance to.
+   * @return the distance calculated with Pythagorean theorem.
+   */
+  public double getDistanceFrom(GameObject other) {
+    return Math.sqrt(Math.pow(coordinates.getX() - other.getCoordinates().getX(), 2)
+        + Math.pow(coordinates.getY() - other.getCoordinates().getY(), 2));
+  }
+
   protected void loadFromSON(SON son) throws SONConversionError {
     SON identifiable = son.getObject(IDENTIFIABLE_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, IDENTIFIABLE_KEY));
