@@ -54,6 +54,7 @@ public class ClientInitializer extends Application {
         ChatController presenter = controller.getChatController();
         presenter.setUserStore(userStore);
 
+
         UserManager userManager = new UserManager(connection, userStore, presenter);
         new ChatManager(userStore, presenter, connection);
         new PingManager(connection, pingStore);

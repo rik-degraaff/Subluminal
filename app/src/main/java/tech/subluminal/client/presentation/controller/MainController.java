@@ -5,6 +5,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import tech.subluminal.client.presentation.customElements.*;
+import tech.subluminal.client.stores.UserStore;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -54,7 +55,6 @@ public class MainController implements Initializable {
         menuDock.getChildren().add(menu);
     }
 
-
     public MainController getController() {
         return this;
     }
@@ -77,8 +77,9 @@ public class MainController implements Initializable {
     public void onHostOpenHandle() {
         menuDock.getChildren().remove(menu);
 
-        menuDock.getChildren().add(lobbyHost);
-        lobbyHost.onWindowOpen();
+        WindowContainerComponent window = new WindowContainerComponent(this, lobbyHost);
+
+        menuDock.getChildren().add(window);
 
     }
 
@@ -97,6 +98,12 @@ public class MainController implements Initializable {
 
     public void onLobbyListClose() {
         menuDock.getChildren().remove(lobbyList);
+
+        menuDock.getChildren().add(menu);
+    }
+
+    public void onWindowClose(){
+        menuDock.getChildren().clear();
 
         menuDock.getChildren().add(menu);
     }
