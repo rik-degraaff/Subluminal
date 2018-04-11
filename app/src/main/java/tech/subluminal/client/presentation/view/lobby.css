@@ -96,8 +96,18 @@
 
 .list-cell {
   -fx-background-color: black;
+  -fx-padding: 0 0 0 0;
 }
 
 .list-cell:filled:hover {
   -fx-background-color: black;
+}
+
+.list-view {
+  -fx-background-insets: 0;
+  -fx-padding: 0;
+}
+
+.label > .list-view {
+  -fx-background-color: pink;
 }

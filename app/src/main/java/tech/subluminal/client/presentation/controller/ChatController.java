@@ -3,6 +3,7 @@ package tech.subluminal.client.presentation.controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -54,13 +55,12 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
   public void addMessageChat(String message, Channel channel) {
     Platform.runLater(() -> {
-      Label msg = new Label(message + "    ");
-      Double padding = chatHistory.getPadding().getLeft() + chatHistory.getPadding().getRight() + 50;
-      Double width = chatHistory.widthProperty().doubleValue();
-      msg.prefWidthProperty().bind(new ObservableMappingValue<>(chatHistory.widthProperty(), w -> w.intValue() - 70));
-      //msg.prefWidthProperty().bind(chatHistory.widthProperty());
+      Label msg = new Label(message);
       msg.setWrapText(true);
-      msg.setPadding(new Insets(0, 0, 0, 0));
+      Insets padding = chatHistory.getPadding();
+      msg.maxWidthProperty().bind(Bindings.createDoubleBinding(() -> chatHistory.getWidth() - padding.getLeft() - padding.getRight() - 1,
+              chatHistory.widthProperty(), chatHistory.paddingProperty()));
+      //msg.prefWidthProperty().bind(chatHistory.widthProperty());
 
       msg.getStyleClass().add(channel.toString().toLowerCase() + "-message");
       chatList.add(msg);
