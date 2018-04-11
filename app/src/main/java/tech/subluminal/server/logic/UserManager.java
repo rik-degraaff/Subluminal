@@ -68,7 +68,7 @@ public class UserManager {
 
     connection.sendMessage(new UsernameRes(username));
 
-    distributor.sendMessageToAllExcept(new PlayerUpdate(id, username), id);
+    distributor.broadcast(new PlayerUpdate(id, username));
   }
 
   /**

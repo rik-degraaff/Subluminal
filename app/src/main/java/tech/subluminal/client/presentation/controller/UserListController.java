@@ -1,5 +1,6 @@
 package tech.subluminal.client.presentation.controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -7,15 +8,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
+import tech.subluminal.client.presentation.ChatPresenter;
+import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.presentation.customElements.PlayerStatusComponent;
+import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.records.PlayerStatus;
+import tech.subluminal.shared.util.MapperList;
 
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 
-public class UserListController implements Initializable {
+public class UserListController implements Initializable, UserPresenter {
     @FXML
     private ListView<PlayerStatusComponent> playerBoard;
     @FXML
@@ -26,6 +31,9 @@ public class UserListController implements Initializable {
     private LinkedList<Label> players;
 
     private boolean isBoardShown = false;
+    private UserStore userStore;
+
+    private UserPresenter.Delegate userDelegate;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -85,6 +93,55 @@ public class UserListController implements Initializable {
             updaterPlayerBoard.setText("Hide Players");
         }
 
+    }
+
+    public void setUserStore(UserStore userStore) {
+        this.userStore = userStore;
+
+        Platform.runLater(() -> {
+            playerBoard.setItems(new MapperList<>(userStore.users().observableList(),
+                    user -> new PlayerStatusComponent(user.getUsername(), PlayerStatus.ONLINE)));
+        });
+
+    }
+
+    @Override
+    public void loginSucceeded() {
+
+    }
+
+    @Override
+    public void logoutSucceeded() {
+
+    }
+
+    @Override
+    public void nameChangeSucceeded() {
+
+    }
+
+    @Override
+    public void setUserDelegate(Delegate delegate) {
+
+    }
+
+    @Override
+    public void onPlayerJoin(String username) {
+
+    }
+
+    @Override
+    public void onPlayerLeave(String username) {
+
+    }
+
+    @Override
+    public void onPlayerUpdate(String oldUsername, String newUsername) {
+
+    }
+
+    public UserListController getController(){
+        return this;
     }
 
 }

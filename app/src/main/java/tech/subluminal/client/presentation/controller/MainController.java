@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import tech.subluminal.client.presentation.customElements.*;
 import tech.subluminal.client.stores.UserStore;
+import tech.subluminal.shared.records.PlayerStatus;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -20,7 +21,7 @@ public class MainController implements Initializable {
     @FXML
     private Parent userListView;
     @FXML
-    private UserListController userListController;
+    private UserListController userListViewController;
 
     @FXML
     private AnchorPane spaceBackgroundDock;
@@ -40,6 +41,14 @@ public class MainController implements Initializable {
     private SettingsComponent settings;
 
     private LobbyHostComponent lobbyHost;
+
+    private UserStore userStore;
+
+    public void setUserStore(UserStore userStore) {
+        this.userStore = userStore;
+
+        userListViewController.setUserStore(userStore);
+    }
 
 
     @Override
@@ -63,15 +72,19 @@ public class MainController implements Initializable {
         return this.chatViewController;
     }
 
+    public UserListController getUserListController() { return  this.userListViewController;}
+
     public void onWindowResizeHandle(int diffX, int diffY) {
         background.onWindowResize(diffX, diffY);
     }
 
     public void onJoinHandle() {
-        menuDock.getChildren().remove(menu);
+        menuDock.getChildren().clear();
 
-        menuDock.getChildren().add(lobbyList);
-        lobbyList.onWindowOpen();
+        WindowContainerComponent window = new WindowContainerComponent(this, lobbyList);
+
+        menuDock.getChildren().add(window);
+        window.onWindowOpen();
     }
 
     public void onHostOpenHandle() {
@@ -80,14 +93,17 @@ public class MainController implements Initializable {
         WindowContainerComponent window = new WindowContainerComponent(this, lobbyHost);
 
         menuDock.getChildren().add(window);
+        window.onWindowOpen();
 
     }
 
     public void onSettingOpenHandle() {
         menuDock.getChildren().forEach(i -> i.setVisible(false));
 
+        WindowContainerComponent window = new WindowContainerComponent(this, lobbyHost);
 
-        menuDock.getChildren().add(settings);
+        menuDock.getChildren().add(window);
+        window.onWindowOpen();
     }
 
     public void onSettingsOpenClose() {

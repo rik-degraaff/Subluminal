@@ -68,4 +68,5 @@ public class LobbyListController implements Initializable, Observer {
   public void setMainController(MainController main) {
     this.main = main;
   }
+
 }

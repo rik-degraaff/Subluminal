@@ -11,6 +11,7 @@ import tech.subluminal.client.logic.PingManager;
 import tech.subluminal.client.logic.UserManager;
 import tech.subluminal.client.presentation.controller.ChatController;
 import tech.subluminal.client.presentation.controller.MainController;
+import tech.subluminal.client.presentation.controller.UserListController;
 import tech.subluminal.client.stores.InMemoryPingStore;
 import tech.subluminal.client.stores.InMemoryUserStore;
 import tech.subluminal.client.stores.PingStore;
@@ -18,6 +19,7 @@ import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.messages.LogoutReq;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.net.SocketConnection;
+import tech.subluminal.shared.records.PlayerStatus;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -51,12 +53,13 @@ public class ClientInitializer extends Application {
         UserStore userStore = new InMemoryUserStore();
         PingStore pingStore = new InMemoryPingStore();
 
-        ChatController presenter = controller.getChatController();
-        presenter.setUserStore(userStore);
+        ChatController chatPresenter = controller.getChatController();
+        chatPresenter.setUserStore(userStore);
+        controller.setUserStore(userStore);
 
 
-        UserManager userManager = new UserManager(connection, userStore, presenter);
-        new ChatManager(userStore, presenter, connection);
+        UserManager userManager = new UserManager(connection, userStore, chatPresenter);
+        new ChatManager(userStore, chatPresenter, connection);
         new PingManager(connection, pingStore);
 
         userManager.start(username);

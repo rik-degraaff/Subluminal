@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
@@ -26,12 +28,14 @@ public class IdentifiableCollection<E extends Identifiable> implements
     ObservableMap<String, Synchronized<E>> obsMap = FXCollections.observableHashMap();
     obsMap.addListener((MapChangeListener<String, Synchronized<E>>) change -> {
       String key = change.getKey();
-      if (change.wasRemoved()) {
-        observableList.remove(key);
-      }
-      if (change.wasAdded()) {
-        observableList.add(key);
-      }
+      Platform.runLater(() -> {
+        if (change.wasRemoved()) {
+          observableList.remove(key);
+        }
+        if (change.wasAdded()) {
+          observableList.add(key);
+        }
+      });
     });
     syncMap = new StoredSynchronized<>(obsMap);
   }

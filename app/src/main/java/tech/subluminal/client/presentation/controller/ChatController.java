@@ -11,7 +11,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 import tech.subluminal.client.presentation.ChatPresenter;
 import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.stores.ReadOnlyUserStore;
@@ -20,15 +19,11 @@ import tech.subluminal.shared.records.Channel;
 import tech.subluminal.shared.stores.records.User;
 
 import java.net.URL;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 
 public class ChatController implements ChatPresenter, UserPresenter, Initializable {
 
-    @FXML
-    private VBox chatBox;
     @FXML
     private ListView<Label> chatHistory;
     @FXML
@@ -39,8 +34,6 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     private ReadOnlyUserStore userStore;
     private ChatPresenter.Delegate chatDelegate;
     private UserPresenter.Delegate userDelegate;
-
-    private List<Label> historyMessages = new LinkedList<>();
 
     private ObservableList<Label> chatList = FXCollections.observableArrayList();
     private FilteredList<Label> filteredList = new FilteredList<>(chatList);
@@ -261,6 +254,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     @Override
     public void onPlayerJoin(String username) {
         addMessageChat(username + " joined.", Channel.INFO);
+
     }
 
     @Override

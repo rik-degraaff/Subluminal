@@ -31,13 +31,13 @@
         <AnchorPane fx:id="chatDock" prefHeight="300.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0"
                     AnchorPane.rightAnchor="0.0">
             <children>
-                <fx:include fx:id="chatView" source="ChatView.fxml"/>
+                <fx:include fx:id="chatView" source="../customElements/ChatView.fxml"/>
             </children>
         </AnchorPane>
         <AnchorPane fx:id="playerBoardDock" prefHeight="200.0" prefWidth="400.0" AnchorPane.rightAnchor="0.0"
                     AnchorPane.topAnchor="100.0">
             <children>
-                <fx:include fx:id="userListView" source="UserListView.fxml"/>
+                <fx:include fx:id="userListView" source="../customElements/UserListView.fxml"/>
             </children>
         </AnchorPane>
 

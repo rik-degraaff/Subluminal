@@ -58,7 +58,6 @@ public class WindowContainerController implements Initializable {
     @FXML
     public void onWindowClose(){
         main.onWindowClose();
-        System.out.println("pressed");
     }
 
     public void setChild(Node node) {
