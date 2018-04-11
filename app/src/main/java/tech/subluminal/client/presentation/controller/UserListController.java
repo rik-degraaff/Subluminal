@@ -41,22 +41,11 @@ public class UserListController implements Initializable, UserPresenter {
             playerBoard.setVisible(false);
         }
 
-
-        addPlayerStatus("test", PlayerStatus.INGAME);
-        //updatePlayerStatus("test", PlayerStatusComponent.INGAME);
-        //removePlayerStatus("test");
     }
 
     public void addPlayerStatus(String username, PlayerStatus status) {
 
-        PlayerStatusComponent playerStatus = new PlayerStatusComponent("test", PlayerStatus.INGAME);
-        PlayerStatusComponent playerStatus1 = new PlayerStatusComponent("test", PlayerStatus.INGAME);
-        playerStatus1.updateStatus(PlayerStatus.ONLINE);
 
-        //playerBoard.getItems().add(playerTag);
-        playerBoard.getItems().add(playerStatus);
-        playerBoard.getItems().add(playerStatus1);
-        //players.add(playerTag);
     }
 
 
@@ -100,7 +89,7 @@ public class UserListController implements Initializable, UserPresenter {
 
         Platform.runLater(() -> {
             playerBoard.setItems(new MapperList<>(userStore.users().observableList(),
-                    user -> new PlayerStatusComponent(user.getUsername(), PlayerStatus.ONLINE)));
+                    user -> new PlayerStatusComponent(user.getUsername(), PlayerStatus.INGAME)));
         });
 
     }

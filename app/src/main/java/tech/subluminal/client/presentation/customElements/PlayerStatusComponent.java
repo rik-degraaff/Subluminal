@@ -31,10 +31,10 @@ public class PlayerStatusComponent extends HBox {
         hbox.setSpacing(5);
         hbox.getChildren().add(name);
         this.getChildren().add(hbox);
-        Platform.runLater(() -> {
-            statusBox.setHeight(this.getHeight());
-            statusBox.setWidth(20);
-        });
+
+        statusBox.setHeight(20);
+        statusBox.setWidth(20);
+        System.out.print("making label");
 
     }
 
