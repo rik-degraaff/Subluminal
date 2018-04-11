@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml"
-            xmlns="http://javafx.com/javafx"
-            fx:controller="tech.subluminal.client.presentation.controller.LobbyHostController"
-            prefHeight="400.0" prefWidth="600.0">
 
-</AnchorPane>
+
+<fx:root type="javafx.scene.layout.AnchorPane" fx:id="lobbyHost" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.subluminal.client.presentation.controller.LobbyHostController">
+   <children>
+      <VBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="481.0" prefWidth="800.0">
+               <children>
+                  <AnchorPane fx:id="lobbySettings" prefHeight="481.0" prefWidth="347.0" />
+                  <AnchorPane fx:id="playerList" layoutX="237.0" layoutY="10.0" prefHeight="481.0" prefWidth="347.0" />
+               </children>
+            </HBox>
+            <Button mnemonicParsing="false" text="Start Game" />
+         </children>
+      </VBox>
+   </children>
+</fx:root>

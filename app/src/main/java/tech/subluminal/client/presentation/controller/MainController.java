@@ -4,10 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
-import tech.subluminal.client.presentation.customElements.BackgroundComponent;
-import tech.subluminal.client.presentation.customElements.LobbyListComponent;
-import tech.subluminal.client.presentation.customElements.MenuComponent;
-import tech.subluminal.client.presentation.customElements.SettingsComponent;
+import tech.subluminal.client.presentation.customElements.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -41,6 +38,8 @@ public class MainController implements Initializable {
 
     private SettingsComponent settings;
 
+    private LobbyHostComponent lobbyHost;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -50,6 +49,7 @@ public class MainController implements Initializable {
         menu = new MenuComponent(this);
         lobbyList = new LobbyListComponent(this);
         settings = new SettingsComponent(this);
+        lobbyHost = new LobbyHostComponent(this);
 
         menuDock.getChildren().add(menu);
     }
@@ -74,18 +74,22 @@ public class MainController implements Initializable {
         lobbyList.onWindowOpen();
     }
 
-    public void onHostHandle() {
+    public void onHostOpenHandle() {
+        menuDock.getChildren().remove(menu);
+
+        menuDock.getChildren().add(lobbyHost);
+        lobbyHost.onWindowOpen();
 
     }
 
-    public void onSettingOpen() {
+    public void onSettingOpenHandle() {
         menuDock.getChildren().forEach(i -> i.setVisible(false));
 
 
         menuDock.getChildren().add(settings);
     }
 
-    public void onSettingsClose() {
+    public void onSettingsOpenClose() {
         menuDock.getChildren().remove(settings);
 
         menuDock.getChildren().forEach(i -> i.setVisible(true));

@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import tech.subluminal.client.presentation.controller.LobbyListController;
 import tech.subluminal.client.presentation.controller.MainController;
+import tech.subluminal.client.stores.LobbyStore;
 
 import java.io.IOException;
 
@@ -20,6 +21,7 @@ public class LobbyListComponent extends AnchorPane {
             fxmlLoader.load();
             controller = fxmlLoader.getController();
             controller.setMainController(mainController);
+            //controller.setLobbyStore(store);
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
