@@ -1,6 +1,5 @@
 package tech.subluminal.shared.util;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -9,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.TransformationList;
 
 public class MapperList<E, F> extends TransformationList<E, F> {
+
   private final Function<F, E> mapper;
 
   public MapperList(ObservableList<F> source, Function<F, E> mapper) {

@@ -2,23 +2,24 @@ package tech.subluminal.client.presentation;
 
 public interface LobbyPresenter {
 
-    void joinLobbySucceded();
+  void joinLobbySucceded();
 
-    void leaveLobbySucceded();
+  void leaveLobbySucceded();
 
-    void createLobbySucceded();
+  void createLobbySucceded();
 
-    void lobbyListReceived();
+  void lobbyListReceived();
 
-    void setLobbyDelegate(Delegate delegate);
+  void setLobbyDelegate(Delegate delegate);
 
-    interface Delegate{
-        void joinLobby(String id);
+  interface Delegate {
 
-        void leaveLobby();
+    void joinLobby(String id);
 
-        void createLobby(String name);
+    void leaveLobby();
 
-        void getLobbyList();
-    }
+    void createLobby(String name);
+
+    void getLobbyList();
+  }
 }

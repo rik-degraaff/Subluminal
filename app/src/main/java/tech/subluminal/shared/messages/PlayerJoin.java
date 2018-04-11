@@ -7,26 +7,26 @@ import tech.subluminal.shared.stores.records.User;
 
 public class PlayerJoin implements SONRepresentable {
 
-    private static final String USER_KEY = "user";
-    private User user;
+  private static final String USER_KEY = "user";
+  private User user;
 
-    public User getUser() {
-        return user;
-    }
+  public PlayerJoin(User user) {
+    this.user = user;
+  }
 
-    public PlayerJoin(User user) {
-        this.user = user;
-    }
+  public static PlayerJoin fromSON(SON son) throws SONConversionError {
+    SON user = son.getObject(USER_KEY)
+        .orElseThrow(() -> new SONConversionError(
+            "UserJoin did not contain a valid " + USER_KEY + "."));
+    return new PlayerJoin(User.fromSON(user));
+  }
 
-    @Override
-    public SON asSON() {
-        return new SON().put(user.asSON(), USER_KEY);
-    }
+  public User getUser() {
+    return user;
+  }
 
-    public static PlayerJoin fromSON(SON son) throws SONConversionError {
-        SON user = son.getObject(USER_KEY)
-                .orElseThrow(() -> new SONConversionError(
-                        "UserJoin did not contain a valid " + USER_KEY + "."));
-        return new PlayerJoin(User.fromSON(user));
-    }
+  @Override
+  public SON asSON() {
+    return new SON().put(user.asSON(), USER_KEY);
+  }
 }

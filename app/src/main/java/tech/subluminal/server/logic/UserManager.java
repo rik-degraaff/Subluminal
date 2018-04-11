@@ -4,7 +4,15 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.stream.Collectors;
 import tech.subluminal.server.stores.UserStore;
-import tech.subluminal.shared.messages.*;
+import tech.subluminal.shared.messages.InitialUsers;
+import tech.subluminal.shared.messages.LoginReq;
+import tech.subluminal.shared.messages.LoginRes;
+import tech.subluminal.shared.messages.LogoutReq;
+import tech.subluminal.shared.messages.PlayerJoin;
+import tech.subluminal.shared.messages.PlayerLeave;
+import tech.subluminal.shared.messages.PlayerUpdate;
+import tech.subluminal.shared.messages.UsernameReq;
+import tech.subluminal.shared.messages.UsernameRes;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.stores.records.User;
 
@@ -13,8 +21,8 @@ import tech.subluminal.shared.stores.records.User;
  */
 public class UserManager {
 
-  private UserStore userStore;
   private final MessageDistributor distributor;
+  private UserStore userStore;
 
   /**
    * Creates a user manager from a user store and a message distributor.
@@ -87,17 +95,18 @@ public class UserManager {
 
     connection.sendMessage(new LoginRes(username, id));
     InitialUsers initialUsers = new InitialUsers();
-    userStore.connectedUsers().getAll().consume(users -> users.stream().map(synUser -> synUser.use(u -> u)).forEach(initialUsers::addUser));
+    userStore.connectedUsers().getAll().consume(
+        users -> users.stream().map(synUser -> synUser.use(u -> u)).forEach(initialUsers::addUser));
     connection.sendMessage(initialUsers);
 
-    distributor.sendMessageToAllExcept(new PlayerJoin(user),id);
+    distributor.sendMessageToAllExcept(new PlayerJoin(user), id);
   }
 
   private String getUnusedUsername(String requestedUsername) {
     Set<String> users = userStore.connectedUsers().getAll().use(us ->
         us.stream()
-        .map(syncUser -> syncUser.use(User::getUsername))
-        .collect(Collectors.toSet()));
+            .map(syncUser -> syncUser.use(User::getUsername))
+            .collect(Collectors.toSet()));
 
     String username = requestedUsername;
     int i = 1;

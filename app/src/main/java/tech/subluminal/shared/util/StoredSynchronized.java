@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class StoredSynchronized<T> extends Synchronized<T> {
+
   private T value;
 
   public StoredSynchronized(T value) {

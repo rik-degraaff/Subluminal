@@ -1,7 +1,6 @@
 package tech.subluminal.shared.stores.records.game;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
@@ -16,11 +15,6 @@ public class Ship extends Movable implements SONRepresentable {
     super(coordinates, id, targetIDs);
   }
 
-  public SON asSON() {
-    return new SON()
-        .put(super.asSON(), MOVABLE_KEY);
-  }
-
   public static Ship fromSON(SON son) throws SONConversionError {
     Ship ship = new Ship(null, null, new ArrayList<>());
 
@@ -30,5 +24,10 @@ public class Ship extends Movable implements SONRepresentable {
     ship.loadFromSON(movable);
 
     return ship;
+  }
+
+  public SON asSON() {
+    return new SON()
+        .put(super.asSON(), MOVABLE_KEY);
   }
 }

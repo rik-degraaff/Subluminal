@@ -6,42 +6,46 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<fx:root xmlns:fx="http://javafx.com/fxml" type="javafx.scene.layout.AnchorPane"
-         xmlns="http://javafx.com/javafx"
-         fx:controller="tech.subluminal.client.presentation.controller.MenuController"
-         prefHeight="400.0" prefWidth="600.0"
-         fx:id="menuContainer">
-    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
-        <ImageView fx:id="logoDock" fitHeight="301.0" fitWidth="703.0" pickOnBounds="true"
-                   preserveRatio="true">
+<fx:root xmlns:fx="http://javafx.com/fxml" prefHeight="400.0"
+  prefWidth="600.0"
+  type="javafx.scene.layout.AnchorPane"
+  xmlns="http://javafx.com/javafx"
+  fx:controller="tech.subluminal.client.presentation.controller.MenuController"
+  fx:id="menuContainer">
+  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0">
+    <ImageView fitHeight="301.0" fitWidth="703.0" pickOnBounds="true" preserveRatio="true"
+      fx:id="logoDock">
 
-        </ImageView>
-        <HBox fx:id="menuButtonsDock" alignment="CENTER" prefHeight="100.0" prefWidth="200.0"
-              spacing="20.0">
-            <children>
-                <Button onAction="#joinPressed" contentDisplay="CENTER" alignment="CENTER" mnemonicParsing="false"
-                        prefHeight="100.0"
-                        prefWidth="134.0" text="Join" textAlignment="CENTER">
-                    <font>
-                        <Font size="12.0"/>
-                    </font>
-                </Button>
-                <Button onAction="#hostPressed" contentDisplay="CENTER" alignment="CENTER" mnemonicParsing="false"
-                        prefHeight="102.0"
-                        prefWidth="138.0" text="Host" textAlignment="CENTER">
-                    <font>
-                        <Font size="12.0"/>
-                    </font>
-                </Button>
-                <Button onAction="#settingPressed" contentDisplay="CENTER" alignment="CENTER" mnemonicParsing="false"
-                        prefHeight="101.0" prefWidth="152.0"
-                        text="Settings" textAlignment="CENTER">
-                    <font>
-                        <Font size="12.0"/>
-                    </font>
-                </Button>
-            </children>
-        </HBox>
-    </VBox>
+    </ImageView>
+    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0"
+      fx:id="menuButtonsDock">
+      <children>
+        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
+          onAction="#joinPressed"
+          prefHeight="100.0"
+          prefWidth="134.0" text="Join" textAlignment="CENTER">
+          <font>
+            <Font size="12.0"/>
+          </font>
+        </Button>
+        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
+          onAction="#hostPressed"
+          prefHeight="102.0"
+          prefWidth="138.0" text="Host" textAlignment="CENTER">
+          <font>
+            <Font size="12.0"/>
+          </font>
+        </Button>
+        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
+          onAction="#settingPressed"
+          prefHeight="101.0" prefWidth="152.0"
+          text="Settings" textAlignment="CENTER">
+          <font>
+            <Font size="12.0"/>
+          </font>
+        </Button>
+      </children>
+    </HBox>
+  </VBox>
 
 </fx:root>

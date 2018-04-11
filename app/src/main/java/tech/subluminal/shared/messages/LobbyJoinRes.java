@@ -1,10 +1,9 @@
 package tech.subluminal.shared.messages;
 
-import tech.subluminal.server.stores.InMemoryUserStore;
-import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
+import tech.subluminal.shared.stores.records.Lobby;
 
 /**
  * Represents a response from server to client with the joined lobby and sends the users already in

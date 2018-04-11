@@ -1,7 +1,6 @@
 package tech.subluminal.shared.net;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.HashMap;
@@ -156,7 +155,6 @@ public class SocketConnection implements Connection {
    */
   @Override
   public void close() throws IOException {
-    Thread.dumpStack();
     stop = true;
     readThread.interrupt();
     writeThread.interrupt();

@@ -3,16 +3,12 @@ package tech.subluminal.client.logic;
 import static tech.subluminal.shared.util.FunctionalUtils.ifPresent;
 
 import java.util.Optional;
-import java.util.stream.Stream;
 import tech.subluminal.client.presentation.ChatPresenter;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.messages.ChatMessageIn;
 import tech.subluminal.shared.messages.ChatMessageOut;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.stores.records.User;
-import tech.subluminal.shared.util.Synchronized;
-
-import java.util.Collection;
 
 public class ChatManager implements ChatPresenter.Delegate {
 

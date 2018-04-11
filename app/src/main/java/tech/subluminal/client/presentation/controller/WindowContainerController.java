@@ -1,5 +1,7 @@
 package tech.subluminal.client.presentation.controller;
 
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
@@ -10,56 +12,53 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 public class WindowContainerController implements Initializable {
-    @FXML
-    private AnchorPane window;
 
-    @FXML
-    private AnchorPane windowDock;
+  @FXML
+  private AnchorPane window;
 
-    @FXML
-    private Label windowTitel;
+  @FXML
+  private AnchorPane windowDock;
 
-    @FXML
-    private Button windowClose;
+  @FXML
+  private Label windowTitel;
+
+  @FXML
+  private Button windowClose;
 
 
-    private MainController main;
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        //openWindow();
-    }
+  private MainController main;
 
-    public void setMainController(MainController main){
-        this.main = main;
-    }
+  @Override
+  public void initialize(URL location, ResourceBundle resources) {
+    //openWindow();
+  }
 
-    public void openWindow(){
-        ScaleTransition scaleTlX = new ScaleTransition(Duration.seconds(0.2), window.getParent());
-        scaleTlX.setFromX(0);
-        scaleTlX.setToX(1);
+  public void setMainController(MainController main) {
+    this.main = main;
+  }
 
-        ScaleTransition scaleTlY = new ScaleTransition(Duration.seconds(0.5), window.getParent());
-        scaleTlY.setFromY(0);
-        scaleTlY.setToY(1);
+  public void openWindow() {
+    ScaleTransition scaleTlX = new ScaleTransition(Duration.seconds(0.2), window.getParent());
+    scaleTlX.setFromX(0);
+    scaleTlX.setToX(1);
 
-        ParallelTransition paraTl = new ParallelTransition();
+    ScaleTransition scaleTlY = new ScaleTransition(Duration.seconds(0.5), window.getParent());
+    scaleTlY.setFromY(0);
+    scaleTlY.setToY(1);
 
-        paraTl.getChildren().addAll(scaleTlX, scaleTlY);
-        paraTl.play();
-    }
+    ParallelTransition paraTl = new ParallelTransition();
 
-    @FXML
-    public void onWindowClose(){
-        main.onWindowClose();
-    }
+    paraTl.getChildren().addAll(scaleTlX, scaleTlY);
+    paraTl.play();
+  }
 
-    public void setChild(Node node) {
-        windowDock.getChildren().add(node);
-    }
+  @FXML
+  public void onWindowClose() {
+    main.onWindowClose();
+  }
+
+  public void setChild(Node node) {
+    windowDock.getChildren().add(node);
+  }
 }

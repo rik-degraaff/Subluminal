@@ -18,6 +18,16 @@ public abstract class MoveReq implements SONRepresentable {
     this.stars = new LinkedList<>();
   }
 
+  static <E extends MoveReq> E fromSON(SON son, Supplier<E> reqSupplier) throws SONConversionError {
+    E moveReq = reqSupplier.get();
+    SONList starList = son.getList(STARLIST_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, STARLIST_KEY));
+
+    starList.strings().forEach(moveReq::addStar);
+
+    return moveReq;
+  }
+
   public void addStar(String star) {
     stars.add(star);
   }
@@ -32,15 +42,5 @@ public abstract class MoveReq implements SONRepresentable {
     SONList starList = new SONList();
     stars.forEach(starList::add);
     return new SON().put(starList, STARLIST_KEY);
-  }
-
-  static <E extends MoveReq> E fromSON(SON son, Supplier<E> reqSupplier) throws SONConversionError {
-    E moveReq = reqSupplier.get();
-    SONList starList = son.getList(STARLIST_KEY)
-        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, STARLIST_KEY));
-
-    starList.strings().forEach(moveReq::addStar);
-
-    return moveReq;
   }
 }
