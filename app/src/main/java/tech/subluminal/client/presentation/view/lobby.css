@@ -19,7 +19,7 @@
 }
 
 .label {
-  /**-fx-text-fill: #59FF00;**/
+  /*-fx-text-fill: red;*/
   -fx-background-color: black;
 }
 
@@ -27,8 +27,12 @@
   -fx-text-fill: #59FF00;
 }
 
-.server-message {
+.info-message {
   -fx-text-fill: #59FF00;
+}
+
+.critical-message {
+  -fx-text-fill: red;
 }
 
 .button {

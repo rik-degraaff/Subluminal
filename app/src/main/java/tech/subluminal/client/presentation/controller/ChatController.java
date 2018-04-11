@@ -9,16 +9,23 @@ import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.OverrunStyle;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.TextAlignment;
 import tech.subluminal.client.presentation.ChatPresenter;
 import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.stores.ReadOnlyUserStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.records.Channel;
 import tech.subluminal.shared.stores.records.User;
+import tech.subluminal.shared.util.ObservableMappingValue;
 
 
 public class ChatController implements ChatPresenter, UserPresenter, Initializable {
@@ -47,8 +54,13 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
   public void addMessageChat(String message, Channel channel) {
     Platform.runLater(() -> {
-      Label msg = new Label(message);
+      Label msg = new Label(message + "    ");
+      Double padding = chatHistory.getPadding().getLeft() + chatHistory.getPadding().getRight() + 50;
+      Double width = chatHistory.widthProperty().doubleValue();
+      msg.prefWidthProperty().bind(new ObservableMappingValue<>(chatHistory.widthProperty(), w -> w.intValue() - 70));
+      //msg.prefWidthProperty().bind(chatHistory.widthProperty());
       msg.setWrapText(true);
+      msg.setPadding(new Insets(0, 0, 0, 0));
 
       msg.getStyleClass().add(channel.toString().toLowerCase() + "-message");
       chatList.add(msg);
@@ -221,7 +233,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
    */
   @Override
   public void loginSucceeded() {
-    addMessageChat("Succesfully logged in as: " + getCurrentUsername(), Channel.INFO);
+    addMessageChat("Logged in as: " + getCurrentUsername(), Channel.INFO);
   }
 
   private String getCurrentUsername() {
@@ -269,5 +281,6 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     chatHistory.setItems(filteredList);
+    chatHistory.setPadding(new Insets(0, 0, 0, 0));
   }
 }
