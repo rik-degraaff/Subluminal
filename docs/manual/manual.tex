@@ -1,26 +1,28 @@
-%
-% Body text font is Palatino!
-%
-
-\documentclass[a5paper,pagesize,10pt,bibtotoc,pointlessnumbers,
-normalheadings,DIV=9,twoside=true]{scrbook}
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+\documentclass[a5paper,pagesize,10pt,bibliograhpy=totoc,numbers=noenddot,
+,twoside=false]{scrbook}
 
 % twoside, openright
-\KOMAoptions{DIV=last}
+\KOMAoptions{}
 
-\usepackage{trajan}
+\usepackage{fontspec}
+\newfontfamily\ibm{PxPlus_IBM_VGA9.ttf}
+%\usepackage{trajan}
  
 \usepackage[ngerman]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 
+
 \usepackage[babel,german=guillemets]{csquotes}
 
-\usepackage[sc]{mathpazo}
-\linespread{1.05} 
+%\usepackage[sc]{mathpazo}
+%\linespread{1.05} 
 
 \usepackage{verbatim} % for comments
 \usepackage{listings} % for comments
+\usepackage{lipsum}
 
 \usepackage{xcolor}
 \definecolor{almostblack}{rgb}{0.1,0.1,0.1}
@@ -32,36 +34,38 @@ normalheadings,DIV=9,twoside=true]{scrbook}
 %\setlength{\parskip}{1.4ex plus 0.35ex minus 0.3ex}
 %\setlength{\parskip}{1.4ex plus 0.35ex minus 0.3ex}
 
-\usepackage{blindtext}
-\newcommand{\q}[1]{>>\textit{#1}<<}
+%\usepackage{blindtext}
+%\newcommand{\q}[1]{>>\textit{#1}<<}
 
 \titleformat{name=\chapter}[block]
   {\sffamily\large}
   {}
   {0pt}
-  {\colorsection}
+  {\colorchapter}
 \titlespacing*{\chapter}{0pt}{\baselineskip}{\baselineskip}
 
 \newcommand{\colorchapter}[1]{%
-  \colorbox{almostblack}{\parbox{\dimexpr\textwidth-2\fboxsep}{\color{limegreen}\thechapter\ #1}}}
+  \colorbox{almostblack}{\parbox{\dimexpr\textwidth-2\fboxsep}{\color{limegreen}\ibm\chaptertitlename\ #1}}}
 
 
 \title{Subluminal \- Game Manual}   
 \author{Bordeaux Ink.} 
 \date{\today} 
 
+\renewcommand{\familydefault}{\sfdefault}
 \begin{document}
-
 
 %=========================================
 \begin{titlepage}
     \pagecolor[rgb]{0.1,0.1,0.1}
     \vspace{\fill}
-		\includegraphics[width=0.9\textwidth]{logo.png}\\
-		\vspace{10mm}
+    \begin{vbox}
+    \includegraphics[width=0.9\textwidth]{logo.png}
+    \end{vbox}
+		\vspace{5mm}
     \centering{\huge{\textcolor{white}{by Bordeaux Ink.}}}\\
     \vspace{\fill}
-    \centering{\Huge{\textcolor{limegreen}{Game Manual}}}\\
+    \centering{\fontsize{50}{1.2}\selectfont{\textcolor{limegreen}{\ibm{Game Manual}}}}\\
 		\vspace{\fill}
 		\centering \Large{\textcolor{white}{2018}}
 \end{titlepage}
@@ -69,7 +73,13 @@ normalheadings,DIV=9,twoside=true]{scrbook}
 %=========================================
 \newpage{}
 %=========================================
-\blinddocument
+%\blinddocument
+\chapter{introduction}
+\lipsum[5]
+\section*{game name}
+\lipsum[10]
+\subsection*{origin}
+\lipsum[10]
 %=========================================
 \begin{comment}
 Just some notes, not visible in pdf.
