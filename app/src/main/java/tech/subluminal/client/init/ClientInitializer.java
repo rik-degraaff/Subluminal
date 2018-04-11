@@ -2,7 +2,6 @@ package tech.subluminal.client.init;
 
 import java.io.IOException;
 import java.net.Socket;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -51,12 +50,12 @@ public class ClientInitializer extends Application {
     UserStore userStore = new InMemoryUserStore();
     PingStore pingStore = new InMemoryPingStore();
 
-    //ConsolePresenter presenter = new ConsolePresenter(System.in, System.out, userStore);
-    ChatController presenter = controller.getChatController();
-    presenter.setUserStore(userStore);
+    ChatController chatPresenter = controller.getChatController();
+    chatPresenter.setUserStore(userStore);
+    controller.setUserStore(userStore);
 
-    UserManager userManager = new UserManager(connection, userStore, presenter);
-    new ChatManager(userStore, presenter, connection);
+    UserManager userManager = new UserManager(connection, userStore, chatPresenter);
+    new ChatManager(userStore, chatPresenter, connection);
     new PingManager(connection, pingStore);
 
     userManager.start(username);
@@ -100,7 +99,8 @@ public class ClientInitializer extends Application {
 
     primaryStage.setTitle("Subluminal - The Game");
     primaryStage.setScene(new Scene(root));
-    primaryStage.getIcons().add(new Image("/tech/subluminal/client/init/Game_Logo_1.png"));
+    primaryStage.getIcons().add(new Image("/tech/subluminal/resources/Game_Logo_1.png"));
+    primaryStage.setMaximized(true);
     primaryStage.show();
 
     String[] cmd = getParameters().getRaw().toArray(new String[4]);
