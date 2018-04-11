@@ -70,7 +70,6 @@ public class UserManager implements UserPresenter.Delegate {
     String id = res.getId();
     String oldUsername = userStore.users().getByID(id).get().use(User::getUsername);
     String newUsername = res.getUsername();
-    System.out.println(oldUsername);
 
     userStore.users().getByID(id)
         .ifPresent(syncUser -> syncUser.update(user -> new User(newUsername, id)));

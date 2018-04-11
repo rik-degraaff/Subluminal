@@ -5,7 +5,7 @@ import tech.subluminal.shared.stores.records.User;
 
 public interface ReadOnlyUserStore {
 
-    ReadOnlySingleEntity<User> currentUser();
+  ReadOnlySingleEntity<User> currentUser();
 
-    UserCollection users();
+  UserCollection users();
 }

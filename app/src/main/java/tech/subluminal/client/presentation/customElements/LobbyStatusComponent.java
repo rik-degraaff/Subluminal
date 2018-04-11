@@ -9,42 +9,44 @@ import javafx.scene.shape.Rectangle;
 import tech.subluminal.shared.records.LobbyStatus;
 
 public class LobbyStatusComponent extends HBox {
-    private String lobbyID;
-    private Rectangle statusBox;
-    private Label playersNow;
 
-    public LobbyStatusComponent(String lobbyName, String lobbyID, int players, int max, LobbyStatus status) {
-        this.lobbyID = lobbyID;
+  private String lobbyID;
+  private Rectangle statusBox;
+  private Label playersNow;
 
-        HBox hbox = new HBox();
-        hbox.setSpacing(5);
-        this.setSpacing(5);
+  public LobbyStatusComponent(String lobbyName, String lobbyID, int players, int max,
+      LobbyStatus status) {
+    this.lobbyID = lobbyID;
 
-        statusBox = new Rectangle(20, 20);
-        statusBox.setFill(status.getColor());
-        Label name = new Label(lobbyName);
-        playersNow = new Label(Integer.toString(players));
+    HBox hbox = new HBox();
+    hbox.setSpacing(5);
+    this.setSpacing(5);
 
-        Label playersMax = new Label(Integer.toString(max));
+    statusBox = new Rectangle(20, 20);
+    statusBox.setFill(status.getColor());
+    Label name = new Label(lobbyName);
+    playersNow = new Label(Integer.toString(players));
 
-        Pane spacer = new Pane();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
+    Label playersMax = new Label(Integer.toString(max));
 
-        Button join = new Button("Join Lobby");
-        Button password = new Button("Password");
-        password.disableProperty();
+    Pane spacer = new Pane();
+    HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        join.onActionProperty();
+    Button join = new Button("Join Lobby");
+    Button password = new Button("Password");
+    password.disableProperty();
 
-        hbox.getChildren().addAll(statusBox, name, playersNow, playersMax);
-        this.getChildren().addAll(hbox, spacer, password, join);
-    }
+    join.onActionProperty();
 
-    public void updateLobby(int players) {
-        playersNow.setText(Integer.toString(players));
-    }
+    hbox.getChildren().addAll(statusBox, name, playersNow, playersMax);
+    this.getChildren().addAll(hbox, spacer, password, join);
+  }
 
-    public void updateLobby(LobbyStatus status) {
-        statusBox.setFill(status.getColor());
-    }
+  public void updateLobby(int players) {
+    playersNow.setText(Integer.toString(players));
+  }
+
+  public void updateLobby(LobbyStatus status) {
+    statusBox.setFill(status.getColor());
+  }
 }

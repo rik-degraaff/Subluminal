@@ -8,16 +8,16 @@ import tech.subluminal.shared.stores.records.User;
  */
 public class InMemoryUserStore implements UserStore {
 
-    private final SingleEntity<User> currentUser = new SingleEntity<>();
-    private final UserCollection users = new UserCollection();
+  private final SingleEntity<User> currentUser = new SingleEntity<>();
+  private final UserCollection users = new UserCollection();
 
-    @Override
-    public SingleEntity<User> currentUser() {
-        return currentUser;
-    }
+  @Override
+  public SingleEntity<User> currentUser() {
+    return currentUser;
+  }
 
-    @Override
-    public UserCollection users() {
-        return users;
-    }
+  @Override
+  public UserCollection users() {
+    return users;
+  }
 }

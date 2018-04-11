@@ -6,46 +6,46 @@ package tech.subluminal.client.presentation;
 public interface UserPresenter {
 
 
-    /**
-     * Function that should be called when login succeeded.
-     */
-    void loginSucceeded();
+  /**
+   * Function that should be called when login succeeded.
+   */
+  void loginSucceeded();
+
+  /**
+   * Gets called when the client got logged out.
+   */
+  void logoutSucceeded();
+
+  /**
+   * Fired when a username got successfully changed.
+   */
+  void nameChangeSucceeded();
+
+  void setUserDelegate(Delegate delegate);
+
+  void onPlayerJoin(String username);
+
+  void onPlayerLeave(String username);
+
+  void onPlayerUpdate(String oldUsername, String newUsername);
+
+  /**
+   * Delegate the UserStore can subscribe to.
+   */
+  interface Delegate {
 
     /**
-     * Gets called when the client got logged out.
+     * Fired when a user tries to change his name.
+     *
+     * @param username the desired new username.
      */
-    void logoutSucceeded();
+    void changeUsername(String username);
+
 
     /**
-     * Fired when a username got successfully changed.
+     * Fired when a user has to be logged out.
      */
-    void nameChangeSucceeded();
-
-    void setUserDelegate(Delegate delegate);
-
-    void onPlayerJoin(String username);
-
-    void onPlayerLeave(String username);
-
-    void onPlayerUpdate(String oldUsername, String newUsername);
-
-    /**
-     * Delegate the UserStore can subscribe to.
-     */
-    interface Delegate {
-
-        /**
-         * Fired when a user tries to change his name.
-         *
-         * @param username the desired new username.
-         */
-        void changeUsername(String username);
-
-
-        /**
-         * Fired when a user has to be logged out.
-         */
-        void logout();
-    }
+    void logout();
+  }
 
 }

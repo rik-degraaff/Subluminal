@@ -4,15 +4,15 @@ import javafx.scene.paint.Color;
 
 public enum PlayerStatus {
 
-    ONLINE(Color.GREEN), INLOBBY(Color.YELLOW), INGAME(Color.RED);
+  ONLINE(Color.GREEN), INLOBBY(Color.YELLOW), INGAME(Color.RED);
 
-    private final Color color;
+  private final Color color;
 
-    PlayerStatus(Color color){
-        this.color = color;
-    }
+  PlayerStatus(Color color) {
+    this.color = color;
+  }
 
-    public Color getColor() {
-        return color;
-    }
+  public Color getColor() {
+    return color;
+  }
 }

@@ -1,5 +1,7 @@
 package tech.subluminal.client.presentation.controller;
 
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
@@ -15,99 +17,97 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 public class MenuController implements Initializable, Observer {
-    @FXML
-    private ImageView logoDock;
 
-    @FXML
-    private AnchorPane menuContainer;
+  @FXML
+  private ImageView logoDock;
 
-    @FXML
-    private VBox menuDock;
+  @FXML
+  private AnchorPane menuContainer;
 
-    @FXML
-    private HBox menuButtonsDock;
+  @FXML
+  private VBox menuDock;
 
-    private MainController main;
+  @FXML
+  private HBox menuButtonsDock;
 
-    private void generateLogo() {
-        Platform.runLater(() -> {
-            PauseTransition pauseTl = new PauseTransition(Duration.seconds(1));
+  private MainController main;
 
-            ScaleTransition scaleTl = new ScaleTransition(Duration.seconds(3), menuContainer);
-            scaleTl.setFromX(0);
-            scaleTl.setFromY(0);
-            scaleTl.setToX(1);
-            scaleTl.setByY(1);
+  private void generateLogo() {
+    Platform.runLater(() -> {
+      PauseTransition pauseTl = new PauseTransition(Duration.seconds(1));
 
-            SequentialTransition seqTl = new SequentialTransition();
+      ScaleTransition scaleTl = new ScaleTransition(Duration.seconds(3), menuContainer);
+      scaleTl.setFromX(0);
+      scaleTl.setFromY(0);
+      scaleTl.setToX(1);
+      scaleTl.setByY(1);
 
-            FadeTransition fadeTl = new FadeTransition(Duration.seconds(0.7), menuButtonsDock);
-            //fadeTl.setFromValue(0);
-            fadeTl.setToValue(1);
-            //fadeTl.setCycleCount(3);
-            seqTl.getChildren().addAll(pauseTl, scaleTl);
+      SequentialTransition seqTl = new SequentialTransition();
 
-            seqTl.play();
-            seqTl.setOnFinished(e -> onFinishedLogoHandler());
-        });
+      FadeTransition fadeTl = new FadeTransition(Duration.seconds(0.7), menuButtonsDock);
+      //fadeTl.setFromValue(0);
+      fadeTl.setToValue(1);
+      //fadeTl.setCycleCount(3);
+      seqTl.getChildren().addAll(pauseTl, scaleTl);
 
-    }
+      seqTl.play();
+      seqTl.setOnFinished(e -> onFinishedLogoHandler());
+    });
 
-    private void onFinishedLogoHandler() {
-        pulsateLogo();
-        showMenuButtons();
-    }
+  }
 
-    private void pulsateLogo() {
-        ScaleTransition scaleMainTl = new ScaleTransition(Duration.seconds(4), menuContainer);
-        scaleMainTl.setFromX(1);
-        scaleMainTl.setFromY(1);
-        scaleMainTl.setToX(1.1);
-        scaleMainTl.setToY(1.1);
+  private void onFinishedLogoHandler() {
+    pulsateLogo();
+    showMenuButtons();
+  }
 
-        scaleMainTl.setCycleCount(ScaleTransition.INDEFINITE);
-        scaleMainTl.setAutoReverse(true);
-        scaleMainTl.play();
-    }
+  private void pulsateLogo() {
+    ScaleTransition scaleMainTl = new ScaleTransition(Duration.seconds(4), menuContainer);
+    scaleMainTl.setFromX(1);
+    scaleMainTl.setFromY(1);
+    scaleMainTl.setToX(1.1);
+    scaleMainTl.setToY(1.1);
 
-    private void showMenuButtons() {
-        FadeTransition fadeTl = new FadeTransition(Duration.seconds(0.2), menuButtonsDock);
-        fadeTl.setFromValue(0);
-        fadeTl.setToValue(1);
-        fadeTl.setCycleCount(3);
-        fadeTl.play();
-    }
+    scaleMainTl.setCycleCount(ScaleTransition.INDEFINITE);
+    scaleMainTl.setAutoReverse(true);
+    scaleMainTl.play();
+  }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        Image logo = new Image("/tech/subluminal/resources/subluminal_logo.png");
-        logoDock.setImage(logo);
-        menuButtonsDock.setOpacity(0.0);
-        generateLogo();
-    }
+  private void showMenuButtons() {
+    FadeTransition fadeTl = new FadeTransition(Duration.seconds(0.2), menuButtonsDock);
+    fadeTl.setFromValue(0);
+    fadeTl.setToValue(1);
+    fadeTl.setCycleCount(3);
+    fadeTl.play();
+  }
 
-    @FXML
-    private void joinPressed(ActionEvent e) {
-        main.onJoinHandle();
+  @Override
+  public void initialize(URL location, ResourceBundle resources) {
+    Image logo = new Image("/tech/subluminal/resources/subluminal_logo.png");
+    logoDock.setImage(logo);
+    menuButtonsDock.setOpacity(0.0);
+    generateLogo();
+  }
 
-    }
+  @FXML
+  private void joinPressed(ActionEvent e) {
+    main.onJoinHandle();
 
-    @FXML
-    private void hostPressed(ActionEvent e) {
-        main.onHostOpenHandle();
-    }
+  }
 
-    @FXML
-    private void settingPressed(ActionEvent e) {
-        main.onSettingOpenHandle();
-    }
+  @FXML
+  private void hostPressed(ActionEvent e) {
+    main.onHostOpenHandle();
+  }
 
-    @Override
-    public void setMainController(MainController main) {
-        this.main = main;
-    }
+  @FXML
+  private void settingPressed(ActionEvent e) {
+    main.onSettingOpenHandle();
+  }
+
+  @Override
+  public void setMainController(MainController main) {
+    this.main = main;
+  }
 }

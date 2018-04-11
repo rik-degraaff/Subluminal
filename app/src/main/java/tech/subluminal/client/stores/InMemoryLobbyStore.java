@@ -1,15 +1,14 @@
 package tech.subluminal.client.stores;
 
 
+import java.util.List;
 import java.util.Optional;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import tech.subluminal.shared.stores.ReadOnlySingleEntity;
-import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.stores.SingleEntity;
+import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.stores.records.SlimLobby;
-
-import java.util.List;
 
 public class InMemoryLobbyStore implements LobbyStore {
 

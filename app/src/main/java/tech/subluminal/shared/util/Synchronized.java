@@ -20,7 +20,8 @@ public abstract class Synchronized<T> {
   public <R> Synchronized<R> map(Function<T, R> mapper) {
     return new RemoteSynchronized<>(lock,
         () -> mapper.apply(use(e -> e)),
-        n -> {});
+        n -> {
+        });
   }
 
   public <R> Synchronized<R> map(Function<T, R> mapper, Function<R, T> reverseMapper) {

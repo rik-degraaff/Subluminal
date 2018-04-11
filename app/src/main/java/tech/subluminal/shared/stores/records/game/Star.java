@@ -6,13 +6,12 @@ import tech.subluminal.shared.son.SONRepresentable;
 
 public class Star extends GameObject implements SONRepresentable {
 
-  private String ownerID;
-  private double possession;
-
   private static final String OWNER_ID_KEY = "ownerID";
   private static final String POSSESSION_KEY = "possession";
   private static final String CLASS_NAME = Star.class.getSimpleName();
   private static final String GAME_OBJECT_KEY = "gameObject";
+  private String ownerID;
+  private double possession;
 
 
   public Star(String ownerID, double possession,
@@ -20,6 +19,22 @@ public class Star extends GameObject implements SONRepresentable {
     super(coordinates, id);
     this.ownerID = ownerID;
     this.possession = possession;
+  }
+
+  public static Star fromSON(SON son) throws SONConversionError {
+    String ownerID = son.getString(OWNER_ID_KEY).orElse(null);
+
+    double possession = son.getDouble(POSSESSION_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, POSSESSION_KEY));
+
+    Star star = new Star(ownerID, possession, null, null);
+
+    SON gameObject = son.getObject(GAME_OBJECT_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, GAME_OBJECT_KEY));
+
+    star.loadFromSON(gameObject);
+
+    return star;
   }
 
   /**
@@ -60,21 +75,5 @@ public class Star extends GameObject implements SONRepresentable {
     }
 
     return son;
-  }
-
-  public static Star fromSON(SON son) throws SONConversionError {
-    String ownerID = son.getString(OWNER_ID_KEY).orElse(null);
-
-    double possession = son.getDouble(POSSESSION_KEY)
-        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, POSSESSION_KEY));
-
-    Star star = new Star(ownerID, possession, null, null);
-
-    SON gameObject = son.getObject(GAME_OBJECT_KEY)
-        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, GAME_OBJECT_KEY));
-
-    star.loadFromSON(gameObject);
-
-    return star;
   }
 }
