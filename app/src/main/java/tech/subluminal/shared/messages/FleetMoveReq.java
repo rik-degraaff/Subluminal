@@ -18,13 +18,6 @@ public class FleetMoveReq extends MoveReq {
     this.amount = amount;
   }
 
-  @Override
-  public SON asSON() {
-    return super.asSON()
-        .put(originID, ORIGIN_ID_KEY)
-        .put(amount, AMOUNT_KEY);
-  }
-
   public static FleetMoveReq fromSON(SON son) throws SONConversionError {
     String originID = son.getString(ORIGIN_ID_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, ORIGIN_ID_KEY));
@@ -32,5 +25,12 @@ public class FleetMoveReq extends MoveReq {
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, ORIGIN_ID_KEY));
 
     return MoveReq.fromSON(son, () -> new FleetMoveReq(originID, amount));
+  }
+
+  @Override
+  public SON asSON() {
+    return super.asSON()
+        .put(originID, ORIGIN_ID_KEY)
+        .put(amount, AMOUNT_KEY);
   }
 }

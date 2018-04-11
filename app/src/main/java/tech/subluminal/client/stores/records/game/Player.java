@@ -24,7 +24,6 @@ public class Player extends Identifiable implements SONRepresentable {
   private List<Fleet> fleets;
 
   /**
-   *
    * @param id the ID of the player.
    * @param motherShip the mother ship of the player.
    * @param fleets a list containing all the fleets a player possesses.
@@ -36,54 +35,6 @@ public class Player extends Identifiable implements SONRepresentable {
   }
 
   /**
-   *
-   * @return the mother ship of the player.
-   */
-  public Ship getMotherShip() {
-    return motherShip;
-  }
-
-  /**
-   *
-   * @param motherShip the mother ship of the player.
-   */
-  public void setMotherShip(Ship motherShip) {
-    this.motherShip = motherShip;
-  }
-
-  /**
-   *
-   * @return a list containing all the fleets of a player.
-   */
-  public List<Fleet> getFleets() {
-    return fleets;
-  }
-
-  /**
-   *
-   * @param fleets a list containing all the fleets of a player.
-   */
-  public void setFleets(List<Fleet> fleets) {
-    this.fleets = fleets;
-  }
-
-  /**
-   * Produces the SON representation of a player.
-   *
-   * @return the SON representation of a player.
-   */
-  public SON asSON() {
-    SONList fleetList = new SONList();
-    fleets.stream().map(Fleet::asSON).forEach(fleetList::add);
-
-    return new SON()
-        .put(super.asSON(), IDENTIFIABLE_KEY)
-        .put(motherShip.asSON(), MOTHERS_SHIP_KEY)
-        .put(fleetList, FLEETS_KEY);
-  }
-
-  /**
-   *
    * @param son the SON representation of a player.
    * @return a player.
    * @throws SONConversionError when the conversion fails.
@@ -111,6 +62,49 @@ public class Player extends Identifiable implements SONRepresentable {
     player.loadFromSON(identifiable);
 
     return player;
+  }
+
+  /**
+   * @return the mother ship of the player.
+   */
+  public Ship getMotherShip() {
+    return motherShip;
+  }
+
+  /**
+   * @param motherShip the mother ship of the player.
+   */
+  public void setMotherShip(Ship motherShip) {
+    this.motherShip = motherShip;
+  }
+
+  /**
+   * @return a list containing all the fleets of a player.
+   */
+  public List<Fleet> getFleets() {
+    return fleets;
+  }
+
+  /**
+   * @param fleets a list containing all the fleets of a player.
+   */
+  public void setFleets(List<Fleet> fleets) {
+    this.fleets = fleets;
+  }
+
+  /**
+   * Produces the SON representation of a player.
+   *
+   * @return the SON representation of a player.
+   */
+  public SON asSON() {
+    SONList fleetList = new SONList();
+    fleets.stream().map(Fleet::asSON).forEach(fleetList::add);
+
+    return new SON()
+        .put(super.asSON(), IDENTIFIABLE_KEY)
+        .put(motherShip.asSON(), MOTHERS_SHIP_KEY)
+        .put(fleetList, FLEETS_KEY);
   }
 
   /**

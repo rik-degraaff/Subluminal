@@ -2,18 +2,50 @@ package tech.subluminal.shared.stores;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import tech.subluminal.shared.stores.records.Identifiable;
+import tech.subluminal.shared.util.MapperList;
+import tech.subluminal.shared.util.StoredSynchronized;
 import tech.subluminal.shared.util.Synchronized;
+import tech.subluminal.shared.util.ThreadUtils;
 
 public class IdentifiableCollection<E extends Identifiable> implements
     ReadOnlyIdentifiableCollection<E> {
 
-  private Synchronized<Map<String, Synchronized<E>>> syncMap = new Synchronized<>(new HashMap<>());
+  protected final Synchronized<ObservableMap<String, Synchronized<E>>> syncMap;
+
+  private final ObservableList<String> observableList = FXCollections.observableArrayList();
+
+  public IdentifiableCollection() {
+    ObservableMap<String, Synchronized<E>> obsMap = FXCollections.observableHashMap();
+    obsMap.addListener((MapChangeListener<String, Synchronized<E>>) change -> {
+      String key = change.getKey();
+      ThreadUtils.runSafly(() -> {
+        if (change.wasRemoved()) {
+          observableList.remove(key);
+        }
+        if (change.wasAdded()) {
+          observableList.add(key);
+        }
+      });
+    });
+    syncMap = new StoredSynchronized<>(obsMap);
+  }
+
+  /**
+   * @return an observable list containing the entries in this collection.
+   */
+  @Override
+  public ObservableList<E> observableList() {
+    return new MapperList<>(observableList, key -> getByID(key).get().use(e -> e));
+  }
 
   /**
    * @return a synchronized collection of synchronized entities which are stored in this collection.
@@ -29,7 +61,7 @@ public class IdentifiableCollection<E extends Identifiable> implements
    * @param e the user to add.
    */
   public void add(E e) {
-    syncMap.use(map -> map.put(e.getID(), new Synchronized<>(e)));
+    syncMap.use(map -> map.put(e.getID(), new StoredSynchronized<>(e)));
   }
 
   /**

@@ -6,7 +6,6 @@
   font-family: "PxPlus IBM VGA9";
   src: url('../PxPlus_IBM_VGA9.ttf');
 
-
 }
 
 .root {
@@ -15,7 +14,7 @@
   -fx-font-size: 20px;
 }
 
-.font-dos{
+.font-dos {
   -fx-text-fill: #59FF00;
 }
 
@@ -24,21 +23,21 @@
   -fx-background-color: black;
 }
 
-.whisper-message, .global-message, .game-message{
+.whisper-message, .global-message, .game-message {
   -fx-text-fill: #59FF00;
 }
 
-.server-message{
+.server-message {
   -fx-text-fill: #59FF00;
 }
 
-.button{
+.button {
   -fx-font-family: "PxPlus IBM VGA9";
   -fx-font-size: 16px;
   -fx-text-fill: #59FF00;
 }
 
-.button:hover{
+.button:hover {
   -fx-cursor: hand;
 }
 
@@ -51,33 +50,31 @@
   -fx-text-fill: #59FF00;
 }
 
-.scroll-bar{
+.scroll-bar {
   -fx-background-color: transparent;
 }
 
-.scroll-pane{
+.scroll-pane {
   -fx-background-color: black;
 }
 
-
 .list-view .scroll-bar:horizontal .thumb,
-.list-view .scroll-bar:vertical .thumb
-{
+.list-view .scroll-bar:vertical .thumb {
   -fx-background-color: #59FF00;
   -fx-background-insets: 2, 0, 0;
 }
 
 .list-view .increment-button,
-.list-view .decrement-button{
+.list-view .decrement-button {
   -fx-background-radius: 0em;
-  -fx-padding:0 0 10 0;
+  -fx-padding: 0 0 10 0;
 }
 
 .list-view .increment-arrow,
-.list-view .decrement-arrow{
+.list-view .decrement-arrow {
   -fx-background-color: #59FF00;
   -fx-shape: " ";
-  -fx-padding:0;
+  -fx-padding: 0;
 }
 
 .button {

@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 import tech.subluminal.client.stores.records.game.Player;
 import tech.subluminal.shared.stores.records.game.Star;
+import tech.subluminal.shared.util.StoredSynchronized;
 import tech.subluminal.shared.util.Synchronized;
 
 /**
@@ -41,7 +42,7 @@ public class InMemoryGameStore implements GameStore {
    */
   @Override
   public void addStar(Star star) {
-    starMap.use(map -> map.put(star.getID(), new Synchronized<>(star)));
+    starMap.use(map -> map.put(star.getID(), new StoredSynchronized<>(star)));
   }
 
   /**
@@ -72,6 +73,6 @@ public class InMemoryGameStore implements GameStore {
    */
   @Override
   public void addPlayer(Player player) {
-    playerMap.use(map -> map.put(player.getID(), new Synchronized<>(player)));
+    playerMap.use(map -> map.put(player.getID(), new StoredSynchronized<>(player)));
   }
 }

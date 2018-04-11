@@ -13,6 +13,24 @@ public class GameLoop {
     this.delegate = delegate;
   }
 
+  public void start() {
+    long lastTime = System.currentTimeMillis();
+    while (true) {
+      long timeBeforeBeforeTick = System.currentTimeMillis();
+      delegate.beforeTick();
+      long currentTime = System.currentTimeMillis();
+      long elapsedTime = currentTime - lastTime;
+      lastTime = currentTime;
+      delegate.tick(elapsedTime);
+      delegate.afterTick();
+      try {
+        Thread.sleep(msPerIteration - (System.currentTimeMillis() - timeBeforeBeforeTick));
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
   /**
    * Defines the tasks that have to be done in each game loop.
    */
@@ -36,23 +54,5 @@ public class GameLoop {
      * time-critical game-updating tasks.
      */
     void afterTick();
-  }
-
-  public void start() {
-    long lastTime = System.currentTimeMillis();
-    while (true) {
-      long timeBeforeBeforeTick = System.currentTimeMillis();
-      delegate.beforeTick();
-      long currentTime = System.currentTimeMillis();
-      long elapsedTime = currentTime - lastTime;
-      lastTime = currentTime;
-      delegate.tick(elapsedTime);
-      delegate.afterTick();
-      try {
-        Thread.sleep(msPerIteration - (System.currentTimeMillis() - timeBeforeBeforeTick));
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-    }
   }
 }

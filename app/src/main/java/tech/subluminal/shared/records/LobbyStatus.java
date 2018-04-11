@@ -3,25 +3,16 @@ package tech.subluminal.shared.records;
 import javafx.scene.paint.Color;
 
 public enum LobbyStatus {
-    OPEN, FULL, LOCKED;
 
-    public Color getColor(){
-        Color color = Color.GRAY;
-        switch (this){
-            case FULL:
-                color = Color.RED;
-                break;
-            case OPEN:
-                color = Color.GREEN;
-                break;
-            case LOCKED:
-                color = Color.GRAY;
-                break;
-            default:
-                System.err.println("Lobby status does not exist!");
+  OPEN(Color.GREEN), FULL(Color.RED), LOCKED(Color.GRAY);
 
-        }
+  private final Color color;
 
-        return color;
-    }
+  LobbyStatus(Color color) {
+    this.color = color;
+  }
+
+  public Color getColor() {
+    return color;
+  }
 }

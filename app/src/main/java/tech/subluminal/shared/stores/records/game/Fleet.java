@@ -19,6 +19,20 @@ public class Fleet extends Movable implements SONRepresentable {
     this.numberOfShips = numberOfShips;
   }
 
+  public static Fleet fromSON(SON son) throws SONConversionError {
+    int numberOfShips = son.getInt(AMOUNT_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, AMOUNT_KEY));
+
+    Fleet fleet = new Fleet(null, numberOfShips, null, new ArrayList<>());
+
+    SON movable = son.getObject(MOVABLE_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, MOVABLE_KEY));
+
+    fleet.loadFromSON(movable);
+
+    return fleet;
+  }
+
   /**
    * @return the number of ships this fleet contains.
    */
@@ -37,19 +51,5 @@ public class Fleet extends Movable implements SONRepresentable {
     return new SON()
         .put(super.asSON(), MOVABLE_KEY)
         .put(numberOfShips, AMOUNT_KEY);
-  }
-
-  public static Fleet fromSON(SON son) throws SONConversionError {
-    int numberOfShips = son.getInt(AMOUNT_KEY)
-        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, AMOUNT_KEY));
-
-    Fleet fleet = new Fleet(null, numberOfShips,null, new ArrayList<>());
-
-    SON movable = son.getObject(MOVABLE_KEY)
-        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, MOVABLE_KEY));
-
-    fleet.loadFromSON(movable);
-
-    return fleet;
   }
 }

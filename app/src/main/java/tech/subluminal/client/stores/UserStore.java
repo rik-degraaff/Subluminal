@@ -1,5 +1,6 @@
 package tech.subluminal.client.stores;
 
+import tech.subluminal.shared.stores.SingleEntity;
 import tech.subluminal.shared.stores.records.User;
 
 /**
@@ -7,11 +8,8 @@ import tech.subluminal.shared.stores.records.User;
  */
 public interface UserStore extends ReadOnlyUserStore {
 
-  /**
-   * Sets the current user.
-   *
-   * @param user to be set as current user.
-   */
-  void setCurrentUser(User user);
+  SingleEntity<User> currentUser();
+
+  UserCollection users();
 
 }
