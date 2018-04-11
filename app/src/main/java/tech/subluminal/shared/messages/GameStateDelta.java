@@ -11,6 +11,9 @@ import tech.subluminal.shared.son.SONList;
 import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.game.Star;
 
+/**
+ * Contains the changes that need to be made to the game state.
+ */
 public class GameStateDelta implements SONRepresentable {
 
   public static final String PLAYERS_KEY = "players";
@@ -27,34 +30,67 @@ public class GameStateDelta implements SONRepresentable {
   private List<String> removedPlayers = new LinkedList<>();
   private Map<String, List<String>> removedFleets = new HashMap<>();
 
+  /**
+   * @return a list of the participating players.
+   */
   public List<Player> getPlayers() {
     return players;
   }
 
+  /**
+   * @return a list of the stars that exist in the current game.
+   */
   public List<Star> getStars() {
     return stars;
   }
 
+  /**
+   * @return Returns a list of the players that have to be removed from the game state.
+   */
   public List<String> getRemovedPlayers() {
     return removedPlayers;
   }
 
+  /**
+   * Adds a player to the game.
+   *
+   * @param player the player to be added to the game.
+   */
   public void addPlayer(Player player) {
     players.add(player);
   }
 
+  /**
+   * Adds a star to the game.
+   *
+   * @param star the star to be added to the game.
+   */
   public void addStar(Star star) {
     stars.add(star);
   }
 
+  /**
+   * Adds a player to the list of the players to be removed from the game.
+   *
+   * @param id the ID of the player to be removed.
+   */
   public void addRemovedPlayer(String id) {
     removedPlayers.add(id);
   }
 
+  /**
+   * @return a map containing the fleets of each player that need to be removed.
+   */
   public Map<String, List<String>> getRemovedFleets() {
     return removedFleets;
   }
 
+  /**
+   * Adds a new fleet to the list to be removed.
+   *
+   * @param playerID
+   * @param fleetID
+   */
   public void addRemovedFleet(String playerID, String fleetID) {
     List<String> fleets = removedFleets.get(playerID);
     if (fleets == null) {
@@ -98,6 +134,13 @@ public class GameStateDelta implements SONRepresentable {
         .put(removedFleetsList, REMOVED_FLEETS_KEY);
   }
 
+  /**
+   * Converts a SON of the GameStateDelta back to the GameStateDelta type itself.
+   *
+   * @param son the SON representation of the GameStateDelta.
+   * @return the GameStateDelta.
+   * @throws SONConversionError if the conversion fails.
+   */
   public static GameStateDelta fromSON(SON son) throws SONConversionError {
     GameStateDelta delta = new GameStateDelta();
 
