@@ -1,5 +1,6 @@
 package tech.subluminal.client.presentation.controller;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -7,15 +8,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
+import tech.subluminal.client.presentation.ChatPresenter;
+import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.presentation.customElements.PlayerStatusComponent;
+import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.records.PlayerStatus;
+import tech.subluminal.shared.util.MapperList;
 
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
 
 
-public class UserListController implements Initializable {
+public class UserListController implements Initializable, UserPresenter {
     @FXML
     private ListView<PlayerStatusComponent> playerBoard;
     @FXML
@@ -26,63 +31,106 @@ public class UserListController implements Initializable {
     private LinkedList<Label> players;
 
     private boolean isBoardShown = false;
+    private UserStore userStore;
+
+    private UserPresenter.Delegate userDelegate;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if(!isBoardShown){
+        if (!isBoardShown) {
             playerBoard.setVisible(false);
         }
 
-
-        addPlayerStatus("test", PlayerStatus.INGAME);
-        //updatePlayerStatus("test", PlayerStatusComponent.INGAME);
-        //removePlayerStatus("test");
     }
 
-    public void addPlayerStatus(String username, PlayerStatus status){
+    public void addPlayerStatus(String username, PlayerStatus status) {
 
-        PlayerStatusComponent playerStatus = new PlayerStatusComponent("test", PlayerStatus.INGAME);
-        PlayerStatusComponent playerStatus1 = new PlayerStatusComponent("test", PlayerStatus.INGAME);
-        playerStatus1.updateStatus(PlayerStatus.ONLINE);
 
-        //playerBoard.getItems().add(playerTag);
-        playerBoard.getItems().add(playerStatus);
-        playerBoard.getItems().add(playerStatus1);
-        //players.add(playerTag);
     }
 
 
 /**    private void removePlayerStatus(String username){
-        for(PlayerStatusComponent player: playerBoard.getItems()){
-            if(player.getText().equals(username)){
-                Platform.runLater(() ->{
-                    playerBoard.getItems().remove(player);
+ for(PlayerStatusComponent player: playerBoard.getItems()){
+ if(player.getText().equals(username)){
+ Platform.runLater(() ->{
+ playerBoard.getItems().remove(player);
 
-                });
-                break;
-            }
-        }
-    }**/
+ });
+ break;
+ }
+ }
+ }**/
 
- /**   public void updatePlayerStatus(String username, PlayerStatusComponent status){
-        for(Label player: playerBoard.getItems()){
-            if(player.getText().equals(username)){
-                player.setTextFill(Color.web(getStatusColor(status)));
-            }
-        }
-    }**/
+    /**
+     * public void updatePlayerStatus(String username, PlayerStatusComponent status){
+     * for(Label player: playerBoard.getItems()){
+     * if(player.getText().equals(username)){
+     * player.setTextFill(Color.web(getStatusColor(status)));
+     * }
+     * }
+     * }
+     **/
 
     public void switchPlayerBoard(ActionEvent actionEvent) {
-        if(isBoardShown){
+        if (isBoardShown) {
             playerBoard.setVisible(false);
             isBoardShown = false;
             updaterPlayerBoard.setText("Show Players");
-        }else {
+        } else {
             playerBoard.setVisible(true);
             isBoardShown = true;
             updaterPlayerBoard.setText("Hide Players");
         }
 
+    }
+
+    public void setUserStore(UserStore userStore) {
+        this.userStore = userStore;
+
+        Platform.runLater(() -> {
+            playerBoard.setItems(new MapperList<>(userStore.users().observableList(),
+                    user -> new PlayerStatusComponent(user.getUsername(), PlayerStatus.INGAME)));
+        });
+
+    }
+
+    @Override
+    public void loginSucceeded() {
+
+    }
+
+    @Override
+    public void logoutSucceeded() {
+
+    }
+
+    @Override
+    public void nameChangeSucceeded() {
+
+    }
+
+    @Override
+    public void setUserDelegate(Delegate delegate) {
+
+    }
+
+    @Override
+    public void onPlayerJoin(String username) {
+
+    }
+
+    @Override
+    public void onPlayerLeave(String username) {
+
+    }
+
+    @Override
+    public void onPlayerUpdate(String oldUsername, String newUsername) {
+
+    }
+
+    public UserListController getController(){
+        return this;
     }
 
 }

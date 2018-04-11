@@ -3,29 +3,27 @@ package tech.subluminal.client.presentation.controller;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableListBase;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
-
-import java.net.URL;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ResourceBundle;
-
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import tech.subluminal.client.presentation.ChatPresenter;
 import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.stores.ReadOnlyUserStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.records.Channel;
+import tech.subluminal.shared.stores.records.User;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
 
 public class ChatController implements ChatPresenter, UserPresenter, Initializable {
 
-    @FXML
-    private VBox chatBox;
     @FXML
     private ListView<Label> chatHistory;
     @FXML
@@ -36,8 +34,6 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     private ReadOnlyUserStore userStore;
     private ChatPresenter.Delegate chatDelegate;
     private UserPresenter.Delegate userDelegate;
-
-    private List<Label> historyMessages = new LinkedList<>();
 
     private ObservableList<Label> chatList = FXCollections.observableArrayList();
     private FilteredList<Label> filteredList = new FilteredList<>(chatList);
@@ -58,27 +54,30 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
             msg.getStyleClass().add(channel.toString().toLowerCase() + "-message");
             chatList.add(msg);
 
-
             scrollToBottom();
 
         });
     }
 
     public void addMessageChat(String message, String username, Channel channel) {
-        addMessageChat(username + ": " + message, channel);
+        if (channel == Channel.WHISPER) {
+            addMessageChat(username + "@you: " + message, channel);
+        } else {
+            addMessageChat(username + ": " + message, channel);
+        }
     }
 
     public void updateFilter(ActionEvent e) {
-        if(isGlobalShown.isSelected()){
+        if (isGlobalShown.isSelected()) {
             filteredList.setPredicate(l -> true);
-        }else{
+        } else {
             filteredList.setPredicate(l -> !l.getStyleClass().contains("global-message"));
         }
 
     }
 
     private void scrollToBottom() {
-        chatHistory.scrollTo(chatHistory.getItems().size()-1);
+        chatHistory.scrollTo(chatHistory.getItems().size() - 1);
     }
 
     public void sendMessage(ActionEvent actionEvent) {
@@ -123,7 +122,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
         String username = newUsername.replaceAll(" ", "");
 
         if (username.equals("")) {
-            addMessageChat("You did not enter a new username, I got you covered, fam.", Channel.SERVER);
+            addMessageChat("You did not enter a new username, I got you covered, fam.", Channel.INFO);
             username = "ThisisPatrick!";
         }
 
@@ -131,7 +130,8 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     }
 
     private void handleDirectedChatMessage(String line) {
-        String channel = getSpecifier(line);
+        String specifier = getSpecifier(line);
+        String channel = specifier.toLowerCase();
         String message = extractMessageBody(line, channel);
 
         if (channel.equals("all") || channel.equals(("server"))) {
@@ -147,17 +147,17 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
             clearInput();
         } else {
             //send @player
-            if (userStore.getUserByUsername(channel) != null) {
+            if (userStore.users().getByUsername(specifier).use(users -> !users.isEmpty())) {
 
-                chatDelegate.sendWhisperMessage(message, channel);
-                addMessageChat("you@" + channel + ": " + message, Channel.WHISPER);
+                chatDelegate.sendWhisperMessage(message, specifier);
+                addMessageChat("you@" + specifier + ": " + message, Channel.WHISPER);
                 clearInput();
             }
         }
     }
 
     private String getSpecifier(String line) {
-        return line.split(" ", 2)[0].substring(1).toLowerCase();
+        return line.split(" ", 2)[0].substring(1);
     }
 
     private String extractMessageBody(String line, String channel) {
@@ -167,6 +167,11 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
     public void clearInput() {
         messageText.setText("");
+    }
+
+    @Override
+    public void displaySystemMessage(String message) {
+        addMessageChat(message, Channel.CRITICAL);
     }
 
     /**
@@ -217,7 +222,12 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
      */
     @Override
     public void loginSucceeded() {
-        addMessageChat("Succesfully logged in as: " + userStore.getCurrentUser().getUsername(), Channel.SERVER);
+        addMessageChat("Succesfully logged in as: " + getCurrentUsername(), Channel.INFO);
+    }
+
+    private String getCurrentUsername() {
+        return userStore.currentUser().get().use(user -> user.map(User::getUsername))
+                .orElseThrow(() -> new IllegalStateException("Current User is not in the Userstore."));
     }
 
     /**
@@ -225,7 +235,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
      */
     @Override
     public void logoutSucceeded() {
-        addMessageChat("Successfully logged out!", Channel.SERVER);
+        addMessageChat("Successfully logged out!", Channel.INFO);
     }
 
     /**
@@ -233,12 +243,28 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
      */
     @Override
     public void nameChangeSucceeded() {
-        addMessageChat("Your username got changed to: " + userStore.getCurrentUser().getUsername(), Channel.SERVER);
+        addMessageChat("Your username got changed to: " + getCurrentUsername(), Channel.INFO);
     }
 
     @Override
     public void setUserDelegate(UserPresenter.Delegate delegate) {
         this.userDelegate = delegate;
+    }
+
+    @Override
+    public void onPlayerJoin(String username) {
+        addMessageChat(username + " joined.", Channel.INFO);
+
+    }
+
+    @Override
+    public void onPlayerLeave(String username) {
+        addMessageChat(username + " left.", Channel.INFO);
+    }
+
+    @Override
+    public void onPlayerUpdate(String oldUsername, String newUsername) {
+        addMessageChat(oldUsername + " changed his name to: " + newUsername + ".", Channel.INFO);
     }
 
     @Override

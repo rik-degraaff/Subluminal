@@ -1,47 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.text.Font?>
 <?private TextArea chatBox?>
 
-<AnchorPane fx:id="window" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.subluminal.client.presentation.controller.MainController">
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" fx:id="window" prefHeight="600" prefWidth="800"
+            xmlns="http://javafx.com/javafx/8"
+            fx:controller="tech.subluminal.client.presentation.controller.MainController">
     <children>
-        <AnchorPane fx:id="spaceBackgroundDock" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-        <AnchorPane fx:id="playArea" prefHeight="547.0" prefWidth="807.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-        <AnchorPane prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <AnchorPane fx:id="spaceBackgroundDock" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0"
+                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+        <AnchorPane fx:id="playArea" prefHeight="547.0" prefWidth="807.0" AnchorPane.bottomAnchor="0.0"
+                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
+        <AnchorPane prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                    AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <HBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <HBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0"
+                      AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <children>
-                  <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                              <AnchorPane fx:id="menuDock" prefHeight="4.0" prefWidth="4.0">
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+                            <children>
+                                <AnchorPane fx:id="menuDock" prefHeight="4.0" prefWidth="4.0">
 
-                        </AnchorPane>
-                     </children>
-                  </VBox>
+                                </AnchorPane>
+                            </children>
+                        </VBox>
                     </children>
                 </HBox>
             </children>
         </AnchorPane>
-        <AnchorPane fx:id="chatDock" prefHeight="300.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+        <AnchorPane fx:id="chatDock" prefHeight="300.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0"
+                    AnchorPane.rightAnchor="0.0">
             <children>
-                <fx:include fx:id="chatView" source="ChatView.fxml" />
+                <fx:include fx:id="chatView" source="../customElements/ChatView.fxml"/>
             </children>
         </AnchorPane>
-        <AnchorPane fx:id="playerBoardDock" prefHeight="200.0" prefWidth="400.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+        <AnchorPane fx:id="playerBoardDock" prefHeight="200.0" prefWidth="400.0" AnchorPane.rightAnchor="0.0"
+                    AnchorPane.topAnchor="100.0">
             <children>
-                <fx:include fx:id="userListView" source="UserListView.fxml" />
+                <fx:include fx:id="userListView" source="../customElements/UserListView.fxml"/>
             </children>
         </AnchorPane>
 

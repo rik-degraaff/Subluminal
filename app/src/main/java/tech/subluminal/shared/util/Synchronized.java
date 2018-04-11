@@ -3,41 +3,30 @@ package tech.subluminal.shared.util;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class Synchronized<T> {
-  private T value;
-  private final Object lock;
+public abstract class Synchronized<T> {
 
-  public Synchronized(T value) {
-    this(value, new Object());
-  }
+  protected final Object lock;
 
-  public Synchronized(T value, Object lock) {
-    this.value = value;
+  protected Synchronized(Object lock) {
     this.lock = lock;
   }
 
-  public void consume(Consumer<T> action) {
-    synchronized (lock) {
-      action.accept(value);
-    }
-  }
+  public abstract void consume(Consumer<T> action);
 
-  public <R> R use(Function<T, R> action) {
-    synchronized (lock) {
-      return action.apply(value);
-    }
-  }
+  public abstract <R> R use(Function<T, R> action);
 
-  public void update(Function<T, T> mapper) {
-    synchronized (lock) {
-      value = mapper.apply(value);
-    }
-  }
+  public abstract void update(Function<T, T> mapper);
 
   public <R> Synchronized<R> map(Function<T, R> mapper) {
-    synchronized (lock) {
-      return new Synchronized<>(mapper.apply(value), lock);
-    }
+    return new RemoteSynchronized<>(lock,
+        () -> mapper.apply(use(e -> e)),
+        n -> {});
+  }
+
+  public <R> Synchronized<R> map(Function<T, R> mapper, Function<R, T> reverseMapper) {
+    return new RemoteSynchronized<>(lock,
+        () -> mapper.apply(use(e -> e)),
+        n -> update(e -> reverseMapper.apply(n)));
   }
 
   public void sync(Runnable action) {

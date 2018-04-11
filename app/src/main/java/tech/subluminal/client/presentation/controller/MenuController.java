@@ -35,8 +35,6 @@ public class MenuController implements Initializable, Observer {
 
     private void generateLogo() {
         Platform.runLater(() -> {
-
-
             PauseTransition pauseTl = new PauseTransition(Duration.seconds(1));
 
             ScaleTransition scaleTl = new ScaleTransition(Duration.seconds(3), menuContainer);
@@ -93,19 +91,19 @@ public class MenuController implements Initializable, Observer {
     }
 
     @FXML
-    private void joinPressed(ActionEvent e){
+    private void joinPressed(ActionEvent e) {
         main.onJoinHandle();
 
     }
 
     @FXML
-    private void hostPressed(ActionEvent e){
-        main.onHostHandle();
+    private void hostPressed(ActionEvent e) {
+        main.onHostOpenHandle();
     }
 
     @FXML
-    private void settingPressed(ActionEvent e){
-        main.onSettingHandle();
+    private void settingPressed(ActionEvent e) {
+        main.onSettingOpenHandle();
     }
 
     @Override
