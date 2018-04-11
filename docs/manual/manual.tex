@@ -1,0 +1,79 @@
+%
+% Body text font is Palatino!
+%
+
+\documentclass[a5paper,pagesize,10pt,bibtotoc,pointlessnumbers,
+normalheadings,DIV=9,twoside=true]{scrbook}
+
+% twoside, openright
+\KOMAoptions{DIV=last}
+
+\usepackage{trajan}
+ 
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage[babel,german=guillemets]{csquotes}
+
+\usepackage[sc]{mathpazo}
+\linespread{1.05} 
+
+\usepackage{verbatim} % for comments
+\usepackage{listings} % for comments
+
+\usepackage{xcolor}
+\definecolor{almostblack}{rgb}{0.1,0.1,0.1}
+\definecolor{limegreen}{rgb}{0.33,0.93,0.01}
+\usepackage{graphicx}
+\usepackage{titlesec}
+
+%\setlength{\parindent}{10pt}
+%\setlength{\parskip}{1.4ex plus 0.35ex minus 0.3ex}
+%\setlength{\parskip}{1.4ex plus 0.35ex minus 0.3ex}
+
+\usepackage{blindtext}
+\newcommand{\q}[1]{>>\textit{#1}<<}
+
+\titleformat{name=\chapter}[block]
+  {\sffamily\large}
+  {}
+  {0pt}
+  {\colorsection}
+\titlespacing*{\chapter}{0pt}{\baselineskip}{\baselineskip}
+
+\newcommand{\colorchapter}[1]{%
+  \colorbox{almostblack}{\parbox{\dimexpr\textwidth-2\fboxsep}{\color{limegreen}\thechapter\ #1}}}
+
+
+\title{Subluminal \- Game Manual}   
+\author{Bordeaux Ink.} 
+\date{\today} 
+
+\begin{document}
+
+
+%=========================================
+\begin{titlepage}
+    \pagecolor[rgb]{0.1,0.1,0.1}
+    \vspace{\fill}
+		\includegraphics[width=0.9\textwidth]{logo.png}\\
+		\vspace{10mm}
+    \centering{\huge{\textcolor{white}{by Bordeaux Ink.}}}\\
+    \vspace{\fill}
+    \centering{\Huge{\textcolor{limegreen}{Game Manual}}}\\
+		\vspace{\fill}
+		\centering \Large{\textcolor{white}{2018}}
+\end{titlepage}
+\pagecolor[rgb]{1,1,1}
+%=========================================
+\newpage{}
+%=========================================
+\blinddocument
+%=========================================
+\begin{comment}
+Just some notes, not visible in pdf.
+\end{comment}
+
+
+\end{document}
