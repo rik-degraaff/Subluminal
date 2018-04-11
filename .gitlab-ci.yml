@@ -1,8 +1,6 @@
 image: subluminalthegame/gradle:4.6.0-jdk8-openjfx-alpine
 
 before_script:
-  - echo "----- Start CI -----"
-  - pwd
   - export GRADLE_USER_HOME=`pwd`/.gradle
 
 cache:
@@ -17,7 +15,7 @@ stages:
   - javadoc
   - staging
   - testing
-  - deploy
+  - production
 
 cache:
   paths:
@@ -41,6 +39,7 @@ checkstyle:
 build:
   stage: build
   script:
+    - gradle clean
     - gradle build -x check -x test
   tags:
     - cs108
@@ -95,8 +94,8 @@ staging:
   variables:
     DOCKER_DRIVER: 'overlay2'
     VERSION: 'null'
-  services:
-  - docker:dind
+#  services:
+#  - docker:dind
   before_script:
   - docker info
   - VERSION=$(cat VERSION)
@@ -119,15 +118,27 @@ staging:
     - dev
     - ft-buildtools-luc
 
-deploy:
-  stage: staging
+testing:
+  stage: testing
   script:
-    - echo "Missing sh script to setup deployment environment."
+    - echo "Missing sh script to setup testing environment."
   tags:
     - cs108
   when: manual
+  environment:
+    name: staging
+  only:
+    - /^rl-.*$/
+
+
+deploy:
+  stage: production
+  script:
+    - echo "Missing sh script to setup production environment."
+  tags:
+    - cs108
+  when: manual
+  environment:
+    name: production
   only:
     - master
-
-after_script:
-  - echo "----- End CI -----"
