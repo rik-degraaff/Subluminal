@@ -13,8 +13,8 @@ stages:
   - test
   - coverage
   - javadoc
-  - staging
   - testing
+  - staging
   - production
 
 cache:
@@ -88,19 +88,19 @@ javadoc:
   only:
     - /^rl-.*$/
 
-staging:
+testing:
   stage: staging
   image: docker:latest
   variables:
     DOCKER_DRIVER: 'overlay2'
     VERSION: 'null'
-#  services:
-#  - docker:dind
+  services:
+  - docker:dind
   before_script:
   - docker info
-  - VERSION=$(cat VERSION)
   script:
-  - echo $VERSION
+  - VERSION=$(cat VERSION)
+  - echo Building and deploying server verison $VERSION to CI_JOB_NAME
   - docker build -t subluminalthegame/subluminal:latest -t subluminalthegame/subluminal:3.0.0 .
   - docker login -u subluminalthegame -p $DOCKERHUB_PASSWORD
   - docker push subluminalthegame/subluminal
@@ -111,27 +111,27 @@ staging:
   - sshpass -p $DEPLOY_PASSWORD ssh gitlab@$DEPLOYHOST docker run --rm -d -p 1727:1729/tcp --name subluminal_staging subluminalthegame/subluminal:latest
   tags:
     - cs108
-  when: manual
+  when: on_success
   environment:
     name: staging
   only:
     - dev
     - ft-buildtools-luc
 
-testing:
+staging:
   stage: testing
   script:
     - echo "Missing sh script to setup testing environment."
   tags:
     - cs108
-  when: manual
+  when: on_success
   environment:
     name: staging
   only:
     - /^rl-.*$/
 
 
-deploy:
+production:
   stage: production
   script:
     - echo "Missing sh script to setup production environment."
