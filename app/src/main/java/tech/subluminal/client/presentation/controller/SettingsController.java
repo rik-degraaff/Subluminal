@@ -19,8 +19,4 @@ public class SettingsController implements Observer, Initializable {
     public void setMainController(MainController main) {
         this.main = main;
     }
-
-    public void onClose(ActionEvent actionEvent) {
-        main.onSettingsOpenClose();
-    }
 }

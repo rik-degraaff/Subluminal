@@ -34,7 +34,6 @@ public class PlayerStatusComponent extends HBox {
 
         statusBox.setHeight(20);
         statusBox.setWidth(20);
-        System.out.print("making label");
 
     }
 

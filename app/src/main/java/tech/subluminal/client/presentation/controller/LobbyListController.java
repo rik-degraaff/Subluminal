@@ -59,11 +59,6 @@ public class LobbyListController implements Initializable, Observer {
     paraTl.play();
   }
 
-  @FXML
-  public void closePressed() {
-    main.onLobbyListClose();
-  }
-
   @Override
   public void setMainController(MainController main) {
     this.main = main;

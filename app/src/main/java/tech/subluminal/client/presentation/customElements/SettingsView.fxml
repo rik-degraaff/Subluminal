@@ -9,13 +9,6 @@
     <children>
         <VBox prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <ToolBar prefHeight="40.0" prefWidth="200.0">
-                    <items>
-                        <Label text="Settings" />
-                        <Pane HBox.hgrow="ALWAYS" />
-                        <Button mnemonicParsing="false" onAction="#onClose" text="Close" />
-                    </items>
-                </ToolBar>
                 <TabPane prefHeight="400.0" prefWidth="600.0" rotateGraphic="true" side="LEFT" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
                         <Tab text="General">

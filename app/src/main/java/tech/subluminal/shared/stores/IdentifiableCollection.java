@@ -16,6 +16,7 @@ import tech.subluminal.shared.stores.records.Identifiable;
 import tech.subluminal.shared.util.MapperList;
 import tech.subluminal.shared.util.StoredSynchronized;
 import tech.subluminal.shared.util.Synchronized;
+import tech.subluminal.shared.util.ThreadUtils;
 
 public class IdentifiableCollection<E extends Identifiable> implements
     ReadOnlyIdentifiableCollection<E> {
@@ -28,7 +29,7 @@ public class IdentifiableCollection<E extends Identifiable> implements
     ObservableMap<String, Synchronized<E>> obsMap = FXCollections.observableHashMap();
     obsMap.addListener((MapChangeListener<String, Synchronized<E>>) change -> {
       String key = change.getKey();
-      Platform.runLater(() -> {
+      ThreadUtils.runSafly(() -> {
         if (change.wasRemoved()) {
           observableList.remove(key);
         }

@@ -42,6 +42,8 @@ public class MainController implements Initializable {
 
     private LobbyHostComponent lobbyHost;
 
+    private WindowContainerComponent window;
+
     private UserStore userStore;
 
     public void setUserStore(UserStore userStore) {
@@ -81,7 +83,7 @@ public class MainController implements Initializable {
     public void onJoinHandle() {
         menuDock.getChildren().clear();
 
-        WindowContainerComponent window = new WindowContainerComponent(this, lobbyList);
+        window = new WindowContainerComponent(this, lobbyList);
 
         menuDock.getChildren().add(window);
         window.onWindowOpen();
@@ -90,7 +92,7 @@ public class MainController implements Initializable {
     public void onHostOpenHandle() {
         menuDock.getChildren().remove(menu);
 
-        WindowContainerComponent window = new WindowContainerComponent(this, lobbyHost);
+        window = new WindowContainerComponent(this, lobbyHost);
 
         menuDock.getChildren().add(window);
         window.onWindowOpen();
@@ -98,24 +100,12 @@ public class MainController implements Initializable {
     }
 
     public void onSettingOpenHandle() {
-        menuDock.getChildren().forEach(i -> i.setVisible(false));
+        menuDock.getChildren().remove(menu);
 
-        WindowContainerComponent window = new WindowContainerComponent(this, lobbyHost);
+        window = new WindowContainerComponent(this, settings);
 
         menuDock.getChildren().add(window);
         window.onWindowOpen();
-    }
-
-    public void onSettingsOpenClose() {
-        menuDock.getChildren().remove(settings);
-
-        menuDock.getChildren().forEach(i -> i.setVisible(true));
-    }
-
-    public void onLobbyListClose() {
-        menuDock.getChildren().remove(lobbyList);
-
-        menuDock.getChildren().add(menu);
     }
 
     public void onWindowClose(){
