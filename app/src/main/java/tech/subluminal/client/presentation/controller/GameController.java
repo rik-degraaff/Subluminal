@@ -25,8 +25,8 @@ public class GameController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    map.getChildren().add(new StarComponent(300,590,60, "ANDROMEDAR"));
-    StarComponent star = new StarComponent(80,500,50, "TITTY IX");
+    map.getChildren().add(new StarComponent(0.4,0.7,60, "ANDROMEDAR"));
+    StarComponent star = new StarComponent(0.2,0.5,50, "TITTY IX");
     star.setSizeProperty(50);
     star.setColorProperty(Color.PINK);
     map.getChildren().add(star);

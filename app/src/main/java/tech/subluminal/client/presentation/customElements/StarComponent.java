@@ -1,26 +1,22 @@
 package tech.subluminal.client.presentation.customElements;
 
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.beans.binding.ObjectBinding;
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableObjectValue;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
@@ -30,11 +26,13 @@ public class StarComponent extends Pane {
   public static final int sizeAll = 200;
   public static final int BORDER_WIDTH = 3;
   private final IntegerProperty sizeProperty = new SimpleIntegerProperty();
-  private final IntegerProperty xProperty = new SimpleIntegerProperty();
-  private final IntegerProperty yProperty = new SimpleIntegerProperty();
+  private final DoubleProperty xProperty = new SimpleDoubleProperty();
+  private final DoubleProperty yProperty = new SimpleDoubleProperty();
 
   private final StringProperty ownerIDProperty = new SimpleStringProperty();
   private final BooleanProperty hasShipsProperty = new SimpleBooleanProperty();
+  private final IntegerProperty parentWidthProperty = new SimpleIntegerProperty();
+  private final IntegerProperty parentHeightProperty = new SimpleIntegerProperty();
 
   private final String name;
 
@@ -70,27 +68,27 @@ public class StarComponent extends Pane {
     this.sizeProperty.set(sizeProperty);
   }
 
-  public int getxProperty() {
+  public double getxProperty() {
     return xProperty.get();
   }
 
-  public IntegerProperty xPropertyProperty() {
+  public DoubleProperty xPropertyProperty() {
     return xProperty;
   }
 
-  public void setxProperty(int xProperty) {
+  public void setXProperty(double xProperty) {
     this.xProperty.set(xProperty);
   }
 
-  public int getyProperty() {
+  public double getyProperty() {
     return yProperty.get();
   }
 
-  public IntegerProperty yPropertyProperty() {
+  public DoubleProperty yPropertyProperty() {
     return yProperty;
   }
 
-  public void setyProperty(int yProperty) {
+  public void setYProperty(double yProperty) {
     this.yProperty.set(yProperty);
   }
 
@@ -118,17 +116,29 @@ public class StarComponent extends Pane {
     this.hasShipsProperty.set(hasShipsProperty);
   }
 
+  public StarComponent(double x, double y, int size, String name) {
 
-
-  public StarComponent(int x, int y, int size, String name) {
-
-    setxProperty(x);
-    setyProperty(y);
+    setXProperty(x);
+    setYProperty(y);
     setSizeProperty(size);
     setColorProperty(Color.GRAY);
 
-    this.layoutXProperty().bind(xProperty);
-    this.layoutYProperty().bind(yProperty);
+    this.layoutXProperty().bind(Bindings
+        .createDoubleBinding(
+            () -> parentWidthProperty.doubleValue() / 2 + (xProperty.doubleValue() - 0.5) * Math
+                .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue())
+                - sizeAll / 2,
+            xProperty, parentWidthProperty, parentHeightProperty));
+    this.layoutYProperty().bind(Bindings
+        .createDoubleBinding(
+            () -> parentHeightProperty.doubleValue() / 2 + (yProperty.doubleValue() - 0.5) * Math
+                .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue())
+                - sizeAll / 2,
+            yProperty, parentWidthProperty, parentHeightProperty));
+    Platform.runLater(() -> {
+      this.parentWidthProperty.bind(getScene().widthProperty());
+      this.parentHeightProperty.bind(getScene().heightProperty());
+    });
 
     ownerIDProperty.set(null);
     hasShipsProperty.set(false);
