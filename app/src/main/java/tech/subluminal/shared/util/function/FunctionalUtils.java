@@ -1,4 +1,4 @@
-package tech.subluminal.shared.util;
+package tech.subluminal.shared.util.function;
 
 import java.util.Optional;
 import java.util.function.Consumer;
