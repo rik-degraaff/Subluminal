@@ -15,8 +15,8 @@ repositories {
 
 // Dependencies ----------------------------
 dependencies {
-    testCompile 'junit:junit:4.12'
-    compile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.12','info.picocli:picocli:3.0.0-alpha-4'
+    compile 'junit:junit:4.12','info.picocli:picocli:3.0.0-alpha-4'
 }
 
 // Project Settings-------------------------
