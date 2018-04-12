@@ -27,6 +27,12 @@ public abstract class Movable extends GameObject {
     this.targetIDs = targetIDs;
   }
 
+  public boolean isOnStar(Star star) {
+    return targetIDs.size() == 1
+        && targetIDs.contains(star.getID())
+        && getDistanceFrom(star) < 0.00001;
+  }
+
   protected void loadFromSON(SON son) throws SONConversionError {
     SON gameObject = son.getObject(GAME_OBJECT_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, GAME_OBJECT_KEY));
