@@ -3,6 +3,9 @@ package tech.subluminal.shared.util.function;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+/**
+ * An {@link Either} that can only contain a left value.
+ */
 public final class Left<L, R> extends Either<L, R> {
 
   private L value;

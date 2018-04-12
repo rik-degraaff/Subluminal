@@ -3,7 +3,7 @@ package tech.subluminal.server.logic.game;
 import tech.subluminal.shared.stores.records.game.GameObject;
 
 /**
- * An object which can be saved in a @link{GameHistory}.
+ * An object which can be saved in a {@link GameHistory}.
  */
 public class GameHistoryEntry<E extends GameObject> {
 
@@ -34,7 +34,7 @@ public class GameHistoryEntry<E extends GameObject> {
    * all players
    *
    * @param state the state of the object.
-   * @return an entry that can be used in a @link{GameHistory}.
+   * @return an entry that can be used in a {@link GameHistory}.
    */
   public static <E extends GameObject> GameHistoryEntry<E> foreverAgo(E state) {
     return new GameHistoryEntry<>(state, Long.MIN_VALUE);
@@ -44,7 +44,7 @@ public class GameHistoryEntry<E extends GameObject> {
    * Creates entry for the game history that signifies that the object has been destroyed.
    *
    * @param state the state the object was in just before being destroyed.
-   * @return an entry that can be used in a @link{GameHistory}.
+   * @return an entry that can be used in a {@link GameHistory}.
    */
   public static <E extends GameObject> GameHistoryEntry<E> destroyed(E state) {
     return new GameHistoryEntry<>(state, true);
