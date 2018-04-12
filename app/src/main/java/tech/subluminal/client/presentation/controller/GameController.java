@@ -27,7 +27,8 @@ public class GameController implements Initializable {
   public void initialize(URL location, ResourceBundle resources) {
     map.getChildren().add(new StarComponent(300,590,60, "ANDROMEDAR"));
     StarComponent star = new StarComponent(80,500,50, "TITTY IX");
-    star.setColorProperty(Color.RED);
+    star.setSizeProperty(50);
+    star.setColorProperty(Color.PINK);
     map.getChildren().add(star);
   }
 

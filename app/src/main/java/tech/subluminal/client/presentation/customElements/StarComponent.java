@@ -1,11 +1,20 @@
 package tech.subluminal.client.presentation.customElements;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableObjectValue;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
@@ -21,17 +30,31 @@ public class StarComponent extends Pane {
   public static final int sizeAll = 200;
   public static final int BORDER_WIDTH = 3;
   private final IntegerProperty sizeProperty = new SimpleIntegerProperty();
-  private final IntegerProperty widthProperty = new SimpleIntegerProperty();
-  private final IntegerProperty heightProperty = new SimpleIntegerProperty();
+  private final IntegerProperty xProperty = new SimpleIntegerProperty();
+  private final IntegerProperty yProperty = new SimpleIntegerProperty();
 
   private final StringProperty ownerIDProperty = new SimpleStringProperty();
   private final BooleanProperty hasShipsProperty = new SimpleBooleanProperty();
 
   private final String name;
 
+  //private final ObjectProperty
+
   private final Group border;
 
-  private Paint colorProperty;
+  public Color getColorProperty() {
+    return colorProperty.get();
+  }
+
+  public ObjectProperty<Color> colorPropertyProperty() {
+    return colorProperty;
+  }
+
+  public void setColorProperty(Color colorProperty) {
+    this.colorProperty.set(colorProperty);
+  }
+
+  private final ObjectProperty<Color> colorProperty = new SimpleObjectProperty<Color>();
   //private final IntegerProperty[] shipAmpountsProperty = new SimpleIntegerProperty()[8];
   //TODO: multiple Ships
 
@@ -47,28 +70,28 @@ public class StarComponent extends Pane {
     this.sizeProperty.set(sizeProperty);
   }
 
-  public int getWidthProperty() {
-    return widthProperty.get();
+  public int getxProperty() {
+    return xProperty.get();
   }
 
-  public IntegerProperty widthPropertyProperty() {
-    return widthProperty;
+  public IntegerProperty xPropertyProperty() {
+    return xProperty;
   }
 
-  public void setWidthProperty(int widthProperty) {
-    this.widthProperty.set(widthProperty);
+  public void setxProperty(int xProperty) {
+    this.xProperty.set(xProperty);
   }
 
-  public int getHeightProperty() {
-    return heightProperty.get();
+  public int getyProperty() {
+    return yProperty.get();
   }
 
-  public IntegerProperty heightPropertyProperty() {
-    return heightProperty;
+  public IntegerProperty yPropertyProperty() {
+    return yProperty;
   }
 
-  public void setHeightProperty(int heightProperty) {
-    this.heightProperty.set(heightProperty);
+  public void setyProperty(int yProperty) {
+    this.yProperty.set(yProperty);
   }
 
   public String getOwnerIDProperty() {
@@ -95,34 +118,30 @@ public class StarComponent extends Pane {
     this.hasShipsProperty.set(hasShipsProperty);
   }
 
-  public Paint getColorProperty() {
-    return colorProperty;
-  }
-
-  public void setColorProperty(Paint colorProperty) {
-    this.colorProperty = colorProperty;
-  }
 
 
   public StarComponent(int x, int y, int size, String name) {
-    widthProperty.set(x);
-    heightProperty.set(y);
-    sizeProperty.set(size);
+
+    setxProperty(x);
+    setyProperty(y);
+    setSizeProperty(size);
+    setColorProperty(Color.GRAY);
+
+    this.layoutXProperty().bind(xProperty);
+    this.layoutYProperty().bind(yProperty);
 
     ownerIDProperty.set(null);
     hasShipsProperty.set(false);
-    colorProperty = Color.GRAY;
 
     this.name = name;
 
     Circle star = new Circle();
-    star.setFill(colorProperty);
+    star.fillProperty().bind(colorProperty);
     star.setRadius(size);
     star.setCenterY(sizeAll / 2);
     star.setCenterX(sizeAll / 2);
-
-    this.setLayoutX(x);
-    this.setLayoutY(y);
+    star.radiusProperty().bind(sizeProperty);
+    star.fillProperty().bind(colorProperty);
 
     Pane starGroup = new Pane();
     starGroup.setPrefWidth(sizeAll);
