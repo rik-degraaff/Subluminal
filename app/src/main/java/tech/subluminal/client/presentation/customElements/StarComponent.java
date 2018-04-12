@@ -18,6 +18,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 
@@ -33,6 +34,10 @@ public class StarComponent extends Pane {
   private final BooleanProperty hasShipsProperty = new SimpleBooleanProperty();
   private final IntegerProperty parentWidthProperty = new SimpleIntegerProperty();
   private final IntegerProperty parentHeightProperty = new SimpleIntegerProperty();
+
+  public String getName() {
+    return name;
+  }
 
   private final String name;
 
@@ -176,6 +181,7 @@ public class StarComponent extends Pane {
     //this.getChildren().addAll(star, starName);
 
     //star.fillProperty().bind(colorProperty);
+
   }
 
   private Group makeBorder() {

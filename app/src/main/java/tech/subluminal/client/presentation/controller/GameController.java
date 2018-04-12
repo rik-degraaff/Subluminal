@@ -1,5 +1,6 @@
 package tech.subluminal.client.presentation.controller;
 
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -10,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import tech.subluminal.client.presentation.customElements.JumpPath;
 import tech.subluminal.client.presentation.customElements.StarComponent;
 
 public class GameController implements Initializable {
@@ -22,6 +24,10 @@ public class GameController implements Initializable {
   @FXML
   private Pane map;
 
+  private StarComponent[] pressStore = new StarComponent[2];
+
+  private JumpPath jump;
+
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -29,6 +35,37 @@ public class GameController implements Initializable {
     StarComponent star = new StarComponent(0.2,0.5,0.2, "TITTY IX");
     star.setColorProperty(Color.PINK);
     map.getChildren().add(star);
+
+    map.getChildren().forEach(e -> {
+      if(e instanceof StarComponent){
+        e.setOnMouseClicked(mouseEvent -> {
+          if(pressStore[1] == null){
+            if(pressStore[0] == null){
+              pressStore[0] = (StarComponent) e;
+              pressStore[1] = null;
+            }else{
+              pressStore[1] = (StarComponent) e;
+              jump = new JumpPath(pressStore[0].getLayoutX(), pressStore[0].getLayoutY(), pressStore[1].getLayoutX(), pressStore[1].getLayoutY());
+              map.getChildren().add(jump);
+            }
+          }else{
+            pressStore[0] = (StarComponent) e;
+            pressStore[1] = null;
+          }
+          System.out.println(pressStore[0].getName());
+          mouseEvent.consume();
+        });
+      }
+    });
+
+    map.setOnMouseClicked(mouseEvent -> {
+      pressStore[0] = null;
+      pressStore[1] = null;
+      if(map.getChildren().contains(jump)){
+        map.getChildren().remove(jump);
+      }
+      System.out.println("cleared");
+    });
   }
 
   public void setMainController(MainController main){
