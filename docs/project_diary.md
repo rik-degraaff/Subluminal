@@ -6,6 +6,13 @@
 **LUC** = Luc Kury  
 **RIK** = Rik de Graaff  
 
+### Monday, April 9th, 2018 (all)
+##### Decisions:
+- In the future, the chat is going to contain five channels:
+  - WHISPER, GAME and GLOBAL, which can be used by the players intentionally.
+  - INFO and CRITICAL, which are used by the server's and clients' systems.
+  - INFO will inform players about stuff like new joined players or name changes and will be mutable by the players. CRITICAL cannot be muted and will send warnings or more important messages to players, for example if a player tries to whisper to a non-existing player.
+
 ### Wednesday, April 4th, 2018 (all)
 ##### Decisions:
 - A game store will store the the game state.
@@ -18,7 +25,7 @@
 ##### Decisions:
 - We are going to define Lobby-Stores because it is easier to store Users and Lobbies separately.
 - **DAV** and **LUC** are going to be working on the client and server lobby functionality and GUI.
-- **LGK** and **RIK** are goind to be working on the client and server game logic.
+- **LGK** and **RIK** are going to be working on the client and server game logic.
 - For the reconnection procedure we need later, our current idea is: If a player loses connection to the game, a cookie file is generated and temporarily stored on the client. This file contains data the client needs to send a reconnection request to the server.
 - Name changing during a game shall not be possible. However, this issue has a low priority.
 - Nice-to-haves:
@@ -26,7 +33,7 @@
     - game speed settings
     - reconnection to lobby with password
     - reconnection to game via user ID
-- Representation of the structure a single game state will have:
+- Representation of the current structure a single game state will have on the client side:
 ```
 gameState
     |__listOfPlayers
