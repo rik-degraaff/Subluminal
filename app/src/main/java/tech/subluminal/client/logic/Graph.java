@@ -1,10 +1,8 @@
 package tech.subluminal.client.logic;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
@@ -12,10 +10,24 @@ import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
+/**
+ * Represents a graph with connected nodes.
+ *
+ * @param <E> the type the nodes in the graph consist of.
+ */
 public class Graph<E> {
 
   private Set<Node<E>> nodes;
 
+  /**
+   * Creates a new graph.
+   *
+   * @param nodes the set of nodes to be included in this graph.
+   * @param canReach tests whether a specific node is within reach of another specific node.
+   * @param weightCalculator calculates the distance between two given nodes
+   * @param symmetric determines whether the reachability of two given nodes shall be symmetric or
+   * asymmetric.
+   */
   public Graph(Set<E> nodes, BiPredicate<E, E> canReach, BiFunction<E, E, Double> weightCalculator,
       boolean symmetric) {
     this.nodes = nodes.stream().map(Node::new).collect(Collectors.toSet());
@@ -50,6 +62,13 @@ public class Graph<E> {
     }
   }
 
+  /**
+   * Returns a List containing the node elements representing the shortest path from alpha to omega.
+   *
+   * @param alpha the element to be started from.
+   * @param omega the target element.
+   * @return the node elements representing the shortest path from alpha to omega.
+   */
   public List<E> findShortestPath(E alpha, E omega) {
     Node<E> start = nodes.stream()
         .filter(n -> n.getData().equals(alpha))
@@ -73,16 +92,15 @@ public class Graph<E> {
     NodeEntry current;
 
     do {
-      // hol mit dqueue aus border: current
       current = border.remove();
-      // wenn end: break
       if (current.node.equals(end)) {
         break;
       }
-      // wenn schon visited: mach nichts
-      if (visitedNodes.contains(current)) {
+      if (visitedNodes.contains(current.node)) {
         continue;
       }
+
+      visitedNodes.add(current.node);
 
       List<E> currentPath = current.path;
       E currentData = current.node.getData();
