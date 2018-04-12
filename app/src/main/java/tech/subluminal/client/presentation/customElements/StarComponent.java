@@ -2,21 +2,24 @@ package tech.subluminal.client.presentation.customElements;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
-import javafx.css.StyleableObjectProperty;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.TextAlignment;
 
-public class StarComponent extends Group {
+public class StarComponent extends Pane {
 
+  public static final int sizeAll = 200;
+  public static final int BORDER_WIDTH = 3;
   private final IntegerProperty sizeProperty = new SimpleIntegerProperty();
   private final IntegerProperty widthProperty = new SimpleIntegerProperty();
   private final IntegerProperty heightProperty = new SimpleIntegerProperty();
@@ -24,7 +27,11 @@ public class StarComponent extends Group {
   private final StringProperty ownerIDProperty = new SimpleStringProperty();
   private final BooleanProperty hasShipsProperty = new SimpleBooleanProperty();
 
-  private Color colorProperty;
+  private final String name;
+
+  private final Group border;
+
+  private Paint colorProperty;
   //private final IntegerProperty[] shipAmpountsProperty = new SimpleIntegerProperty()[8];
   //TODO: multiple Ships
 
@@ -88,16 +95,16 @@ public class StarComponent extends Group {
     this.hasShipsProperty.set(hasShipsProperty);
   }
 
-  public Color getColorProperty() {
+  public Paint getColorProperty() {
     return colorProperty;
   }
 
-  public void setColorProperty(Color colorProperty) {
+  public void setColorProperty(Paint colorProperty) {
     this.colorProperty = colorProperty;
   }
 
 
-  public StarComponent(int x, int y, int size) {
+  public StarComponent(int x, int y, int size, String name) {
     widthProperty.set(x);
     heightProperty.set(y);
     sizeProperty.set(size);
@@ -106,13 +113,65 @@ public class StarComponent extends Group {
     hasShipsProperty.set(false);
     colorProperty = Color.GRAY;
 
-    Node parent = this.getParent();
+    this.name = name;
+
     Circle star = new Circle();
     star.setFill(colorProperty);
-    star.setCenterX(size / 2);
-    star.setCenterY(size / 2);
     star.setRadius(size);
-    this.getChildren().add(star);
+    star.setCenterY(sizeAll / 2);
+    star.setCenterX(sizeAll / 2);
 
+    this.setLayoutX(x);
+    this.setLayoutY(y);
+
+    Pane starGroup = new Pane();
+    starGroup.setPrefWidth(sizeAll);
+    starGroup.setPrefHeight(sizeAll);
+
+    border = makeBorder();
+    border.setVisible(false);
+    starGroup.setOnMouseEntered(event -> border.setVisible(true));
+
+    starGroup.setOnMouseExited(event -> border.setVisible(false));
+
+    Label starName = new Label(name);
+    starName.getStyleClass().add("starname-label");
+    starName.setAlignment(Pos.BOTTOM_CENTER);
+    starName.setPrefWidth(sizeAll);
+    starName.setTextAlignment(TextAlignment.CENTER);
+
+    starGroup.getChildren().addAll(star, starName);
+    this.getChildren().addAll(starGroup, border);
+
+    //this.getChildren().addAll(star, starName);
+
+    //star.fillProperty().bind(colorProperty);
+  }
+
+  private Group makeBorder() {
+    Group border = new Group();
+
+    for (int y = 0; y < 2; y++) {
+      for (int x = 0; x < 2; x++) {
+        Rectangle focus = new Rectangle(BORDER_WIDTH, sizeAll / 5);
+
+        focus.setFill(Color.RED);
+        focus.setX(x * (sizeAll - BORDER_WIDTH));
+        focus.setY(y * (sizeAll - sizeAll / 5));
+        border.getChildren().add(focus);
+      }
+    }
+    for (int y = 0; y < 2; y++) {
+      for (int x = 0; x < 2; x++) {
+        Rectangle focus = new Rectangle(sizeAll / 5, BORDER_WIDTH);
+
+        focus.setFill(Color.RED);
+        focus.setX(x * (sizeAll - sizeAll / 5));
+        focus.setY(y * (sizeAll - BORDER_WIDTH));
+        border.getChildren().add(focus);
+      }
+    }
+
+    return border;
   }
 }

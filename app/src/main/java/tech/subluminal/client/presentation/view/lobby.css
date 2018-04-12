@@ -18,9 +18,14 @@
   -fx-text-fill: #59FF00;
 }
 
+.starname-label{
+  -fx-background-color: transparent;
+  -fx-text-fill: red;
+}
+
 .label {
   /*-fx-text-fill: red;*/
-  -fx-background-color: black;
+  /*-fx-background-color: black;*/
 }
 
 .whisper-message, .global-message, .game-message {

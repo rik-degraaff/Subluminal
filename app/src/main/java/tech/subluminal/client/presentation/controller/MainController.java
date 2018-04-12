@@ -36,6 +36,9 @@ public class MainController implements Initializable {
   @FXML
   private AnchorPane menuDock;
 
+  @FXML
+  private AnchorPane playArea;
+
   private BackgroundComponent background;
 
   private MenuComponent menu;
@@ -46,11 +49,16 @@ public class MainController implements Initializable {
 
   private LobbyHostComponent lobbyHost;
 
-  private WindowContainerComponent window;
+  @FXML
+  private WindowContainerComponent windowContainer;
+
+  @FXML
+  private AnchorPane window;
 
   private GameComponent game;
 
   private UserStore userStore;
+
 
   public void setUserStore(UserStore userStore) {
     this.userStore = userStore;
@@ -93,29 +101,29 @@ public class MainController implements Initializable {
   public void onJoinHandle() {
     menuDock.getChildren().clear();
 
-    window = new WindowContainerComponent(this, lobbyList);
+    windowContainer = new WindowContainerComponent(this, lobbyList);
 
-    menuDock.getChildren().add(window);
-    window.onWindowOpen();
+    menuDock.getChildren().add(windowContainer);
+    windowContainer.onWindowOpen();
   }
 
   public void onHostOpenHandle() {
     menuDock.getChildren().remove(menu);
 
-    window = new WindowContainerComponent(this, lobbyHost);
+    windowContainer = new WindowContainerComponent(this, lobbyHost);
 
-    menuDock.getChildren().add(window);
-    window.onWindowOpen();
+    menuDock.getChildren().add(windowContainer);
+    windowContainer.onWindowOpen();
 
   }
 
   public void onSettingOpenHandle() {
     menuDock.getChildren().remove(menu);
 
-    window = new WindowContainerComponent(this, settings);
+    windowContainer = new WindowContainerComponent(this, settings);
 
-    menuDock.getChildren().add(window);
-    window.onWindowOpen();
+    menuDock.getChildren().add(windowContainer);
+    windowContainer.onWindowOpen();
   }
 
   public void onWindowClose() {
@@ -127,6 +135,6 @@ public class MainController implements Initializable {
   public void onMapOpenHandle(){
     menuDock.getChildren().clear();
 
-    menuDock.getChildren().add(game);
+    playArea.getChildren().add(game);
   }
 }
