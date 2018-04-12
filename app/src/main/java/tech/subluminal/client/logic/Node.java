@@ -1,10 +1,11 @@
 package tech.subluminal.client.logic;
 
+import java.util.HashMap;
 import java.util.Map;
 
 class Node<E> {
 
-  private Map<Node<E>, Double> neighbours;
+  private Map<Node<E>, Double> neighbours = new HashMap<>();
 
   private E data;
 
