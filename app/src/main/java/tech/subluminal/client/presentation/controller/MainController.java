@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import tech.subluminal.client.presentation.customElements.BackgroundComponent;
+import tech.subluminal.client.presentation.customElements.GameComponent;
 import tech.subluminal.client.presentation.customElements.LobbyHostComponent;
 import tech.subluminal.client.presentation.customElements.LobbyListComponent;
 import tech.subluminal.client.presentation.customElements.MenuComponent;
@@ -47,6 +48,8 @@ public class MainController implements Initializable {
 
   private WindowContainerComponent window;
 
+  private GameComponent game;
+
   private UserStore userStore;
 
   public void setUserStore(UserStore userStore) {
@@ -65,8 +68,10 @@ public class MainController implements Initializable {
     lobbyList = new LobbyListComponent(this);
     settings = new SettingsComponent(this);
     lobbyHost = new LobbyHostComponent(this);
+    game = new GameComponent(this);
 
-    menuDock.getChildren().add(menu);
+    //menuDock.getChildren().add(menu); //TODO: reactivate this
+    onMapOpenHandle();
   }
 
   public MainController getController() {
@@ -117,5 +122,11 @@ public class MainController implements Initializable {
     menuDock.getChildren().clear();
 
     menuDock.getChildren().add(menu);
+  }
+
+  public void onMapOpenHandle(){
+    menuDock.getChildren().clear();
+
+    menuDock.getChildren().add(game);
   }
 }
