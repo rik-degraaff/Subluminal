@@ -23,9 +23,9 @@ import javafx.scene.text.TextAlignment;
 
 public class StarComponent extends Pane {
 
-  public static final int sizeAll = 200;
   public static final int BORDER_WIDTH = 3;
-  private final IntegerProperty sizeProperty = new SimpleIntegerProperty();
+  private final int sizeAll = 200;
+  private final DoubleProperty sizeProperty = new SimpleDoubleProperty();
   private final DoubleProperty xProperty = new SimpleDoubleProperty();
   private final DoubleProperty yProperty = new SimpleDoubleProperty();
 
@@ -56,15 +56,15 @@ public class StarComponent extends Pane {
   //private final IntegerProperty[] shipAmpountsProperty = new SimpleIntegerProperty()[8];
   //TODO: multiple Ships
 
-  public int getSizeProperty() {
+  public double getSizeProperty() {
     return sizeProperty.get();
   }
 
-  public IntegerProperty sizePropertyProperty() {
+  public DoubleProperty sizePropertyProperty() {
     return sizeProperty;
   }
 
-  public void setSizeProperty(int sizeProperty) {
+  public void setSizeProperty(double sizeProperty) {
     this.sizeProperty.set(sizeProperty);
   }
 
@@ -116,7 +116,7 @@ public class StarComponent extends Pane {
     this.hasShipsProperty.set(hasShipsProperty);
   }
 
-  public StarComponent(double x, double y, int size, String name) {
+  public StarComponent(double x, double y, double size, String name) {
 
     setXProperty(x);
     setYProperty(y);
@@ -150,7 +150,8 @@ public class StarComponent extends Pane {
     star.setRadius(size);
     star.setCenterY(sizeAll / 2);
     star.setCenterX(sizeAll / 2);
-    star.radiusProperty().bind(sizeProperty);
+    star.radiusProperty().bind(Bindings.createDoubleBinding(
+        () -> sizeProperty.doubleValue() *sizeAll, sizeProperty));
     star.fillProperty().bind(colorProperty);
 
     Pane starGroup = new Pane();
