@@ -1,11 +1,12 @@
 #!/bin/bash
 VERSION=$(cat VERSION)
 SERVER=164.132.199.58
-STAGING_PORT=1727
-TESTING_PORT=1728
+TESTING_PORT=1727
+STAGING_PORT=1728
 PRODUCTION_PORT=1729
 SERVER_KEY=server
 CLIENT_KEY=client
+LOCALCLIENT_KEY=localclient
 STAGING_KEY=staging
 TESTING_KEY=testing
 PRODUCTION_KEY=production
@@ -19,8 +20,10 @@ function show_usage {
   echo -e "\t./make.sh <OPTIONS1> <OPTIONS2>"
   echo ""
   echo -e "\tOPTIONS1:"
-  echo -e "\t--help \t\tThis message"
-  echo -e "\tclient \t\tStart the client GUI and connects to $SERVER."
+  echo -e "\thelp \t\tThis message"
+  echo -e "\twatch \t\tStart gradle continuous build ("gradle build -x check -x test --continuous")."
+  echo -e "\tclient \t\tStart the client GUI and connect to $SERVER."
+  echo -e "\localclient \t\t Start the client GUI and connect to localhost."
   echo -e "\tserver \t\tStarts the server on localhost."
   echo ""
   echo -e "\tOPTIONS2:"
@@ -32,9 +35,12 @@ function show_usage {
   echo -e "\tnumber in your VERSION file."
 }
 
-if [[ "$1" = "--help" ]] || [[ $# -eq 0 ]]
-then
+if [[ "$1" = "help" ]] || [[ $# -eq 0 ]];then
   show_usage
+elif [[ "$1" = "watch" ]];then
+  gradle build -x test -x check --continuous
+elif [[ "$1" = "testenv" ]];then
+  echo "//TODO: Make client and server start"
 else
   case $2 in
   $STAGING_KEY)
@@ -43,6 +49,11 @@ else
       echo "Starting $STAGING_KEY $CLIENT_KEY..."
       SWITCH=$CLIENT_KEY
       ADRESS=$SERVER:$STAGING_PORT
+      ;;
+    $LOCALCLIENT_KEY)
+      echo "Starting $STAGING_KEY $LOCALCLIENT_KEY"
+      SWITCH=$CLIENT_KEY
+      ADRESS=localhost:$STAGING_PORT
       ;;
     $SERVER_KEY)
       echo "Start $STAGING_KEY $SERVER_KEY..."
@@ -62,6 +73,11 @@ else
       SWITCH=$CLIENT_KEY
       ADRESS=$SERVER:$TESTING_PORT
       ;;
+    $LOCALCLIENT_KEY)
+      echo "Starting $TESTING_KEY $LOCALCLIENT_KEY"
+      SWITCH=$CLIENT_KEY
+      ADRESS=localhost:$TESTING_PORT
+      ;;
     $SERVER_KEY)
       echo "Start $TESTING_KEY $SERVER_KEY..."
       SWITCH=$SERVER_KEY
@@ -79,6 +95,11 @@ else
       echo "Starting $PRODUCTION_KEY $CLIENT_KEY..."
       SWITCH=$CLIENT_KEY
       ADRESS=$SERVER:$PRODUCTION_PORT
+      ;;
+    $LOCALCLIENT_KEY)
+      echo "Starting $PRODUCTION_KEY $LOCALCLIENT_KEY"
+      SWITCH=$CLIENT_KEY
+      ADRESS=localhost:$PRODUCTION_PORT
       ;;
     $SERVER_KEY)
       echo "Start $PRODUCTION_KEY $SERVER_KEY..."

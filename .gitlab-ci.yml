@@ -111,7 +111,8 @@ testing:
   - sshpass -p $DEPLOY_PASSWORD ssh gitlab@$DEPLOYHOST docker run --rm -d -p 1727:1729/tcp --name subluminal_staging subluminalthegame/subluminal:latest
   tags:
     - cs108
-  when: on_success
+  #when: on_success
+  when: manual
   environment:
     name: staging
   only:
@@ -124,7 +125,8 @@ staging:
     - echo "Missing sh script to setup testing environment."
   tags:
     - cs108
-  when: on_success
+  #when: on_success
+  when: manual
   environment:
     name: staging
   only:
