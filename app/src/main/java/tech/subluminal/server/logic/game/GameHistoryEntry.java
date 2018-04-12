@@ -20,6 +20,16 @@ public class GameHistoryEntry<E extends GameObject> {
   }
 
   /**
+   * Creates an entry for the game history that has always been the same and can therefor be seen by all players
+   *
+   * @param state the state of the object.
+   * @return an entry that can be used in a @link{GameHistory}.
+   */
+  public static <E extends GameObject> GameHistoryEntry<E> foreverAgo(E state) {
+    return new GameHistoryEntry<>(state, Long.MIN_VALUE);
+  }
+
+  /**
    * @return the GameObject store in this entry.
    */
   public E getState() {

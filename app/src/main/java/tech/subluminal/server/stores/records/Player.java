@@ -24,7 +24,8 @@ public class Player extends Identifiable {
     playerIDs.addAll(otherPlayerIDs);
     otherPlayerIDs.add(id);
 
-    this.motherShip = new GameHistory<>(otherPlayerIDs, new GameHistoryEntry<>(motherShip), lightSpeed);
+    this.motherShip = new GameHistory<>(otherPlayerIDs, GameHistoryEntry.foreverAgo(motherShip), lightSpeed);
+    this.motherShip.add(new GameHistoryEntry<>(motherShip));
   }
 
   public GameHistory<Ship> getMotherShip() {
