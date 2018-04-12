@@ -2,9 +2,9 @@ package tech.subluminal.server.logic;
 
 import tech.subluminal.server.stores.ReadOnlyUserStore;
 import tech.subluminal.shared.messages.ChatMessageIn;
-import tech.subluminal.shared.messages.ChatMessageIn.Channel;
 import tech.subluminal.shared.messages.ChatMessageOut;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.records.Channel;
 import tech.subluminal.shared.stores.records.User;
 
 /**

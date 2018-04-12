@@ -62,7 +62,7 @@ public class LobbyManager {
         .getLobbiesWithUser(userID)
         .consume(lobbies ->
             lobbies.forEach(syncLobby -> syncLobby.consume(lobby -> lobby.removePlayer(userID)))
-    );
+        );
     //TODO: Send message to client: Successfully left lobby
   }
 

@@ -19,6 +19,7 @@ public class SONParsing {
 
   /**
    * Parses a Integer to a representing String format.
+   *
    * @param key specifies the keyword for deparsing the object later.
    * @return the Integer in the SON specific String format.
    */
@@ -28,6 +29,7 @@ public class SONParsing {
 
   /**
    * Parses a Double to a representing String format.
+   *
    * @param key specifies the key to deparsing the object later.
    * @return the Double in the SON specific String format.
    */
@@ -37,6 +39,7 @@ public class SONParsing {
 
   /**
    * Parses a Boolean to a representing String format.
+   *
    * @param key specifies the key to deparsing the object later.
    * @return the Boolean in the SON specific String format.
    */
@@ -46,6 +49,7 @@ public class SONParsing {
 
   /**
    * Parses a String to a representing String format.
+   *
    * @param key specifies the key to deparsing the object later.
    * @return the String in the SON specific String format.
    */
@@ -55,6 +59,7 @@ public class SONParsing {
 
   /**
    * Parses a SON to a representing String format.
+   *
    * @param key specifies the key to deparsing the object later.
    * @return the String in SON the SON specific String format.
    */
@@ -64,6 +69,7 @@ public class SONParsing {
 
   /**
    * Parses a SONList to a representing String format.
+   *
    * @param key specifies the key to deparsing the object later.
    * @return the String in SON the SON specific String format.
    */
@@ -77,6 +83,7 @@ public class SONParsing {
 
   /**
    * Parses a Integer from its SON specific String form.
+   *
    * @param str is the sequence contaning the Integer.
    */
   static PartialParseResult<Integer> partialParseInt(String str, int i) throws SONParsingError {
@@ -106,6 +113,7 @@ public class SONParsing {
 
   /**
    * Parses a Double from its SON specific String form.
+   *
    * @param str is the sequence containing the Double.
    */
   static PartialParseResult<Double> partialParseDouble(String str, int i) throws SONParsingError {
@@ -136,6 +144,7 @@ public class SONParsing {
 
   /**
    * Parses a Boolean from its SON specific String form.
+   *
    * @param str is the sequence containing the Boolean.
    */
   static PartialParseResult<Boolean> partialParseBoolean(String str, int i) throws SONParsingError {
@@ -156,6 +165,7 @@ public class SONParsing {
 
   /**
    * Parses a String from its SON specific String form.
+   *
    * @param str is the sequence containing the Double.
    */
   static PartialParseResult<String> partialParseString(String str, int start)

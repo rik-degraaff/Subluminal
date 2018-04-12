@@ -2,10 +2,16 @@ package tech.subluminal.shared.stores;
 
 import java.util.Collection;
 import java.util.Optional;
+import javafx.collections.ObservableList;
 import tech.subluminal.shared.stores.records.Identifiable;
 import tech.subluminal.shared.util.Synchronized;
 
 public interface ReadOnlyIdentifiableCollection<E extends Identifiable> {
+
+  /**
+   * @return an observable list containing the entries in this collection.
+   */
+  ObservableList<E> observableList();
 
   /**
    * @return all the entities that are saved in this collection.

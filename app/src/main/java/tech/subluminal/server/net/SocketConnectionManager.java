@@ -57,11 +57,12 @@ public class SocketConnectionManager implements ConnectionManager {
   }
 
   /**
-   * Closes this stream and releases any system resources associated with it. If the stream is
-   * already closed then invoking this method has no effect.
+   * Closes this stream and releases any system tech.subluminal.resources associated with it. If the
+   * stream is already closed then invoking this method has no effect.
    *
    * <p>As noted in {@link AutoCloseable#close()}, cases where the close may fail require careful
-   * attention. It is strongly advised to relinquish the underlying resources and to internally
+   * attention. It is strongly advised to relinquish the underlying tech.subluminal.resources and to
+   * internally
    * <em>mark</em> the {@code Closeable} as closed, prior to throwing the {@code IOException}.</p>
    *
    * @throws IOException if an I/O error occurs
