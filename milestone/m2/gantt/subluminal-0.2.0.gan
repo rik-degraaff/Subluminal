@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Subluminal" company="Bordeaux Ink" webLink="http://" view-date="2018-02-12" view-index="0" gantt-divider-location="839" resource-divider-location="300" version="2.8.6" locale="de">
+<?xml version="1.0" encoding="UTF-8"?><project name="Subluminal" company="Bordeaux Ink" webLink="http://" view-date="2018-02-26" view-index="0" gantt-divider-location="839" resource-divider-location="300" version="2.8.6" locale="de">
     <description><![CDATA[
         
         
@@ -12,7 +12,7 @@
         <field id="tpd3" name="Vorgang" width="394" order="0"/>
         <field id="tpd4" name="Anfang" width="215" order="1"/>
         <field id="tpd5" name="Ende" width="197" order="2"/>
-        <option id="color.recent"><![CDATA[#ff00ff #ff0000 #ffff00 #000000 #00ff00 #f0f0f0 #0000ff]]></option>
+        <option id="color.recent"><![CDATA[#00ff00 #ff00ff #ff0000 #ffff00 #000000 #f0f0f0 #0000ff]]></option>
     </view>
     <view id="resource-table">
         <field id="0" name="Ressource" width="210" order="0"/>
@@ -114,7 +114,7 @@
         <task id="82" name="write some unit tests" color="#00ff00" meeting="false" start="2018-03-18" duration="4" complete="0" thirdDate="2018-04-07" thirdDate-constraint="0" expand="true"/>
         <task id="274" name="game list server side" color="#ff0000" meeting="false" start="2018-03-18" duration="1" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true"/>
         <task id="277" name="model game state client side" color="#00ff00" meeting="false" start="2018-03-18" duration="1" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true"/>
-        <task id="280" name="model game state server side" color="#ff0000" meeting="false" start="2018-03-18" duration="1" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true"/>
+        <task id="280" name="model game state server side" color="#00ff00" meeting="false" start="2018-04-12" duration="2" complete="0" thirdDate="2018-04-12" thirdDate-constraint="1" expand="true"/>
         <task id="284" name="generate highscore" color="#ff0000" meeting="false" start="2018-03-18" duration="1" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true"/>
         <task id="287" name="make highscore persistent" color="#ff0000" meeting="false" start="2018-03-18" duration="1" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true"/>
         <task id="290" name="make a build script" color="#00ff00" meeting="false" start="2018-03-18" duration="1" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true"/>
@@ -143,7 +143,7 @@
             <depend id="93" type="2" difference="0" hardness="Strong"/>
             <depend id="94" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="106" name="write manual" color="#ff0000" meeting="false" start="2018-03-18" duration="5" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true"/>
+        <task id="106" name="write manual" color="#00ff00" meeting="false" start="2018-04-09" duration="4" complete="0" thirdDate="2018-04-09" thirdDate-constraint="1" expand="true"/>
         <task id="93" name="create game assets" color="#ff0000" meeting="false" start="2018-04-16" duration="3" complete="0" thirdDate="2018-04-16" thirdDate-constraint="0" expand="true"/>
         <task id="92" name="game GUI" color="#ff0000" meeting="false" start="2018-04-16" duration="5" complete="0" thirdDate="2018-04-16" thirdDate-constraint="0" expand="true">
             <depend id="204" type="2" difference="0" hardness="Strong"/>
