@@ -14,7 +14,11 @@ import tech.subluminal.shared.util.IdUtils;
 
 public class MapGeneration {
 
+  // it should take roughly 20 second for light to traverse the entire map
   private static final double LIGHT_SPEED = 1 / 20.0;
+  // ships can cross the map in roughly 10 jumps
+  private static final double JUMP_DISTANCE = 1 / 10.0;
+  private static final double SHIP_SPEED = LIGHT_SPEED * 0.3;
 
   public static GameState getNewGameStateForPlayers(Set<String> playerIDs, String gameID) {
     final Set<Star> stars = new HashSet<>();
@@ -42,6 +46,6 @@ public class MapGeneration {
         .limit(additionalStars)
         .forEach(stars::add);
 
-    return new GameState(gameID, stars, players, LIGHT_SPEED);
+    return new GameState(gameID, stars, players, LIGHT_SPEED, JUMP_DISTANCE, SHIP_SPEED);
   }
 }

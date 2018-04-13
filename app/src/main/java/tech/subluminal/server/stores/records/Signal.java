@@ -1,5 +1,6 @@
 package tech.subluminal.server.stores.records;
 
+import java.util.List;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.GameObject;
 
@@ -12,11 +13,13 @@ public class Signal extends GameObject implements Comparable<Signal> {
   private final String playerID;
   private final long arrivalTime;
   private final int amount;
+  private final List<String> targets;
 
-  public Signal(Coordinates origin, String id, String starID, String playerID,
+  public Signal(Coordinates origin, String id, String starID, List<String> targets, String playerID,
       Coordinates starCoordinates, int amount, double lightSpeed) {
     super(origin, id);
     this.starID = starID;
+    this.targets = targets;
     this.playerID = playerID;
     this.amount = amount;
     this.arrivalTime = (long) (origin.getDistanceFrom(starCoordinates)/lightSpeed);
@@ -35,6 +38,13 @@ public class Signal extends GameObject implements Comparable<Signal> {
    */
   public String getStarID() {
     return starID;
+  }
+
+  /**
+   * @return a list containing all targets the fleet should fly over.
+   */
+  public List<String> getTargets() {
+    return targets;
   }
 
   /**

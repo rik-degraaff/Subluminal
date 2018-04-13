@@ -1,8 +1,9 @@
 package tech.subluminal.server.stores.records;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import tech.subluminal.server.logic.game.GameHistory;
 import tech.subluminal.server.logic.game.GameHistoryEntry;
@@ -15,7 +16,7 @@ public class Player extends Identifiable {
   private final double lightSpeed;
   private final Set<String> playerIDs = new HashSet<>();
   private final GameHistory<Ship> motherShip;
-  private final List<GameHistory<Fleet>> fleets = new ArrayList<>();
+  private final Map<String, GameHistory<Fleet>> fleets = new HashMap<>();
 
   public Player(String id, Set<String> otherPlayerIDs, Ship motherShip, double lightSpeed) {
     super(id);
@@ -32,7 +33,7 @@ public class Player extends Identifiable {
     return motherShip;
   }
 
-  public List<GameHistory<Fleet>> getFleets() {
+  public Map<String, GameHistory<Fleet>> getFleets() {
     return fleets;
   }
 }
