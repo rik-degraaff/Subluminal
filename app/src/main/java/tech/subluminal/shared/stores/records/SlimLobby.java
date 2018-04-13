@@ -7,25 +7,23 @@ import tech.subluminal.shared.son.SONRepresentable;
 
 public class SlimLobby extends Identifiable implements SONRepresentable {
 
-  private static final String IDENTIFIABLE_KEY = "identifiable";
   private static final String CLASS_NAME = SlimLobby.class.getSimpleName();
-  private static final String NAME_KEY = "name";
-  private static final String ADMIN_ID_KEY = "adminID";
-  private static final String MIN_PLAYERS_KEY = "minPlayers";
-  private static final String MAX_PLAYERS_KEY = "maxPlayers";
-  private static final String PLAYER_COUNT_KEY = "playerCount";
-  // Lobby properties
-  private String name;
-  private String adminID;
-  private int minPlayers = 2;
-  private int maxPlayers = 8;
-  private int playerCount;
+  private static final String IDENTIFIABLE_KEY = "identifiable";
+  private static final String SETTINGS_KEY = "settings";
 
-  public SlimLobby(
-      String id, String name, String adminID) {
+  private LobbySettings settings;
+
+  public SlimLobby(String id, LobbySettings settings) {
     super(id);
-    this.name = name;
-    this.adminID = adminID;
+    this.settings = settings;
+  }
+
+  public LobbySettings getSettings() {
+    return settings;
+  }
+
+  public void setSettings(LobbySettings settings) {
+    this.settings = settings;
   }
 
   public static <E extends SlimLobby> E fromSON(SON son, Supplier<E> lobbySupplier)
@@ -36,66 +34,15 @@ public class SlimLobby extends Identifiable implements SONRepresentable {
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, IDENTIFIABLE_KEY));
     lobby.loadFromSON(identifiable);
 
-    lobby.setName(son.getString(NAME_KEY)
-        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, NAME_KEY)));
-
-    lobby.setAdminID(son.getString(ADMIN_ID_KEY)
-        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, ADMIN_ID_KEY)));
-
-    lobby.setMinPlayers(son.getInt(MIN_PLAYERS_KEY)
-        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, MIN_PLAYERS_KEY)));
-
-    lobby.setMaxPlayers(son.getInt(MAX_PLAYERS_KEY)
-        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, MAX_PLAYERS_KEY)));
-
-    lobby.setPlayerCount(son.getInt(PLAYER_COUNT_KEY)
-        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, PLAYER_COUNT_KEY)));
+    SON settings = son.getObject(SETTINGS_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, IDENTIFIABLE_KEY));
+    lobby.loadFromSON(settings);
 
     return lobby;
   }
 
   public static SlimLobby fromSON(SON son) throws SONConversionError {
-    return fromSON(son, () -> new SlimLobby(null, null, null));
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getAdminID() {
-    return adminID;
-  }
-
-  public void setAdminID(String adminID) {
-    this.adminID = adminID;
-  }
-
-  public int getMinPlayers() {
-    return minPlayers;
-  }
-
-  public void setMinPlayers(int minPlayers) {
-    this.minPlayers = minPlayers;
-  }
-
-  public int getMaxPlayers() {
-    return maxPlayers;
-  }
-
-  public void setMaxPlayers(int maxPlayers) {
-    this.maxPlayers = maxPlayers;
-  }
-
-  public int getPlayerCount() {
-    return playerCount;
-  }
-
-  public void setPlayerCount(int playerCount) {
-    this.playerCount = playerCount;
+    return fromSON(son, () -> new SlimLobby(null, null));
   }
 
   /**
@@ -107,10 +54,7 @@ public class SlimLobby extends Identifiable implements SONRepresentable {
   public SON asSON() {
     return new SON()
         .put(super.asSON(), IDENTIFIABLE_KEY)
-        .put(getName(), NAME_KEY)
-        .put(getAdminID(), ADMIN_ID_KEY)
-        .put(getMinPlayers(), MIN_PLAYERS_KEY)
-        .put(getMaxPlayers(), MAX_PLAYERS_KEY)
-        .put(getPlayerCount(), PLAYER_COUNT_KEY);
+        .put(settings.asSON(), SETTINGS_KEY);
+
   }
 }

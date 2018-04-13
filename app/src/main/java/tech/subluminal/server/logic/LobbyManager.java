@@ -7,7 +7,10 @@ import tech.subluminal.server.stores.LobbyStore;
 import tech.subluminal.server.stores.ReadOnlyUserStore;
 import tech.subluminal.shared.messages.LobbyJoinReq;
 import tech.subluminal.shared.messages.LobbyLeaveReq;
+import tech.subluminal.shared.messages.LobbyListReq;
+import tech.subluminal.shared.messages.LobbyUpdateReq;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.util.Synchronized;
 
@@ -37,6 +40,16 @@ public class LobbyManager {
   private void attachHandlers(String id, Connection connection) {
     connection
         .registerHandler(LobbyJoinReq.class, LobbyJoinReq::fromSON, req -> onLobbyJoin(id, req));
+    connection
+        .registerHandler(LobbyLeaveReq.class, LobbyLeaveReq::fromSON, req -> onLobbyLeave());
+    //  connection
+    //      .registerHandler(LobbyListReq.class, LobbyListReq::fromSON, this::onLobbyList);
+  }
+
+  private <T extends SONRepresentable> void onLobbyList(T t) {
+  }
+
+  private void onLobbyLeave() {
   }
 
   private void onLobbyJoin(String userID, LobbyJoinReq req) {
@@ -47,7 +60,7 @@ public class LobbyManager {
     }
     //TODO: Check if player is already in a lobby
     lobby.get().update(l -> {
-      if (l.getPlayerCount() >= l.getMaxPlayers()) {
+      if (l.getPlayerCount() >= l.getSettings().getMaxPlayers()) {
         //TODO: Send message to client: Lobby full
         return l;
       }
