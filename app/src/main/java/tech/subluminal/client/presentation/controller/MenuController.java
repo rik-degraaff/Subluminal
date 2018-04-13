@@ -1,5 +1,6 @@
 package tech.subluminal.client.presentation.controller;
 
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
@@ -16,6 +17,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public class MenuController implements Initializable, Observer {
 
@@ -88,26 +91,46 @@ public class MenuController implements Initializable, Observer {
     logoDock.setImage(logo);
     menuButtonsDock.setOpacity(0.0);
     generateLogo();
+
+    //TODO: Iterate over all the files and play random track
+    Media media = null;
+    //try {
+    //TODO: Import track with getResources
+    media = new Media(getClass().getResource("/tech/subluminal/resources/music/theyre-here_looping.mp3").toString());
+    //} catch (URISyntaxException e) {
+    //  e.printStackTrace();
+    //}
+
+    MediaPlayer player = new MediaPlayer(media);
+    player.setVolume(0.75);
+    player.play();
+
+    player.setOnEndOfMedia(new Runnable() {
+                             public void run() {
+                               player.seek(Duration.ZERO);
+                             }
+                           }
+    );
   }
 
-  @FXML
-  private void joinPressed(ActionEvent e) {
-    main.onJoinHandle();
+    @FXML
+    private void joinPressed (ActionEvent e){
+      main.onJoinHandle();
 
-  }
+    }
 
-  @FXML
-  private void hostPressed(ActionEvent e) {
-    main.onHostOpenHandle();
-  }
+    @FXML
+    private void hostPressed (ActionEvent e){
+      main.onHostOpenHandle();
+    }
 
-  @FXML
-  private void settingPressed(ActionEvent e) {
-    main.onSettingOpenHandle();
-  }
+    @FXML
+    private void settingPressed (ActionEvent e){
+      main.onSettingOpenHandle();
+    }
 
-  @Override
-  public void setMainController(MainController main) {
-    this.main = main;
+    @Override
+    public void setMainController (MainController main){
+      this.main = main;
+    }
   }
-}

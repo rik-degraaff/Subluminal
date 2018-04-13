@@ -36,7 +36,7 @@ public class ClientInitializer extends Application {
    * @param port of the server.
    * @param username initial username to request from the server.
    */
-  public static void init(String server, int port, String username) {
+  public static void init(String server, int port, String username, boolean debug) {
     Socket socket = null;
     try {
       socket = new Socket(server, port);
@@ -103,9 +103,9 @@ public class ClientInitializer extends Application {
     primaryStage.setMaximized(true);
     primaryStage.show();
 
-    String[] cmd = getParameters().getRaw().toArray(new String[3]);
+    String[] cmd = getParameters().getRaw().toArray(new String[4]);
 
-    init(cmd[0], Integer.parseInt(cmd[1]), cmd[2]);
+    init(cmd[0], Integer.parseInt(cmd[1]), cmd[2], Boolean.getBoolean(cmd[3]));
 
     primaryStage.widthProperty().addListener((v, oldV, newV) -> {
       int diff = oldV.intValue() - newV.intValue();
