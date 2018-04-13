@@ -43,9 +43,11 @@ public class GameController implements Initializable {
             if(pressStore[0] == null){
               pressStore[0] = (StarComponent) e;
               pressStore[1] = null;
+            }else if(pressStore[0] == e){
+
             }else{
               pressStore[1] = (StarComponent) e;
-              jump = new JumpPath(pressStore[0].getLayoutX(), pressStore[0].getLayoutY(), pressStore[1].getLayoutX(), pressStore[1].getLayoutY());
+              jump = new JumpPath(pressStore[0].layoutXProperty(), pressStore[0].layoutYProperty(), pressStore[1].layoutXProperty(), pressStore[1].layoutYProperty());
               map.getChildren().add(jump);
             }
           }else{

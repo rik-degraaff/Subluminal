@@ -131,14 +131,12 @@ public class StarComponent extends Pane {
     this.layoutXProperty().bind(Bindings
         .createDoubleBinding(
             () -> parentWidthProperty.doubleValue() / 2 + (xProperty.doubleValue() - 0.5) * Math
-                .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue())
-                - sizeAll / 2,
+                .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue()),
             xProperty, parentWidthProperty, parentHeightProperty));
     this.layoutYProperty().bind(Bindings
         .createDoubleBinding(
             () -> parentHeightProperty.doubleValue() / 2 + (yProperty.doubleValue() - 0.5) * Math
-                .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue())
-                - sizeAll / 2,
+                .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue()),
             yProperty, parentWidthProperty, parentHeightProperty));
     Platform.runLater(() -> {
       this.parentWidthProperty.bind(getScene().widthProperty());
@@ -162,6 +160,8 @@ public class StarComponent extends Pane {
     Pane starGroup = new Pane();
     starGroup.setPrefWidth(sizeAll);
     starGroup.setPrefHeight(sizeAll);
+    starGroup.setTranslateX(-sizeAll/2);
+    starGroup.setTranslateY(-sizeAll/2);
 
     border = makeBorder();
     border.setVisible(false);
@@ -175,8 +175,8 @@ public class StarComponent extends Pane {
     starName.setPrefWidth(sizeAll);
     starName.setTextAlignment(TextAlignment.CENTER);
 
-    starGroup.getChildren().addAll(star, starName);
-    this.getChildren().addAll(starGroup, border);
+    starGroup.getChildren().addAll(star, starName, border);
+    this.getChildren().addAll(starGroup);
 
     //this.getChildren().addAll(star, starName);
 
