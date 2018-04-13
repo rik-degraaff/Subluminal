@@ -1,12 +1,13 @@
 package tech.subluminal.server.logic.game;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import tech.subluminal.server.logic.MessageDistributor;
 import tech.subluminal.server.stores.GameStore;
 import tech.subluminal.server.stores.LobbyStore;
@@ -14,6 +15,7 @@ import tech.subluminal.server.stores.records.GameState;
 import tech.subluminal.server.stores.records.MoveRequests;
 import tech.subluminal.server.stores.records.Player;
 import tech.subluminal.server.stores.records.Signal;
+import tech.subluminal.server.stores.records.Star;
 import tech.subluminal.shared.logic.game.GameLoop;
 import tech.subluminal.shared.messages.FleetMoveReq;
 import tech.subluminal.shared.messages.GameStateDelta;
@@ -22,7 +24,6 @@ import tech.subluminal.shared.messages.MoveReq;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Ship;
-import tech.subluminal.shared.stores.records.game.Star;
 import tech.subluminal.shared.util.IdUtils;
 import tech.subluminal.shared.util.Synchronized;
 import tech.subluminal.shared.util.function.Either;
@@ -160,10 +161,68 @@ public class GameManager {
   }
 
   private void gameTick(GameState gameState, long elapsedTime) {
-    long currentTime = System.currentTimeMillis();
-    final PriorityQueue<PriorityRunnable> queue = new PriorityQueue<>();
+    final Map<String, Star> stars = gameState.getStars()
+        .entrySet()
+        .stream()
+        .filter(e -> !e.getValue().getCurrent().isDestroyed())
+        .collect(Collectors.toMap(Entry::getKey, e -> e.getValue().getCurrent().getState()));
 
+    final IntermediateGameState intermediateGameState =
+        new IntermediateGameState(elapsedTime, stars, gameState.getPlayers().keySet());
 
+    gameState.getPlayers().forEach((playerID, player) -> {
+      player.getFleets()
+          .values()
+          .stream()
+          .map(GameHistory::getCurrent)
+          .filter(s -> !s.isDestroyed())
+          .map(GameHistoryEntry::getState)
+          .forEach(fleet -> {
+            intermediateGameState.addFleet(fleet, playerID);
+          });
+
+      intermediateGameState.addMotherShip(player.getMotherShip().getCurrent().getState(), playerID);
+    });
+
+    intermediateGameState.advance();
+
+    intermediateGameState.getStars().forEach((starID, star) -> {
+      gameState.getStars().get(starID).add(new GameHistoryEntry<>(star));
+    });
+
+    intermediateGameState.getFleetsOnStars().forEach((playerID, map) -> {
+      final Player player = gameState.getPlayers().get(playerID);
+      map.values()
+          .stream()
+          .filter(Optional::isPresent)
+          .map(Optional::get)
+          .forEach(
+              fleet -> player.getFleets().get(fleet.getID()).add(new GameHistoryEntry<>(fleet)));
+    });
+
+    intermediateGameState.getFleetsUnderway().forEach((playerID, fleets) -> {
+      final Player player = gameState.getPlayers().get(playerID);
+      fleets.forEach((fleetID, fleet) -> {
+        player.getFleets().get(fleet.getID()).add(new GameHistoryEntry<>(fleet));
+      });
+    });
+
+    intermediateGameState.getMotherShipsOnStars().forEach((playerID, map) -> {
+      final Player player = gameState.getPlayers().get(playerID);
+      map.values()
+          .stream()
+          .filter(Optional::isPresent)
+          .map(Optional::get)
+          .forEach(
+              ship -> player.getMotherShip().add(new GameHistoryEntry<>(ship)));
+    });
+
+    intermediateGameState.getMotherShipsUnderway().forEach((playerID, optionalShip) -> {
+      optionalShip.ifPresent(ship -> {
+        final Player player = gameState.getPlayers().get(playerID);
+        player.getMotherShip().add(new GameHistoryEntry<>(ship));
+      });
+    });
   }
 
   private void processMoveRequests(

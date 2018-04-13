@@ -30,8 +30,8 @@ public class GameStateDeltaTest {
     delta.addPlayer(new Player("2345",
         new Ship(new Coordinates(10.0, 2.3), "4321", Arrays.asList("5"), 0.2), Arrays.asList()));
 
-    delta.addStar(new Star("1234", 1, new Coordinates(0, 0), "starid"));
-    delta.addStar(new Star(null, 0, new Coordinates(0, 42), "starid2"));
+    delta.addStar(new Star("1234", 1, new Coordinates(0, 0), "starid", true));
+    delta.addStar(new Star(null, 0, new Coordinates(0, 42), "starid2", false));
 
     delta.addRemovedFleet("1234", "645");
     delta.addRemovedFleet("1234", "123");

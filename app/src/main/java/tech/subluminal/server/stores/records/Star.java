@@ -18,10 +18,10 @@ public class Star extends tech.subluminal.shared.stores.records.game.Star implem
   private final double nextShipgen;
 
   public Star(
-      String ownerID, double possession, Coordinates coordinates, String id,
+      String ownerID, double possession, Coordinates coordinates, String id, boolean generating,
       double dematRate, double nextDemat, double generationRate, double nextShipgen
   ) {
-    super(ownerID, possession, coordinates, id);
+    super(ownerID, possession, coordinates, id, generating);
     this.dematRate = dematRate;
     this.nextDemat = nextDemat;
     this.generationRate = generationRate;
@@ -44,7 +44,7 @@ public class Star extends tech.subluminal.shared.stores.records.game.Star implem
         .advanceBy(deltaTime, nextShipgen, generationRate, shipGenHandler);
     double newGen = DeltaTimeUtils.advanceBy(deltaTime, nextDemat, dematRate, dematHandler);
 
-    return new Star(getOwnerID(), getPossession(), getCoordinates(), getID(), dematRate, newDemat,
-        generationRate, newGen);
+    return new Star(getOwnerID(), getPossession(), getCoordinates(), getID(), isGenerating(),
+        dematRate, newDemat, generationRate, newGen);
   }
 }

@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import tech.subluminal.server.logic.game.GameHistory;
 import tech.subluminal.server.logic.game.GameHistoryEntry;
 import tech.subluminal.shared.stores.records.Identifiable;
-import tech.subluminal.shared.stores.records.game.Star;
 
 /**
  * Represents the state of a game in progress.

@@ -80,14 +80,54 @@ public class IntermediateGameState {
       if (fleet.getTargetIDs().size() == 1) {
         tasks.add(new PriorityRunnable(newStart, () -> {
           fleetsUnderway.get(playerID).remove(fleetID);
-          addFleetToStar(fleet, playerID, fleet.getTargetIDs().get(0));
+          addFleetToStar(fleet, playerID, star.getID());
         }));
       } else {
         fleet.getTargetIDs().remove(0);
         tasks.add(new PriorityRunnable(newStart,
-            () -> moveFleet(newStart, playerID, fleetID, deltaTimeLeft - timeToArrive)));
+            () -> {
+              passFleetByStar(playerID, fleetID, star.getID());
+              moveFleet(newStart, playerID, fleetID, deltaTimeLeft - timeToArrive);
+            }));
       }
     }
+  }
+
+  private void moveMotherShip(double start, String playerID, String shipID, double deltaTimeLeft) {
+    Ship ship = motherShipsUnderway.get(playerID).get();
+    Star star = stars.get(ship.getTargetIDs().get(0));
+
+    double timeToArrive = ship.getTimeToReach(star.getCoordinates());
+    if (deltaTimeLeft > timeToArrive) {
+      Ship newShip = new Ship(
+          ship.getPositionMovingTowards(star.getCoordinates(), deltaTimeLeft), shipID, ship.getTargetIDs(), ship.getSpeed());
+      motherShipsUnderway.put(playerID, Optional.of(newShip));
+    } else {
+      ship.setCoordinates(
+          new Coordinates(star.getCoordinates().getX(), star.getCoordinates().getY()));
+      double newStart = start + timeToArrive;
+      if (ship.getTargetIDs().size() == 1) {
+        tasks.add(new PriorityRunnable(newStart, () -> {
+          motherShipsUnderway.remove(playerID);
+          addMotherShipToStar(ship, playerID, star.getID());
+        }));
+      } else {
+        ship.getTargetIDs().remove(0);
+        tasks.add(new PriorityRunnable(newStart,
+            () -> {
+              passMotherShipByStar(playerID, shipID, star.getID());
+              moveMotherShip(newStart, playerID, shipID, deltaTimeLeft - timeToArrive);
+            }));
+      }
+    }
+  }
+
+  private void passMotherShipByStar(String playerID, String shipID, String id) {
+    // TODO: implement this
+  }
+
+  private void passFleetByStar(String playerID, String fleetID, String id) {
+    // TODO: implement this
   }
 
   private void colonisationTick(String starID) {
@@ -116,7 +156,7 @@ public class IntermediateGameState {
 
   public void addMotherShip(Ship ship, String playerID) {
     if (isOnStar(ship)) {
-      addMotherShipToStar(ship, playerID);
+      addMotherShipToStar(ship, playerID, ship.getTargetIDs().get(0));
     } else {
       setMotherShipUnderway(ship, playerID);
     }
@@ -126,8 +166,8 @@ public class IntermediateGameState {
     motherShipsUnderway.put(playerID, Optional.of(ship));
   }
 
-  private void addMotherShipToStar(Ship ship, String playerID) {
-    motherShipsOnStars.get(ship.getTargetIDs().get(0)).put(playerID, Optional.of(ship));
+  private void addMotherShipToStar(Ship ship, String playerID, String starID) {
+    motherShipsOnStars.get(starID).put(playerID, Optional.of(ship));
   }
 
   private boolean isOnStar(Movable movable) {
