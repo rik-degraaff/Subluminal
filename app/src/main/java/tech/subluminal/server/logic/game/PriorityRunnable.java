@@ -5,10 +5,10 @@ package tech.subluminal.server.logic.game;
  */
 public class PriorityRunnable implements Runnable, Comparable<PriorityRunnable> {
 
-  private final long priority;
+  private final double priority;
   private final Runnable runnable;
 
-  public PriorityRunnable(long priority, Runnable runnable) {
+  public PriorityRunnable(double priority, Runnable runnable) {
     this.priority = priority;
     this.runnable = runnable;
   }
@@ -23,6 +23,6 @@ public class PriorityRunnable implements Runnable, Comparable<PriorityRunnable> 
 
   @Override
   public int compareTo(PriorityRunnable o) {
-    return Long.compare(priority, o.priority);
+    return Double.compare(priority, o.priority);
   }
 }

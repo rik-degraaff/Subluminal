@@ -19,6 +19,7 @@ public class MapGeneration {
   // ships can cross the map in roughly 10 jumps
   private static final double JUMP_DISTANCE = 1 / 10.0;
   private static final double SHIP_SPEED = LIGHT_SPEED * 0.3;
+  private static final double MOTHER_SHIP_SPEED = LIGHT_SPEED * 0.2;
 
   public static GameState getNewGameStateForPlayers(Set<String> playerIDs, String gameID) {
     final Set<Star> stars = new HashSet<>();
@@ -35,14 +36,14 @@ public class MapGeneration {
 
       Player player = new Player(playerID, otherPlayers,
           new Ship(homeCoords, IdUtils.generateId(8),
-              Collections.singletonList(homeStar.getID())), LIGHT_SPEED);
+              Collections.singletonList(homeStar.getID()), MOTHER_SHIP_SPEED), LIGHT_SPEED);
 
       players.add(player);
     });
 
-    int additionalStars = (int) Math.sqrt(1 + 2*playerIDs.size());
+    int additionalStars = (int) Math.sqrt(1 + 2 * playerIDs.size());
     Stream.generate(() -> new Star(null, 0, new Coordinates(Math.random(), Math.random()),
-                                   IdUtils.generateId(8)))
+        IdUtils.generateId(8)))
         .limit(additionalStars)
         .forEach(stars::add);
 

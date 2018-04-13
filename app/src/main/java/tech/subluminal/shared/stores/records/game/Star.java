@@ -4,11 +4,14 @@ import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 
+/**
+ * A representation of a star which can be traveled to and colonized.
+ */
 public class Star extends GameObject implements SONRepresentable {
 
+  private static final String CLASS_NAME = Star.class.getSimpleName();
   private static final String OWNER_ID_KEY = "ownerID";
   private static final String POSSESSION_KEY = "possession";
-  private static final String CLASS_NAME = Star.class.getSimpleName();
   private static final String GAME_OBJECT_KEY = "gameObject";
   private String ownerID;
   private double possession;

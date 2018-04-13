@@ -129,10 +129,11 @@ public class GameManager {
     });
   }
 
-  private tech.subluminal.client.stores.records.game.Player createPlayerDelta(Ship motherShip,
+  private tech.subluminal.client.stores.records.game.Player createPlayerDelta(
+      Ship motherShip,
       GameHistoryEntry<Ship> motherShipEntry, Player player, GameStateDelta delta,
-      String forPlayerID) {
-
+      String forPlayerID
+  ) {
     tech.subluminal.client.stores.records.game.Player playerDelta =
         new tech.subluminal.client.stores.records.game.Player(player.getID(), motherShip,
             new LinkedList<>());
@@ -165,8 +166,9 @@ public class GameManager {
 
   }
 
-  private void processMoveRequests(Synchronized<MoveRequests> syncReqs, String lobbyID,
-      Set<String> playerIDs) {
+  private void processMoveRequests(
+      Synchronized<MoveRequests> syncReqs, String lobbyID, Set<String> playerIDs
+  ) {
     Map<String, List<MoveReq>> requestMap = syncReqs.use(reqs -> {
       Map<String, List<MoveReq>> map = new HashMap<>();
       playerIDs.forEach(id -> map.put(id, reqs.getAndRemoveForPlayer(id)));
@@ -191,7 +193,8 @@ public class GameManager {
       }
 
       final GameHistoryEntry<Ship> entry = new GameHistoryEntry<>(
-          new Ship(motherShip.getCoordinates(), motherShip.getID(), req.getTargets()));
+          new Ship(motherShip.getCoordinates(), motherShip.getID(), req.getTargets(),
+              motherShip.getSpeed()));
 
       // write the updated mother ship directly into the game store.
       player.getMotherShip().add(entry);
