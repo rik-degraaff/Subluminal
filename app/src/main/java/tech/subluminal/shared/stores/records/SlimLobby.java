@@ -22,6 +22,7 @@ public class SlimLobby extends Identifiable implements SONRepresentable {
     return settings;
   }
 
+
   public void setSettings(LobbySettings settings) {
     this.settings = settings;
   }

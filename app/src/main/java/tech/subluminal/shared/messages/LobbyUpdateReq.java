@@ -18,12 +18,15 @@ public class LobbyUpdateReq implements SONRepresentable {
     this.settings = settings;
   }
 
+  public LobbySettings getSettings() {
+    return settings;
+  }
+
   public static LobbyUpdateReq fromSON(SON son) throws SONConversionError{
      SON settings = son.getObject(SETTINGS_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, SETTINGS_KEY));
 
      return new LobbyUpdateReq(LobbySettings.fromSON(settings));
-
   }
 
   /**

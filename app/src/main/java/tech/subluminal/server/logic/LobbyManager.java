@@ -1,14 +1,20 @@
 package tech.subluminal.server.logic;
 
 import static tech.subluminal.shared.util.IdUtils.generateId;
-
+import static tech.subluminal.shared.util.FunctionalUtils.ifPresent;
 import java.util.Optional;
 import tech.subluminal.server.stores.LobbyStore;
 import tech.subluminal.server.stores.ReadOnlyUserStore;
+import tech.subluminal.shared.messages.GameStartReq;
+import tech.subluminal.shared.messages.LobbyCreateReq;
 import tech.subluminal.shared.messages.LobbyJoinReq;
+import tech.subluminal.shared.messages.LobbyJoinRes;
 import tech.subluminal.shared.messages.LobbyLeaveReq;
 import tech.subluminal.shared.messages.LobbyListReq;
+import tech.subluminal.shared.messages.LobbyUpdateReq;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.son.SON;
+import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.stores.records.LobbySettings;
 import tech.subluminal.shared.util.Synchronized;
@@ -43,6 +49,34 @@ public class LobbyManager {
         .registerHandler(LobbyLeaveReq.class, LobbyLeaveReq::fromSON, req -> onLobbyLeave(id, req));
     connection
         .registerHandler(LobbyListReq.class, LobbyListReq::fromSON, this::onLobbyList);
+    connection
+        .registerHandler(LobbyCreateReq.class, LobbyCreateReq::fromSON, req -> onLobbyCreate(id, req, connection));
+    connection
+        .registerHandler(LobbyUpdateReq.class, LobbyUpdateReq::fromSON, req -> onLobbyUpdate(id, req, connection));
+    connection
+        .registerHandler(GameStartReq.class, GameStartReq::fromSON, req -> onGameStart(id, req));
+  }
+
+  private void onGameStart(String userID, GameStartReq req) {
+    lobbyStore.lobbies().getLobbiesWithUser(userID).consume(l -> l.stream().findFirst().ifPresent(u -> u.));
+    //if
+  }
+
+  private void onLobbyUpdate(String userID, LobbyUpdateReq req, Connection connection) {
+    LobbySettings settings = req.getSettings();
+    lobbyStore.lobbies().getLobbiesWithUser(userID)
+        .consume(l -> l.stream().map(syncLobby -> syncLobby
+            .update(u -> new Lobby(syncLobby.map((Lobby::getID), settings))));
+        //TODO: How to store LobbySettings from message to lobby?
+        //TODO: Send new settings to all other players
+  }
+
+  private void onLobbyCreate(String userID, LobbyCreateReq req, Connection connection) {
+    String lobbyID = generateId(6);
+    String name = req.getName();
+    Lobby lobby = new Lobby(lobbyID, new LobbySettings(name, userID));
+    lobbyStore.lobbies().add(lobby);
+    connection.sendMessage(new LobbyJoinRes(lobby));
   }
 
   private void onLobbyJoin(String userID, LobbyJoinReq req) {
