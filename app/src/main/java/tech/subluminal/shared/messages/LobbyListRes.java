@@ -2,7 +2,6 @@ package tech.subluminal.shared.messages;
 
 import java.util.LinkedList;
 import java.util.List;
-import javafx.collections.ObservableList;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONList;
@@ -24,7 +23,6 @@ public class LobbyListRes implements SONRepresentable{
     SONList slimLobbies = son.getList(LOBBIES_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, LOBBIES_KEY));
     List<SlimLobby> lobbies = new LinkedList<>();
-    ObservableList<SlimLobby> = new Observa
     for (SON lobby : slimLobbies.objects()) {
       lobbies.add(SlimLobby.fromSON(lobby));
     }

@@ -1,6 +1,7 @@
 package tech.subluminal.client.stores;
 
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import javafx.collections.FXCollections;
@@ -30,6 +31,9 @@ public class InMemoryLobbyStore implements LobbyStore {
 
   @Override
   public SingleEntity<List<SlimLobby>> lobbies() {
-    return lobbies;
+    //TODO: Implement Lobby GETTER
+    SingleEntity<List<SlimLobby>> temp = new LinkedList<>();
+
+    return lobbies.get().map(l -> (ObservableList<SlimLobby>) l);
   }
 }

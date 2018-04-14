@@ -55,6 +55,5 @@ public class SlimLobby extends Identifiable implements SONRepresentable {
     return new SON()
         .put(super.asSON(), IDENTIFIABLE_KEY)
         .put(settings.asSON(), SETTINGS_KEY);
-
   }
 }
