@@ -1,6 +1,7 @@
 package tech.subluminal.shared.net;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.HashMap;
@@ -115,6 +116,7 @@ public class SocketConnection implements Connection {
 
   private void outStreamLoop() {
     try {
+      //TODO: Fix variable not found error
       OutputStream out = socket.getOutputStream();
       String typeName = message.getClass().getSimpleName();
       String msg = message.asSON().asString();
