@@ -21,7 +21,7 @@ import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 
-public class MotherShip extends Group {
+public class MotherShipComponent extends Group {
 
   private final ObjectProperty<Color> color = new SimpleObjectProperty<Color>();
 
@@ -65,7 +65,7 @@ public class MotherShip extends Group {
     this.ownerID.set(ownerID);
   }
 
-  public MotherShip(double x, double y, String playerId){
+  public MotherShipComponent(double x, double y, String playerId){
     Group group = new Group();
     group.getTransforms().add(new Translate(-fromCenter, -fromCenter));
     group.getTransforms().add(new Rotate(90));

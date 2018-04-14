@@ -2,6 +2,7 @@ package tech.subluminal.client.presentation;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import tech.subluminal.client.stores.records.game.Player;
 import tech.subluminal.shared.stores.records.game.Star;
 
@@ -13,9 +14,10 @@ public interface GamePresenter {
 
   public void updateFleet(List<Player> players);
 
-  public void addFleet(Star star, int amount);
+  public void addFleet(List<Player> players);
 
-  public void removeFleet(Star star, int amount);
+  public void removeFleet(
+      Map<String, List<String>> removedFleets);
 
   public void updateMothership(List<Player> players);
 

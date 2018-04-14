@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,10 +13,9 @@ import tech.subluminal.client.presentation.GamePresenter;
 import tech.subluminal.client.presentation.customElements.FleetComponent;
 import tech.subluminal.client.presentation.customElements.Jump;
 import tech.subluminal.client.presentation.customElements.JumpBox;
-import tech.subluminal.client.presentation.customElements.MotherShip;
+import tech.subluminal.client.presentation.customElements.MotherShipComponent;
 import tech.subluminal.client.presentation.customElements.StarComponent;
 import tech.subluminal.client.stores.records.game.Player;
-import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.stores.records.game.Star;
 
@@ -37,7 +37,9 @@ public class GameController implements Initializable, GamePresenter {
 
   private List<StarComponent> starList = new LinkedList<StarComponent>();
 
-  private List<MotherShip> shipList = new LinkedList<MotherShip>();
+  private List<MotherShipComponent> shipList = new LinkedList<MotherShipComponent>();
+
+  private List<FleetComponent> fleetList = new LinkedList<FleetComponent>();
 
 
   @Override
@@ -56,7 +58,7 @@ public class GameController implements Initializable, GamePresenter {
     createJumpPath(test);
     removeJumpPath();
 
-    MotherShip ship = new MotherShip(star.layoutXProperty(),star.layoutYProperty(), "fwefr1");
+    MotherShipComponent ship = new MotherShipComponent(star.layoutXProperty(),star.layoutYProperty(), "fwefr1");
     ship.setIsRotating(true);
     map.getChildren().add(ship);
     //removeJumpPath();*/
@@ -64,20 +66,19 @@ public class GameController implements Initializable, GamePresenter {
     //FleetComponent fleet = new FleetComponent(new Coordinates(0.2, 0.3), 30, "wefwef", "22r2f2");
     //map.getChildren().add(fleet);
 
-
     map.getChildren().forEach(e -> {
-      if(e instanceof StarComponent){
+      if (e instanceof StarComponent) {
         e.setOnMouseClicked(mouseEvent -> {
-          if(pressStore[1] == null){
-            if(pressStore[0] == null){
+          if (pressStore[1] == null) {
+            if (pressStore[0] == null) {
               pressStore[0] = (StarComponent) e;
               pressStore[1] = null;
-            }else if(pressStore[0] == e){
+            } else if (pressStore[0] == e) {
 
-            }else{
+            } else {
               pressStore[1] = (StarComponent) e;
             }
-          }else{
+          } else {
             pressStore[0] = (StarComponent) e;
             pressStore[1] = null;
           }
@@ -90,16 +91,17 @@ public class GameController implements Initializable, GamePresenter {
     map.setOnMouseClicked(mouseEvent -> {
       pressStore[0] = null;
       pressStore[1] = null;
-      if(map.getChildren().contains(jump)){
+      if (map.getChildren().contains(jump)) {
         map.getChildren().remove(jump);
       }
       System.out.println("cleared");
     });
   }
 
-  public void createJumpPath(List<StarComponent> path){
-    for(int i = 0; i < path.size() - 1; i++){
-      jump.add(new Jump(path.get(i).layoutXProperty(), path.get(i).layoutYProperty(),path.get(i+1).layoutXProperty(), path.get(i+1).layoutYProperty()));
+  public void createJumpPath(List<StarComponent> path) {
+    for (int i = 0; i < path.size() - 1; i++) {
+      jump.add(new Jump(path.get(i).layoutXProperty(), path.get(i).layoutYProperty(),
+          path.get(i + 1).layoutXProperty(), path.get(i + 1).layoutYProperty()));
     }
     jump.stream().forEach(j -> map.getChildren().add(j));
 
@@ -107,13 +109,13 @@ public class GameController implements Initializable, GamePresenter {
 
   }
 
-  public void removeJumpPath(){
+  public void removeJumpPath() {
     jump.stream().forEach(j -> map.getChildren().remove(j));
 
     removeJumpBox();
   }
 
-  public void createJumpBox(StarComponent start){
+  public void createJumpBox(StarComponent start) {
     box = new JumpBox(start.layoutXProperty(), start.layoutYProperty(), start.shipsProperty());
 
     box.shipToSendProperty().addListener((observable, oldValue, newValue) -> {
@@ -123,17 +125,18 @@ public class GameController implements Initializable, GamePresenter {
     map.getChildren().add(box);
   }
 
-  public void removeJumpBox(){
+  public void removeJumpBox() {
     map.getChildren().remove(box);
   }
 
-  public void setMainController(MainController main){
+  public void setMainController(MainController main) {
     this.main = main;
   }
 
   @Override
   public void displayMap(Collection<Star> stars) {
-    stars.stream().forEach(s -> starList.add(new StarComponent(s.getOwnerID(), 0.0, s.getCoordinates(), s.getID())));
+    stars.stream().forEach(
+        s -> starList.add(new StarComponent(s.getOwnerID(), 0.0, s.getCoordinates(), s.getID())));
 
     starList.stream().forEach(s -> map.getChildren().add(s));
   }
@@ -142,7 +145,7 @@ public class GameController implements Initializable, GamePresenter {
   public void updateStar(Collection<Star> stars) {
     stars.stream().forEach(s -> {
       starList.stream().forEach(e -> {
-        if(e.getStarID().equals(s.getID())){
+        if (e.getStarID().equals(s.getID())) {
           e.setOwnerIDProperty(s.getOwnerID());
           e.setPossession(s.getPossession());
         }
@@ -153,17 +156,45 @@ public class GameController implements Initializable, GamePresenter {
 
   @Override
   public void updateFleet(List<Player> players) {
-
+    players.stream().forEach(p -> {
+      p.getFleets().stream().forEach(f -> {
+        fleetList.stream().forEach(fc -> {
+          // TODO: comment what is done here because of complex structure
+          if (f.getID().equals(fc.getFleetID())) {
+            fc.setNumberOfShips(f.getNumberOfShips());
+            fc.setLayoutX(f.getCoordinates().getX());
+            fc.setLayoutY(f.getCoordinates().getY());
+          } else {
+            fleetList.add(new FleetComponent(f.getCoordinates(), f.getNumberOfShips(), f.getID(), p.getID()));
+          }
+        });
+      });
+    });
   }
 
   @Override
-  public void addFleet(Star star, int amount) {
-
+  public void addFleet(List<Player> players) {
+    players.stream().forEach(p -> {
+      p.getFleets().stream().forEach(f -> {
+        fleetList.add(
+            new FleetComponent(f.getCoordinates(), f.getNumberOfShips(), f.getID(), p.getID()));
+      });
+    });
+    fleetList.stream().forEach(f -> map.getChildren().add(f));
   }
 
   @Override
-  public void removeFleet(Star star, int amount) {
-
+  public void removeFleet(Map<String, List<String>> removedFleets) {
+    removedFleets.forEach((k, v) -> {
+      v.stream().forEach(f -> {
+        fleetList.stream().forEach(fc -> {
+          // TODO: explain what is done here because of complex code
+          if (f.equals(fc.getFleetID())) {
+            fleetList.remove(fc);
+          }
+        });
+      });
+    });
   }
 
   @Override
@@ -171,7 +202,7 @@ public class GameController implements Initializable, GamePresenter {
     players.stream().forEach(p -> {
       Ship mothership = p.getMotherShip();
       shipList.stream().forEach(s -> {
-        if (p.getMotherShip().getID().equals(s.getId())){
+        if (p.getMotherShip().getID().equals(s.getId())) {
           s.setLayoutX(mothership.getCoordinates().getX());
           s.setLayoutY(mothership.getCoordinates().getY());
         }
@@ -184,7 +215,8 @@ public class GameController implements Initializable, GamePresenter {
     players.stream().forEach(p -> {
       Ship mothership = p.getMotherShip();
 
-      shipList.add(new MotherShip(mothership.getCoordinates().getX(), mothership.getCoordinates().getY(), p.getID()));
+      shipList.add(new MotherShipComponent(mothership.getCoordinates().getX(),
+          mothership.getCoordinates().getY(), p.getID()));
 
       shipList.stream().forEach(s -> map.getChildren().add(s));
     });
@@ -195,7 +227,7 @@ public class GameController implements Initializable, GamePresenter {
   public void removeMothership(List<String> playerID) {
     playerID.stream().forEach(p -> {
       shipList.stream().forEach(s -> {
-        if(s.getOwnerID().equals(p)){
+        if (s.getOwnerID().equals(p)) {
           shipList.remove(s);
         }
       });
