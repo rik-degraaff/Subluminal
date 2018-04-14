@@ -9,7 +9,7 @@
 <fx:root xmlns:fx="http://javafx.com/fxml" prefHeight="400.0"
   prefWidth="600.0"
   type="javafx.scene.layout.AnchorPane"
-  xmlns="http://javafx.com/javafx"
+  xmlns="http://javafx.com/javafx/8"
   fx:controller="tech.subluminal.client.presentation.controller.MenuController"
   fx:id="menuContainer">
   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="30.0">

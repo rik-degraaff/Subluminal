@@ -1,5 +1,7 @@
 package tech.subluminal.client.presentation.customElements;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -13,6 +15,20 @@ public class LobbyStatusComponent extends HBox {
   private String lobbyID;
   private Rectangle statusBox;
   private Label playersNow;
+
+  private final StringProperty lobbyToJoin = new SimpleStringProperty();
+
+  public String getLobbyToJoin() {
+    return lobbyToJoin.get();
+  }
+
+  public StringProperty lobbyToJoinProperty() {
+    return lobbyToJoin;
+  }
+
+  public void setLobbyToJoin(String lobbyToJoin) {
+    this.lobbyToJoin.set(lobbyToJoin);
+  }
 
   public LobbyStatusComponent(String lobbyName, String lobbyID, int players, int max,
       LobbyStatus status) {
@@ -36,7 +52,9 @@ public class LobbyStatusComponent extends HBox {
     Button password = new Button("Password");
     password.disableProperty();
 
-    join.onActionProperty();
+    join.setOnMouseClicked(e -> {
+      lobbyToJoinProperty().set(lobbyID);
+    });
 
     hbox.getChildren().addAll(statusBox, name, playersNow, playersMax);
     this.getChildren().addAll(hbox, spacer, password, join);

@@ -41,6 +41,8 @@ public class GameController implements Initializable, GamePresenter {
 
   private List<FleetComponent> fleetList = new LinkedList<FleetComponent>();
 
+  private GamePresenter.Delegate gameDelegate;
+
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {

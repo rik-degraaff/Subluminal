@@ -3,15 +3,15 @@ package tech.subluminal.client.presentation.customElements;
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
-import tech.subluminal.client.presentation.controller.LobbyHostController;
+import tech.subluminal.client.presentation.controller.LobbyUserController;
 import tech.subluminal.client.presentation.controller.MainController;
 
-public class LobbyHostComponent extends AnchorPane {
+public class LobbyUserComponent extends AnchorPane {
 
-  private LobbyHostController controller;
+  private LobbyUserController controller;
 
-  public LobbyHostComponent(MainController mainController) {
-    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LobbyHostView.fxml"));
+  public LobbyUserComponent(MainController mainController) {
+    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LobbyUserView.fxml"));
     fxmlLoader.setRoot(this);
     //fxmlLoader.setController(this);
 
@@ -22,9 +22,5 @@ public class LobbyHostComponent extends AnchorPane {
     } catch (IOException exception) {
       throw new RuntimeException(exception);
     }
-  }
-
-  public void onWindowOpen() {
-    controller.openWindow();
   }
 }

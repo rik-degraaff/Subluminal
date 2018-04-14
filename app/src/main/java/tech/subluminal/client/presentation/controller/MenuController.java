@@ -85,14 +85,16 @@ public class MenuController implements Initializable, Observer {
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     Image logo = new Image("/tech/subluminal/resources/subluminal_logo.png");
-    logoDock.setImage(logo);
+    Platform.runLater(() -> {
+      logoDock.setImage(logo);
+    });
     menuButtonsDock.setOpacity(0.0);
     generateLogo();
   }
 
   @FXML
   private void joinPressed(ActionEvent e) {
-    main.onJoinHandle();
+    main.onJoinOpenHandle();
 
   }
 

@@ -29,27 +29,18 @@ public class LobbyListController implements Initializable, Observer {
   @Override
   public void initialize(URL location, ResourceBundle resources) {
 
-    openWindow();
-
-    //lobbyList.getItems()
-    //    .add(new LobbyStatusComponent("testLobby", "wefwef", 3, 8, LobbyStatus.OPEN));
-
+    lobbyList.getItems()
+        .add(new LobbyStatusComponent("testLobby", "wefwef", 3, 8, LobbyStatus.OPEN));
+    lobbyList.getItems().forEach(i -> i.lobbyToJoinProperty().addListener(event -> {
+      main.getLobby().onLobbyJoin(i.lobbyToJoinProperty().getValue());
+    }));
   }
 
-  public void openWindow() {
-    ScaleTransition scaleTlX = new ScaleTransition(Duration.seconds(0.2), lobbyList.getParent());
-    scaleTlX.setFromX(0);
-    scaleTlX.setToX(1);
-
-    ScaleTransition scaleTlY = new ScaleTransition(Duration.seconds(0.5), lobbyList.getParent());
-    scaleTlY.setFromY(0);
-    scaleTlY.setToY(1);
-
-    ParallelTransition paraTl = new ParallelTransition();
-
-    paraTl.getChildren().addAll(scaleTlX, scaleTlY);
-    paraTl.play();
+  @FXML
+  private void onLobbyCreate(){
+    main.onLobbyCreateHandle();
   }
+
 
   @Override
   public void setMainController(MainController main) {

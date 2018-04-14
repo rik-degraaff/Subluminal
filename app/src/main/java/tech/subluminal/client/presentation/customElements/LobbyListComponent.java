@@ -24,8 +24,4 @@ public class LobbyListComponent extends AnchorPane {
       throw new RuntimeException(exception);
     }
   }
-
-  public void onWindowOpen() {
-    controller.openWindow();
-  }
 }
