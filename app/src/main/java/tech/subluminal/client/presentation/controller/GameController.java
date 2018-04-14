@@ -9,11 +9,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.Pane;
 import tech.subluminal.client.presentation.GamePresenter;
+import tech.subluminal.client.presentation.customElements.FleetComponent;
 import tech.subluminal.client.presentation.customElements.Jump;
 import tech.subluminal.client.presentation.customElements.JumpBox;
 import tech.subluminal.client.presentation.customElements.MotherShip;
 import tech.subluminal.client.presentation.customElements.StarComponent;
 import tech.subluminal.client.stores.records.game.Player;
+import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.stores.records.game.Star;
 
@@ -58,6 +60,9 @@ public class GameController implements Initializable, GamePresenter {
     ship.setIsRotating(true);
     map.getChildren().add(ship);
     //removeJumpPath();*/
+
+    //FleetComponent fleet = new FleetComponent(new Coordinates(0.2, 0.3), 30, "wefwef", "22r2f2");
+    //map.getChildren().add(fleet);
 
 
     map.getChildren().forEach(e -> {
