@@ -13,5 +13,5 @@ public interface LobbyStore {
 
   SingleEntity<Lobby> currentLobby();
 
-  SingleEntity<List<SlimLobby>> lobbies();
+  ReadOnlySingleEntity<List<SlimLobby>> lobbies();
 }

@@ -29,7 +29,10 @@ public class LobbyManager {
   }
 
   private void onLobbyList(LobbyListRes res) {
-    lobbyStore.lobbies().set(res.getSlimLobbies());
+    lobbyStore.lobbies().get().consume(opt -> opt.ifPresent(list -> {
+      list.clear();
+      list.addAll(res.getSlimLobbies());
+    }));
   }
 
   private void onLobbyUpdate(LobbyUpdateRes res) {

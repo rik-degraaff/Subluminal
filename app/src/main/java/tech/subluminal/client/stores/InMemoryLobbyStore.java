@@ -1,11 +1,11 @@
 package tech.subluminal.client.stores;
 
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import tech.subluminal.shared.stores.ReadOnlySingleEntity;
 import tech.subluminal.shared.stores.SingleEntity;
 import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.stores.records.SlimLobby;
@@ -30,10 +30,7 @@ public class InMemoryLobbyStore implements LobbyStore {
   }
 
   @Override
-  public SingleEntity<List<SlimLobby>> lobbies() {
-    //TODO: Implement Lobby GETTER
-    SingleEntity<List<SlimLobby>> temp = new LinkedList<>();
-
-    return lobbies.get().map(l -> (ObservableList<SlimLobby>) l);
+  public ReadOnlySingleEntity<List<SlimLobby>> lobbies() {
+    return lobbies.map(l -> l);
   }
 }
