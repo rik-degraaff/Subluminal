@@ -116,3 +116,7 @@
 .label > .list-view {
   -fx-background-color: pink;
 }
+
+.jumpbox{
+  -fx-background-color: black;
+}

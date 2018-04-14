@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
-public class JumpPath extends Line {
+public class Jump extends Line {
 
   private final ObjectProperty<Color> color = new SimpleObjectProperty<Color>();
 
@@ -22,7 +22,7 @@ public class JumpPath extends Line {
     this.color.set(colorObjectProperty);
   }
 
-  public JumpPath(Property startX, Property startY, Property endX, Property endY) {
+  public Jump(Property startX, Property startY, Property endX, Property endY) {
     this.startXProperty().bind(startX);
     this.startYProperty().bind(startY);
     this.endXProperty().bind(endX);
@@ -36,7 +36,7 @@ public class JumpPath extends Line {
 
   }
 
-  public JumpPath(double startX, double startY, double endX, double endY) {
+  public Jump(double startX, double startY, double endX, double endY) {
     this.setStartX(startX);
     this.setStartY(startY);
     this.setEndX(endX);

@@ -29,9 +29,9 @@ public class StarComponent extends Pane {
   private final DoubleProperty sizeProperty = new SimpleDoubleProperty();
   private final DoubleProperty xProperty = new SimpleDoubleProperty();
   private final DoubleProperty yProperty = new SimpleDoubleProperty();
+  private final IntegerProperty ships = new SimpleIntegerProperty();
 
   private final StringProperty ownerIDProperty = new SimpleStringProperty();
-  private final BooleanProperty hasShipsProperty = new SimpleBooleanProperty();
   private final IntegerProperty parentWidthProperty = new SimpleIntegerProperty();
   private final IntegerProperty parentHeightProperty = new SimpleIntegerProperty();
 
@@ -109,19 +109,21 @@ public class StarComponent extends Pane {
     this.ownerIDProperty.set(ownerIDProperty);
   }
 
-  public boolean isHasShipsProperty() {
-    return hasShipsProperty.get();
+  public int getShips() {
+    return ships.get();
   }
 
-  public BooleanProperty hasShipsPropertyProperty() {
-    return hasShipsProperty;
+  public IntegerProperty shipsProperty() {
+    return ships;
   }
 
-  public void setHasShipsProperty(boolean hasShipsProperty) {
-    this.hasShipsProperty.set(hasShipsProperty);
+  public void setShips(int ships) {
+    this.ships.set(ships);
   }
 
   public StarComponent(double x, double y, double size, String name) {
+
+    setShips(20); //TODO:  remove this
 
     setXProperty(x);
     setYProperty(y);
@@ -144,7 +146,6 @@ public class StarComponent extends Pane {
     });
 
     ownerIDProperty.set(null);
-    hasShipsProperty.set(false);
 
     this.name = name;
 
