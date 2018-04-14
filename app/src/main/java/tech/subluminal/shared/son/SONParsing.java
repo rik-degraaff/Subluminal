@@ -1,6 +1,6 @@
 package tech.subluminal.shared.son;
 
-class SONParsing {
+public class SONParsing {
 
   static final char KEY_VALUE_DELIMITER = ':';
   static final char ENTRY_DELIMITER = ',';
@@ -17,26 +17,56 @@ class SONParsing {
   private static final char STRING_DELIMITER = '"';
   private static final char STRING_ESCAPE = '\\';
 
+  /**
+   * Parses a Integer to a representing String format.
+   * @param key specifies the keyword for deparsing the object later.
+   * @return the Integer in the SON specific String format.
+   */
   static String keyValueString(String key, Integer value) {
     return stringString(key) + KEY_VALUE_DELIMITER + INTEGER_ID + integerString(value);
   }
 
+  /**
+   * Parses a Double to a representing String format.
+   * @param key specifies the key to deparsing the object later.
+   * @return the Double in the SON specific String format.
+   */
   static String keyValueString(String key, Double value) {
     return stringString(key) + KEY_VALUE_DELIMITER + DOUBLE_ID + doubleString(value);
   }
 
+  /**
+   * Parses a Boolean to a representing String format.
+   * @param key specifies the key to deparsing the object later.
+   * @return the Boolean in the SON specific String format.
+   */
   static String keyValueString(String key, Boolean value) {
     return stringString(key) + KEY_VALUE_DELIMITER + BOOLEAN_ID + booleanString(value);
   }
 
+  /**
+   * Parses a String to a representing String format.
+   * @param key specifies the key to deparsing the object later.
+   * @return the String in the SON specific String format.
+   */
   static String keyValueString(String key, String value) {
     return stringString(key) + KEY_VALUE_DELIMITER + STRING_ID + stringString(value);
   }
 
+  /**
+   * Parses a SON to a representing String format.
+   * @param key specifies the key to deparsing the object later.
+   * @return the String in SON the SON specific String format.
+   */
   static String keyValueString(String key, SON value) {
     return stringString(key) + KEY_VALUE_DELIMITER + OBJECT_ID + value.asString();
   }
 
+  /**
+   * Parses a SONList to a representing String format.
+   * @param key specifies the key to deparsing the object later.
+   * @return the String in SON the SON specific String format.
+   */
   static String keyValueString(String key, SONList value) {
     return stringString(key) + KEY_VALUE_DELIMITER + LIST_ID + value.asString();
   }
@@ -45,6 +75,10 @@ class SONParsing {
     return value.toString();
   }
 
+  /**
+   * Parses a Integer from its SON specific String form.
+   * @param str is the sequence contaning the Integer.
+   */
   static PartialParseResult<Integer> partialParseInt(String str, int i) throws SONParsingError {
     try {
       StringBuilder builder = new StringBuilder();
@@ -70,6 +104,10 @@ class SONParsing {
     return value.toString();
   }
 
+  /**
+   * Parses a Double from its SON specific String form.
+   * @param str is the sequence containing the Double.
+   */
   static PartialParseResult<Double> partialParseDouble(String str, int i) throws SONParsingError {
     try {
       StringBuilder builder = new StringBuilder();
@@ -96,6 +134,10 @@ class SONParsing {
     return value.toString();
   }
 
+  /**
+   * Parses a Boolean from its SON specific String form.
+   * @param str is the sequence containing the Boolean.
+   */
   static PartialParseResult<Boolean> partialParseBoolean(String str, int i) throws SONParsingError {
     if (str.startsWith("true", i)) {
       return new PartialParseResult<>(true, i + 4);
@@ -112,6 +154,10 @@ class SONParsing {
     return STRING_DELIMITER + escapeString(str) + STRING_DELIMITER;
   }
 
+  /**
+   * Parses a String from its SON specific String form.
+   * @param str is the sequence containing the Double.
+   */
   static PartialParseResult<String> partialParseString(String str, int start)
       throws SONParsingError {
     try {

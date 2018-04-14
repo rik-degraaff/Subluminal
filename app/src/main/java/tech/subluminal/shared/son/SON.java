@@ -36,6 +36,11 @@ public class SON {
   private Map<String, SON> sonMap = new HashMap<>();
   private Map<String, SONList> sonListMap = new HashMap<>();
 
+  /**
+   * Parses a String to a SON object.
+   * @param str is the string to parse.
+   * @return the parsed SON object.
+   */
   public static SON parse(String str) throws SONParsingError {
     return partialParse(str, 0).result;
   }
