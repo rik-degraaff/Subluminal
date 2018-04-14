@@ -1,11 +1,10 @@
 package tech.subluminal.client.presentation.customElements;
 
+import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import tech.subluminal.client.presentation.controller.MainController;
 import tech.subluminal.client.presentation.controller.MenuController;
-
-import java.io.IOException;
 
 public class MenuComponent extends AnchorPane {
 

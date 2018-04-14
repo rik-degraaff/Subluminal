@@ -2,7 +2,6 @@ package tech.subluminal.client.init;
 
 import java.io.IOException;
 import java.net.Socket;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -26,10 +25,11 @@ import tech.subluminal.shared.net.SocketConnection;
 /**
  * Assembles the client-side architecture.
  */
-public class ClientInitializer extends Application{
+public class ClientInitializer extends Application {
 
   public static MainController controller;
   public FXMLLoader loader;
+
   /**
    * Initializes the assembling.
    *
@@ -37,9 +37,8 @@ public class ClientInitializer extends Application{
    * @param port of the server.
    * @param username initial username to request from the server.
    */
-  public static void init(String server, int port, String username) {
+  public static void init(String server, int port, String username, boolean debug) {
     Logger.info("Starting client ...");
-
     Socket socket = null;
     try {
       socket = new Socket(server, port);
@@ -53,12 +52,12 @@ public class ClientInitializer extends Application{
     UserStore userStore = new InMemoryUserStore();
     PingStore pingStore = new InMemoryPingStore();
 
-    //ConsolePresenter presenter = new ConsolePresenter(System.in, System.out, userStore);
-    ChatController presenter = controller.getChatController();
-    presenter.setUserStore(userStore);
+    ChatController chatPresenter = controller.getChatController();
+    chatPresenter.setUserStore(userStore);
+    controller.setUserStore(userStore);
 
-    UserManager userManager = new UserManager(connection, userStore, presenter);
-    new ChatManager(userStore, presenter, connection);
+    UserManager userManager = new UserManager(connection, userStore, chatPresenter);
+    new ChatManager(userStore, chatPresenter, connection);
     new PingManager(connection, pingStore);
 
     userManager.start(username);
@@ -90,21 +89,25 @@ public class ClientInitializer extends Application{
   @Override
   public void start(Stage primaryStage) throws Exception {
     loader = new FXMLLoader();
-    loader.setLocation(getClass().getResource("/tech/subluminal/client/presentation/view/MainView.fxml"));
+    loader.setLocation(
+        getClass().getResource("/tech/subluminal/client/presentation/view/MainView.fxml"));
     //loader.setController(new MainController());
     Parent root = loader.load();
-    root.getStylesheets().add(getClass().getResource("/tech/subluminal/client/presentation/view/lobby.css").toExternalForm());
+    root.getStylesheets().add(
+        getClass().getResource("/tech/subluminal/client/presentation/view/lobby.css")
+            .toExternalForm());
 
-    controller = (MainController)loader.getController();
+    controller = (MainController) loader.getController();
 
     primaryStage.setTitle("Subluminal - The Game");
     primaryStage.setScene(new Scene(root));
-    primaryStage.getIcons().add(new Image("/tech/subluminal/client/init/Game_Logo_1.png"));
+    primaryStage.getIcons().add(new Image("/tech/subluminal/resources/Game_Logo_1.png"));
+    primaryStage.setMaximized(true);
     primaryStage.show();
 
-    String[] cmd = getParameters().getRaw().toArray(new String[3]);
+    String[] cmd = getParameters().getRaw().toArray(new String[4]);
 
-    init(cmd[0],Integer.parseInt(cmd[1]),cmd[2]);
+    init(cmd[0], Integer.parseInt(cmd[1]), cmd[2], Boolean.getBoolean(cmd[3]));
 
     primaryStage.widthProperty().addListener((v, oldV, newV) -> {
       int diff = oldV.intValue() - newV.intValue();
@@ -120,7 +123,7 @@ public class ClientInitializer extends Application{
   /**
    * Gets called when the window is closed.
    */
-  public void stop(){
+  public void stop() {
     //TODO: Log out
     //System.exit(0);
   }

@@ -23,9 +23,8 @@ public class ServerInitializer {
    *
    * @param port to bind the server to.
    */
-  public static void init(int port) {
+  public static void init(int port, boolean debug) {
     Logger.info("Starting server ...");
-
     ConnectionManager connectionManager = new SocketConnectionManager(port);
 
     MessageDistributor messageDistributor = new ConnectionMessageDistributor(connectionManager);

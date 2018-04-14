@@ -2,7 +2,6 @@ package tech.subluminal.server.logic;
 
 import static tech.subluminal.shared.util.IdUtils.generateId;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import tech.subluminal.server.stores.PingStore;
@@ -46,7 +45,7 @@ public class PingManager {
   }
 
   private void attachHandlers(String id, Connection connection) {
-    connection.registerHandler(Pong.class, Pong::fromSON, pong -> pongReceived(pong));
+    connection.registerHandler(Pong.class, Pong::fromSON, this::pongReceived);
     pingResponder.attachHandlers(connection);
   }
 
@@ -66,15 +65,16 @@ public class PingManager {
           us.stream()
               .map(syncUser -> syncUser.use(User::getID))
               .map(id -> new SentPing(System.currentTimeMillis(), id, generateId(8)))
-              .collect(Collectors.toCollection(HashSet::new))
+              .collect(Collectors.toSet())
       );
 
       pings.forEach(p -> distributor.sendMessage(new Ping(p.getID()), p.getUserID()));
 
       pingStore.sentPings().sync(() -> {
-        pingStore.sentPings()
-            .getUsersWithPings()
-            .forEach(toCloseID -> distributor.closeConnection(toCloseID));
+        Set<String> usersWithPings = pingStore.sentPings().getUsersWithPings();
+        usersWithPings.forEach(System.out::println);
+        usersWithPings.forEach(distributor::closeConnection);
+        pingStore.sentPings().removeAll();
         pings.forEach(pingStore.sentPings()::add);
       });
     }
