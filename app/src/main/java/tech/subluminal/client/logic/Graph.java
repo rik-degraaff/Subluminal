@@ -63,7 +63,8 @@ public class Graph<E> {
   }
 
   /**
-   * Returns a List containing the node elements representing the shortest path from alpha to omega.
+   * Returns a List containing the node elements representing the shortest path from alpha to
+   * omega.
    *
    * @param alpha the element to be started from.
    * @param omega the target element.
@@ -105,7 +106,6 @@ public class Graph<E> {
       List<E> currentPath = current.path;
       E currentData = current.node.getData();
       double currentDistance = current.distance;
-      // dann mache für alle unvisited neighbours einen eintrag in border
       current.node.getNeighbours().forEach((n, d) -> {
         if (!visitedNodes.contains(n)) {
           List<E> newPath = new ArrayList<>(currentPath.size() + 1);
