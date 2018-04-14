@@ -2,12 +2,9 @@ package tech.subluminal.client.presentation.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.animation.ParallelTransition;
-import javafx.animation.ScaleTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
-import javafx.util.Duration;
 import tech.subluminal.client.presentation.customElements.LobbyStatusComponent;
 import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.shared.records.LobbyStatus;
@@ -37,7 +34,7 @@ public class LobbyListController implements Initializable, Observer {
   }
 
   @FXML
-  private void onLobbyCreate(){
+  private void onLobbyCreate() {
     main.onLobbyCreateHandle();
   }
 

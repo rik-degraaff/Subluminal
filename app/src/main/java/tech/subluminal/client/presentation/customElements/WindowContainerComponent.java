@@ -35,5 +35,7 @@ public class WindowContainerComponent extends AnchorPane {
     controller.openWindow();
   }
 
-  public void onWindowClose() { controller.closeWindow();}
+  public void onWindowClose() {
+    controller.closeWindow();
+  }
 }

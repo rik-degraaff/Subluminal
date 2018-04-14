@@ -36,118 +36,13 @@ public class StarComponent extends Pane {
   private final StringProperty ownerIDProperty = new SimpleStringProperty();
   private final IntegerProperty parentWidthProperty = new SimpleIntegerProperty();
   private final IntegerProperty parentHeightProperty = new SimpleIntegerProperty();
-
-  public String getName() {
-    return name;
-  }
-
   private final String name;
-
-  //private final ObjectProperty
-
   private final Group border;
 
-  public Color getColorProperty() {
-    return colorProperty.get();
-  }
-
-  public ObjectProperty<Color> colorPropertyProperty() {
-    return colorProperty;
-  }
-
-  public void setColorProperty(Color colorProperty) {
-    this.colorProperty.set(colorProperty);
-  }
-
+  //private final ObjectProperty
   private final ObjectProperty<Color> colorProperty = new SimpleObjectProperty<Color>();
-  //private final IntegerProperty[] shipAmpountsProperty = new SimpleIntegerProperty()[8];
-  //TODO: multiple Ships
 
-  public double getSizeProperty() {
-    return sizeProperty.get();
-  }
-
-  public DoubleProperty sizePropertyProperty() {
-    return sizeProperty;
-  }
-
-  public void setSizeProperty(double sizeProperty) {
-    this.sizeProperty.set(sizeProperty);
-  }
-
-  public double getxProperty() {
-    return xProperty.get();
-  }
-
-  public DoubleProperty xPropertyProperty() {
-    return xProperty;
-  }
-
-  public void setXProperty(double xProperty) {
-    this.xProperty.set(xProperty);
-  }
-
-  public double getyProperty() {
-    return yProperty.get();
-  }
-
-  public DoubleProperty yPropertyProperty() {
-    return yProperty;
-  }
-
-  public void setYProperty(double yProperty) {
-    this.yProperty.set(yProperty);
-  }
-
-  public String getOwnerIDProperty() {
-    return ownerIDProperty.get();
-  }
-
-  public StringProperty ownerIDPropertyProperty() {
-    return ownerIDProperty;
-  }
-
-  public int getShips() {
-    return ships.get();
-  }
-
-  public IntegerProperty shipsProperty() {
-    return ships;
-  }
-
-  public void setShips(int ships) {
-    this.ships.set(ships);
-  }
-
-  public void setOwnerIDProperty(String ownerIDProperty) {
-    this.ownerIDProperty.set(ownerIDProperty);
-  }
-
-  public String getStarID() {
-    return starID.get();
-  }
-
-  public StringProperty starIDProperty() {
-    return starID;
-  }
-
-  public void setStarID(String starID) {
-    this.starID.set(starID);
-  }
-
-  public double getPossession() {
-    return possession.get();
-  }
-
-  public DoubleProperty possessionProperty() {
-    return possession;
-  }
-
-  public void setPossession(double possession) {
-    this.possession.set(possession);
-  }
-
-  public StarComponent( String ownerID, double possession, Coordinates coordinates, String id) {
+  public StarComponent(String ownerID, double possession, Coordinates coordinates, String id) {
 
     setPossession(possession);
     setXProperty(coordinates.getX());
@@ -210,6 +105,108 @@ public class StarComponent extends Pane {
 
     //star.fillProperty().bind(colorProperty);
 
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public Color getColorProperty() {
+    return colorProperty.get();
+  }
+
+  public void setColorProperty(Color colorProperty) {
+    this.colorProperty.set(colorProperty);
+  }
+  //private final IntegerProperty[] shipAmpountsProperty = new SimpleIntegerProperty()[8];
+  //TODO: multiple Ships
+
+  public ObjectProperty<Color> colorPropertyProperty() {
+    return colorProperty;
+  }
+
+  public double getSizeProperty() {
+    return sizeProperty.get();
+  }
+
+  public void setSizeProperty(double sizeProperty) {
+    this.sizeProperty.set(sizeProperty);
+  }
+
+  public DoubleProperty sizePropertyProperty() {
+    return sizeProperty;
+  }
+
+  public double getxProperty() {
+    return xProperty.get();
+  }
+
+  public DoubleProperty xPropertyProperty() {
+    return xProperty;
+  }
+
+  public void setXProperty(double xProperty) {
+    this.xProperty.set(xProperty);
+  }
+
+  public double getyProperty() {
+    return yProperty.get();
+  }
+
+  public DoubleProperty yPropertyProperty() {
+    return yProperty;
+  }
+
+  public void setYProperty(double yProperty) {
+    this.yProperty.set(yProperty);
+  }
+
+  public String getOwnerIDProperty() {
+    return ownerIDProperty.get();
+  }
+
+  public void setOwnerIDProperty(String ownerIDProperty) {
+    this.ownerIDProperty.set(ownerIDProperty);
+  }
+
+  public StringProperty ownerIDPropertyProperty() {
+    return ownerIDProperty;
+  }
+
+  public int getShips() {
+    return ships.get();
+  }
+
+  public void setShips(int ships) {
+    this.ships.set(ships);
+  }
+
+  public IntegerProperty shipsProperty() {
+    return ships;
+  }
+
+  public String getStarID() {
+    return starID.get();
+  }
+
+  public void setStarID(String starID) {
+    this.starID.set(starID);
+  }
+
+  public StringProperty starIDProperty() {
+    return starID;
+  }
+
+  public double getPossession() {
+    return possession.get();
+  }
+
+  public void setPossession(double possession) {
+    this.possession.set(possession);
+  }
+
+  public DoubleProperty possessionProperty() {
+    return possession;
   }
 
   private Group makeBorder() {

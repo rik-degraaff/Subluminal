@@ -1,12 +1,9 @@
 package tech.subluminal.client.presentation.customElements;
 
-import java.text.ParseException;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -22,30 +19,6 @@ public class JumpBox extends Group {
   IntegerProperty shipToSend = new SimpleIntegerProperty();
   IntegerProperty maxShips = new SimpleIntegerProperty();
 
-  public int getShipToSend() {
-    return shipToSend.get();
-  }
-
-  public IntegerProperty shipToSendProperty() {
-    return shipToSend;
-  }
-
-  public void setShipToSend(int shipToSend) {
-    this.shipToSend.set(shipToSend);
-  }
-
-  public int getMaxShips() {
-    return maxShips.get();
-  }
-
-  public IntegerProperty maxShipsProperty() {
-    return maxShips;
-  }
-
-  public void setMaxShips(int maxShips) {
-    this.maxShips.set(maxShips);
-  }
-
   public JumpBox(Property x, Property y, IntegerProperty maxAmount) {
     this.layoutXProperty().bind(x);
     this.layoutYProperty().bind(y);
@@ -55,7 +28,8 @@ public class JumpBox extends Group {
 
     HBox shipsAmount = new HBox();
     Label max = new Label();
-    max.textProperty().bind(Bindings.createStringBinding(() -> maxShipsProperty().getValue().toString(), maxShipsProperty()));
+    max.textProperty().bind(Bindings
+        .createStringBinding(() -> maxShipsProperty().getValue().toString(), maxShipsProperty()));
 
     TextField actual = new TextField();
 
@@ -65,11 +39,9 @@ public class JumpBox extends Group {
       }
     });
 
-
     actual.setOnAction(event -> {
       tryToSend(Integer.parseInt(actual.getText()));
     });
-
 
     shipsAmount.getChildren().addAll(actual, max);
 
@@ -86,10 +58,32 @@ public class JumpBox extends Group {
 
     box.getChildren().addAll(shipsAmount, send, sendMother);
 
-
-
     this.getChildren().add(box);
     box.getStyleClass().add("jumpbox");
+  }
+
+  public int getShipToSend() {
+    return shipToSend.get();
+  }
+
+  public void setShipToSend(int shipToSend) {
+    this.shipToSend.set(shipToSend);
+  }
+
+  public IntegerProperty shipToSendProperty() {
+    return shipToSend;
+  }
+
+  public int getMaxShips() {
+    return maxShips.get();
+  }
+
+  public void setMaxShips(int maxShips) {
+    this.maxShips.set(maxShips);
+  }
+
+  public IntegerProperty maxShipsProperty() {
+    return maxShips;
   }
 
   private void tryToSend(int actual) {

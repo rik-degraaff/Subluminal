@@ -6,8 +6,6 @@ import javafx.animation.ParallelTransition;
 import javafx.animation.ScaleTransition;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -18,34 +16,28 @@ import javafx.util.Duration;
 
 public class WindowContainerController implements Initializable {
 
+  private final StringProperty titel = new SimpleStringProperty();
   @FXML
   private AnchorPane window;
-
   @FXML
   private AnchorPane windowDock;
-
   @FXML
   private Label windowTitel;
-
   @FXML
   private Button windowClose;
-
-  private final StringProperty titel = new SimpleStringProperty();
+  private MainController main;
 
   public String getTitel() {
     return titel.get();
-  }
-
-  public StringProperty titelProperty() {
-    return titel;
   }
 
   public void setTitel(String titel) {
     this.titel.set(titel);
   }
 
-
-  private MainController main;
+  public StringProperty titelProperty() {
+    return titel;
+  }
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -72,7 +64,7 @@ public class WindowContainerController implements Initializable {
     paraTl.play();
   }
 
-  public void closeWindow(){
+  public void closeWindow() {
     ScaleTransition scaleTlX = new ScaleTransition(Duration.seconds(0.2), window.getParent());
     scaleTlX.setFromX(1);
     scaleTlX.setToX(0);

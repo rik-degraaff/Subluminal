@@ -12,23 +12,10 @@ import tech.subluminal.shared.records.LobbyStatus;
 
 public class LobbyStatusComponent extends HBox {
 
+  private final StringProperty lobbyToJoin = new SimpleStringProperty();
   private String lobbyID;
   private Rectangle statusBox;
   private Label playersNow;
-
-  private final StringProperty lobbyToJoin = new SimpleStringProperty();
-
-  public String getLobbyToJoin() {
-    return lobbyToJoin.get();
-  }
-
-  public StringProperty lobbyToJoinProperty() {
-    return lobbyToJoin;
-  }
-
-  public void setLobbyToJoin(String lobbyToJoin) {
-    this.lobbyToJoin.set(lobbyToJoin);
-  }
 
   public LobbyStatusComponent(String lobbyName, String lobbyID, int players, int max,
       LobbyStatus status) {
@@ -58,6 +45,18 @@ public class LobbyStatusComponent extends HBox {
 
     hbox.getChildren().addAll(statusBox, name, playersNow, playersMax);
     this.getChildren().addAll(hbox, spacer, password, join);
+  }
+
+  public String getLobbyToJoin() {
+    return lobbyToJoin.get();
+  }
+
+  public void setLobbyToJoin(String lobbyToJoin) {
+    this.lobbyToJoin.set(lobbyToJoin);
+  }
+
+  public StringProperty lobbyToJoinProperty() {
+    return lobbyToJoin;
   }
 
   public void updateLobby(int players) {

@@ -167,7 +167,8 @@ public class GameController implements Initializable, GamePresenter {
             fc.setLayoutX(f.getCoordinates().getX());
             fc.setLayoutY(f.getCoordinates().getY());
           } else {
-            fleetList.add(new FleetComponent(f.getCoordinates(), f.getNumberOfShips(), f.getID(), p.getID()));
+            fleetList.add(
+                new FleetComponent(f.getCoordinates(), f.getNumberOfShips(), f.getID(), p.getID()));
           }
         });
       });

@@ -27,6 +27,7 @@ public interface GamePresenter {
 
 
   interface Delegate {
+
     public void sendShips(Collection<Star> stars, int amount);
 
     public void sendMothership(Collection<Star> star);

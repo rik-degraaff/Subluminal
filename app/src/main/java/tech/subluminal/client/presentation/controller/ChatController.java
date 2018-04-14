@@ -11,22 +11,16 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.OverrunStyle;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.TextAlignment;
 import tech.subluminal.client.presentation.ChatPresenter;
 import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.stores.ReadOnlyUserStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.records.Channel;
 import tech.subluminal.shared.stores.records.User;
-import tech.subluminal.shared.util.ObservableMappingValue;
 
 
 public class ChatController implements ChatPresenter, UserPresenter, Initializable {
@@ -58,8 +52,9 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
       Label msg = new Label(message);
       msg.setWrapText(true);
       Insets padding = chatHistory.getPadding();
-      msg.maxWidthProperty().bind(Bindings.createDoubleBinding(() -> chatHistory.getWidth() - padding.getLeft() - padding.getRight() - 1,
-              chatHistory.widthProperty(), chatHistory.paddingProperty()));
+      msg.maxWidthProperty().bind(Bindings.createDoubleBinding(
+          () -> chatHistory.getWidth() - padding.getLeft() - padding.getRight() - 1,
+          chatHistory.widthProperty(), chatHistory.paddingProperty()));
       //msg.prefWidthProperty().bind(chatHistory.widthProperty());
 
       msg.getStyleClass().add(channel.toString().toLowerCase() + "-message");

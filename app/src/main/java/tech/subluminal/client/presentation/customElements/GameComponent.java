@@ -1,11 +1,8 @@
 package tech.subluminal.client.presentation.customElements;
 
 import java.io.IOException;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import tech.subluminal.client.presentation.controller.GameController;
 import tech.subluminal.client.presentation.controller.MainController;
 
@@ -13,7 +10,7 @@ public class GameComponent extends AnchorPane {
 
   GameController controller;
 
-  public GameComponent(MainController mainController){
+  public GameComponent(MainController mainController) {
     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("GameView.fxml"));
     fxmlLoader.setRoot(this);
     //fxmlLoader.setController(this);

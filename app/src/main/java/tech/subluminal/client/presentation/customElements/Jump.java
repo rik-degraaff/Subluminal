@@ -10,18 +10,6 @@ public class Jump extends Line {
 
   private final ObjectProperty<Color> color = new SimpleObjectProperty<Color>();
 
-  public Color getColorProperty() {
-    return color.get();
-  }
-
-  public ObjectProperty<Color> colorProperty() {
-    return color;
-  }
-
-  public void setColor(Color colorObjectProperty) {
-    this.color.set(colorObjectProperty);
-  }
-
   public Jump(Property startX, Property startY, Property endX, Property endY) {
     this.startXProperty().bind(startX);
     this.startYProperty().bind(startY);
@@ -48,6 +36,18 @@ public class Jump extends Line {
 
     setColor(Color.RED);
 
+  }
+
+  public Color getColorProperty() {
+    return color.get();
+  }
+
+  public ObjectProperty<Color> colorProperty() {
+    return color;
+  }
+
+  public void setColor(Color colorObjectProperty) {
+    this.color.set(colorObjectProperty);
   }
 
 }

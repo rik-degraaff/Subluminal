@@ -18,7 +18,7 @@
   -fx-text-fill: #59FF00;
 }
 
-.starname-label{
+.starname-label {
   -fx-background-color: transparent;
   -fx-text-fill: red;
 }
@@ -117,6 +117,6 @@
   -fx-background-color: pink;
 }
 
-.jumpbox{
+.jumpbox {
   -fx-background-color: black;
 }

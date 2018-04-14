@@ -21,17 +21,9 @@
       fx:id="menuButtonsDock">
       <children>
         <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
-          onAction="#joinPressed"
+          onAction="#onLobbyList"
           prefHeight="100.0"
-          prefWidth="134.0" text="Join" textAlignment="CENTER">
-          <font>
-            <Font size="12.0"/>
-          </font>
-        </Button>
-        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
-          onAction="#hostPressed"
-          prefHeight="102.0"
-          prefWidth="138.0" text="Host" textAlignment="CENTER">
+          prefWidth="134.0" text="Lobbylist" textAlignment="CENTER">
           <font>
             <Font size="12.0"/>
           </font>

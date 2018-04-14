@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?private TextArea chatBox?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
-<AnchorPane fx:id="window" prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.subluminal.client.presentation.controller.MainController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/8"
+  fx:controller="tech.subluminal.client.presentation.controller.MainController"
+  fx:id="window">
   <children>
-    <AnchorPane fx:id="spaceBackgroundDock" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-    <AnchorPane prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+      AnchorPane.topAnchor="0.0" prefHeight="600.0" prefWidth="800.0"
+      fx:id="spaceBackgroundDock"/>
+    <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+      AnchorPane.topAnchor="0.0" prefHeight="600.0" prefWidth="800.0">
       <children>
-        <HBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
+          alignment="CENTER" prefHeight="600.0" prefWidth="800.0">
           <children>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
               <children>
-                <AnchorPane fx:id="menuDock" prefHeight="4.0" prefWidth="4.0">
+                <AnchorPane prefHeight="4.0" prefWidth="4.0" fx:id="menuDock">
 
                 </AnchorPane>
               </children>
@@ -25,15 +29,18 @@
         </HBox>
       </children>
     </AnchorPane>
-    <AnchorPane fx:id="playArea" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-    <AnchorPane fx:id="chatDock" prefHeight="300.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+    <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
+      prefHeight="600.0" prefWidth="800.0" fx:id="playArea"/>
+    <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" prefHeight="300.0"
+      fx:id="chatDock">
       <children>
-        <fx:include fx:id="chatView" source="../customElements/ChatView.fxml" />
+        <fx:include source="../customElements/ChatView.fxml" fx:id="chatView"/>
       </children>
     </AnchorPane>
-    <AnchorPane fx:id="playerBoardDock" prefHeight="200.0" prefWidth="400.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+    <AnchorPane AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0" prefHeight="200.0"
+      prefWidth="400.0" fx:id="playerBoardDock">
       <children>
-        <fx:include fx:id="userListView" source="../customElements/UserListView.fxml" />
+        <fx:include source="../customElements/UserListView.fxml" fx:id="userListView"/>
       </children>
     </AnchorPane>
 
