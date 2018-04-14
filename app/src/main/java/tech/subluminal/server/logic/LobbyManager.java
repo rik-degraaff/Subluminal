@@ -8,10 +8,9 @@ import tech.subluminal.server.stores.ReadOnlyUserStore;
 import tech.subluminal.shared.messages.LobbyJoinReq;
 import tech.subluminal.shared.messages.LobbyLeaveReq;
 import tech.subluminal.shared.messages.LobbyListReq;
-import tech.subluminal.shared.messages.LobbyUpdateReq;
 import tech.subluminal.shared.net.Connection;
-import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.Lobby;
+import tech.subluminal.shared.stores.records.LobbySettings;
 import tech.subluminal.shared.util.Synchronized;
 
 /**
@@ -41,15 +40,9 @@ public class LobbyManager {
     connection
         .registerHandler(LobbyJoinReq.class, LobbyJoinReq::fromSON, req -> onLobbyJoin(id, req));
     connection
-        .registerHandler(LobbyLeaveReq.class, LobbyLeaveReq::fromSON, req -> onLobbyLeave());
-    //  connection
-    //      .registerHandler(LobbyListReq.class, LobbyListReq::fromSON, this::onLobbyList);
-  }
-
-  private <T extends SONRepresentable> void onLobbyList(T t) {
-  }
-
-  private void onLobbyLeave() {
+        .registerHandler(LobbyLeaveReq.class, LobbyLeaveReq::fromSON, req -> onLobbyLeave(id, req));
+    connection
+        .registerHandler(LobbyListReq.class, LobbyListReq::fromSON, this::onLobbyList);
   }
 
   private void onLobbyJoin(String userID, LobbyJoinReq req) {
@@ -79,6 +72,10 @@ public class LobbyManager {
     //TODO: Send message to client: Successfully left lobby
   }
 
+  private void onLobbyList(LobbyListReq req) {
+
+  }
+
   /**
    * Creates a new lobby and adds it to the
    *
@@ -87,7 +84,7 @@ public class LobbyManager {
    */
   public void createLobby(String name, String adminID) {
     String id = generateId(6);
-    lobbyStore.lobbies().add(new Lobby(id, name, adminID));
+    lobbyStore.lobbies().add(new Lobby(id, new LobbySettings(name, adminID)));
   }
 
   /**

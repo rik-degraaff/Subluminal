@@ -28,7 +28,6 @@ public class Lobby extends SlimLobby {
    */
   public Lobby(String id, LobbySettings settings) {
     super(id, settings);
-    users.put(adminID, false);
   }
 
   public static Lobby fromSON(SON son) throws SONConversionError {
