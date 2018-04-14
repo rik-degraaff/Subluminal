@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Subluminal" company="Bordeaux Ink" webLink="http://" view-date="2018-02-26" view-index="0" gantt-divider-location="839" resource-divider-location="300" version="2.8.6" locale="de">
+<?xml version="1.0" encoding="UTF-8"?><project name="Subluminal" company="Bordeaux Ink" webLink="http://" view-date="2018-02-19" view-index="0" gantt-divider-location="839" resource-divider-location="300" version="2.8.6" locale="de">
     <description><![CDATA[
         
         
@@ -8,10 +8,11 @@
     
     
     ]]></description>
-    <view zooming-state="default:6" id="gantt-chart">
+    <view zooming-state="default:4" id="gantt-chart">
         <field id="tpd3" name="Vorgang" width="394" order="0"/>
         <field id="tpd4" name="Anfang" width="215" order="1"/>
         <field id="tpd5" name="Ende" width="197" order="2"/>
+        <timeline><![CDATA[311,284]]></timeline>
         <option id="color.recent"><![CDATA[#00ff00 #ff00ff #ff0000 #ffff00 #000000 #f0f0f0 #0000ff]]></option>
     </view>
     <view id="resource-table">
@@ -47,6 +48,7 @@
             <depend id="19" type="2" difference="0" hardness="Strong"/>
             <depend id="21" type="2" difference="0" hardness="Strong"/>
             <depend id="23" type="2" difference="0" hardness="Strong"/>
+            <depend id="82" type="2" difference="0" hardness="Strong"/>
         </task>
         <task id="15" name="write network protocol" color="#00ff00" meeting="false" start="2018-03-03" duration="1" complete="0" thirdDate="2018-03-03" thirdDate-constraint="0" expand="true"/>
         <task id="19" name="create mockups" color="#00ff00" meeting="false" start="2018-03-03" duration="1" complete="0" thirdDate="2018-03-03" thirdDate-constraint="0" expand="true"/>
@@ -66,6 +68,7 @@
             <depend id="67" type="2" difference="0" hardness="Strong"/>
             <depend id="95" type="2" difference="0" hardness="Strong"/>
             <depend id="216" type="2" difference="0" hardness="Strong"/>
+            <depend id="311" type="2" difference="0" hardness="Strong"/>
         </task>
         <task id="95" name="design project architecture" color="#00ff00" meeting="false" start="2018-03-08" duration="2" complete="0" thirdDate="2018-03-08" thirdDate-constraint="0" expand="true">
             <depend id="47" type="2" difference="0" hardness="Strong"/>
@@ -96,10 +99,8 @@
             <depend id="82" type="2" difference="0" hardness="Strong"/>
             <depend id="87" type="2" difference="0" hardness="Strong"/>
             <depend id="106" type="2" difference="0" hardness="Strong"/>
-            <depend id="117" type="2" difference="0" hardness="Strong"/>
             <depend id="274" type="2" difference="0" hardness="Strong"/>
             <depend id="277" type="2" difference="0" hardness="Strong"/>
-            <depend id="280" type="2" difference="0" hardness="Strong"/>
             <depend id="284" type="2" difference="0" hardness="Strong"/>
             <depend id="287" type="2" difference="0" hardness="Strong"/>
             <depend id="290" type="2" difference="0" hardness="Strong"/>
@@ -108,36 +109,39 @@
             <depend id="299" type="2" difference="0" hardness="Strong"/>
             <depend id="302" type="2" difference="0" hardness="Strong"/>
             <depend id="307" type="2" difference="0" hardness="Strong"/>
+            <depend id="311" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="91" name="private chat" color="#00ff00" meeting="false" start="2018-03-18" duration="6" complete="0" thirdDate="2018-04-01" thirdDate-constraint="0" expand="true"/>
+        <task id="91" name="chat whispers" color="#00ff00" meeting="false" start="2018-03-26" duration="2" complete="0" thirdDate="2018-03-26" thirdDate-constraint="1" expand="true"/>
         <task id="216" name="implement SONList" color="#00ff00" meeting="false" start="2018-03-08" duration="5" complete="0" thirdDate="2018-04-01" thirdDate-constraint="0" expand="true"/>
-        <task id="82" name="write some unit tests" color="#00ff00" meeting="false" start="2018-03-18" duration="4" complete="0" thirdDate="2018-04-07" thirdDate-constraint="0" expand="true"/>
-        <task id="274" name="game list server side" color="#ff0000" meeting="false" start="2018-03-18" duration="1" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true"/>
-        <task id="277" name="model game state client side" color="#00ff00" meeting="false" start="2018-03-18" duration="1" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true"/>
+        <task id="82" name="write some unit tests" color="#00ff00" meeting="false" start="2018-04-07" duration="7" complete="0" thirdDate="2018-04-07" thirdDate-constraint="1" expand="true"/>
+        <task id="274" name="game list server side" color="#00ff00" meeting="false" start="2018-04-12" duration="2" complete="0" thirdDate="2018-04-12" thirdDate-constraint="1" expand="true"/>
+        <task id="277" name="model game state client side" color="#00ff00" meeting="false" start="2018-04-07" duration="2" complete="0" thirdDate="2018-04-07" thirdDate-constraint="1" expand="true">
+            <depend id="280" type="2" difference="0" hardness="Strong"/>
+        </task>
         <task id="280" name="model game state server side" color="#00ff00" meeting="false" start="2018-04-12" duration="2" complete="0" thirdDate="2018-04-12" thirdDate-constraint="1" expand="true"/>
-        <task id="284" name="generate highscore" color="#ff0000" meeting="false" start="2018-03-18" duration="1" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true"/>
-        <task id="287" name="make highscore persistent" color="#ff0000" meeting="false" start="2018-03-18" duration="1" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true"/>
-        <task id="290" name="make a build script" color="#00ff00" meeting="false" start="2018-03-18" duration="1" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true"/>
-        <task id="293" name="enable ship movement requests" color="#00ff00" meeting="false" start="2018-03-18" duration="1" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true"/>
-        <task id="296" name="implement signal delays" color="#ff0000" meeting="false" start="2018-03-18" duration="1" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true"/>
-        <task id="299" name="make game list visible" color="#ff0000" meeting="false" start="2018-03-18" duration="1" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true"/>
-        <task id="302" name="make users list visible" color="#ff0000" meeting="false" start="2018-03-18" duration="1" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true"/>
-        <task id="307" name="generate game map" color="#ff0000" meeting="false" start="2018-03-18" duration="1" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true"/>
-        <task id="76" name="server game loop" color="#ff0000" meeting="false" start="2018-03-18" duration="2" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true"/>
-        <task id="117" name="client game loop" color="#ff0000" meeting="false" start="2018-03-18" duration="2" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true"/>
-        <task id="87" name="create game" color="#ff0000" meeting="false" start="2018-03-18" duration="1" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true">
+        <task id="284" name="generate highscore" color="#ff0000" meeting="false" start="2018-04-15" duration="1" complete="0" thirdDate="2018-04-15" thirdDate-constraint="1" expand="true"/>
+        <task id="287" name="make highscore persistent" color="#ff0000" meeting="false" start="2018-04-15" duration="1" complete="0" thirdDate="2018-04-15" thirdDate-constraint="1" expand="true"/>
+        <task id="290" name="build script / CI" color="#00ff00" meeting="false" start="2018-04-01" duration="7" complete="0" thirdDate="2018-04-01" thirdDate-constraint="1" expand="true"/>
+        <task id="293" name="enable ship movement requests" color="#00ff00" meeting="false" start="2018-04-09" duration="1" complete="0" thirdDate="2018-04-09" thirdDate-constraint="1" expand="true"/>
+        <task id="296" name="implement signal delays" color="#00ff00" meeting="false" start="2018-04-13" duration="1" complete="0" thirdDate="2018-04-13" thirdDate-constraint="1" expand="true"/>
+        <task id="299" name="make game list visible" color="#ff0000" meeting="false" start="2018-04-15" duration="1" complete="0" thirdDate="2018-04-15" thirdDate-constraint="1" expand="true"/>
+        <task id="356" name="implement pathfindig" color="#00ff00" meeting="false" start="2018-04-11" duration="1" complete="0" thirdDate="2018-04-11" thirdDate-constraint="1" expand="true"/>
+        <task id="302" name="make users list visible" color="#ff0000" meeting="false" start="2018-04-15" duration="1" complete="0" thirdDate="2018-04-15" thirdDate-constraint="1" expand="true"/>
+        <task id="307" name="generate game map" color="#00ff00" meeting="false" start="2018-04-13" duration="1" complete="0" thirdDate="2018-04-13" thirdDate-constraint="1" expand="true"/>
+        <task id="76" name="server game loop" color="#00ff00" meeting="false" start="2018-04-12" duration="2" complete="0" thirdDate="2018-04-12" thirdDate-constraint="1" expand="true"/>
+        <task id="311" name="show stars on GUI" color="#00ff00" meeting="false" start="2018-04-10" duration="1" complete="0" thirdDate="2018-04-10" thirdDate-constraint="1" expand="true"/>
+        <task id="117" name="client game loop" color="#ff0000" meeting="false" start="2018-04-20" duration="3" complete="0" thirdDate="2018-04-20" thirdDate-constraint="1" expand="true"/>
+        <task id="87" name="create game req./res." color="#00ff00" meeting="false" start="2018-04-11" duration="2" complete="0" thirdDate="2018-04-11" thirdDate-constraint="1" expand="true">
             <depend id="85" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="85" name="join game" color="#ff0000" meeting="false" start="2018-03-19" duration="1" complete="0" thirdDate="2018-03-19" thirdDate-constraint="0" expand="true">
+        <task id="85" name="join game req./res." color="#00ff00" meeting="false" start="2018-04-13" duration="1" complete="0" thirdDate="2018-04-13" thirdDate-constraint="0" expand="true">
             <depend id="86" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="86" name="leave game" color="#ff0000" meeting="false" start="2018-03-20" duration="1" complete="0" thirdDate="2018-03-20" thirdDate-constraint="0" expand="true">
-            <depend id="89" type="2" difference="0" hardness="Strong"/>
+        <task id="86" name="leave game req./res." color="#00ff00" meeting="false" start="2018-04-14" duration="1" complete="0" thirdDate="2018-04-14" thirdDate-constraint="0" expand="true"/>
+        <task id="89" name="lobby GUI" color="#ff0000" meeting="false" start="2018-04-12" duration="3" complete="0" thirdDate="2018-04-12" thirdDate-constraint="1" expand="true"/>
+        <task id="90" name="create powerpoint presentation M3" color="#ff0000" meeting="false" start="2018-04-13" duration="3" complete="0" thirdDate="2018-04-13" thirdDate-constraint="0" expand="true">
+            <depend id="6" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="89" name="lobby GUI" color="#ff0000" meeting="false" start="2018-03-21" duration="2" complete="0" thirdDate="2018-03-21" thirdDate-constraint="0" expand="true">
-            <depend id="90" type="2" difference="0" hardness="Strong"/>
-        </task>
-        <task id="90" name="create powerpoint presentation M3" color="#ff0000" meeting="false" start="2018-04-13" duration="3" complete="0" thirdDate="2018-04-13" thirdDate-constraint="1" expand="true"/>
         <task id="6" name="Milestone 3" color="#ff00ff" meeting="true" start="2018-04-16" duration="0" complete="0" thirdDate="2018-04-16" thirdDate-constraint="0" expand="true">
             <depend id="92" type="2" difference="0" hardness="Strong"/>
             <depend id="93" type="2" difference="0" hardness="Strong"/>
