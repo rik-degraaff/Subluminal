@@ -2,23 +2,22 @@ package tech.subluminal.client.presentation.controller;
 
 import java.net.URL;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
+import tech.subluminal.client.presentation.GamePresenter;
 import tech.subluminal.client.presentation.customElements.Jump;
 import tech.subluminal.client.presentation.customElements.JumpBox;
 import tech.subluminal.client.presentation.customElements.MotherShip;
 import tech.subluminal.client.presentation.customElements.StarComponent;
+import tech.subluminal.client.stores.records.game.Player;
+import tech.subluminal.shared.stores.records.game.Ship;
+import tech.subluminal.shared.stores.records.game.Star;
 
-public class GameController implements Initializable {
+public class GameController implements Initializable, GamePresenter {
 
   private MainController main;
 
@@ -34,10 +33,14 @@ public class GameController implements Initializable {
 
   private JumpBox box;
 
+  private List<StarComponent> starList = new LinkedList<StarComponent>();
+
+  private List<MotherShip> shipList = new LinkedList<MotherShip>();
+
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    StarComponent star = new StarComponent(0.4,0.7,0.4, "ANDROMEDAR");
+    /*StarComponent star = new StarComponent(0.4,0.7,0.4, "ANDROMEDAR");
     StarComponent star2 = new StarComponent(1,0.0,0.2, "TITTY IX");
     star2.setColorProperty(Color.PINK);
     StarComponent star3 = new StarComponent(0.1,1,0.1, "LUXIS BB");
@@ -54,7 +57,7 @@ public class GameController implements Initializable {
     MotherShip ship = new MotherShip(star.layoutXProperty(),star.layoutYProperty(), "fwefr1");
     ship.setIsRotating(true);
     map.getChildren().add(ship);
-    //removeJumpPath();
+    //removeJumpPath();*/
 
 
     map.getChildren().forEach(e -> {
@@ -121,5 +124,76 @@ public class GameController implements Initializable {
 
   public void setMainController(MainController main){
     this.main = main;
+  }
+
+  @Override
+  public void displayMap(Collection<Star> stars) {
+    stars.stream().forEach(s -> starList.add(new StarComponent(s.getOwnerID(), 0.0, s.getCoordinates(), s.getID())));
+
+    starList.stream().forEach(s -> map.getChildren().add(s));
+  }
+
+  @Override
+  public void updateStar(Collection<Star> stars) {
+    stars.stream().forEach(s -> {
+      starList.stream().forEach(e -> {
+        if(e.getStarID().equals(s.getID())){
+          e.setOwnerIDProperty(s.getOwnerID());
+          e.setPossession(s.getPossession());
+        }
+      });
+    });
+
+  }
+
+  @Override
+  public void updateFleet(List<Player> players) {
+
+  }
+
+  @Override
+  public void addFleet(Star star, int amount) {
+
+  }
+
+  @Override
+  public void removeFleet(Star star, int amount) {
+
+  }
+
+  @Override
+  public void updateMothership(List<Player> players) {
+    players.stream().forEach(p -> {
+      Ship mothership = p.getMotherShip();
+      shipList.stream().forEach(s -> {
+        if (p.getMotherShip().getID().equals(s.getId())){
+          s.setLayoutX(mothership.getCoordinates().getX());
+          s.setLayoutY(mothership.getCoordinates().getY());
+        }
+      });
+    });
+  }
+
+  @Override
+  public void addMothership(List<Player> players) {
+    players.stream().forEach(p -> {
+      Ship mothership = p.getMotherShip();
+
+      shipList.add(new MotherShip(mothership.getCoordinates().getX(), mothership.getCoordinates().getY(), p.getID()));
+
+      shipList.stream().forEach(s -> map.getChildren().add(s));
+    });
+
+  }
+
+  @Override
+  public void removeMothership(List<String> playerID) {
+    playerID.stream().forEach(p -> {
+      shipList.stream().forEach(s -> {
+        if(s.getOwnerID().equals(p)){
+          shipList.remove(s);
+        }
+      });
+    });
   }
 }

@@ -137,4 +137,10 @@ public class MainController implements Initializable {
 
     playArea.getChildren().add(game);
   }
+
+  public void onMapCloseHandle(){
+    playArea.getChildren().clear();
+
+    menuDock.getChildren().add(menu);
+  }
 }

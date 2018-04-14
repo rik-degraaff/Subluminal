@@ -1,28 +1,20 @@
 package tech.subluminal.client.presentation.customElements;
 
 import javafx.animation.RotateTransition;
-import javafx.animation.ScaleTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 
-public class MotherShip extends Group {
-
+public class Fleet extends Group {
   private final ObjectProperty<Color> color = new SimpleObjectProperty<Color>();
 
   private final BooleanProperty isRotating = new SimpleBooleanProperty();
@@ -65,7 +57,7 @@ public class MotherShip extends Group {
     this.ownerID.set(ownerID);
   }
 
-  public MotherShip(double x, double y, String playerId){
+  public Fleet(double x, double y, int amount, String playerId){
     Group group = new Group();
     group.getTransforms().add(new Translate(-fromCenter, -fromCenter));
     group.getTransforms().add(new Rotate(90));

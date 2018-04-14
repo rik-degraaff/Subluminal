@@ -1,8 +1,32 @@
 package tech.subluminal.client.presentation;
 
+import java.util.Collection;
+import java.util.List;
+import tech.subluminal.client.stores.records.game.Player;
+import tech.subluminal.shared.stores.records.game.Star;
+
 public interface GamePresenter {
 
-  interface Delegate {
+  public void displayMap(Collection<Star> stars);
 
+  public void updateStar(Collection<Star> stars);
+
+  public void updateFleet(List<Player> players);
+
+  public void addFleet(Star star, int amount);
+
+  public void removeFleet(Star star, int amount);
+
+  public void updateMothership(List<Player> players);
+
+  public void addMothership(List<Player> players);
+
+  public void removeMothership(List<String> playerID);
+
+
+  interface Delegate {
+    public void sendShips(Collection<Star> stars, int amount);
+
+    public void sendMothership(Collection<Star> star);
   }
 }

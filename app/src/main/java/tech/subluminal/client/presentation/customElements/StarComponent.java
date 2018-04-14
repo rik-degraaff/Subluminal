@@ -2,11 +2,9 @@ package tech.subluminal.client.presentation.customElements;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -18,9 +16,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
+import tech.subluminal.shared.stores.records.game.Coordinates;
 
 public class StarComponent extends Pane {
 
@@ -29,7 +27,11 @@ public class StarComponent extends Pane {
   private final DoubleProperty sizeProperty = new SimpleDoubleProperty();
   private final DoubleProperty xProperty = new SimpleDoubleProperty();
   private final DoubleProperty yProperty = new SimpleDoubleProperty();
+  private final StringProperty starID = new SimpleStringProperty();
+  private final DoubleProperty possession = new SimpleDoubleProperty();
   private final IntegerProperty ships = new SimpleIntegerProperty();
+  //TODO let planet know that there are ships to move
+
 
   private final StringProperty ownerIDProperty = new SimpleStringProperty();
   private final IntegerProperty parentWidthProperty = new SimpleIntegerProperty();
@@ -105,10 +107,6 @@ public class StarComponent extends Pane {
     return ownerIDProperty;
   }
 
-  public void setOwnerIDProperty(String ownerIDProperty) {
-    this.ownerIDProperty.set(ownerIDProperty);
-  }
-
   public int getShips() {
     return ships.get();
   }
@@ -121,14 +119,44 @@ public class StarComponent extends Pane {
     this.ships.set(ships);
   }
 
-  public StarComponent(double x, double y, double size, String name) {
+  public void setOwnerIDProperty(String ownerIDProperty) {
+    this.ownerIDProperty.set(ownerIDProperty);
+  }
 
-    setShips(20); //TODO:  remove this
+  public String getStarID() {
+    return starID.get();
+  }
 
-    setXProperty(x);
-    setYProperty(y);
-    setSizeProperty(size);
+  public StringProperty starIDProperty() {
+    return starID;
+  }
+
+  public void setStarID(String starID) {
+    this.starID.set(starID);
+  }
+
+  public double getPossession() {
+    return possession.get();
+  }
+
+  public DoubleProperty possessionProperty() {
+    return possession;
+  }
+
+  public void setPossession(double possession) {
+    this.possession.set(possession);
+  }
+
+  public StarComponent( String ownerID, double possession, Coordinates coordinates, String id) {
+
+    setPossession(possession);
+    setXProperty(coordinates.getX());
+    setYProperty(coordinates.getY());
+    setSizeProperty(20);
     setColorProperty(Color.GRAY);
+    setStarID(id);
+
+    setShips(0);
 
     this.layoutXProperty().bind(Bindings
         .createDoubleBinding(
@@ -147,22 +175,21 @@ public class StarComponent extends Pane {
 
     ownerIDProperty.set(null);
 
-    this.name = name;
+    this.name = "SUBBY";
 
     Circle star = new Circle();
     star.fillProperty().bind(colorProperty);
-    star.setRadius(size);
     star.setCenterY(sizeAll / 2);
     star.setCenterX(sizeAll / 2);
     star.radiusProperty().bind(Bindings.createDoubleBinding(
-        () -> sizeProperty.doubleValue() *sizeAll, sizeProperty));
+        () -> sizeProperty.doubleValue() * sizeAll, sizeProperty));
     star.fillProperty().bind(colorProperty);
 
     Pane starGroup = new Pane();
     starGroup.setPrefWidth(sizeAll);
     starGroup.setPrefHeight(sizeAll);
-    starGroup.setTranslateX(-sizeAll/2);
-    starGroup.setTranslateY(-sizeAll/2);
+    starGroup.setTranslateX(-sizeAll / 2);
+    starGroup.setTranslateY(-sizeAll / 2);
 
     border = makeBorder();
     border.setVisible(false);
