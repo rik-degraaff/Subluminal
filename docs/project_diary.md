@@ -13,13 +13,21 @@
   - INFO and CRITICAL, which are used by the server's and clients' systems.
   - INFO will inform players about stuff like new joined players or name changes and will be mutable by the players. CRITICAL cannot be muted and will send warnings or more important messages to players, for example if a player tries to whisper to a non-existing player.
 
+### Thursday, April 5th, 2018
+##### Decisions:
+- For now, we are going to test the following classes:
+    - SON
+    - GameStateDelta
+    - Graph
+- After milestone 3, we are probably going to test some of the messages to make sure that they are parsed correctly.
+
 ### Wednesday, April 4th, 2018 (all)
 ##### Decisions:
 - A game store will store the the game state.
 - A game manager will listen to game state deltas which contain the features that need to be updated. The game manager then updates these features. It will also take care of the information delay, which is a key feature in our game. 
 - The mentioned game state delta message will contain the changes to be made to the game state.
 - The game lobby view will be a dynamic outer space view which makes the viewer feel like he or she is in a cockpit of a space ship, travelling at a really high speed. The lobby chat window will be at the bottom right corner of the window, in a command line-like design.
-
+- To make things easier, for milestone 3 we are simply going to implement the movement of motherships, the colonization of stars by the motherships and the confrontation of two motherships on the same star. 
 
 ### Saturday, March 31st, 2018 (all)
 ##### Decisions:
