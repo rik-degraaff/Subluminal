@@ -1,8 +1,6 @@
 image: subluminalthegame/gradle:4.6.0-jdk8-openjfx-alpine
 
 before_script:
-  - echo "----- Start CI -----"
-  - pwd
   - export GRADLE_USER_HOME=`pwd`/.gradle
 
 cache:
@@ -15,8 +13,9 @@ stages:
   - test
   - coverage
   - javadoc
+  - testing
   - staging
-  - deploy
+  - production
 
 cache:
   paths:
@@ -30,21 +29,22 @@ checkstyle:
     - cs108
   allow_failure: true
   artifacts:
-    name: "$CI_JOB_NAME-$CI_COMMIT_SHA	"
+    name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     paths:
       - app/build/
       - app/out
   only:
     - /^rl-.*$/
 
-build:java:
+build:
   stage: build
   script:
-    - gradle build
+    - gradle clean
+    - gradle build -x check -x test
   tags:
     - cs108
   artifacts:
-    name: "$CI_JOB_NAME-$CI_COMMIT_REF_NAME"
+    name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     paths:
       - app/build/
       - app/out
@@ -61,23 +61,11 @@ test:
       - app/build/
       - app/out
 
-coverage:java:
+coverage:
   stage: coverage
   script:
     - gradle jacocoTestReport
     - cat app/build/reports/coverage/index.html
-  tags:
-    - cs108
-  artifacts:
-    name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
-    paths:
-      - app/build/
-      - app/out
-  
-build:
-  stage: build
-  script:
-    - gradle build -x check -x test
   tags:
     - cs108
   artifacts:
@@ -92,7 +80,6 @@ javadoc:
     - gradle -q javadoc
   tags:
     - cs108
-  allow_failure: true
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     paths:
@@ -101,22 +88,59 @@ javadoc:
   only:
     - /^rl-.*$/
 
-staging:
+testing:
   stage: staging
+  image: docker:latest
+  variables:
+    DOCKER_DRIVER: 'overlay2'
+    VERSION: 'null'
+  services:
+  - docker:dind
+  before_script:
+  - docker info
   script:
-    - echo "Missing sh script to setup testing/staging environment."
+  - VERSION=$(cat VERSION)
+  - echo Building and deploying server verison $VERSION to CI_JOB_NAME
+  - docker build -t subluminalthegame/subluminal:latest -t subluminalthegame/subluminal:3.0.0 .
+  - docker login -u subluminalthegame -p $DOCKERHUB_PASSWORD
+  - docker push subluminalthegame/subluminal
+  - apk update
+  - apk add --no-cache openssh-client sshpass
+  - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no gitlab@$DEPLOYHOST docker stop subluminal_staging || true
+  - sshpass -p $DEPLOY_PASSWORD ssh gitlab@$DEPLOYHOST docker pull subluminalthegame/subluminal:latest
+  - sshpass -p $DEPLOY_PASSWORD ssh gitlab@$DEPLOYHOST docker run --rm -d -p 1727:1729/tcp --name subluminal_staging subluminalthegame/subluminal:latest
+  tags:
+    - cs108
+  #when: on_success
   when: manual
+  environment:
+    name: staging
+  only:
+    - dev
+    - ft-buildtools-luc
+
+staging:
+  stage: testing
+  script:
+    - echo "Missing sh script to setup testing environment."
+  tags:
+    - cs108
+  #when: on_success
+  when: manual
+  environment:
+    name: staging
   only:
     - /^rl-.*$/
-    - dev
 
-deploy:
-  stage: staging
+
+production:
+  stage: production
   script:
-    - echo "Missing sh script to setup deployment environment."
+    - echo "Missing sh script to setup production environment."
+  tags:
+    - cs108
   when: manual
+  environment:
+    name: production
   only:
     - master
-
-after_script:
-  - echo "----- End CI -----"

@@ -1,12 +1,17 @@
 package tech.subluminal.shared.stores.records;
 
+import tech.subluminal.shared.son.SON;
+import tech.subluminal.shared.son.SONConversionError;
+import tech.subluminal.shared.son.SONRepresentable;
+
 /**
  * Record that represents a user.
  */
-public class User {
+public class User extends Identifiable implements SONRepresentable {
 
+  private static final String IDENTIFIABLE_KEY = "identifiable";
+  private static final String USERNAME_KEY = "username";
   private String username;
-  private String id;
 
   /**
    * Creates a user.
@@ -15,8 +20,21 @@ public class User {
    * @param id to record for a specified user
    */
   public User(String username, String id) {
+    super(id);
     this.username = username;
-    this.id = id;
+  }
+
+  public static User fromSON(SON son) throws SONConversionError {
+    String username = son.getString(USERNAME_KEY)
+        .orElseThrow(
+            () -> new SONConversionError("User did not contain a valid " + USERNAME_KEY + "."));
+
+    User user = new User(username, null);
+    SON identifiable = son.getObject(IDENTIFIABLE_KEY)
+        .orElseThrow(() -> SONRepresentable.error("User", IDENTIFIABLE_KEY));
+    user.loadFromSON(identifiable);
+
+    return user;
   }
 
   /**
@@ -37,22 +55,10 @@ public class User {
     this.username = username;
   }
 
-  /**
-   * Gets the id of the user.
-   *
-   * @return the user id.
-   */
-  public String getId() {
-    return id;
-  }
-
-  /**
-   *
-   * Sets the id of the user.
-   *
-   * @param id to be set as user id.
-   */
-  public void setId(String id) {
-    this.id = id;
+  @Override
+  public SON asSON() {
+    return new SON()
+        .put(username, USERNAME_KEY)
+        .put(super.asSON(), IDENTIFIABLE_KEY);
   }
 }

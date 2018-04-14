@@ -22,7 +22,7 @@ public class ServerInitializer {
    *
    * @param port to bind the server to.
    */
-  public static void init(int port) {
+  public static void init(int port, boolean debug) {
     ConnectionManager connectionManager = new SocketConnectionManager(port);
 
     MessageDistributor messageDistributor = new ConnectionMessageDistributor(connectionManager);

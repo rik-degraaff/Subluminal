@@ -38,6 +38,7 @@ public class SON {
 
   /**
    * Parses a String to a SON object.
+   *
    * @param str is the string to parse.
    * @return the parsed SON object.
    */

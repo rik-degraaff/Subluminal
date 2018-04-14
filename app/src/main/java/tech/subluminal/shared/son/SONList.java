@@ -4,28 +4,28 @@ import static tech.subluminal.shared.son.SONParsing.BOOLEAN_ID;
 import static tech.subluminal.shared.son.SONParsing.DOUBLE_ID;
 import static tech.subluminal.shared.son.SONParsing.ENTRY_DELIMITER;
 import static tech.subluminal.shared.son.SONParsing.INTEGER_ID;
-import static tech.subluminal.shared.son.SONParsing.KEY_VALUE_DELIMITER;
 import static tech.subluminal.shared.son.SONParsing.LIST_ID;
+import static tech.subluminal.shared.son.SONParsing.LIST_LEFTBRACE;
+import static tech.subluminal.shared.son.SONParsing.LIST_RIGHTBRACE;
 import static tech.subluminal.shared.son.SONParsing.OBJECT_ID;
-import static tech.subluminal.shared.son.SONParsing.OBJECT_LEFTBRACE;
-import static tech.subluminal.shared.son.SONParsing.OBJECT_RIGHTBRACE;
 import static tech.subluminal.shared.son.SONParsing.STRING_ID;
-import static tech.subluminal.shared.son.SONParsing.integerString;
-import static tech.subluminal.shared.son.SONParsing.doubleString;
 import static tech.subluminal.shared.son.SONParsing.booleanString;
+import static tech.subluminal.shared.son.SONParsing.doubleString;
+import static tech.subluminal.shared.son.SONParsing.integerString;
 import static tech.subluminal.shared.son.SONParsing.partialParseBoolean;
 import static tech.subluminal.shared.son.SONParsing.partialParseDouble;
 import static tech.subluminal.shared.son.SONParsing.partialParseInt;
 import static tech.subluminal.shared.son.SONParsing.partialParseString;
 import static tech.subluminal.shared.son.SONParsing.stringString;
-import static tech.subluminal.shared.son.SONParsing.LIST_LEFTBRACE;
-import static tech.subluminal.shared.son.SONParsing.LIST_RIGHTBRACE;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.IntFunction;
 import java.util.stream.Stream;
 import tech.subluminal.shared.son.SONParsing.PartialParseResult;
+import tech.subluminal.shared.util.Streamable;
 
 /**
  * Subluminal Object Notation List:
@@ -35,6 +35,70 @@ import tech.subluminal.shared.son.SONParsing.PartialParseResult;
 public class SONList {
 
   private List<Object> list = new ArrayList<>();
+
+  static PartialParseResult<SONList> partialParse(String str, int start)
+      throws SONParsingError {
+    try {
+      if (str.charAt(start) != LIST_LEFTBRACE) {
+        throw new SONParsingError("Expected a list but found no left brace.");
+      }
+
+      SONList list = new SONList();
+
+      if (str.charAt(start + 1) == LIST_RIGHTBRACE) {
+        return new PartialParseResult<>(list, start + 2);
+      }
+      int i = start;
+
+      do {
+        i++;
+        char typeID = str.charAt(i++);
+        switch (typeID) {
+          case INTEGER_ID:
+            PartialParseResult<Integer> intRes = partialParseInt(str, i);
+            i = intRes.pos;
+            list.add(intRes.result);
+            break;
+          case DOUBLE_ID:
+            PartialParseResult<Double> doubleRes = partialParseDouble(str, i);
+            i = doubleRes.pos;
+            list.add(doubleRes.result);
+            break;
+          case BOOLEAN_ID:
+            PartialParseResult<Boolean> boolRes = partialParseBoolean(str, i);
+            i = boolRes.pos;
+            list.add(boolRes.result);
+            break;
+          case STRING_ID:
+            PartialParseResult<String> strRes = partialParseString(str, i);
+            i = strRes.pos;
+            list.add(strRes.result);
+            break;
+          case OBJECT_ID:
+            PartialParseResult<SON> objRes = SON.partialParse(str, i);
+            i = objRes.pos;
+            list.add(objRes.result);
+            break;
+          case LIST_ID:
+            PartialParseResult<SONList> listRes = SONList.partialParse(str, i);
+            i = listRes.pos;
+            list.add(listRes.result);
+            break;
+          default:
+            throw new SONParsingError(
+                "Expected a value, but found no type identifier. Instead found: '" + typeID + "'");
+        }
+      } while (str.charAt(i) == ENTRY_DELIMITER);
+
+      if (str.charAt(i) != LIST_RIGHTBRACE) {
+        throw new SONParsingError("SON list was not terminated.");
+      }
+
+      return new PartialParseResult<>(list, i + 1);
+    } catch (IndexOutOfBoundsException e) {
+      throw new SONParsingError("SON list was not terminated.");
+    }
+  }
 
   /**
    * Returns the number of elements this SONList contains.
@@ -281,67 +345,74 @@ public class SONList {
     return builder.toString();
   }
 
-  static PartialParseResult<SONList> partialParse(String str, int start)
-      throws SONParsingError {
-    try {
-      if (str.charAt(start) != LIST_LEFTBRACE) {
-        throw new SONParsingError("Expected a list but found no left brace.");
-      }
+  /**
+   * @return a streamable containing all the integers in this list in order.
+   */
+  public Streamable<Integer> ints() {
+    return streamable(this::getInt);
+  }
 
-      SONList list = new SONList();
+  /**
+   * @return a streamable containing all the doubles in this list in order.
+   */
+  public Streamable<Double> doubles() {
+    return streamable(this::getDouble);
+  }
 
-      if (str.charAt(start + 1) == LIST_RIGHTBRACE) {
-        return new PartialParseResult<>(list, start + 2);
-      }
-      int i = start;
+  /**
+   * @return a streamable containing all the booleans in this list in order.
+   */
+  public Streamable<Boolean> booleans() {
+    return streamable(this::getBoolean);
+  }
 
-      do {
-        i++;
-        char typeID = str.charAt(i++);
-        switch (typeID) {
-          case INTEGER_ID:
-            PartialParseResult<Integer> intRes = partialParseInt(str, i);
-            i = intRes.pos;
-            list.add(intRes.result);
-            break;
-          case DOUBLE_ID:
-            PartialParseResult<Double> doubleRes = partialParseDouble(str, i);
-            i = doubleRes.pos;
-            list.add(doubleRes.result);
-            break;
-          case BOOLEAN_ID:
-            PartialParseResult<Boolean> boolRes = partialParseBoolean(str, i);
-            i = boolRes.pos;
-            list.add(boolRes.result);
-            break;
-          case STRING_ID:
-            PartialParseResult<String> strRes = partialParseString(str, i);
-            i = strRes.pos;
-            list.add(strRes.result);
-            break;
-          case OBJECT_ID:
-            PartialParseResult<SON> objRes = SON.partialParse(str, i);
-            i = objRes.pos;
-            list.add(objRes.result);
-            break;
-          case LIST_ID:
-            PartialParseResult<SONList> listRes = SONList.partialParse(str, i);
-            i = listRes.pos;
-            list.add(listRes.result);
-            break;
-          default:
-            throw new SONParsingError(
-                "Expected a value, but found no type identifier. Instead found: '" + typeID + "'");
+  /**
+   * @return a streamable containing all the strings in this list in order.
+   */
+  public Streamable<String> strings() {
+    return streamable(this::getString);
+  }
+
+  /**
+   * @return a streamable containing all the objects in this list in order.
+   */
+  public Streamable<SON> objects() {
+    return streamable(this::getObject);
+  }
+
+  /**
+   * @return a streamable containing all the lists in this list in order.
+   */
+  public Streamable<SONList> lists() {
+    return streamable(this::getList);
+  }
+
+  private <E> Streamable<E> streamable(IntFunction<Optional<E>> getter) {
+    return () -> new Iterator<E>() {
+      int i = 0;
+
+      @Override
+      public boolean hasNext() {
+        if (i >= size()) {
+          return false;
         }
-      } while (str.charAt(i) == ENTRY_DELIMITER);
 
-      if (str.charAt(i) != LIST_RIGHTBRACE) {
-        throw new SONParsingError("SON list was not terminated.");
+        while (!getter.apply(i).isPresent()) {
+          i++;
+          if (i >= size()) {
+            return false;
+          }
+        }
+        return true;
       }
 
-      return new PartialParseResult<>(list, i + 1);
-    } catch (IndexOutOfBoundsException e) {
-      throw new SONParsingError("SON list was not terminated.");
-    }
+      @Override
+      public E next() {
+        while (!getter.apply(i).isPresent()) {
+          i++;
+        }
+        return getter.apply(i++).get();
+      }
+    };
   }
 }

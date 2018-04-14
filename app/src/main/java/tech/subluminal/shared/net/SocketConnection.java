@@ -1,7 +1,6 @@
 package tech.subluminal.shared.net;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.util.HashMap;
@@ -10,6 +9,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.PriorityBlockingQueue;
 import java.util.function.Consumer;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
@@ -22,8 +22,10 @@ public class SocketConnection implements Connection {
   private Socket socket;
   private Map<String, Set<Consumer<SON>>> handlers = new HashMap<>();
   private Set<Runnable> closeListeners = new HashSet<>();
+  private PriorityBlockingQueue<String> messages = new PriorityBlockingQueue<>();
   private volatile boolean stop = false;
   private Thread readThread;
+  private Thread writeThread;
 
   public SocketConnection(Socket socket) {
     this.socket = socket;
@@ -35,12 +37,11 @@ public class SocketConnection implements Connection {
       handler.accept(converter.convert(son));
     } catch (SONConversionError sonConversionError) {
       System.err.println(
-          "Structure of " + sonConversionError.getMessage() + "packets was incorrect, son.");
+          "Structure of " + sonConversionError.getMessage() + " packets was incorrect, son.");
     }
   }
 
   private void inStreamLoop() {
-
     try {
       Scanner scanner = new Scanner(socket.getInputStream());
 
@@ -64,7 +65,7 @@ public class SocketConnection implements Connection {
         } catch (NoSuchElementException e) {
           System.out.println("Socket was forcefully closed.");
           stop = true;
-          System.exit(0); //FIXME: cleaner way
+          //System.exit(0); //FIXME: cleaner way
         }
       }
     } catch (IOException e) {
@@ -102,16 +103,21 @@ public class SocketConnection implements Connection {
    */
   @Override
   public void sendMessage(SONRepresentable message) {
+    String typeName = message.getClass().getSimpleName();
+    String msg = message.asSON().asString();
+    messages.add(typeName + " " + msg);
+  }
+
+  private void outStreamLoop() {
     try {
-      OutputStream out = socket.getOutputStream();
-      String typeName = message.getClass().getSimpleName();
-      String msg = message.asSON().asString();
-      synchronized (out) {
-        //concatenate type and message and send on a journey
-        new PrintStream(out).println(typeName + " " + msg);
+      PrintStream out = new PrintStream(socket.getOutputStream());
+      while (!stop) {
+        out.println(messages.take());
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      throw new IllegalStateException("Could not get the output stream of a socket.");
+    } catch (InterruptedException e) {
+      // This is expected.
     }
   }
 
@@ -132,15 +138,18 @@ public class SocketConnection implements Connection {
   public void start() {
     readThread = new Thread(this::inStreamLoop);
     readThread.start();
+    writeThread = new Thread(this::outStreamLoop);
+    writeThread.start();
   }
 
   /**
-   * Closes this stream and releases any system resources associated with it. If the stream is
-   * already closed then invoking this method has no effect.
+   * Closes this stream and releases any system tech.subluminal.resources associated with it. If the
+   * stream is already closed then invoking this method has no effect.
    *
    * <p>As noted in {@link AutoCloseable#close()}, cases where the close may fail require careful
-   * attention. It is strongly advised to relinquish the underlying resources and to internally
-   * <em>mark</em> the {@code Closeable} as closed, prior to throwing the {@code IOException}.
+   * attention. It is strongly advised to relinquish the underlying tech.subluminal.resources and to
+   * internally <em>mark</em> the {@code Closeable} as closed, prior to throwing the {@code
+   * IOException}.
    *
    * @throws IOException if an I/O error occurs
    */
@@ -148,5 +157,7 @@ public class SocketConnection implements Connection {
   public void close() throws IOException {
     stop = true;
     readThread.interrupt();
+    writeThread.interrupt();
+    socket.close();
   }
 }

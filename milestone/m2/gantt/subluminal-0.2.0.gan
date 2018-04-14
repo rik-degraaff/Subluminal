@@ -182,12 +182,12 @@
         <task id="140" name="create powerpoint presentation MS 5" color="#8cb6ce" meeting="false" start="2018-05-14" duration="1" complete="0" thirdDate="2018-05-14" thirdDate-constraint="0" expand="true"/>
         <task id="12" name="Milestone 5" color="#8cb6ce" meeting="true" start="2018-05-21" duration="0" complete="0" thirdDate="2018-05-07" thirdDate-constraint="0" expand="true"/>
     </tasks>
-    <resources>
+    <tech.subluminal.resources>
         <resource id="0" name="Rik" function="Default:0" contacts="" phone=""/>
         <resource id="1" name="Luc" function="Default:0" contacts="" phone=""/>
         <resource id="2" name="Lucas" function="Default:0" contacts="" phone=""/>
         <resource id="3" name="Dave" function="Default:0" contacts="" phone=""/>
-    </resources>
+    </tech.subluminal.resources>
     <allocations>
         <allocation task-id="2" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="15" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
