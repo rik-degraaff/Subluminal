@@ -4,33 +4,40 @@
 **DAV** = David Lengweiler  
 **LGK** = Lucas Galery Käser  
 **LUC** = Luc Kury  
-**RIK** = Rik de Graaff  
+**RIK** = Rik de Graaff
 
-### Monday, April 9th, 2018 (all)
-##### Decisions:
+### Friday-Sunday, April 13th-15th, 2018
+- Fine-tuning and optimization of user interface, embedding of lobby functionality in GUI.
+- Implementation of server game logic within game loop was finished.
+- Gantt and diary were polished and made milestone-presentable.
+- Added missing javadocs, minimized checkstyle errors.
+
+### Thursday, April 12th, 2018
+- **DAV** and **LUC** started worked on the necessary message packages for lobby functionalities and also the client- and server-sided lobby managers. **LGK** and **RIK** worked on client- and server-sided game logic and game loop.
+
+### Monday, April 9th, 2018
 - In the future, the chat is going to contain five channels:
   - WHISPER, GAME and GLOBAL, which can be used by the players intentionally.
   - INFO and CRITICAL, which are used by the server's and clients' systems.
   - INFO will inform players about stuff like new joined players or name changes and will be mutable by the players. CRITICAL cannot be muted and will send warnings or more important messages to players, for example if a player tries to whisper to a non-existing player.
+- Stars on the map are going to be represented as white circles and ships/fleets as isoceles triangles.
+- The shortest jumping path between two stars is going to be determined by a pathfinding algorithm and is going to be shown in the GUI as a line intersecting all the stars on the path.
 
 ### Thursday, April 5th, 2018
-##### Decisions:
 - For now, we are going to test the following classes:
     - SON
     - GameStateDelta
     - Graph
-- After milestone 3, we are probably going to test some of the messages to make sure that they are parsed correctly.
+- After milestone 3, we are probably going to unit-test some of the messages to make sure that they are parsed correctly.
 
-### Wednesday, April 4th, 2018 (all)
-##### Decisions:
+### Wednesday, April 4th, 2018
 - A game store will store the the game state.
 - A game manager will listen to game state deltas which contain the features that need to be updated. The game manager then updates these features. It will also take care of the information delay, which is a key feature in our game. 
 - The mentioned game state delta message will contain the changes to be made to the game state.
-- The game lobby view will be a dynamic outer space view which makes the viewer feel like he or she is in a cockpit of a space ship, travelling at a really high speed. The lobby chat window will be at the bottom right corner of the window, in a command line-like design.
+- The GUI background view will be a dynamic outer space view, which makes the viewer feel like he or she is in a cockpit of a space ship, travelling at a really high speed. The lobby chat window will be at the bottom right corner of the window, in a command line-like design.
 - To make things easier, for milestone 3 we are simply going to implement the movement of motherships, the colonization of stars by the motherships and the confrontation of two motherships on the same star. 
 
-### Saturday, March 31st, 2018 (all)
-##### Decisions:
+### Saturday, March 31st, 2018
 - We are going to define Lobby-Stores because it is easier to store Users and Lobbies separately.
 - **DAV** and **LUC** are going to be working on the client and server lobby functionality and GUI.
 - **LGK** and **RIK** are going to be working on the client and server game logic.
@@ -64,8 +71,7 @@ gameState
         . 
 ```    
 
-### Thursday, March 29th, 2018 (DAV, LGK, LUC)
-##### Decisions:
+### Thursday, March 29th, 2018
 - Justified master merges are now allowed anytime. Issue templates for example need to be in the master branch to be detected correctly. However, direct merges of source code into the master branch are still forbidden.
 - Current to do's are:  
   - to fix the NetCat-Situation of M2 (to be specified)
@@ -73,12 +79,12 @@ gameState
   - to improve the reaction logic of the server when it doesn't get the client's pong message anymore
   - To overwork the QA plan: Instead of the latency time, we want to track the client and server tick rates and achieve certain rates (which yet are to be set).
 - Log4J and Mockito are external libraries we are going to use until M3.
-### Sunday, March 25th, 2018 (DAV, LGK, LUC)
+### Sunday, March 25th, 2018
 - Logout functionality implementation was finished.
 - Protocol document was created.
 - Source code documentation was updated.
 
-### Friday, March 23rd, 2018 (DAV, LUC, RIK)
+### Friday, March 23rd, 2018
 - DAV created a syntax for all "/"-commands for console messages.
 - SON parsing functionality was implemented.
 - Ping manager was implemented.
@@ -86,19 +92,18 @@ gameState
 - Logout functionality was starting to be implemented.
 ![coding with some pizza](../assets/pictures/m2_friday_pizza.jpg) 
 
-### Thursday, March 22nd, 2018 (all)
+### Thursday, March 22nd, 2018
 - Added feature: When you prepend "/" or "@" to your command-line message you can add functionality to it, for example "/logout", or "@alex02". These changes were made in ConsolePresenter.java. 
 
-### Wednesday, March 21st, 2018 (all)
+### Wednesday, March 21st, 2018
 - Long coding evening, implementing all methods of the SON.java class, the network chat functionality and the client-side chat presentation.
 - Our tutor Marco recommended us to take better care of our diary.
 ![late night coding](../assets/pictures/m2_random_coding_session.jpg)
 
-### Sunday, March 18th, 2018 (all)
+### Sunday, March 18th, 2018
 We spent half a day implementing the first classes and interfaces.
 
-### Wednesday, March 14th, 2018 (all)
-##### Decisions/ideas:
+### Wednesday, March 14th, 2018
 - Our code style is going to be the Google Java code style.
 - We specified the package structure for the project (in the app folder).
 The structure is as follows:  
@@ -134,14 +139,13 @@ src
                        
 ```
 
-### Sunday, March 11th, 2018 (all)
+### Sunday, March 11th, 2018
 After some discussion within the group and consulting the tutors, we decided to use our own implementation of the JSON format. We named it SON (**S**ubluminal **O**bject **N**otation). This format will be used to generalize the network communication between the client and the server. It is designed as an interface and thus allows us to parse any Java object into a transferable object.
 
-### Thursday, March 9th, 2018 (all)
+### Thursday, March 9th, 2018
 ![Our Team at Milestone 1](../assets/pictures/m1_presentation.jpg)
 
-### Monday, March 5th, 2018 (all)
-##### Decisions/ideas:
+### Monday, March 5th, 2018
 In this meeting we decided about most of the rules of our game. They are:
 ##### _Rules_
 - Possibly 2-n players, for the moment we decided the maximum number of players will be 8.
@@ -177,8 +181,7 @@ In this meeting we decided about most of the rules of our game. They are:
 - If the base of the mother ship is intruded, the mother ship is the last one to be torn down.
 - Every mother ship and every regular ship broadcast their position so that every player can see it.
 
-## Sunday, March 4th, 2018 (DAV, LUC, LGK)
-##### Decisions/ideas:
+## Sunday, March 4th, 2018
 - The language for all documents concerning the programming project will be English.
 - The game concept will be concreted on Monday, March 5th.
 - On Monday we will also make a final decision if the game is going to be round-based or in real time.
@@ -187,7 +190,7 @@ In this meeting we decided about most of the rules of our game. They are:
 **LUC**: Definition of our software requirements for the project; brainstorming/design of our repository and branch structure and of our IntelliJ configuration  
 **DAV**: Setup of a rudimentary merchandise website as a gag for the first milestone
 
-### Friday, March 2nd, 2018 (RIK, DAV, LGK)
+### Friday, March 2nd, 2018
 ##### Decisions/ideas:
 - **Ideas for game names**: Ether, Far Away, Separation, Delay, Subluminal
 - **Team name**: Bordeaux Ink.
