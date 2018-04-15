@@ -38,7 +38,7 @@ public class LobbyManager {
   }
 
   private void onGameStart(GameStartRes res) {
-    //TODO: Start game loop
+    //TODO: Start game
   }
 
   //private void onLobbyCreate(LobbyCreateRes res) {
