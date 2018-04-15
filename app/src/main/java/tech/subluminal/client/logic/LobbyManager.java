@@ -2,9 +2,11 @@ package tech.subluminal.client.logic;
 
 import javafx.application.Platform;
 import tech.subluminal.client.presentation.LobbyPresenter;
+import tech.subluminal.client.presentation.controller.MainController;
 import tech.subluminal.client.presentation.customElements.LobbyComponent;
 import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.shared.messages.GameStartReq;
+import tech.subluminal.shared.messages.GameStartRes;
 import tech.subluminal.shared.messages.LobbyCreateReq;
 import tech.subluminal.shared.messages.LobbyJoinReq;
 import tech.subluminal.shared.messages.LobbyJoinRes;
@@ -24,9 +26,11 @@ public class LobbyManager implements LobbyPresenter.Delegate {
   private final LobbyStore lobbyStore;
   private final Connection connection;
   private final LobbyPresenter lobbyPresenter;
+  private final MainController mainController;
 
   public LobbyManager(LobbyStore lobbyStore, Connection connection,
-      LobbyComponent lobbyPresenter) {
+      LobbyComponent lobbyPresenter, MainController mainController) {
+    this.mainController = mainController;
     this.lobbyStore = lobbyStore;
     this.connection = connection;
     this.lobbyPresenter = lobbyPresenter;
@@ -73,8 +77,13 @@ public class LobbyManager implements LobbyPresenter.Delegate {
         .registerHandler(LobbyListRes.class, LobbyListRes::fromSON, this::onLobbyList);
     connection
         .registerHandler(LobbyUpdateRes.class, LobbyUpdateRes::fromSON, this::onLobbyUpdate);
+    connection
+        .registerHandler(GameStartRes.class, GameStartRes::fromSON, this::onGameStart);
   }
 
+  private void onGameStart(GameStartRes res) {
+    mainController.onMapOpenHandle();
+  }
 
 
   private void onLobbyList(LobbyListRes res) {

@@ -2,6 +2,7 @@ package tech.subluminal.client.presentation.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -143,10 +144,12 @@ public class MainController implements Initializable {
   }
 
   public void onMapOpenHandle() {
-    menuDock.getChildren().clear();
+    Platform.runLater(() -> {
+      menuDock.getChildren().clear();
 
-    playArea.setMouseTransparent(false);
-    playArea.getChildren().add(game);
+      playArea.setMouseTransparent(false);
+      playArea.getChildren().add(game);
+    });
   }
 
   public void onMapCloseHandle() {

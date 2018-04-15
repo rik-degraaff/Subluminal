@@ -66,7 +66,7 @@ public class ClientInitializer extends Application {
     new PingManager(connection, pingStore);
 
     LobbyComponent lobbyPresenter = controller.getLobby();
-    LobbyManager lobbyManager = new LobbyManager(lobbyStore, connection, lobbyPresenter);
+    LobbyManager lobbyManager = new LobbyManager(lobbyStore, connection, lobbyPresenter, controller);
 
     lobbyPresenter.setLobbyStore(lobbyStore);
     lobbyPresenter.setUserStore(userStore);
