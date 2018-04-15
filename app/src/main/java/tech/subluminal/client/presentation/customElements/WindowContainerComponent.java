@@ -9,9 +9,11 @@ import tech.subluminal.client.presentation.controller.WindowContainerController;
 
 public class WindowContainerComponent extends AnchorPane {
 
+
   private WindowContainerController controller;
 
-  public WindowContainerComponent(MainController mainController, Node node) {
+
+  public WindowContainerComponent(MainController mainController, Node node, String titel) {
     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("WindowContainerView.fxml"));
     fxmlLoader.setRoot(this);
     //fxmlLoader.setController(this);
@@ -25,9 +27,15 @@ public class WindowContainerComponent extends AnchorPane {
     } catch (IOException exception) {
       throw new RuntimeException(exception);
     }
+
+    controller.setTitel(titel);
   }
 
   public void onWindowOpen() {
     controller.openWindow();
+  }
+
+  public void onWindowClose() {
+    controller.closeWindow();
   }
 }

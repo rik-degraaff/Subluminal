@@ -20,9 +20,10 @@
           prefHeight="40.0"
           prefWidth="200.0">
           <items>
-            <Button mnemonicParsing="false" text="Create Lobby"/>
+            <Button mnemonicParsing="false" onAction="#onLobbyCreate" text="Create Lobby"/>
           </items>
         </ToolBar>
+
       </children>
     </VBox>
   </children>

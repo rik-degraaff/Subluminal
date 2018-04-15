@@ -7,8 +7,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import tech.subluminal.client.presentation.customElements.BackgroundComponent;
-import tech.subluminal.client.presentation.customElements.LobbyHostComponent;
+import tech.subluminal.client.presentation.customElements.GameComponent;
+import tech.subluminal.client.presentation.customElements.LobbyComponent;
 import tech.subluminal.client.presentation.customElements.LobbyListComponent;
+import tech.subluminal.client.presentation.customElements.LobbyUserComponent;
 import tech.subluminal.client.presentation.customElements.MenuComponent;
 import tech.subluminal.client.presentation.customElements.SettingsComponent;
 import tech.subluminal.client.presentation.customElements.WindowContainerComponent;
@@ -35,6 +37,9 @@ public class MainController implements Initializable {
   @FXML
   private AnchorPane menuDock;
 
+  @FXML
+  private AnchorPane playArea;
+
   private BackgroundComponent background;
 
   private MenuComponent menu;
@@ -43,11 +48,24 @@ public class MainController implements Initializable {
 
   private SettingsComponent settings;
 
-  private LobbyHostComponent lobbyHost;
+  private LobbyUserComponent lobbyUser;
 
-  private WindowContainerComponent window;
+  private LobbyComponent lobby;
+
+  @FXML
+  private WindowContainerComponent windowContainer;
+
+  @FXML
+  private AnchorPane window;
+
+  private GameComponent game;
 
   private UserStore userStore;
+
+  public LobbyComponent getLobby() {
+    return lobby;
+  }
+
 
   public void setUserStore(UserStore userStore) {
     this.userStore = userStore;
@@ -64,9 +82,14 @@ public class MainController implements Initializable {
     menu = new MenuComponent(this);
     lobbyList = new LobbyListComponent(this);
     settings = new SettingsComponent(this);
-    lobbyHost = new LobbyHostComponent(this);
+    lobbyUser = new LobbyUserComponent(this);
+    lobby = new LobbyComponent(lobbyList, lobbyUser);
+    game = new GameComponent(this);
 
-    menuDock.getChildren().add(menu);
+    playArea.setMouseTransparent(true);
+
+    menuDock.getChildren().add(menu); //TODO: reactivate this
+    //onMapOpenHandle();
   }
 
   public MainController getController() {
@@ -85,32 +108,23 @@ public class MainController implements Initializable {
     background.onWindowResize(diffX, diffY);
   }
 
-  public void onJoinHandle() {
+  public void onLobbyOpenHandle() {
     menuDock.getChildren().clear();
 
-    window = new WindowContainerComponent(this, lobbyList);
+    windowContainer = new WindowContainerComponent(this, lobby, "Lobbies");
+    //lobby.setUserActive();
 
-    menuDock.getChildren().add(window);
-    window.onWindowOpen();
-  }
-
-  public void onHostOpenHandle() {
-    menuDock.getChildren().remove(menu);
-
-    window = new WindowContainerComponent(this, lobbyHost);
-
-    menuDock.getChildren().add(window);
-    window.onWindowOpen();
-
+    menuDock.getChildren().add(windowContainer);
+    windowContainer.onWindowOpen();
   }
 
   public void onSettingOpenHandle() {
     menuDock.getChildren().remove(menu);
 
-    window = new WindowContainerComponent(this, settings);
+    windowContainer = new WindowContainerComponent(this, settings, "Settings");
 
-    menuDock.getChildren().add(window);
-    window.onWindowOpen();
+    menuDock.getChildren().add(windowContainer);
+    windowContainer.onWindowOpen();
   }
 
   public void onWindowClose() {
@@ -118,4 +132,29 @@ public class MainController implements Initializable {
 
     menuDock.getChildren().add(menu);
   }
+
+  public void onMapOpenHandle() {
+    menuDock.getChildren().clear();
+
+    playArea.setMouseTransparent(false);
+    playArea.getChildren().add(game);
+  }
+
+  public void onMapCloseHandle() {
+    playArea.getChildren().clear();
+    playArea.setMouseTransparent(true);
+
+    menuDock.getChildren().add(menu);
+  }
+
+  public void removeWindow() {
+    menuDock.getChildren().clear();
+
+    menuDock.getChildren().add(menu);
+  }
+
+  public void onLobbyCreateHandle() {
+
+  }
+
 }

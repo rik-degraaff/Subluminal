@@ -18,17 +18,26 @@
   -fx-text-fill: #59FF00;
 }
 
+.starname-label {
+  -fx-background-color: transparent;
+  -fx-text-fill: red;
+}
+
 .label {
-  /**-fx-text-fill: #59FF00;**/
-  -fx-background-color: black;
+  /*-fx-text-fill: red;*/
+  /*-fx-background-color: black;*/
 }
 
 .whisper-message, .global-message, .game-message {
   -fx-text-fill: #59FF00;
 }
 
-.server-message {
+.info-message {
   -fx-text-fill: #59FF00;
+}
+
+.critical-message {
+  -fx-text-fill: red;
 }
 
 .button {
@@ -92,8 +101,22 @@
 
 .list-cell {
   -fx-background-color: black;
+  -fx-padding: 0 0 0 0;
 }
 
 .list-cell:filled:hover {
+  -fx-background-color: black;
+}
+
+.list-view {
+  -fx-background-insets: 0;
+  -fx-padding: 0;
+}
+
+.label > .list-view {
+  -fx-background-color: pink;
+}
+
+.jumpbox {
   -fx-background-color: black;
 }

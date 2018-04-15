@@ -88,46 +88,36 @@ public class MenuController implements Initializable, Observer {
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     Image logo = new Image("/tech/subluminal/resources/subluminal_logo.png");
-    logoDock.setImage(logo);
+
+    Platform.runLater(() -> {
+      logoDock.setImage(logo);
+    });
     menuButtonsDock.setOpacity(0.0);
     generateLogo();
 
     //TODO: Iterate over all the files and play random track
     Media media = null;
-    //try {
+
     //TODO: Import track with getResources
     media = new Media(getClass().getResource("/tech/subluminal/resources/music/theyre-here_looping.mp3").toString());
-    //} catch (URISyntaxException e) {
-    //  e.printStackTrace();
-    //}
 
     MediaPlayer player = new MediaPlayer(media);
     player.setVolume(0.75);
     player.play();
 
-    player.setOnEndOfMedia(new Runnable() {
-                             public void run() {
-                               player.seek(Duration.ZERO);
-                             }
-                           }
+    player.setOnEndOfMedia(() -> player.seek(Duration.ZERO)
     );
   }
 
-    @FXML
-    private void joinPressed (ActionEvent e){
-      main.onJoinHandle();
+  @FXML
+  private void onLobbyList(ActionEvent e) {
+    main.onLobbyOpenHandle();
+  }
 
-    }
-
-    @FXML
-    private void hostPressed (ActionEvent e){
-      main.onHostOpenHandle();
-    }
-
-    @FXML
-    private void settingPressed (ActionEvent e){
-      main.onSettingOpenHandle();
-    }
+  @FXML
+  private void settingPressed(ActionEvent e) {
+    main.onSettingOpenHandle();
+  }
 
     @Override
     public void setMainController (MainController main){
