@@ -20,6 +20,7 @@ import tech.subluminal.client.presentation.customElements.JumpBox;
 import tech.subluminal.client.presentation.customElements.MotherShipComponent;
 import tech.subluminal.client.presentation.customElements.StarComponent;
 import tech.subluminal.client.stores.GameStore;
+import tech.subluminal.client.stores.records.game.OwnerPair;
 import tech.subluminal.client.stores.records.game.Player;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.stores.records.game.Star;
@@ -46,6 +47,7 @@ public class GameController implements Initializable, GamePresenter {
   //private ListProperty<StarComponent> stars = new SimpleListProperty<>();
 
   private Map<String, StarComponent> stars = new HashMap<>();
+  private Map<String, MotherShipComponent> ships = new HashMap<>();
 
   private List<MotherShipComponent> shipList = new LinkedList<MotherShipComponent>();
 
@@ -55,8 +57,9 @@ public class GameController implements Initializable, GamePresenter {
 
   private GameStore gameStore;
 
-  MapperList<StarComponent, Star> starComponents;
-  private ListView<StarComponent> dummyListView = new ListView<>();
+  private ListView<MotherShipComponent> dummyShipList = new ListView<>();
+
+  private ListView<StarComponent> dummyStarList = new ListView<>();
 
 
   @Override
@@ -269,8 +272,10 @@ public class GameController implements Initializable, GamePresenter {
   public void update() {
     Logger.debug("REFRESH");
     Platform.runLater(() -> {
-      dummyListView.refresh();
-      dummyListView.getItems().forEach(starComponent -> Logger.debug("star: " + starComponent));
+      dummyStarList.refresh();
+      dummyStarList.getItems().forEach(starComponent -> Logger.debug("star: " + starComponent));
+      dummyShipList.refresh();
+      dummyShipList.getItems().forEach(shipComponent -> Logger.debug("ship: " + shipComponent));
     });
 
   }
@@ -280,12 +285,10 @@ public class GameController implements Initializable, GamePresenter {
 
     Logger.debug("before Mapperlist.");
 
-
-
     Platform.runLater(() -> {
-      this.starComponents = new MapperList<>(gameStore.stars().observableList(),
+      MapperList<StarComponent, Star> starComponents = new MapperList<>(
+          gameStore.stars().observableList(),
           star -> {
-            Logger.debug("Drawing some stars, son");
             if (stars.get(star.getID()) == null) {
               StarComponent starComponent = new StarComponent(star.getOwnerID(),
                   star.getPossession(),
@@ -301,7 +304,29 @@ public class GameController implements Initializable, GamePresenter {
             starComponent.setOwnerID(star.getOwnerID());
             return starComponent;
           });
-      this.dummyListView.setItems(starComponents);
+
+      this.dummyStarList.setItems(starComponents);
+
+      MapperList<MotherShipComponent, OwnerPair<Ship>> shipComponents = new MapperList<>(
+          gameStore.motherShips().observableList(),
+          pair -> {
+            if (ships.get(pair.getID()) == null) {
+              MotherShipComponent shipComponent = new MotherShipComponent(
+                  pair.getValue().getCoordinates().getX(), pair.getValue().getCoordinates().getY(),
+                  pair.getKey(), pair.getValue().getTargetIDs());
+              ships.put(pair.getKey(), shipComponent);
+              map.getChildren().add(shipComponent);
+              return shipComponent;
+
+            }
+            MotherShipComponent shipComponent = ships.get(pair.getKey());
+            shipComponent.setX(pair.getValue().getCoordinates().getX());
+            shipComponent.setY(pair.getValue().getCoordinates().getY());
+            return shipComponent;
+          }
+      );
+
+      this.dummyShipList.setItems(shipComponents);
     });
 
   }

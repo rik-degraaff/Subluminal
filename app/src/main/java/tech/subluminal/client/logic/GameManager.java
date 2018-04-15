@@ -5,11 +5,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import tech.subluminal.client.presentation.GamePresenter;
 import tech.subluminal.client.stores.GameStore;
-import tech.subluminal.client.stores.records.game.Player;
+import tech.subluminal.client.stores.records.game.OwnerPair;
 import tech.subluminal.shared.messages.FleetMoveReq;
 import tech.subluminal.shared.messages.GameStateDelta;
 import tech.subluminal.shared.messages.MotherShipMoveReq;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.stores.records.game.Star;
 import tech.subluminal.shared.util.Synchronized;
 
@@ -40,27 +41,20 @@ public class GameManager implements GamePresenter.Delegate {
   }
 
   private void onGameStateDeltaReceived(GameStateDelta delta) {
-    delta.getRemovedPlayers().forEach(gameStore.players()::removeByID);
-    gameStore.players().getAll().consume(players -> {
-      players.forEach(syncPlayer -> syncPlayer.consume(player -> {
-        List<String> removedFleets = delta.getRemovedFleets().get(player.getID());
-        player.getFleets().removeIf(fleet -> removedFleets.contains(fleet.getID()));
-      }));
+    //delta.getRemovedPlayers().forEach(gameStore.players()::removeByID);
+    delta.getPlayers().forEach(player -> {
+      Ship motherShip = player.getMotherShip();
+      gameStore.motherShips().add(new OwnerPair<>(player.getID(), motherShip));
+      player.getFleets().forEach(fleet -> {
+        gameStore.fleets().add(new OwnerPair<>(player.getID(), fleet));
+      });
     });
 
-    delta.getPlayers().forEach(playerDelta -> {
-      Optional<Synchronized<Player>> optPlayer = gameStore.players().getByID(playerDelta.getID());
-      if (!optPlayer.isPresent()) {
-        gameStore.players().add(
-            new Player(playerDelta.getID(), playerDelta.getMotherShip(), playerDelta.getFleets()));
-      } else {
-        optPlayer.get().consume(player -> {
-          playerDelta.getFleets().forEach(player::updateFleet);
-          player.setMotherShip(playerDelta.getMotherShip());
-        });
-      }
+    delta.getRemovedFleets().forEach((playerID, removedFleets) -> {
+      removedFleets.forEach(gameStore.fleets()::removeByID);
     });
 
+    // TODO: removed players
 
     delta.getStars().forEach(star -> {
       Optional<Synchronized<Star>> optStar = gameStore.stars().getByID(star.getID());

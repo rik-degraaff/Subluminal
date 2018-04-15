@@ -1,7 +1,9 @@
 package tech.subluminal.client.stores;
 
-import tech.subluminal.client.stores.records.game.Player;
+import tech.subluminal.client.stores.records.game.OwnerPair;
 import tech.subluminal.shared.stores.IdentifiableCollection;
+import tech.subluminal.shared.stores.records.game.Fleet;
+import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.stores.records.game.Star;
 
 /**
@@ -10,7 +12,8 @@ import tech.subluminal.shared.stores.records.game.Star;
 public class InMemoryGameStore implements GameStore {
 
   private final IdentifiableCollection<Star> stars = new IdentifiableCollection<>();
-  private final IdentifiableCollection<Player> players = new IdentifiableCollection<>();
+  private final IdentifiableCollection<OwnerPair<Fleet>> fleets = new IdentifiableCollection<>();
+  private final IdentifiableCollection<OwnerPair<Ship>> motherShips = new IdentifiableCollection<>();
 
 
   @Override
@@ -19,7 +22,13 @@ public class InMemoryGameStore implements GameStore {
   }
 
   @Override
-  public IdentifiableCollection<Player> players() {
-    return players;
+  public IdentifiableCollection<OwnerPair<Fleet>> fleets() {
+    return fleets;
   }
+
+  @Override
+  public IdentifiableCollection<OwnerPair<Ship>> motherShips() {
+    return motherShips;
+  }
+
 }
