@@ -2,6 +2,7 @@ package tech.subluminal.server.logic.game;
 
 import static tech.subluminal.shared.util.function.FunctionalUtils.ifPresent;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -61,6 +62,10 @@ public class IntermediateGameState {
     fleetsUnderway.forEach((playerID, fleetMap) -> {
       fleetMap.keySet().forEach(fleetID -> moveFleet(0.0, playerID, fleetID, deltaTime));
     });
+
+    while (!tasks.isEmpty()) {
+      tasks.poll().run();
+    }
   }
 
   private void moveFleet(double start, String playerID, String fleetID, double deltaTimeLeft) {
@@ -71,7 +76,8 @@ public class IntermediateGameState {
     if (deltaTimeLeft > timeToArrive) {
       Fleet newFleet = new Fleet(
           fleet.getPositionMovingTowards(star.getCoordinates(), deltaTimeLeft),
-          fleet.getNumberOfShips(), fleetID, fleet.getTargetIDs(), fleet.getSpeed());
+          fleet.getNumberOfShips(), fleetID, fleet.getTargetIDs(), fleet.getEndTarget(),
+          fleet.getSpeed());
       fleetsUnderway.get(playerID).put(fleetID, newFleet);
     } else {
       fleet.setCoordinates(
@@ -100,7 +106,8 @@ public class IntermediateGameState {
     double timeToArrive = ship.getTimeToReach(star.getCoordinates());
     if (deltaTimeLeft > timeToArrive) {
       Ship newShip = new Ship(
-          ship.getPositionMovingTowards(star.getCoordinates(), deltaTimeLeft), shipID, ship.getTargetIDs(), ship.getSpeed());
+          ship.getPositionMovingTowards(star.getCoordinates(), deltaTimeLeft), shipID,
+          ship.getTargetIDs(), ship.getEndTarget(), ship.getSpeed());
       motherShipsUnderway.put(playerID, Optional.of(newShip));
     } else {
       ship.setCoordinates(
@@ -167,11 +174,16 @@ public class IntermediateGameState {
   }
 
   private void addMotherShipToStar(Ship ship, String playerID, String starID) {
-    motherShipsOnStars.get(starID).put(playerID, Optional.of(ship));
+    Ship newShip = ship.getTargetIDs().size() == 0
+        ? ship
+        : new Ship(ship.getCoordinates(), ship.getID(), Collections.emptyList(), starID,
+            ship.getSpeed());
+    motherShipsOnStars.get(starID).put(playerID, Optional.of(newShip));
   }
 
   private boolean isOnStar(Movable movable) {
-    return movable.getTargetIDs().size() == 1
+    return movable.getTargetIDs().size() == 0
+        || movable.getTargetIDs().size() == 1
         && movable.getDistanceFrom(stars.get(movable.getTargetIDs().get(0))) < DISTANCE_THRESHOLD;
   }
 
@@ -184,8 +196,13 @@ public class IntermediateGameState {
           destroyedFleets.get(playerID).add(fleet);
         },
         () -> {
+          Fleet newFleet = fleet.getTargetIDs().size() == 0
+              ? fleet
+              : new Fleet(fleet.getCoordinates(), fleet.getNumberOfShips(), fleet.getID(),
+                  Collections.emptyList(), starID, fleet.getSpeed());
+
           fleetsOnStars.get(starID)
-              .put(playerID, Optional.of(fleet));
+              .put(playerID, Optional.of(newFleet));
         }
     );
   }
