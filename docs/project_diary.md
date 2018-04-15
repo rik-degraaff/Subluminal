@@ -14,6 +14,8 @@
 
 ### Thursday, April 12th, 2018
 - **DAV** and **LUC** started worked on the necessary message packages for lobby functionalities and also the client- and server-sided lobby managers. **LGK** and **RIK** worked on client- and server-sided game logic and game loop.
+- **LUC** optimized CI in GitLab and enabled advanced command line parsing using picocli.
+- **LUC** also created the template for our game manual.
 
 ### Monday, April 9th, 2018
 - In the future, the chat is going to contain five channels:
