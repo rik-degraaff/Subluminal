@@ -20,5 +20,4 @@ app/out/
 app/build/
 bin/
 build/
-docs/javadocs/
-assets/fonts/
+docs/javadoc/
