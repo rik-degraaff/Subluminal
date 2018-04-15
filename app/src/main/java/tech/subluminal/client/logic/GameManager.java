@@ -2,9 +2,7 @@ package tech.subluminal.client.logic;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.GamePresenter;
 import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.client.stores.records.game.Player;
@@ -63,18 +61,16 @@ public class GameManager implements GamePresenter.Delegate {
       }
     });
 
-    Logger.debug(delta.getStars());
 
     delta.getStars().forEach(star -> {
       Optional<Synchronized<Star>> optStar = gameStore.stars().getByID(star.getID());
-      Logger.debug("updating from: " + optStar + " to: " + star);
       if (!optStar.isPresent()) {
         gameStore.stars().add(star);
       } else {
         optStar.get().update(s -> star);
       }
     });
-    gameStore.stars().getAll().use(Function.identity()).stream().map(s -> s.use(Function.identity())).forEach(Logger::debug);
+    gamePresenter.update();
   }
 
   @Override

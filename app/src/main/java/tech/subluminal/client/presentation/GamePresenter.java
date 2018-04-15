@@ -27,6 +27,8 @@ public interface GamePresenter {
 
   public void setGameDelegate(Delegate delegate);
 
+  void update();
+
   interface Delegate {
 
     public void sendShips(List<Star> stars, int amount);

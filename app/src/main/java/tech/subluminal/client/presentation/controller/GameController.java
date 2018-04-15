@@ -7,8 +7,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.GamePresenter;
@@ -52,6 +54,9 @@ public class GameController implements Initializable, GamePresenter {
   private GamePresenter.Delegate gameDelegate;
 
   private GameStore gameStore;
+
+  MapperList<StarComponent, Star> starComponents;
+  private ListView<StarComponent> dummyListView = new ListView<>();
 
 
   @Override
@@ -260,27 +265,44 @@ public class GameController implements Initializable, GamePresenter {
 
   }
 
+  @Override
+  public void update() {
+    Logger.debug("REFRESH");
+    Platform.runLater(() -> {
+      dummyListView.refresh();
+      dummyListView.getItems().forEach(starComponent -> Logger.debug("star: " + starComponent));
+    });
+
+  }
+
   public void setGameStore(GameStore gameStore) {
     this.gameStore = gameStore;
 
     Logger.debug("before Mapperlist.");
 
-    new MapperList<>(gameStore.stars().observableList(),
-        star -> {
-          Logger.debug("Drawing some stars, son");
-          if (stars.get(star.getID()) == null) {
-            StarComponent starComponent = new StarComponent(star.getOwnerID(), star.getPossession(),
-                star.getCoordinates(),
-                star.getID());
-            stars.put(star.getID(),starComponent);
-            map.getChildren().add(starComponent);
-            return starComponent;
 
-          }
-          StarComponent starComponent = stars.get(star.getID());
-          starComponent.setPossession(star.getPossession());
-          starComponent.setOwnerID(star.getOwnerID());
-          return starComponent;
-        });
+
+    Platform.runLater(() -> {
+      this.starComponents = new MapperList<>(gameStore.stars().observableList(),
+          star -> {
+            Logger.debug("Drawing some stars, son");
+            if (stars.get(star.getID()) == null) {
+              StarComponent starComponent = new StarComponent(star.getOwnerID(),
+                  star.getPossession(),
+                  star.getCoordinates(),
+                  star.getID());
+              stars.put(star.getID(), starComponent);
+              map.getChildren().add(starComponent);
+              return starComponent;
+
+            }
+            StarComponent starComponent = stars.get(star.getID());
+            starComponent.setPossession(star.getPossession());
+            starComponent.setOwnerID(star.getOwnerID());
+            return starComponent;
+          });
+      this.dummyListView.setItems(starComponents);
+    });
+
   }
 }

@@ -123,13 +123,11 @@ public class GameManager implements GameStarter {
                 );
           });
 
-      Logger.debug(gameState.getStars().size());
       gameState.getStars().forEach((starID, starHistory) ->
           starHistory.getLatestForPlayer(playerID, motherShipEntry)
               .flatMap(Either::left)
               .ifPresent(delta::addStar));
-
-      Logger.debug("GemeManager passed.");
+      Logger.debug(delta.asSON().asString());
 
       distributor.sendMessage(delta, playerID);
     });

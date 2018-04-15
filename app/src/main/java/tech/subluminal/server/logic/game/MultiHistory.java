@@ -10,7 +10,6 @@ import java.util.function.Predicate;
 
 /**
  * Allows the storage of states which can be accessed by multiple clients in FIFO order.
- *
  */
 public class MultiHistory<K, V> {
 
