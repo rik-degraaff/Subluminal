@@ -28,8 +28,18 @@ public abstract class MoveReq implements SONRepresentable {
     return moveReq;
   }
 
+  /**
+   * @param star the id of a star to add to the target list.
+   */
   public void addStar(String star) {
     stars.add(star);
+  }
+
+  /**
+   * @return the list of targets the movable wants to fly by.
+   */
+  public List<String> getTargets() {
+    return stars;
   }
 
   /**

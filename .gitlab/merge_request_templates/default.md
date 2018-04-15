@@ -1,4 +1,4 @@
-# Merge reqeust template
+# Merge request template
 
 * [ ] Is the right merge target selected?
 * [ ] Did you pull the target branch first to avoid merge conflicts?

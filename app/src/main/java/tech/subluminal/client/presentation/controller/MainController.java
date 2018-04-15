@@ -88,8 +88,8 @@ public class MainController implements Initializable {
 
     playArea.setMouseTransparent(true);
 
-    //menuDock.getChildren().add(menu); //TODO: reactivate this
-    onMapOpenHandle();
+    menuDock.getChildren().add(menu); //TODO: reactivate this
+    //onMapOpenHandle();
   }
 
   public MainController getController() {

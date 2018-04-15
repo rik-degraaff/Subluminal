@@ -1,11 +1,14 @@
-FROM openjdk:8u151-jre-alpine3.7
+FROM subluminalthegame/gradle:4.6.0-jdk8-openjfx-alpine
+
+ARG VERSION
+ARG PORT
 
 LABEL projectname="Subluminal - The Game"
 LABEL company="Bordeaux Ink."
 LABEL maintainer="Luc Kury <luc.kury@unibas.ch>"
 
 WORKDIR /opt/lib/subluminal
-ADD ./app/build/libs/Subluminal-0.3.0-beta1.jar /opt/lib/subluminal
-EXPOSE 1790
+ADD ./app/build/libs/Subluminal-$VERSION.jar /opt/lib/subluminal
+EXPOSE $PORT
 
-ENTRYPOINT ["java", "-jar", "Subluminal-0.3.0-beta1.jar", "server", "1729"]
+ENTRYPOINT ["java", "-jar", "Subluminal-$VERSION.jar", "server", $PORT]
