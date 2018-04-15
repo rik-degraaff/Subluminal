@@ -14,6 +14,7 @@ import tech.subluminal.client.presentation.customElements.LobbyUserComponent;
 import tech.subluminal.client.presentation.customElements.MenuComponent;
 import tech.subluminal.client.presentation.customElements.SettingsComponent;
 import tech.subluminal.client.presentation.customElements.WindowContainerComponent;
+import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.client.stores.UserStore;
 
 public class MainController implements Initializable {
@@ -62,10 +63,17 @@ public class MainController implements Initializable {
 
   private UserStore userStore;
 
+  private LobbyStore lobbyStore;
+
   public LobbyComponent getLobby() {
     return lobby;
   }
 
+  public void setLobbyStore(LobbyStore lobbyStore) {
+    this.lobbyStore = lobbyStore;
+
+    lobby.setLobbyStore(lobbyStore);
+  }
 
   public void setUserStore(UserStore userStore) {
     this.userStore = userStore;
@@ -80,10 +88,8 @@ public class MainController implements Initializable {
     spaceBackgroundDock.getChildren().add(background);
 
     menu = new MenuComponent(this);
-    lobbyList = new LobbyListComponent(this);
     settings = new SettingsComponent(this);
-    lobbyUser = new LobbyUserComponent(this);
-    lobby = new LobbyComponent(lobbyList, lobbyUser);
+    lobby = new LobbyComponent();
     game = new GameComponent(this);
 
     playArea.setMouseTransparent(true);
@@ -106,6 +112,10 @@ public class MainController implements Initializable {
 
   public void onWindowResizeHandle(int diffX, int diffY) {
     background.onWindowResize(diffX, diffY);
+  }
+
+  public void setLobby(LobbyComponent lobby) {
+    this.lobby = lobby;
   }
 
   public void onLobbyOpenHandle() {

@@ -5,8 +5,11 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
+import tech.subluminal.client.presentation.LobbyPresenter;
+import tech.subluminal.client.presentation.LobbyPresenter.Delegate;
 
-public class LobbyUserController implements Initializable, Observer {
+
+public class LobbyUserController implements Initializable{
 
   @FXML
   private AnchorPane lobbyHost;
@@ -17,14 +20,14 @@ public class LobbyUserController implements Initializable, Observer {
   @FXML
   private AnchorPane lobbySettings;
 
-  private MainController main;
+  private LobbyPresenter.Delegate lobbyDelegate;
+
+  public void setLobbyDelegate(Delegate lobbyDelegate) {
+    this.lobbyDelegate = lobbyDelegate;
+  }
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
   }
 
-  @Override
-  public void setMainController(MainController main) {
-    this.main = main;
-  }
 }

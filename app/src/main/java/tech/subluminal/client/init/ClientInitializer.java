@@ -15,6 +15,7 @@ import tech.subluminal.client.logic.PingManager;
 import tech.subluminal.client.logic.UserManager;
 import tech.subluminal.client.presentation.controller.ChatController;
 import tech.subluminal.client.presentation.controller.MainController;
+import tech.subluminal.client.presentation.customElements.LobbyComponent;
 import tech.subluminal.client.stores.InMemoryLobbyStore;
 import tech.subluminal.client.stores.InMemoryPingStore;
 import tech.subluminal.client.stores.InMemoryUserStore;
@@ -64,7 +65,9 @@ public class ClientInitializer extends Application {
     new ChatManager(userStore, chatPresenter, connection);
     new PingManager(connection, pingStore);
 
-    LobbyManager lobbyManager = new LobbyManager(lobbyStore, connection);
+    LobbyComponent lobbyPresenter = controller.getLobby();
+    lobbyPresenter.setLobbyStore(lobbyStore);
+    LobbyManager lobbyManager = new LobbyManager(lobbyStore, connection, lobbyPresenter);
 
     userManager.start(username);
 

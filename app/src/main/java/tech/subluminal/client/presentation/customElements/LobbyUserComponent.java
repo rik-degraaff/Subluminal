@@ -4,13 +4,12 @@ import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import tech.subluminal.client.presentation.controller.LobbyUserController;
-import tech.subluminal.client.presentation.controller.MainController;
 
 public class LobbyUserComponent extends AnchorPane {
 
   private LobbyUserController controller;
 
-  public LobbyUserComponent(MainController mainController) {
+  public LobbyUserComponent() {
     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("LobbyUserView.fxml"));
     fxmlLoader.setRoot(this);
     //fxmlLoader.setController(this);
@@ -18,9 +17,16 @@ public class LobbyUserComponent extends AnchorPane {
     try {
       fxmlLoader.load();
       controller = fxmlLoader.getController();
-      controller.setMainController(mainController);
     } catch (IOException exception) {
       throw new RuntimeException(exception);
     }
+  }
+
+  public LobbyUserController getController() {
+    return controller;
+  }
+
+  public void setController(LobbyUserController controller) {
+    this.controller = controller;
   }
 }

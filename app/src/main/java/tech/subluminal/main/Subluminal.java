@@ -3,6 +3,7 @@ package tech.subluminal.main;
 import java.util.Arrays;
 import java.util.List;
 import javafx.application.Application;
+import org.pmw.tinylog.Logger;
 import picocli.CommandLine;
 import tech.subluminal.client.init.ClientInitializer;
 import tech.subluminal.server.init.ServerInitializer;
@@ -55,7 +56,7 @@ public class Subluminal {
       List<String> logleves = Arrays.asList("trace", "debug", "info", "error", "fatal");
       String host = "localhost";
       int port = 1729;
-      System.out.println("mode:" + subl.mode + " hostAndOrPort:" + subl.hostAndOrPort + " debug:" + String.valueOf(subl.debug) + " logfile:" + subl.logfile + " loglevel:" + subl.loglevel + " username:" + subl.username);
+      Logger.debug("mode:" + subl.mode + " hostAndOrPort:" + subl.hostAndOrPort + " debug:" + String.valueOf(subl.debug) + " logfile:" + subl.logfile + " loglevel:" + subl.loglevel + " username:" + subl.username);
 
       String[] parts = subl.hostAndOrPort.split(":");
 
