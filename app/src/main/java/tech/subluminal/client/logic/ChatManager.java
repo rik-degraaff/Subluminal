@@ -1,6 +1,6 @@
 package tech.subluminal.client.logic;
 
-import static tech.subluminal.shared.util.FunctionalUtils.ifPresent;
+import static tech.subluminal.shared.util.function.FunctionalUtils.ifPresent;
 
 import java.util.Optional;
 import tech.subluminal.client.presentation.ChatPresenter;

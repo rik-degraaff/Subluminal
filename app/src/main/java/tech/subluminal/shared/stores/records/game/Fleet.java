@@ -14,8 +14,10 @@ public class Fleet extends Movable implements SONRepresentable {
 
   private int numberOfShips;
 
-  public Fleet(Coordinates coordinates, int numberOfShips, String id, List<String> targetIDs) {
-    super(coordinates, id, targetIDs);
+  public Fleet(
+      Coordinates coordinates, int numberOfShips, String id, List<String> targetIDs, double speed
+  ) {
+    super(coordinates, id, targetIDs, speed);
     this.numberOfShips = numberOfShips;
   }
 
@@ -23,7 +25,7 @@ public class Fleet extends Movable implements SONRepresentable {
     int numberOfShips = son.getInt(AMOUNT_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, AMOUNT_KEY));
 
-    Fleet fleet = new Fleet(null, numberOfShips, null, new ArrayList<>());
+    Fleet fleet = new Fleet(null, numberOfShips, null, new ArrayList<>(), 0.0);
 
     SON movable = son.getObject(MOVABLE_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, MOVABLE_KEY));
@@ -38,6 +40,17 @@ public class Fleet extends Movable implements SONRepresentable {
    */
   public int getNumberOfShips() {
     return numberOfShips;
+  }
+
+  /**
+   * Adds a number of ships to this fleet.
+   *
+   * @param newShips the amount of ships to add.
+   * @return a new instance of Fleets with the added amount of ships.
+   */
+  public Fleet expanded(int newShips) {
+    return new Fleet(getCoordinates(), getNumberOfShips() + newShips, getID(), getTargetIDs(),
+        getSpeed());
   }
 
   /**

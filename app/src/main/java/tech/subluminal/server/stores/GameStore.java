@@ -14,5 +14,5 @@ public interface GameStore {
   /**
    * @return a collection containing move requests that were sent to games.
    */
-  IdentifiableCollection<MoveRequests> gameSignals();
+  IdentifiableCollection<MoveRequests> moveRequests();
 }

@@ -18,6 +18,20 @@ public class FleetMoveReq extends MoveReq {
     this.amount = amount;
   }
 
+  /**
+   * @return the id of the star this move should start from.
+   */
+  public String getOriginID() {
+    return originID;
+  }
+
+  /**
+   * @return the amount of ships that should be sent out.
+   */
+  public int getAmount() {
+    return amount;
+  }
+
   public static FleetMoveReq fromSON(SON son) throws SONConversionError {
     String originID = son.getString(ORIGIN_ID_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, ORIGIN_ID_KEY));

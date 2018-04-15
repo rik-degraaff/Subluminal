@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 public class MultiHistory<K, V> {
 
   private final Set<K> keys;
-  private final Map<K, Queue<V>> history = new HashMap<>();
+  protected final Map<K, Queue<V>> history = new HashMap<>();
   private V current;
 
   /**
