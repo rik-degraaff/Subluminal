@@ -91,4 +91,9 @@ public class LobbyUserController implements Initializable {
       });
     });
   }
+
+  @FXML
+  private void onGameStart(){
+    lobbyDelegate.startGame();
+  }
 }

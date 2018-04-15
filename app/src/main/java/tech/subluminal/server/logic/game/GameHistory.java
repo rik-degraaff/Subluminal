@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.shared.stores.records.game.GameObject;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.util.function.Either;
@@ -44,6 +45,7 @@ public class GameHistory<E extends GameObject> extends MultiHistory<String, Game
       GameHistoryEntry<Ship> motherShip) {
     return getLatestForKeyIf(playerID,
         entry -> {
+          Logger.debug("Mothership State: " + entry);
           double distance = entry.getState().getDistanceFrom(motherShip.getState());
           double timeDiff = (motherShip.getTime() - entry.getTime()) / 1000.0;
           return distance / timeDiff < lightSpeed;

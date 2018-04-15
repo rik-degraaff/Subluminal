@@ -24,7 +24,8 @@ public class GameLoop {
       delegate.tick(elapsedTime);
       delegate.afterTick();
       try {
-        Thread.sleep(msPerIteration - (System.currentTimeMillis() - timeBeforeBeforeTick));
+        Thread.sleep(
+            Math.max(0, msPerIteration - (System.currentTimeMillis() - timeBeforeBeforeTick)));
       } catch (InterruptedException e) {
         e.printStackTrace();
       }

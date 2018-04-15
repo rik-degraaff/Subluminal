@@ -23,5 +23,7 @@ public interface LobbyPresenter {
     void createLobby(String name);
 
     void getLobbyList();
+
+    void startGame();
   }
 }

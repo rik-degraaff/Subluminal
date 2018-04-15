@@ -9,9 +9,11 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.pmw.tinylog.Logger;
+import tech.subluminal.server.logic.game.GameStarter;
 import tech.subluminal.server.stores.LobbyStore;
 import tech.subluminal.server.stores.ReadOnlyUserStore;
 import tech.subluminal.shared.messages.GameStartReq;
+import tech.subluminal.shared.messages.GameStartRes;
 import tech.subluminal.shared.messages.LobbyCreateReq;
 import tech.subluminal.shared.messages.LobbyJoinReq;
 import tech.subluminal.shared.messages.LobbyJoinRes;
@@ -35,10 +37,12 @@ public class LobbyManager {
 
   private final LobbyStore lobbyStore;
   private final ReadOnlyUserStore userStore;
+  private final GameStarter gameStarter;
   private final MessageDistributor distributor;
 
   public LobbyManager(LobbyStore lobbyStore, ReadOnlyUserStore userStore,
-      MessageDistributor distributor) {
+      MessageDistributor distributor, GameStarter gameStarter) {
+    this.gameStarter = gameStarter;
     this.lobbyStore = lobbyStore;
     this.userStore = userStore;
     this.distributor = distributor;
@@ -78,7 +82,8 @@ public class LobbyManager {
                     .equals(userID)))
                 .forEach(s -> s.consume(lobby -> {
                   lobby.setStatus(LobbyStatus.FULL);
-                  //Start game
+                  distributor.sendMessage(new GameStartRes(), lobby.getPlayers());
+                  gameStarter.startGame(lobby.getID(), new HashSet<>(lobby.getPlayers()));
                 })));
   }
 

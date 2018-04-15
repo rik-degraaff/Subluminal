@@ -163,7 +163,7 @@ public class IntermediateGameState {
 
   public void addMotherShip(Ship ship, String playerID) {
     if (isOnStar(ship)) {
-      addMotherShipToStar(ship, playerID, ship.getTargetIDs().get(0));
+      addMotherShipToStar(ship, playerID, ship.getEndTarget());
     } else {
       setMotherShipUnderway(ship, playerID);
     }

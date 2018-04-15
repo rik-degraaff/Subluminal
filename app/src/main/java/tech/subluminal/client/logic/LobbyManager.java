@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import tech.subluminal.client.presentation.LobbyPresenter;
 import tech.subluminal.client.presentation.customElements.LobbyComponent;
 import tech.subluminal.client.stores.LobbyStore;
+import tech.subluminal.shared.messages.GameStartReq;
 import tech.subluminal.shared.messages.LobbyCreateReq;
 import tech.subluminal.shared.messages.LobbyJoinReq;
 import tech.subluminal.shared.messages.LobbyJoinRes;
@@ -55,6 +56,11 @@ public class LobbyManager implements LobbyPresenter.Delegate {
   @Override
   public void getLobbyList() {
     connection.sendMessage(new LobbyListReq());
+  }
+
+  @Override
+  public void startGame() {
+    connection.sendMessage(new GameStartReq());
   }
 
 

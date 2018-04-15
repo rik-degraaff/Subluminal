@@ -19,7 +19,7 @@
           </children>
         </HBox>
         <Button mnemonicParsing="false" onAction="#onLobbyLeave" text="Leave Lobby" />
-        <Button mnemonicParsing="false" text="Start Game" />
+        <Button mnemonicParsing="false" onAction="#onGameStart" text="Start Game" />
       </children>
     </VBox>
   </children>
