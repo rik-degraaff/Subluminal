@@ -15,9 +15,9 @@ public class LobbyJoinRes implements SONRepresentable {
   private Lobby lobby;
 
   /**
-   * Creates a lobby join request with a given id.
+   * Creates a lobby join request with a given lobby.
    *
-   * @param id the id of the lobby.
+   * @param lobby the id of the lobby.
    */
   public LobbyJoinRes(Lobby lobby) {
     this.lobby = lobby;
