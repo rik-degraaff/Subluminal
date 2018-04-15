@@ -84,7 +84,7 @@ public class MainController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    background = new BackgroundComponent(2000);
+    background = new BackgroundComponent(200);
     spaceBackgroundDock.getChildren().add(background);
 
     menu = new MenuComponent(this);

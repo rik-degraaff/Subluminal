@@ -13,7 +13,6 @@ import tech.subluminal.client.presentation.LobbyPresenter;
 import tech.subluminal.client.presentation.LobbyPresenter.Delegate;
 import tech.subluminal.client.presentation.customElements.LobbyStatusComponent;
 import tech.subluminal.client.stores.LobbyStore;
-import tech.subluminal.shared.records.LobbyStatus;
 import tech.subluminal.shared.stores.records.SlimLobby;
 import tech.subluminal.shared.util.MapperList;
 
@@ -47,15 +46,12 @@ public class LobbyListController implements Initializable {
     lobbyList.setItems(new MapperList<>(store.observableLobbies(),
         lobby -> new LobbyStatusComponent(lobby.getSettings().getName(), lobby.getID(),
             lobby.getPlayerCount(), lobby.getSettings().getMaxPlayers(),
-            lobby.getStatus())));
+            lobby.getStatus(), lobbyDelegate)));
   }
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-
-    lobbyList.getItems()
-        .add(new LobbyStatusComponent("testLobby", "wefwef", 3, 8, LobbyStatus.OPEN));
-
+    lobbyList.getItems().forEach(l -> l.lobbyToJoinProperty().addListener(e -> Logger.trace("help me !!!")));
   }
 
   @FXML

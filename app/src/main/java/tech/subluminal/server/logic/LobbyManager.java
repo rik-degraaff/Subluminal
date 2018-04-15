@@ -2,8 +2,10 @@ package tech.subluminal.server.logic;
 
 import static tech.subluminal.shared.util.IdUtils.generateId;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.pmw.tinylog.Logger;
@@ -115,8 +117,10 @@ public class LobbyManager {
         //TODO: Send message to client: Lobby full
         return l;
       }
+      Set<String> players = new HashSet<>(l.getPlayers());
       l.addPlayer(userID, false);
-      //TODO: Send message to client: Successfully joined lobby
+      distributor.sendMessage(new LobbyJoinRes(l), userID);
+      distributor.sendMessage(new LobbyUpdateRes(l), players);
       return l;
     });
   }

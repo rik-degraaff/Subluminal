@@ -1,5 +1,6 @@
 package tech.subluminal.client.logic;
 
+import javafx.application.Platform;
 import tech.subluminal.client.presentation.LobbyPresenter;
 import tech.subluminal.client.presentation.customElements.LobbyComponent;
 import tech.subluminal.client.stores.LobbyStore;
@@ -71,10 +72,13 @@ public class LobbyManager implements LobbyPresenter.Delegate {
 
 
   private void onLobbyList(LobbyListRes res) {
-    lobbyStore.lobbies().get().consume(opt -> opt.ifPresent(list -> {
-      list.clear();
-      list.addAll(res.getSlimLobbies());
-    }));
+    Platform.runLater(() -> {
+      lobbyStore.lobbies().get().consume(opt -> opt.ifPresent(list -> {
+        list.clear();
+        list.addAll(res.getSlimLobbies());
+      }));
+    });
+
   }
 
   private void onLobbyUpdate(LobbyUpdateRes res) {
