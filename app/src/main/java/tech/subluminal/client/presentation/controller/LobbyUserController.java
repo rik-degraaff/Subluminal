@@ -81,6 +81,7 @@ public class LobbyUserController implements Initializable {
   }
 
   public void lobbyUpdateReceived() {
+    Logger.trace("LobbyUpdage got received here watch out!");
     Platform.runLater(() -> {
       filterdUsers.setPredicate(u -> {
         Logger.trace("LOBBYUSERVIEW GOT UPDATED");

@@ -135,6 +135,7 @@ public class LobbyManager {
                 Logger.trace("Deleting lobby");
               } else {
                 lobby.removePlayer(userID);
+                distributor.sendMessage(new LobbyUpdateRes(lobby),lobby.getPlayers());
               }
             }))
         );

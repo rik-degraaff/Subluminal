@@ -42,7 +42,7 @@ public class ServerInitializer {
 
     new UserManager(userStore, messageDistributor);
     new PingManager(pingStore, userStore, messageDistributor);
-    new ChatManager(messageDistributor, userStore);
+    new ChatManager(messageDistributor, userStore, lobbyStore);
     new GameManager(gameStore, lobbyStore, messageDistributor);
     new LobbyManager(lobbyStore, userStore, messageDistributor);
   }
