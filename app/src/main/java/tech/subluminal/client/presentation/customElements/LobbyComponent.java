@@ -1,5 +1,6 @@
 package tech.subluminal.client.presentation.customElements;
 
+import javafx.application.Platform;
 import javafx.scene.Group;
 import tech.subluminal.client.presentation.LobbyPresenter;
 import tech.subluminal.client.presentation.controller.LobbyListController;
@@ -23,7 +24,6 @@ public class LobbyComponent extends Group implements LobbyPresenter {
     lobbyUserController = lobbyUser.getController();
 
 
-
     this.lobbyList = lobbyList;
     this.lobbyUser = lobbyUser;
 
@@ -31,13 +31,19 @@ public class LobbyComponent extends Group implements LobbyPresenter {
   }
 
   public void setListActive() {
-    this.getChildren().remove(lobbyUser);
-    this.getChildren().add(lobbyList);
+    lobbyDelegate.getLobbyList();
+    Platform.runLater(() -> {
+      this.getChildren().clear();
+      this.getChildren().add(lobbyList);
+    });
   }
 
   public void setUserActive() {
-    this.getChildren().remove(lobbyList);
-    this.getChildren().add(lobbyUser);
+    Platform.runLater(() -> {
+      this.getChildren().clear();
+      this.getChildren().add(lobbyUser);
+    });
+
   }
 
   public void onLobbyJoin(String id) {
@@ -81,5 +87,6 @@ public class LobbyComponent extends Group implements LobbyPresenter {
 
     lobbyListController.setLobbyDelegate(delegate);
     lobbyUserController.setLobbyDelegate(delegate);
+    setListActive();
   }
 }

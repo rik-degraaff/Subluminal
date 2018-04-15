@@ -2,7 +2,10 @@ package tech.subluminal.server.logic;
 
 import static tech.subluminal.shared.util.IdUtils.generateId;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import tech.subluminal.server.stores.LobbyStore;
 import tech.subluminal.server.stores.ReadOnlyUserStore;
 import tech.subluminal.shared.messages.GameStartReq;
@@ -11,12 +14,14 @@ import tech.subluminal.shared.messages.LobbyJoinReq;
 import tech.subluminal.shared.messages.LobbyJoinRes;
 import tech.subluminal.shared.messages.LobbyLeaveReq;
 import tech.subluminal.shared.messages.LobbyListReq;
+import tech.subluminal.shared.messages.LobbyListRes;
 import tech.subluminal.shared.messages.LobbyUpdateReq;
 import tech.subluminal.shared.messages.LobbyUpdateRes;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.records.LobbyStatus;
 import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.stores.records.LobbySettings;
+import tech.subluminal.shared.stores.records.SlimLobby;
 import tech.subluminal.shared.util.Synchronized;
 
 /**
@@ -48,7 +53,7 @@ public class LobbyManager {
     connection
         .registerHandler(LobbyLeaveReq.class, LobbyLeaveReq::fromSON, req -> onLobbyLeave(id, req));
     connection
-        .registerHandler(LobbyListReq.class, LobbyListReq::fromSON, this::onLobbyList);
+        .registerHandler(LobbyListReq.class, LobbyListReq::fromSON, req -> onLobbyList(id, req));
     connection
         .registerHandler(LobbyCreateReq.class, LobbyCreateReq::fromSON,
             req -> onLobbyCreate(id, req, connection));
@@ -65,8 +70,8 @@ public class LobbyManager {
         .consume(list ->
             list.stream()
                 .filter(s -> s.use(lobby -> lobby.getSettings()
-                                                 .getAdminID()
-                                                 .equals(userID)))
+                    .getAdminID()
+                    .equals(userID)))
                 .forEach(s -> s.consume(lobby -> {
                   lobby.setStatus(LobbyStatus.FULL);
                   //Start game
@@ -91,6 +96,7 @@ public class LobbyManager {
     String name = req.getName();
     LobbyStatus status = LobbyStatus.OPEN;
     Lobby lobby = new Lobby(lobbyID, new LobbySettings(name, userID), status);
+    lobby.addPlayer(userID, true);
     lobbyStore.lobbies().add(lobby);
     connection.sendMessage(new LobbyJoinRes(lobby));
   }
@@ -122,8 +128,14 @@ public class LobbyManager {
     //TODO: Send message to client: Successfully left lobby
   }
 
-  private void onLobbyList(LobbyListReq req) {
+  private void onLobbyList(String id, LobbyListReq req) {
+    List<SlimLobby> lobbies = lobbyStore.lobbies()
+        .getAll()
+        .use(l -> l.stream()
+            .map(s -> s.use(Function.identity()))
+            .collect(Collectors.toList()));
 
+    distributor.sendMessage(new LobbyListRes(lobbies), id);
   }
 
   /**

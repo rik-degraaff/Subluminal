@@ -1,5 +1,6 @@
 package tech.subluminal.client.presentation.controller;
 
+import java.awt.event.ActionEvent;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -28,6 +29,11 @@ public class LobbyUserController implements Initializable{
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+  }
+
+  @FXML
+  private void onLobbyLeave(ActionEvent actionEvent){
+    lobbyDelegate.leaveLobby();
   }
 
 }

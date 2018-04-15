@@ -20,6 +20,7 @@
               fx:id="playerList"/>
           </children>
         </HBox>
+        <Button onAction="#onLobbyLeave" mnemonicParsing="false" text="Leave Lobby"/>
         <Button mnemonicParsing="false" text="Start Game"/>
       </children>
     </VBox>

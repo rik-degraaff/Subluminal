@@ -6,9 +6,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import org.junit.Test;
 import tech.subluminal.client.stores.records.game.Player;
+import tech.subluminal.shared.records.LobbyStatus;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONParsingError;
+import tech.subluminal.shared.stores.records.LobbySettings;
+import tech.subluminal.shared.stores.records.SlimLobby;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.Ship;
@@ -52,5 +55,9 @@ public class GameStateDeltaTest {
       sonConversionError.printStackTrace();
     }
     System.out.println(msg);
+  }
+  @Test
+  public void einfachTest(){
+    System.out.println(new SlimLobby("gwewef", new LobbySettings("name", "adminID"),LobbyStatus.OPEN).asSON().asString());
   }
 }

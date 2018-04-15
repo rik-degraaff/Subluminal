@@ -11,6 +11,7 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.function.Consumer;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONConverter;
@@ -49,6 +50,7 @@ public class SocketConnection implements Connection {
         try {
           //Get the next message and separate type and SON
           String message = scanner.nextLine();
+          Logger.trace(message);
           String[] parts = message.split(" ", 2);
           if (parts.length == 2) {
             //parse in the message to SON

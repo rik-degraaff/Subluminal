@@ -46,7 +46,7 @@ public class LobbyListController implements Initializable {
     Logger.trace("Setting lobbystore of lobbyListComponent");
     lobbyList.setItems(new MapperList<>(store.observableLobbies(),
         lobby -> new LobbyStatusComponent(lobby.getSettings().getName(), lobby.getID(),
-            lobby.getSettings().getPlayerCount(), lobby.getSettings().getMaxPlayers(),
+            lobby.getPlayerCount(), lobby.getSettings().getMaxPlayers(),
             lobby.getStatus())));
   }
 
@@ -63,6 +63,11 @@ public class LobbyListController implements Initializable {
     Logger.trace("Creating lobby");
     lobbyDelegate.createLobby("ExampleLobby");
 
+  }
+
+  @FXML
+  private void onLobbyRefresh(){
+    lobbyDelegate.getLobbyList();
   }
 
 
