@@ -25,4 +25,7 @@ public class GameComponent extends AnchorPane {
     }
   }
 
+  public GameController getController() {
+    return controller;
+  }
 }

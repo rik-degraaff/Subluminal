@@ -2,6 +2,7 @@ package tech.subluminal.client.presentation.controller;
 
 import java.net.URL;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -9,16 +10,18 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.Pane;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.GamePresenter;
 import tech.subluminal.client.presentation.customElements.FleetComponent;
 import tech.subluminal.client.presentation.customElements.Jump;
 import tech.subluminal.client.presentation.customElements.JumpBox;
 import tech.subluminal.client.presentation.customElements.MotherShipComponent;
 import tech.subluminal.client.presentation.customElements.StarComponent;
+import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.client.stores.records.game.Player;
-import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.stores.records.game.Star;
+import tech.subluminal.shared.util.MapperList;
 
 public class GameController implements Initializable, GamePresenter {
 
@@ -36,13 +39,19 @@ public class GameController implements Initializable, GamePresenter {
 
   private JumpBox box;
 
-  private List<StarComponent> starList = new LinkedList<StarComponent>();
+  private List<StarComponent> starList = new LinkedList<StarComponent>();//TODO: remove this
+
+  //private ListProperty<StarComponent> stars = new SimpleListProperty<>();
+
+  private Map<String, StarComponent> stars = new HashMap<>();
 
   private List<MotherShipComponent> shipList = new LinkedList<MotherShipComponent>();
 
   private List<FleetComponent> fleetList = new LinkedList<FleetComponent>();
 
   private GamePresenter.Delegate gameDelegate;
+
+  private GameStore gameStore;
 
 
   @Override
@@ -151,7 +160,7 @@ public class GameController implements Initializable, GamePresenter {
     stars.stream().forEach(s -> {
       starList.stream().forEach(e -> {
         if (e.getStarID().equals(s.getID())) {
-          e.setOwnerIDProperty(s.getOwnerID());
+          e.setOwnerID(s.getOwnerID());
           e.setPossession(s.getPossession());
         }
       });
@@ -172,7 +181,8 @@ public class GameController implements Initializable, GamePresenter {
             fc.setTargetIDs(f.getTargetIDs());
           } else {
             fleetList.add(
-                new FleetComponent(f.getCoordinates(), f.getNumberOfShips(), f.getID(), p.getID(), f.getTargetIDs() ));
+                new FleetComponent(f.getCoordinates(), f.getNumberOfShips(), f.getID(), p.getID(),
+                    f.getTargetIDs()));
           }
         });
       });
@@ -184,7 +194,8 @@ public class GameController implements Initializable, GamePresenter {
     players.stream().forEach(p -> {
       p.getFleets().stream().forEach(f -> {
         fleetList.add(
-            new FleetComponent(f.getCoordinates(), f.getNumberOfShips(), f.getID(), p.getID(), f.getTargetIDs() ));
+            new FleetComponent(f.getCoordinates(), f.getNumberOfShips(), f.getID(), p.getID(),
+                f.getTargetIDs()));
       });
     });
     fleetList.stream().forEach(f -> map.getChildren().add(f));
@@ -240,5 +251,36 @@ public class GameController implements Initializable, GamePresenter {
         }
       });
     });
+  }
+
+
+  @Override
+  public void setGameDelegate(Delegate delegate) {
+    gameDelegate = delegate;
+
+  }
+
+  public void setGameStore(GameStore gameStore) {
+    this.gameStore = gameStore;
+
+    Logger.debug("before Mapperlist.");
+
+    new MapperList<>(gameStore.stars().observableList(),
+        star -> {
+          Logger.debug("Drawing some stars, son");
+          if (stars.get(star.getID()) == null) {
+            StarComponent starComponent = new StarComponent(star.getOwnerID(), star.getPossession(),
+                star.getCoordinates(),
+                star.getID());
+            stars.put(star.getID(),starComponent);
+            map.getChildren().add(starComponent);
+            return starComponent;
+
+          }
+          StarComponent starComponent = stars.get(star.getID());
+          starComponent.setPossession(star.getPossession());
+          starComponent.setOwnerID(star.getOwnerID());
+          return starComponent;
+        });
   }
 }

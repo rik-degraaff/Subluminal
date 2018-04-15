@@ -52,7 +52,7 @@ public class StarComponent extends Pane {
     setSizeProperty(0.2);
     setColorProperty(Color.GRAY);
     setStarID(id);
-    setOwnerIDProperty(ownerID);
+    setOwnerID(ownerID);
 
     setShips(0);
 
@@ -187,7 +187,7 @@ public class StarComponent extends Pane {
     return ownerIDProperty.get();
   }
 
-  public void setOwnerIDProperty(String ownerIDProperty) {
+  public void setOwnerID(String ownerIDProperty) {
     this.ownerIDProperty.set(ownerIDProperty);
   }
 

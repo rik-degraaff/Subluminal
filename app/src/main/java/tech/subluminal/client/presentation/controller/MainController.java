@@ -66,6 +66,8 @@ public class MainController implements Initializable {
 
   private LobbyStore lobbyStore;
 
+  private GameController gameController;
+
   public LobbyComponent getLobby() {
     return lobby;
   }
@@ -91,6 +93,7 @@ public class MainController implements Initializable {
     lobby = new LobbyComponent();
 
     game = new GameComponent(this);
+    gameController = game.getController();
 
     playArea.setMouseTransparent(true);
 
@@ -169,4 +172,7 @@ public class MainController implements Initializable {
 
   }
 
+  public GameController getGameController() {
+    return gameController;
+  }
 }

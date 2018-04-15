@@ -1,6 +1,5 @@
 package tech.subluminal.shared.messages;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 import tech.subluminal.shared.son.SON;
@@ -14,8 +13,8 @@ public abstract class MoveReq implements SONRepresentable {
   private static final String STARLIST_KEY = "starList";
   private List<String> stars;
 
-  public MoveReq() {
-    this.stars = new LinkedList<>();
+  public MoveReq(List<String> stars) {
+    this.stars = stars;
   }
 
   static <E extends MoveReq> E fromSON(SON son, Supplier<E> reqSupplier) throws SONConversionError {

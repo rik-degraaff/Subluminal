@@ -1,5 +1,7 @@
 package tech.subluminal.shared.messages;
 
+import java.util.LinkedList;
+import java.util.List;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
@@ -13,7 +15,8 @@ public class FleetMoveReq extends MoveReq {
   private String originID;
   private int amount;
 
-  public FleetMoveReq(String originID, int amount) {
+  public FleetMoveReq(String originID, int amount, List<String> stars) {
+    super(stars);
     this.originID = originID;
     this.amount = amount;
   }
@@ -38,7 +41,7 @@ public class FleetMoveReq extends MoveReq {
     int amount = son.getInt(AMOUNT_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, ORIGIN_ID_KEY));
 
-    return MoveReq.fromSON(son, () -> new FleetMoveReq(originID, amount));
+    return MoveReq.fromSON(son, () -> new FleetMoveReq(originID, amount, new LinkedList<>()));
   }
 
   @Override
