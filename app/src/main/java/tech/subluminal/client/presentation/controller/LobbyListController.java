@@ -22,8 +22,9 @@ public class LobbyListController implements Initializable, Observer {
 
   public void setLobbyStore(LobbyStore store) {
     lobbyList.setItems(new MapperList<>(store.observableLobbies(),
-        lobby -> new LobbyStatusComponent(lobby.getName(), lobby.getID(), lobby.getPlayerCount(),
-            lobby.getMaxPlayers(), LobbyStatus.OPEN)));
+        lobby -> new LobbyStatusComponent(lobby.getSettings().getName(), lobby.getID(),
+            lobby.getSettings().getPlayerCount(), lobby.getSettings().getMaxPlayers(),
+            LobbyStatus.OPEN)));
   }
 
   @Override
