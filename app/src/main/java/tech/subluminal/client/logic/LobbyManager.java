@@ -83,6 +83,8 @@ public class LobbyManager implements LobbyPresenter.Delegate {
 
   private void onLobbyUpdate(LobbyUpdateRes res) {
     lobbyStore.currentLobby().set(res.getLobby());
+
+    lobbyPresenter.lobbyUpdateReceived();
   }
 
   private void onLobbyLeave(LobbyLeaveRes res) {
@@ -96,5 +98,6 @@ public class LobbyManager implements LobbyPresenter.Delegate {
     lobbyStore.currentLobby().set(lobby);
 
     lobbyPresenter.joinLobbySucceded();
+    lobbyPresenter.lobbyUpdateReceived();
   }
 }

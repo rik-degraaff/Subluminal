@@ -71,8 +71,6 @@ public class MainController implements Initializable {
 
   public void setLobbyStore(LobbyStore lobbyStore) {
     this.lobbyStore = lobbyStore;
-
-    lobby.setLobbyStore(lobbyStore);
   }
 
   public void setUserStore(UserStore userStore) {
@@ -90,6 +88,7 @@ public class MainController implements Initializable {
     menu = new MenuComponent(this);
     settings = new SettingsComponent(this);
     lobby = new LobbyComponent();
+
     game = new GameComponent(this);
 
     playArea.setMouseTransparent(true);

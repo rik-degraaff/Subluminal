@@ -6,6 +6,7 @@ import tech.subluminal.client.presentation.LobbyPresenter;
 import tech.subluminal.client.presentation.controller.LobbyListController;
 import tech.subluminal.client.presentation.controller.LobbyUserController;
 import tech.subluminal.client.stores.LobbyStore;
+import tech.subluminal.client.stores.UserStore;
 
 public class LobbyComponent extends Group implements LobbyPresenter {
 
@@ -13,6 +14,7 @@ public class LobbyComponent extends Group implements LobbyPresenter {
   private LobbyUserComponent lobbyUser;
   private LobbyListController lobbyListController;
   private LobbyUserController lobbyUserController;
+  private UserStore userStore;
   private LobbyStore lobbyStore;
   private LobbyPresenter.Delegate lobbyDelegate;
 
@@ -55,10 +57,17 @@ public class LobbyComponent extends Group implements LobbyPresenter {
     return lobbyStore;
   }
 
+  public void setUserStore(UserStore userStore) {
+    this.userStore = userStore;
+
+    lobbyUserController.setUserStore(userStore);
+  }
+
   public void setLobbyStore(LobbyStore lobbyStore) {
     this.lobbyStore = lobbyStore;
 
     lobbyListController.setLobbyStore(lobbyStore);
+    lobbyUserController.setLobbyStore(lobbyStore);
   }
 
   @Override
@@ -79,6 +88,11 @@ public class LobbyComponent extends Group implements LobbyPresenter {
   @Override
   public void lobbyListReceived() {
 
+  }
+
+  @Override
+  public void lobbyUpdateReceived() {
+    lobbyUserController.lobbyUpdateReceived();
   }
 
   @Override

@@ -21,7 +21,6 @@ public class LobbyStatusComponent extends HBox {
 
   public LobbyStatusComponent(String lobbyName, String lobbyID, int players, int max,
       LobbyStatus status, LobbyPresenter.Delegate delegate) {
-    Logger.trace("LobbyStatusComponent !!!!!!!!!!!");
     this.lobbyDelegate = delegate;
     this.lobbyID = lobbyID;
 
