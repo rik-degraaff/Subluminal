@@ -253,7 +253,7 @@ public class GameManager {
 
       final GameHistoryEntry<Ship> entry = new GameHistoryEntry<>(
           new Ship(motherShip.getCoordinates(), motherShip.getID(), req.getTargets(),
-              motherShip.getSpeed()));
+              req.getTargets().get(req.getTargets().size() - 1) ,motherShip.getSpeed()));
 
       // write the updated mother ship directly into the game store.
       player.getMotherShip().add(entry);
