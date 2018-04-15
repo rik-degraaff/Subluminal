@@ -1,0 +1,4 @@
+\babel@toc {english}{}
+\contentsline {part}{I\hspace {1em}test}{4}
+\contentsline {chapter}{\numberline {1}game rules}{5}
+\contentsline {section}{\numberline {1.1}test section for toc}{5}

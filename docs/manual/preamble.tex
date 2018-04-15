@@ -1,0 +1,30 @@
+%\setlength{\parindent}{10pt}
+%\setlength{\parskip}{1.4ex plus 0.35ex minus 0.3ex}
+%\setlength{\parskip}{1.4ex plus 0.35ex minus 0.3ex}
+
+%\newcommand{\q}[1]{>>\textit{#1}<<}
+
+\titleformat{name=\chapter}[block]
+  {\sffamily\Large}
+  {}
+  {0pt}
+  {\colorchapter}
+\titlespacing*{\chapter}{0pt}{\baselineskip}{\baselineskip}
+
+\newcommand{\colorchapter}[1]{%
+  \colorbox{almostblack}{\parbox[][0.6cm][c]{\dimexpr\textwidth-2\fboxsep}{\color{limegreen}\ibm \MakeUppercase{#1}}}}
+
+\title{Subluminal \- Game Manual}   
+\author{Bordeaux Ink.} 
+\date{\today} 
+
+\renewcommand{\familydefault}{\sfdefault}
+
+%\linespread{1.05} 
+
+\newfontfamily\ibm{PxPlus_IBM_VGA9.ttf}
+
+\definecolor{almostblack}{rgb}{0.1,0.1,0.1}
+\definecolor{limegreen}{rgb}{0.33,0.93,0.01}
+
+\setlist{noitemsep}
