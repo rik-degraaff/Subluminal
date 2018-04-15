@@ -6,6 +6,7 @@ import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.shared.messages.LobbyCreateReq;
 import tech.subluminal.shared.messages.LobbyJoinReq;
 import tech.subluminal.shared.messages.LobbyJoinRes;
+import tech.subluminal.shared.messages.LobbyLeaveReq;
 import tech.subluminal.shared.messages.LobbyLeaveRes;
 import tech.subluminal.shared.messages.LobbyListReq;
 import tech.subluminal.shared.messages.LobbyListRes;
@@ -40,7 +41,7 @@ public class LobbyManager implements LobbyPresenter.Delegate {
 
   @Override
   public void leaveLobby() {
-    connection.sendMessage(new LobbyLeaveRes());
+    connection.sendMessage(new LobbyLeaveReq());
 
   }
 
@@ -82,6 +83,8 @@ public class LobbyManager implements LobbyPresenter.Delegate {
 
   private void onLobbyLeave(LobbyLeaveRes res) {
     lobbyStore.currentLobby().remove();
+
+    lobbyPresenter.leaveLobbySucceded();
   }
 
   private void onLobbyJoin(LobbyJoinRes res) {

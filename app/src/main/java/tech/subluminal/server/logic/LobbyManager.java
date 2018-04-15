@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.server.stores.LobbyStore;
 import tech.subluminal.server.stores.ReadOnlyUserStore;
 import tech.subluminal.shared.messages.GameStartReq;
@@ -13,6 +14,7 @@ import tech.subluminal.shared.messages.LobbyCreateReq;
 import tech.subluminal.shared.messages.LobbyJoinReq;
 import tech.subluminal.shared.messages.LobbyJoinRes;
 import tech.subluminal.shared.messages.LobbyLeaveReq;
+import tech.subluminal.shared.messages.LobbyLeaveRes;
 import tech.subluminal.shared.messages.LobbyListReq;
 import tech.subluminal.shared.messages.LobbyListRes;
 import tech.subluminal.shared.messages.LobbyUpdateReq;
@@ -123,9 +125,16 @@ public class LobbyManager {
     lobbyStore.lobbies()
         .getLobbiesWithUser(userID)
         .consume(lobbies ->
-            lobbies.forEach(syncLobby -> syncLobby.consume(lobby -> lobby.removePlayer(userID)))
+            lobbies.forEach(syncLobby -> syncLobby.consume(lobby -> {
+              if (lobby.getPlayers().size() == 1) {
+                lobbyStore.lobbies().removeByID(lobby.getID());
+                Logger.trace("Deleting lobby");
+              } else {
+                lobby.removePlayer(userID);
+              }
+            }))
         );
-    //TODO: Send message to client: Successfully left lobby
+    distributor.sendMessage(new LobbyLeaveRes(), userID);
   }
 
   private void onLobbyList(String id, LobbyListReq req) {
