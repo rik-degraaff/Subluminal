@@ -16,6 +16,7 @@ import tech.subluminal.client.presentation.customElements.JumpBox;
 import tech.subluminal.client.presentation.customElements.MotherShipComponent;
 import tech.subluminal.client.presentation.customElements.StarComponent;
 import tech.subluminal.client.stores.records.game.Player;
+import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.stores.records.game.Star;
 
@@ -46,27 +47,29 @@ public class GameController implements Initializable, GamePresenter {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    /*StarComponent star = new StarComponent(0.4,0.7,0.4, "ANDROMEDAR");
-    StarComponent star2 = new StarComponent(1,0.0,0.2, "TITTY IX");
+    StarComponent star = new StarComponent("fewff",0.8,new Coordinates(0.2,0.6), "ANDROMEDAR");
+    StarComponent star1 = new StarComponent("fewff",0.2,new Coordinates(0.6,0.2), "ANDROMEDAR");
+    StarComponent star3 = new StarComponent("fewff",0.5,new Coordinates(0.8,0.5), "ANDROMEDAR");
+    /*StarComponent star2 = new StarComponent(1,0.0,0.2, "TITTY IX");
     star2.setColorProperty(Color.PINK);
-    StarComponent star3 = new StarComponent(0.1,1,0.1, "LUXIS BB");
+    StarComponent star3 = new StarComponent(0.1,1,0.1, "LUXIS BB");*/
 
-    map.getChildren().addAll(star,star2, star3);
+    map.getChildren().addAll(star, star1, star3);
 
     List<StarComponent> test = new LinkedList();
     test.add(star);
-    test.add(star2);
-    test.add(star3);
+    /*test.add(star2);
+    test.add(star3);*/
     createJumpPath(test);
-    removeJumpPath();
+    //removeJumpPath();
 
-    MotherShipComponent ship = new MotherShipComponent(star.layoutXProperty(),star.layoutYProperty(), "fwefr1");
+    /*MotherShipComponent ship = new MotherShipComponent(star.getLayoutX(),star.getLayoutY()), "fwefr1");
     ship.setIsRotating(true);
     map.getChildren().add(ship);
-    //removeJumpPath();*/
+    //removeJumpPath();
 
-    //FleetComponent fleet = new FleetComponent(new Coordinates(0.2, 0.3), 30, "wefwef", "22r2f2");
-    //map.getChildren().add(fleet);
+    FleetComponent fleet = new FleetComponent(new Coordinates(0.2, 0.3), 30, "wefwef", "22r2f2");
+    map.getChildren().add(fleet);*/
 
     map.getChildren().forEach(e -> {
       if (e instanceof StarComponent) {
@@ -118,7 +121,7 @@ public class GameController implements Initializable, GamePresenter {
   }
 
   public void createJumpBox(StarComponent start) {
-    box = new JumpBox(start.layoutXProperty(), start.layoutYProperty(), start.shipsProperty());
+    box = new JumpBox(start.layoutXProperty(), start.layoutYProperty());
 
     box.shipToSendProperty().addListener((observable, oldValue, newValue) -> {
       System.out.println("Ships send" + newValue);
@@ -166,9 +169,10 @@ public class GameController implements Initializable, GamePresenter {
             fc.setNumberOfShips(f.getNumberOfShips());
             fc.setLayoutX(f.getCoordinates().getX());
             fc.setLayoutY(f.getCoordinates().getY());
+            fc.setTargetIDs(f.getTargetIDs());
           } else {
             fleetList.add(
-                new FleetComponent(f.getCoordinates(), f.getNumberOfShips(), f.getID(), p.getID()));
+                new FleetComponent(f.getCoordinates(), f.getNumberOfShips(), f.getID(), p.getID(), f.getTargetIDs() ));
           }
         });
       });
@@ -180,7 +184,7 @@ public class GameController implements Initializable, GamePresenter {
     players.stream().forEach(p -> {
       p.getFleets().stream().forEach(f -> {
         fleetList.add(
-            new FleetComponent(f.getCoordinates(), f.getNumberOfShips(), f.getID(), p.getID()));
+            new FleetComponent(f.getCoordinates(), f.getNumberOfShips(), f.getID(), p.getID(), f.getTargetIDs() ));
       });
     });
     fleetList.stream().forEach(f -> map.getChildren().add(f));
@@ -208,6 +212,7 @@ public class GameController implements Initializable, GamePresenter {
         if (p.getMotherShip().getID().equals(s.getId())) {
           s.setLayoutX(mothership.getCoordinates().getX());
           s.setLayoutY(mothership.getCoordinates().getY());
+          s.setTargetIDs(mothership.getTargetIDs());
         }
       });
     });
@@ -219,7 +224,7 @@ public class GameController implements Initializable, GamePresenter {
       Ship mothership = p.getMotherShip();
 
       shipList.add(new MotherShipComponent(mothership.getCoordinates().getX(),
-          mothership.getCoordinates().getY(), p.getID()));
+          mothership.getCoordinates().getY(), p.getID(), mothership.getTargetIDs()));
 
       shipList.stream().forEach(s -> map.getChildren().add(s));
     });

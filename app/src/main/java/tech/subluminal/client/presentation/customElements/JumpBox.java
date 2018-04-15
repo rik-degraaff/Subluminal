@@ -17,19 +17,19 @@ import javafx.scene.layout.VBox;
 public class JumpBox extends Group {
 
   IntegerProperty shipToSend = new SimpleIntegerProperty();
-  IntegerProperty maxShips = new SimpleIntegerProperty();
+  //IntegerProperty maxShips = new SimpleIntegerProperty();
 
-  public JumpBox(Property x, Property y, IntegerProperty maxAmount) {
+  public JumpBox(Property x, Property y) {
     this.layoutXProperty().bind(x);
     this.layoutYProperty().bind(y);
-    this.maxShips.bind(maxAmount);
+    //this.maxShips.bind(maxAmount);
 
     VBox box = new VBox();
 
     HBox shipsAmount = new HBox();
     Label max = new Label();
-    max.textProperty().bind(Bindings
-        .createStringBinding(() -> maxShipsProperty().getValue().toString(), maxShipsProperty()));
+    //max.textProperty().bind(Bindings
+    //    .createStringBinding(() -> maxShipsProperty().getValue().toString(), maxShipsProperty()));
 
     TextField actual = new TextField();
 
@@ -74,7 +74,7 @@ public class JumpBox extends Group {
     return shipToSend;
   }
 
-  public int getMaxShips() {
+  /*public int getMaxShips() {
     return maxShips.get();
   }
 
@@ -85,9 +85,10 @@ public class JumpBox extends Group {
   public IntegerProperty maxShipsProperty() {
     return maxShips;
   }
+  */
 
   private void tryToSend(int actual) {
-    if (actual <= maxShipsProperty().getValue() && actual >= 0) {
+    if (actual >= 0) {
       sendShips(actual);
     } else {
       System.out.println("Not a possiblity");

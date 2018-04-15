@@ -34,8 +34,10 @@ public class StarComponent extends Pane {
 
 
   private final StringProperty ownerIDProperty = new SimpleStringProperty();
+  private final StringProperty starIDProperty = new SimpleStringProperty();
   private final IntegerProperty parentWidthProperty = new SimpleIntegerProperty();
   private final IntegerProperty parentHeightProperty = new SimpleIntegerProperty();
+
   private final String name;
   private final Group border;
 
@@ -47,9 +49,10 @@ public class StarComponent extends Pane {
     setPossession(possession);
     setXProperty(coordinates.getX());
     setYProperty(coordinates.getY());
-    setSizeProperty(20);
+    setSizeProperty(0.2);
     setColorProperty(Color.GRAY);
     setStarID(id);
+    setOwnerIDProperty(ownerID);
 
     setShips(0);
 
@@ -80,6 +83,13 @@ public class StarComponent extends Pane {
         () -> sizeProperty.doubleValue() * sizeAll, sizeProperty));
     star.fillProperty().bind(colorProperty);
 
+    Circle possessionCount = new Circle();
+    possessionCount.setOpacity(0.7);
+    possessionCount.setFill(Color.RED);
+    possessionCount.setCenterX(sizeAll / 2);
+    possessionCount.setCenterY(sizeAll / 2);
+    possessionCount.radiusProperty().bind(Bindings.createDoubleBinding(() -> star.getRadius()* Math.pow(getPossession(),0.8), possessionProperty(), sizeProperty));
+
     Pane starGroup = new Pane();
     starGroup.setPrefWidth(sizeAll);
     starGroup.setPrefHeight(sizeAll);
@@ -98,13 +108,25 @@ public class StarComponent extends Pane {
     starName.setPrefWidth(sizeAll);
     starName.setTextAlignment(TextAlignment.CENTER);
 
-    starGroup.getChildren().addAll(star, starName, border);
+    starGroup.getChildren().addAll(star, starName, border, possessionCount);
     this.getChildren().addAll(starGroup);
 
     //this.getChildren().addAll(star, starName);
 
     //star.fillProperty().bind(colorProperty);
 
+  }
+
+  public String getStarIDProperty() {
+    return starIDProperty.get();
+  }
+
+  public StringProperty starIDPropertyProperty() {
+    return starIDProperty;
+  }
+
+  public void setStarIDProperty(String starIDProperty) {
+    this.starIDProperty.set(starIDProperty);
   }
 
   public String getName() {

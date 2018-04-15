@@ -1,16 +1,21 @@
 package tech.subluminal.client.presentation.customElements;
 
+import java.util.LinkedList;
+import java.util.List;
 import javafx.animation.RotateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
@@ -29,8 +34,10 @@ public class FleetComponent extends Group {
   private final StringProperty ownerID = new SimpleStringProperty();
   private final StringProperty fleetID = new SimpleStringProperty();
   private final IntegerProperty numberOfShips = new SimpleIntegerProperty();
+  private final ListProperty<String> targetIDs = new SimpleListProperty<String>();
 
-  public FleetComponent(Coordinates coordinates, int numberOfShips, String ID, String ownerID) {
+  public FleetComponent(Coordinates coordinates, int numberOfShips, String ID, String ownerID,
+      List<String> targetIDs) {
     Group group = new Group();
     group.getTransforms().add(new Translate(-fromCenter, -fromCenter));
     group.getTransforms().add(new Rotate(90));
@@ -38,6 +45,16 @@ public class FleetComponent extends Group {
     Platform.runLater(() -> {
       this.setLayoutX(coordinates.getX() * getScene().getWidth());
       this.setLayoutY(coordinates.getY() * getScene().getHeight());
+    });
+
+    this.setTargetIDs(targetIDs);
+
+    targetIDsProperty().addListener((observable, oldValue, newValue) -> {
+      if(!oldValue.isEmpty() && newValue.isEmpty()){
+        setIsRotating(true);
+      }else if(oldValue.isEmpty() && !newValue.isEmpty()){
+        setIsRotating(false);
+      }
     });
 
     this.setOwnerID(ownerID);
@@ -55,6 +72,7 @@ public class FleetComponent extends Group {
     amount.textProperty().bind(Bindings.createStringBinding(() ->
         this.numberOfShipsProperty().getValue().toString(), numberOfShipsProperty()));
 
+
     group.getChildren().add(ship);
     group.getChildren().add(amount);
 
@@ -63,14 +81,26 @@ public class FleetComponent extends Group {
     rotateTl.setCycleCount(RotateTransition.INDEFINITE);
 
     isRotatingProperty().addListener((observable, oldValue, newValue) -> {
-      if (newValue == true) {
+      if (newValue == true && oldValue == false) {
         rotateTl.play();
-      } else {
+      } else if(newValue == false && oldValue == true) {
         rotateTl.stop();
       }
     });
 
     this.getChildren().add(group);
+  }
+
+  public ObservableList<String> getTargetIDs() {
+    return targetIDs.get();
+  }
+
+  public ListProperty<String> targetIDsProperty() {
+    return targetIDs;
+  }
+
+  public void setTargetIDs(List<String> targetIDs) {
+    targetIDs.forEach(i -> this.targetIDs.add(i));
   }
 
   public Color getColor() {
