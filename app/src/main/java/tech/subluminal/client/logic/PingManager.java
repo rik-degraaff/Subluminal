@@ -3,13 +3,14 @@ package tech.subluminal.client.logic;
 import static tech.subluminal.shared.util.IdUtils.generateId;
 
 import java.io.IOException;
+import java.util.Optional;
 import tech.subluminal.client.stores.PingStore;
 import tech.subluminal.shared.logic.PingResponder;
 import tech.subluminal.shared.messages.LogoutReq;
 import tech.subluminal.shared.messages.Ping;
 import tech.subluminal.shared.messages.Pong;
 import tech.subluminal.shared.net.Connection;
-import tech.subluminal.shared.records.SentPing;
+import tech.subluminal.shared.stores.records.SentPing;
 
 
 public class PingManager {
@@ -39,7 +40,7 @@ public class PingManager {
       try {
         Thread.sleep(PING_TIMEOUT_KEY);
         synchronized (pingStore) {
-          if (pingStore.getPing() != null) {
+          if (pingStore.lastPing().get().use(Optional::isPresent)) {
             connection.sendMessage(new LogoutReq());
             try {
               connection.close();
@@ -48,9 +49,9 @@ public class PingManager {
               //TODO: handle this accordingly
             }
           } else {
-            SentPing ping = new SentPing(System.currentTimeMillis(), generateId(6));
-            pingStore.setPing(ping);
-            connection.sendMessage(new Ping(ping.getId()));
+            SentPing ping = new SentPing(System.currentTimeMillis(), null, generateId(6));
+            pingStore.lastPing().set(ping);
+            connection.sendMessage(new Ping(ping.getID()));
           }
         }
       } catch (InterruptedException e) {
@@ -66,11 +67,9 @@ public class PingManager {
   }
 
   private void onPongReceived(Pong pong) {
-    synchronized (pingStore) {
-      //pingStore.getPing().getSentTime();
-      //TODO: calculate ping and store in pingstore
-      pingStore.setPing(null);
-    }
+    //pingStore.getPing().getSentTime();
+    //TODO: calculate ping and store in pingstore
+    pingStore.lastPing().remove();
 
   }
 

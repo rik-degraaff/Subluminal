@@ -23,10 +23,16 @@ public interface UserPresenter {
 
   void setUserDelegate(Delegate delegate);
 
+  void onPlayerJoin(String username);
+
+  void onPlayerLeave(String username);
+
+  void onPlayerUpdate(String oldUsername, String newUsername);
+
   /**
    * Delegate the UserStore can subscribe to.
    */
-  public static interface Delegate {
+  interface Delegate {
 
     /**
      * Fired when a user tries to change his name.

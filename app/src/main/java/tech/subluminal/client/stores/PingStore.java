@@ -1,19 +1,12 @@
 package tech.subluminal.client.stores;
 
-import tech.subluminal.shared.records.SentPing;
+import tech.subluminal.shared.stores.SingleEntity;
+import tech.subluminal.shared.stores.records.SentPing;
 
 public interface PingStore {
 
   /**
-   * Returns the last Ping.
+   * @return the last ping that was last sent to the server.
    */
-  SentPing getPing();
-
-  /**
-   * Sets the ping.
-   *
-   * @param ping is the ping to be set.
-   */
-  void setPing(SentPing ping);
-
+  SingleEntity<SentPing> lastPing();
 }

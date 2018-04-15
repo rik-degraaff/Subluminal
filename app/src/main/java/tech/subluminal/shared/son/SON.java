@@ -38,6 +38,7 @@ public class SON {
 
   /**
    * Parses a String to a SON object.
+   *
    * @param str is the string to parse.
    * @return the parsed SON object.
    */
@@ -45,7 +46,7 @@ public class SON {
     return partialParse(str, 0).result;
   }
 
-  private static PartialParseResult<SON> partialParse(String str, int start)
+  static PartialParseResult<SON> partialParse(String str, int start)
       throws SONParsingError {
     try {
       if (str.charAt(start) != OBJECT_LEFTBRACE) {
@@ -89,14 +90,18 @@ public class SON {
             son.put(strRes.result, keyRes.result);
             break;
           case OBJECT_ID:
-            PartialParseResult<SON> objRes = partialParse(str, i);
+            PartialParseResult<SON> objRes = SON.partialParse(str, i);
             i = objRes.pos;
             son.put(objRes.result, keyRes.result);
             break;
           case LIST_ID:
+            PartialParseResult<SONList> listRes = SONList.partialParse(str, i);
+            i = listRes.pos;
+            son.put(listRes.result, keyRes.result);
             break;
           default:
-            throw new SONParsingError("Expected a value, but found no type identifier.");
+            throw new SONParsingError(
+                "Expected a value, but found no type identifier. Instead found: '" + typeID + "'");
         }
       } while (str.charAt(i) == ENTRY_DELIMITER);
 

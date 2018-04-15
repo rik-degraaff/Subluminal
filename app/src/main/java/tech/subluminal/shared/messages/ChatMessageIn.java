@@ -1,5 +1,6 @@
 package tech.subluminal.shared.messages;
 
+import tech.subluminal.shared.records.Channel;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
@@ -51,7 +52,7 @@ public class ChatMessageIn implements SONRepresentable {
       channel = son.getString(CHANNEL_KEY).map(Channel::valueOf)
           .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, CHANNEL_KEY));
     } catch (IllegalArgumentException e) {
-      throw new SONConversionError("Message was send with an invalid channel.");
+      throw new SONConversionError("Message was sent with an invalid channel.");
     }
 
     return new ChatMessageIn(message, username, channel);
@@ -92,7 +93,4 @@ public class ChatMessageIn implements SONRepresentable {
         .put(channel.toString(), CHANNEL_KEY);
   }
 
-  public static enum Channel {
-    WHISPER, GAME, GLOBAL
-  }
 }

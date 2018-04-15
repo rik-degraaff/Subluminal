@@ -1,15 +1,21 @@
 package tech.subluminal.client.logic;
 
+import static tech.subluminal.shared.util.function.FunctionalUtils.ifPresent;
+
 import java.io.IOException;
 import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.stores.UserStore;
+import tech.subluminal.shared.messages.InitialUsers;
 import tech.subluminal.shared.messages.LoginReq;
 import tech.subluminal.shared.messages.LoginRes;
 import tech.subluminal.shared.messages.LogoutReq;
+import tech.subluminal.shared.messages.PlayerJoin;
+import tech.subluminal.shared.messages.PlayerLeave;
+import tech.subluminal.shared.messages.PlayerUpdate;
 import tech.subluminal.shared.messages.UsernameReq;
 import tech.subluminal.shared.messages.UsernameRes;
 import tech.subluminal.shared.net.Connection;
-import tech.subluminal.shared.records.User;
+import tech.subluminal.shared.stores.records.User;
 
 /**
  * Manages the information of the active user.
@@ -48,19 +54,64 @@ public class UserManager implements UserPresenter.Delegate {
   private void attachHandlers() {
     connection.registerHandler(LoginRes.class, LoginRes::fromSON, this::onLogin);
     connection.registerHandler(UsernameRes.class, UsernameRes::fromSON, this::onUsernameChanged);
+    connection.registerHandler(PlayerJoin.class, PlayerJoin::fromSON, this::onPlayerJoin);
+    connection.registerHandler(PlayerLeave.class, PlayerLeave::fromSON, this::onPlayerLeave);
+    connection.registerHandler(PlayerUpdate.class, PlayerUpdate::fromSON, this::onPlayerUpdate);
+    connection.registerHandler(InitialUsers.class, InitialUsers::fromSON, this::onInitialUsers);
+  }
+
+  private void onInitialUsers(InitialUsers initialUsers) {
+    userStore.users().sync(() -> {
+      initialUsers.getUsers().forEach(userStore.users()::add);
+    });
+  }
+
+  private void onPlayerUpdate(PlayerUpdate res) {
+    String id = res.getId();
+    String oldUsername = userStore.users().getByID(id).get().use(User::getUsername);
+    String newUsername = res.getUsername();
+
+    userStore.users().getByID(id)
+        .ifPresent(syncUser -> syncUser.update(user -> new User(newUsername, id)));
+
+    ifPresent(userStore.users().getByID(id).map(syncUser -> syncUser.use(User::getUsername)),
+        System.out::println,
+        () -> System.out.println("User ain't here bro."));
+
+    userPresenter.onPlayerUpdate(oldUsername, newUsername);
+
+  }
+
+  private void onPlayerLeave(PlayerLeave res) {
+    String id = res.getId();
+    String username = userStore.users().getByID(id).get().use(user -> user.getUsername());
+    userStore.users().removeByID(id);
+
+    userPresenter.onPlayerLeave(username);
+  }
+
+  private void onPlayerJoin(PlayerJoin res) {
+    User user = res.getUser();
+    String username = user.getUsername();
+    userStore.users().add(user);
+
+    userPresenter.onPlayerJoin(username);
+  }
+
+  private String getCurrentId() {
+    return userStore.currentUser().get().use(user -> user.map(User::getID))
+        .orElseThrow(() -> new IllegalStateException("Current User is not in the Userstore."));
   }
 
   private void onUsernameChanged(UsernameRes res) {
-    synchronized (userStore) {
-      userStore.setCurrentUser(new User(res.getUsername(), userStore.getCurrentUser().getId()));
-    }
+    userStore.currentUser().set(new User(res.getUsername(), getCurrentId()));
+
     userPresenter.nameChangeSucceeded();
   }
 
   private void onLogin(LoginRes res) {
-    synchronized (userStore) {
-      userStore.setCurrentUser(new User(res.getUsername(), res.getUserID()));
-    }
+    userStore.currentUser().set(new User(res.getUsername(), res.getUserID()));
+
     userPresenter.loginSucceeded();
   }
 
