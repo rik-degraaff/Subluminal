@@ -10,12 +10,15 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.logic.ChatManager;
+import tech.subluminal.client.logic.LobbyManager;
 import tech.subluminal.client.logic.PingManager;
 import tech.subluminal.client.logic.UserManager;
 import tech.subluminal.client.presentation.controller.ChatController;
 import tech.subluminal.client.presentation.controller.MainController;
+import tech.subluminal.client.stores.InMemoryLobbyStore;
 import tech.subluminal.client.stores.InMemoryPingStore;
 import tech.subluminal.client.stores.InMemoryUserStore;
+import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.client.stores.PingStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.messages.LogoutReq;
@@ -51,6 +54,7 @@ public class ClientInitializer extends Application {
 
     UserStore userStore = new InMemoryUserStore();
     PingStore pingStore = new InMemoryPingStore();
+    LobbyStore lobbyStore = new InMemoryLobbyStore();
 
     ChatController chatPresenter = controller.getChatController();
     chatPresenter.setUserStore(userStore);
@@ -59,6 +63,8 @@ public class ClientInitializer extends Application {
     UserManager userManager = new UserManager(connection, userStore, chatPresenter);
     new ChatManager(userStore, chatPresenter, connection);
     new PingManager(connection, pingStore);
+
+    LobbyManager lobbyManager = new LobbyManager(lobbyStore, connection);
 
     userManager.start(username);
 

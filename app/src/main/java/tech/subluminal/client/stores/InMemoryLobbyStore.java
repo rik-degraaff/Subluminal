@@ -31,6 +31,6 @@ public class InMemoryLobbyStore implements LobbyStore {
 
   @Override
   public ReadOnlySingleEntity<List<SlimLobby>> lobbies() {
-    return lobbies.map(e -> e);
+    return lobbies.map(l -> l);
   }
 }
