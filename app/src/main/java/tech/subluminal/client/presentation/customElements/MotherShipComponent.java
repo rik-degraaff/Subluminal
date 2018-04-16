@@ -1,6 +1,7 @@
 package tech.subluminal.client.presentation.customElements;
 
 import java.util.List;
+import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -23,13 +24,14 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
+import org.pmw.tinylog.Logger;
 
 public class MotherShipComponent extends Group {
 
   private final ObjectProperty<Color> color = new SimpleObjectProperty<Color>();
 
   private final BooleanProperty isRotating = new SimpleBooleanProperty();
-  private final int fromCenter = 100;
+  private final int fromCenter = 40;
   private final StringProperty ownerID = new SimpleStringProperty();
   private final ListProperty<String> targetIDs = new SimpleListProperty<String>();
 
@@ -65,33 +67,48 @@ public class MotherShipComponent extends Group {
 
     setTargetIDs(targetIDs);
 
-    targetIDsProperty().addListener((observable, oldValue, newValue) -> {
-      if (!oldValue.isEmpty() && newValue.isEmpty()) {
-        setIsRotating(true);
-      } else if (oldValue.isEmpty() && !newValue.isEmpty()) {
-        setIsRotating(false);
-      }
-    });
+
+
+
 
     Polygon ship = new Polygon();
     ship.getPoints().addAll(new Double[]{
-        -20.0, -20.0,
-        20.0, 0.0,
-        0.0, 20.0});
+        -10.0, -10.0,
+        10.0, 0.0,
+        0.0, 10.0});
     ship.setFill(Color.PINK);
 
     group.getChildren().add(ship);
+    group.setMouseTransparent(true);
 
     RotateTransition rotateTl = new RotateTransition(Duration.seconds(5), group);
     rotateTl.setToAngle(360);
     rotateTl.setCycleCount(RotateTransition.INDEFINITE);
+    rotateTl.setInterpolator(Interpolator.LINEAR);
 
-    isRotatingProperty().addListener((observable, oldValue, newValue) -> {
-      if (newValue == true && oldValue == false) {
-        rotateTl.play();
-      } else if (newValue == false && oldValue == true) {
-        rotateTl.stop();
-      }
+
+    Platform.runLater(() -> {
+      targetIDsProperty().addListener((observable, oldValue, newValue) -> {
+        Logger.debug("Ships should move!!!");
+        if (!oldValue.isEmpty() && newValue.isEmpty()) {
+          setIsRotating(true);
+        } else if (oldValue.isEmpty() && !newValue.isEmpty()) {
+          setIsRotating(false);
+        }
+      });
+
+      isRotatingProperty().addListener((observable, oldValue, newValue) -> {
+        if (newValue && !oldValue) {
+          rotateTl.play();
+        } else if (!newValue && oldValue) {
+          rotateTl.stop();
+        }
+      });
+    });
+
+
+    Platform.runLater(() -> {
+      setIsRotating(targetIDs.isEmpty());
     });
 
     this.getChildren().add(group);

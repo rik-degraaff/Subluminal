@@ -311,17 +311,28 @@ public class GameController implements Initializable, GamePresenter {
           gameStore.motherShips().observableList(),
           pair -> {
             if (ships.get(pair.getID()) == null) {
+              Logger.debug("CREATE A NEW SHIP!!");
               MotherShipComponent shipComponent = new MotherShipComponent(
                   pair.getValue().getCoordinates().getX(), pair.getValue().getCoordinates().getY(),
                   pair.getKey(), pair.getValue().getTargetIDs());
-              ships.put(pair.getKey(), shipComponent);
+              ships.put(pair.getID(), shipComponent);
               map.getChildren().add(shipComponent);
               return shipComponent;
 
             }
-            MotherShipComponent shipComponent = ships.get(pair.getKey());
-            shipComponent.setX(pair.getValue().getCoordinates().getX());
-            shipComponent.setY(pair.getValue().getCoordinates().getY());
+            MotherShipComponent shipComponent = ships.get(pair.getID());
+
+            if(Math.abs(pair.getValue().getCoordinates().getX() - shipComponent.getX()) > 0.000001){
+              shipComponent.setX(pair.getValue().getCoordinates().getX());
+              Logger.debug("X gets UPDATED");
+            }
+            if(Math.abs(pair.getValue().getCoordinates().getY() - shipComponent.getY()) > 0.000001){
+              shipComponent.setY(pair.getValue().getCoordinates().getY());
+              Logger.debug("y gets UPDATED");
+            }
+
+
+            shipComponent.setTargetIDs(pair.getValue().getTargetIDs());
             return shipComponent;
           }
       );
