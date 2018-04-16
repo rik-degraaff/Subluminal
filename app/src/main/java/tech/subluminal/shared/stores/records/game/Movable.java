@@ -11,14 +11,17 @@ public abstract class Movable extends GameObject {
   private static final String CLASS_NAME = Movable.class.getSimpleName();
   private static final String GAME_OBJECT_KEY = "gameObject";
   private static final String TARGETS_KEY = "targets";
+  private static final String END_TARGET_KEY = "target";
   private static final String SPEED_KEY = "speed";
 
   private List<String> targetIDs;
+  private String endTarget;
   private double speed;
 
-  public Movable(Coordinates coordinates, String id, List<String> targetIDs, double speed) {
+  public Movable(Coordinates coordinates, String id, List<String> targetIDs, String endTarget, double speed) {
     super(coordinates, id);
     this.targetIDs = targetIDs;
+    this.endTarget = endTarget;
     this.speed = speed;
   }
 
@@ -28,6 +31,14 @@ public abstract class Movable extends GameObject {
 
   public void setTargetIDs(List<String> targetIDs) {
     this.targetIDs = targetIDs;
+  }
+
+  public String getEndTarget() {
+    return endTarget;
+  }
+
+  public void setEndTarget(String endTarget) {
+    this.endTarget = endTarget;
   }
 
   public boolean isOnStar(Star star) {
@@ -81,6 +92,9 @@ public abstract class Movable extends GameObject {
     this.speed = son.getDouble(SPEED_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, SPEED_KEY));
 
+    this.endTarget = son.getString(END_TARGET_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, END_TARGET_KEY));
+
     for (int i = 0; i < targets.size(); i++) {
       int ii = i;
       targetIDs.add(targets.getString(i)
@@ -95,6 +109,7 @@ public abstract class Movable extends GameObject {
     return new SON()
         .put(super.asSON(), GAME_OBJECT_KEY)
         .put(targets, TARGETS_KEY)
+        .put(endTarget, END_TARGET_KEY)
         .put(speed, SPEED_KEY);
   }
 }

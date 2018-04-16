@@ -11,12 +11,12 @@ public class Ship extends Movable implements SONRepresentable {
   private static final String CLASS_NAME = Movable.class.getSimpleName();
   private static final String MOVABLE_KEY = "movable";
 
-  public Ship(Coordinates coordinates, String id, List<String> targetIDs, double speed) {
-    super(coordinates, id, targetIDs, speed);
+  public Ship(Coordinates coordinates, String id, List<String> targetIDs, String endTarget, double speed) {
+    super(coordinates, id, targetIDs, endTarget, speed);
   }
 
   public static Ship fromSON(SON son) throws SONConversionError {
-    Ship ship = new Ship(null, null, new ArrayList<>(), 0.0);
+    Ship ship = new Ship(null, null, new ArrayList<>(), null, 0.0);
 
     SON movable = son.getObject(MOVABLE_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, MOVABLE_KEY));

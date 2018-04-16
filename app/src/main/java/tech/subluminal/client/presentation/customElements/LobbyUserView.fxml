@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <fx:root xmlns:fx="http://javafx.com/fxml/1" prefHeight="300.0" prefWidth="800.0"
   type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8"
-  fx:controller="tech.subluminal.client.presentation.controller.LobbyHostController"
+  fx:controller="tech.subluminal.client.presentation.controller.LobbyUserController"
   fx:id="lobbyHost">
   <children>
     <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"

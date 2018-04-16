@@ -39,7 +39,7 @@ public class MapGeneration {
 
       Player player = new Player(playerID, otherPlayers,
           new Ship(homeCoords, IdUtils.generateId(8),
-              Collections.singletonList(homeStar.getID()), MOTHER_SHIP_SPEED), LIGHT_SPEED);
+              Collections.emptyList(), homeStar.getID(), MOTHER_SHIP_SPEED), LIGHT_SPEED);
 
       players.add(player);
     });

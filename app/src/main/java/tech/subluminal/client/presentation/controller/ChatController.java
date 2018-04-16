@@ -3,12 +3,14 @@ package tech.subluminal.client.presentation.controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -49,6 +51,11 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     Platform.runLater(() -> {
       Label msg = new Label(message);
       msg.setWrapText(true);
+      Insets padding = chatHistory.getPadding();
+      msg.maxWidthProperty().bind(Bindings.createDoubleBinding(
+          () -> chatHistory.getWidth() - padding.getLeft() - padding.getRight() - 1,
+          chatHistory.widthProperty(), chatHistory.paddingProperty()));
+      //msg.prefWidthProperty().bind(chatHistory.widthProperty());
 
       msg.getStyleClass().add(channel.toString().toLowerCase() + "-message");
       chatList.add(msg);
@@ -221,7 +228,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
    */
   @Override
   public void loginSucceeded() {
-    addMessageChat("Succesfully logged in as: " + getCurrentUsername(), Channel.INFO);
+    addMessageChat("Logged in as: " + getCurrentUsername(), Channel.INFO);
   }
 
   private String getCurrentUsername() {
@@ -269,5 +276,6 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     chatHistory.setItems(filteredList);
+    chatHistory.setPadding(new Insets(0, 0, 0, 0));
   }
 }

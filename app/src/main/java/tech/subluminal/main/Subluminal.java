@@ -100,6 +100,7 @@ public class Subluminal {
     if (port >= 1024 && port < 65535) {
       //TODO: change that
       Application.launch(ClientInitializer.class, host, Integer.toString(port), username, String.valueOf(debug));
+      System.exit(0);
       //String username = args.length > 2 ? args[2] : System.getProperty("user.name");
       //ClientInitializer.init(host, port, username);
     }
