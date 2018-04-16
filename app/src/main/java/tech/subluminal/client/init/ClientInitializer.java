@@ -10,11 +10,16 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.logic.ChatManager;
+import tech.subluminal.client.logic.GameManager;
 import tech.subluminal.client.logic.LobbyManager;
 import tech.subluminal.client.logic.PingManager;
 import tech.subluminal.client.logic.UserManager;
 import tech.subluminal.client.presentation.controller.ChatController;
+import tech.subluminal.client.presentation.controller.GameController;
 import tech.subluminal.client.presentation.controller.MainController;
+import tech.subluminal.client.presentation.customElements.LobbyComponent;
+import tech.subluminal.client.stores.GameStore;
+import tech.subluminal.client.stores.InMemoryGameStore;
 import tech.subluminal.client.stores.InMemoryLobbyStore;
 import tech.subluminal.client.stores.InMemoryPingStore;
 import tech.subluminal.client.stores.InMemoryUserStore;
@@ -64,9 +69,20 @@ public class ClientInitializer extends Application {
     new ChatManager(userStore, chatPresenter, connection);
     new PingManager(connection, pingStore);
 
-    LobbyManager lobbyManager = new LobbyManager(lobbyStore, connection);
+    LobbyComponent lobbyPresenter = controller.getLobby();
+    LobbyManager lobbyManager = new LobbyManager(lobbyStore, connection, lobbyPresenter, controller);
+
+    lobbyPresenter.setLobbyStore(lobbyStore);
+    lobbyPresenter.setUserStore(userStore);
 
     userManager.start(username);
+
+    GameStore gameStore = new InMemoryGameStore();
+    GameController gamePresenter = controller.getGameController();
+    GameManager gameManager = new GameManager(gameStore, connection, gamePresenter);
+    gamePresenter.setUserStore(userStore);
+    gamePresenter.setGameStore(gameStore);
+
 
     final Thread mainThread = Thread.currentThread();
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {

@@ -25,11 +25,14 @@ public interface GamePresenter {
 
   public void removeMothership(List<String> playerID);
 
+  public void setGameDelegate(Delegate delegate);
+
+  void update();
 
   interface Delegate {
 
-    public void sendShips(Collection<Star> stars, int amount);
+    public void sendShips(List<String> stars, int amount);
 
-    public void sendMothership(Collection<Star> star);
+    public void sendMothership(List<String> star);
   }
 }

@@ -6,9 +6,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import org.junit.Test;
 import tech.subluminal.client.stores.records.game.Player;
+import tech.subluminal.shared.records.LobbyStatus;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONParsingError;
+import tech.subluminal.shared.stores.records.LobbySettings;
+import tech.subluminal.shared.stores.records.SlimLobby;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.Ship;
@@ -34,8 +37,8 @@ public class GameStateDeltaTest {
         new Ship(new Coordinates(10.0, 2.3), "4321", Collections.emptyList(), "5", 0.2),
         Collections.emptyList()));
 
-    delta.addStar(new Star("1234", 1, new Coordinates(0, 0), "starid", true));
-    delta.addStar(new Star(null, 0, new Coordinates(0, 42), "starid2", false));
+    delta.addStar(new Star("1234", 1, new Coordinates(0, 0), "starid", true, 0.1));
+    delta.addStar(new Star(null, 0, new Coordinates(0, 42), "starid2", false, 0.3));
 
     delta.addRemovedFleet("1234", "645");
     delta.addRemovedFleet("1234", "123");
@@ -52,5 +55,12 @@ public class GameStateDeltaTest {
       sonConversionError.printStackTrace();
     }
     System.out.println(msg);
+  }
+
+  @Test
+  public void einfachTest() {
+    System.out.println(
+        new SlimLobby("gwewef", new LobbySettings("name", "adminID"), LobbyStatus.OPEN).asSON()
+            .asString());
   }
 }

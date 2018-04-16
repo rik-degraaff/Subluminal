@@ -1,11 +1,18 @@
 package tech.subluminal.client.logic;
 
+import javafx.application.Platform;
 import tech.subluminal.client.presentation.LobbyPresenter;
+import tech.subluminal.client.presentation.controller.MainController;
+import tech.subluminal.client.presentation.customElements.LobbyComponent;
 import tech.subluminal.client.stores.LobbyStore;
-import tech.subluminal.shared.messages.LobbyJoinReq;
+import tech.subluminal.shared.messages.GameStartReq;
 import tech.subluminal.shared.messages.GameStartRes;
+import tech.subluminal.shared.messages.LobbyCreateReq;
+import tech.subluminal.shared.messages.LobbyJoinReq;
 import tech.subluminal.shared.messages.LobbyJoinRes;
+import tech.subluminal.shared.messages.LobbyLeaveReq;
 import tech.subluminal.shared.messages.LobbyLeaveRes;
+import tech.subluminal.shared.messages.LobbyListReq;
 import tech.subluminal.shared.messages.LobbyListRes;
 import tech.subluminal.shared.messages.LobbyUpdateRes;
 import tech.subluminal.shared.net.Connection;
@@ -18,10 +25,19 @@ public class LobbyManager implements LobbyPresenter.Delegate {
 
   private final LobbyStore lobbyStore;
   private final Connection connection;
+  private final LobbyPresenter lobbyPresenter;
+  private final MainController mainController;
 
-  public LobbyManager(LobbyStore lobbyStore, Connection connection) {
+  public LobbyManager(LobbyStore lobbyStore, Connection connection,
+      LobbyComponent lobbyPresenter, MainController mainController) {
+    this.mainController = mainController;
     this.lobbyStore = lobbyStore;
     this.connection = connection;
+    this.lobbyPresenter = lobbyPresenter;
+
+    lobbyPresenter.setLobbyDelegate(this);
+
+    attachHandlers();
   }
 
   @Override
@@ -31,24 +47,27 @@ public class LobbyManager implements LobbyPresenter.Delegate {
 
   @Override
   public void leaveLobby() {
-    connection.sendMessage(new LobbyLeaveRes());
+    connection.sendMessage(new LobbyLeaveReq());
 
   }
 
   @Override
   public void createLobby(String name) {
-    //TODO: implement this
+    connection.sendMessage(new LobbyCreateReq(name));
 
   }
 
   @Override
   public void getLobbyList() {
-    //TODO: implements this
+    connection.sendMessage(new LobbyListReq());
   }
 
-  //TODO: React to packeage from connection
-  //TODO: Presenter/Delegate: UserMangager
-  //TODO: Take requests from Presenter
+  @Override
+  public void startGame() {
+    connection.sendMessage(new GameStartReq());
+  }
+
+
   private void attachHandlers() {
     connection
         .registerHandler(LobbyJoinRes.class, LobbyJoinRes::fromSON, this::onLobbyJoin);
@@ -60,35 +79,40 @@ public class LobbyManager implements LobbyPresenter.Delegate {
         .registerHandler(LobbyUpdateRes.class, LobbyUpdateRes::fromSON, this::onLobbyUpdate);
     connection
         .registerHandler(GameStartRes.class, GameStartRes::fromSON, this::onGameStart);
-    //connection
-    //    .registerHandler(LobbyCreateRes.class, LobbyCreateRes::fromSON, this::onLobbyCreate);
   }
 
   private void onGameStart(GameStartRes res) {
-    //TODO: Start game
+    mainController.onMapOpenHandle();
   }
 
-  //private void onLobbyCreate(LobbyCreateRes res) {
-  //
-  //}
 
   private void onLobbyList(LobbyListRes res) {
-    lobbyStore.lobbies().get().consume(opt -> opt.ifPresent(list -> {
-      list.clear();
-      list.addAll(res.getSlimLobbies());
-    }));
+    Platform.runLater(() -> {
+      lobbyStore.lobbies().get().consume(opt -> opt.ifPresent(list -> {
+        list.clear();
+        list.addAll(res.getSlimLobbies());
+      }));
+    });
+
   }
 
   private void onLobbyUpdate(LobbyUpdateRes res) {
     lobbyStore.currentLobby().set(res.getLobby());
+
+    lobbyPresenter.lobbyUpdateReceived();
   }
 
   private void onLobbyLeave(LobbyLeaveRes res) {
     lobbyStore.currentLobby().remove();
+
+    lobbyPresenter.leaveLobbySucceded();
   }
 
   private void onLobbyJoin(LobbyJoinRes res) {
     Lobby lobby = res.getLobby();
     lobbyStore.currentLobby().set(lobby);
+
+    lobbyPresenter.joinLobbySucceded();
+    lobbyPresenter.lobbyUpdateReceived();
   }
 }

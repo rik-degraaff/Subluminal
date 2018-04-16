@@ -16,7 +16,7 @@
       <children>
         <ListView style="-fx-background-color: black;" prefHeight="200.0" prefWidth="400.0"
           fx:id="playerBoard"/>
-        <Button mnemonicParsing="false" onAction="#switchPlayerBoard" text="Show Button"
+        <Button mnemonicParsing="false" onAction="#switchPlayerBoard" text="Show Players"
           textAlignment="CENTER" fx:id="updaterPlayerBoard"/>
       </children>
     </VBox>
