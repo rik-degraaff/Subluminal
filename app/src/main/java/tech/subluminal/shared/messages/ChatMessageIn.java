@@ -1,5 +1,6 @@
 package tech.subluminal.shared.messages;
 
+import tech.subluminal.shared.records.Channel;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
@@ -9,9 +10,9 @@ import tech.subluminal.shared.son.SONRepresentable;
  */
 public class ChatMessageIn implements SONRepresentable {
 
-  public static final String MESSAGE_KEY = "message";
-  public static final String USERNAME_KEY = "username";
-  public static final String CHANNEL_KEY = "channel";
+  private static final String MESSAGE_KEY = "message";
+  private static final String USERNAME_KEY = "username";
+  private static final String CHANNEL_KEY = "channel";
   private static final String CLASS_NAME = ChatMessageIn.class.getSimpleName();
   private String message;
   private String username;
@@ -51,7 +52,7 @@ public class ChatMessageIn implements SONRepresentable {
       channel = son.getString(CHANNEL_KEY).map(Channel::valueOf)
           .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, CHANNEL_KEY));
     } catch (IllegalArgumentException e) {
-      throw new SONConversionError("Message was send with an invalid channel.");
+      throw new SONConversionError("Message was sent with an invalid channel.");
     }
 
     return new ChatMessageIn(message, username, channel);
@@ -84,6 +85,9 @@ public class ChatMessageIn implements SONRepresentable {
     return channel;
   }
 
+  /**
+   * @return the SON representation of this object.
+   */
   @Override
   public SON asSON() {
     return new SON()
@@ -92,7 +96,4 @@ public class ChatMessageIn implements SONRepresentable {
         .put(channel.toString(), CHANNEL_KEY);
   }
 
-  public static enum Channel {
-    WHISPER, GAME, GLOBAL
-  }
 }

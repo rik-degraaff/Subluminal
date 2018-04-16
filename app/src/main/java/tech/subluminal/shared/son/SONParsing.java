@@ -19,6 +19,7 @@ public class SONParsing {
 
   /**
    * Parses a Integer to a representing String format.
+   *
    * @param key specifies the keyword for deparsing the object later.
    * @return the Integer in the SON specific String format.
    */
@@ -28,6 +29,7 @@ public class SONParsing {
 
   /**
    * Parses a Double to a representing String format.
+   *
    * @param key specifies the key to deparsing the object later.
    * @return the Double in the SON specific String format.
    */
@@ -37,6 +39,7 @@ public class SONParsing {
 
   /**
    * Parses a Boolean to a representing String format.
+   *
    * @param key specifies the key to deparsing the object later.
    * @return the Boolean in the SON specific String format.
    */
@@ -46,6 +49,7 @@ public class SONParsing {
 
   /**
    * Parses a String to a representing String format.
+   *
    * @param key specifies the key to deparsing the object later.
    * @return the String in the SON specific String format.
    */
@@ -55,6 +59,7 @@ public class SONParsing {
 
   /**
    * Parses a SON to a representing String format.
+   *
    * @param key specifies the key to deparsing the object later.
    * @return the String in SON the SON specific String format.
    */
@@ -64,6 +69,7 @@ public class SONParsing {
 
   /**
    * Parses a SONList to a representing String format.
+   *
    * @param key specifies the key to deparsing the object later.
    * @return the String in SON the SON specific String format.
    */
@@ -71,12 +77,13 @@ public class SONParsing {
     return stringString(key) + KEY_VALUE_DELIMITER + LIST_ID + value.asString();
   }
 
-  private static String integerString(Integer value) {
+  static String integerString(Integer value) {
     return value.toString();
   }
 
   /**
    * Parses a Integer from its SON specific String form.
+   *
    * @param str is the sequence contaning the Integer.
    */
   static PartialParseResult<Integer> partialParseInt(String str, int i) throws SONParsingError {
@@ -100,12 +107,13 @@ public class SONParsing {
     }
   }
 
-  private static String doubleString(Double value) {
+  static String doubleString(Double value) {
     return value.toString();
   }
 
   /**
    * Parses a Double from its SON specific String form.
+   *
    * @param str is the sequence containing the Double.
    */
   static PartialParseResult<Double> partialParseDouble(String str, int i) throws SONParsingError {
@@ -130,12 +138,13 @@ public class SONParsing {
     }
   }
 
-  private static String booleanString(Boolean value) {
+  static String booleanString(Boolean value) {
     return value.toString();
   }
 
   /**
    * Parses a Boolean from its SON specific String form.
+   *
    * @param str is the sequence containing the Boolean.
    */
   static PartialParseResult<Boolean> partialParseBoolean(String str, int i) throws SONParsingError {
@@ -150,12 +159,13 @@ public class SONParsing {
     throw new SONParsingError("Invalid boolean value.");
   }
 
-  private static String stringString(String str) {
+  static String stringString(String str) {
     return STRING_DELIMITER + escapeString(str) + STRING_DELIMITER;
   }
 
   /**
    * Parses a String from its SON specific String form.
+   *
    * @param str is the sequence containing the Double.
    */
   static PartialParseResult<String> partialParseString(String str, int start)
@@ -188,8 +198,8 @@ public class SONParsing {
 
   private static String escapeString(String str) {
     return str
-        .replace("" + STRING_DELIMITER, "" + STRING_ESCAPE + STRING_DELIMITER)
-        .replace("" + STRING_ESCAPE, "" + STRING_ESCAPE + STRING_ESCAPE);
+        .replace("" + STRING_ESCAPE, "" + STRING_ESCAPE + STRING_ESCAPE)
+        .replace("" + STRING_DELIMITER, "" + STRING_ESCAPE + STRING_DELIMITER);
   }
 
   static class PartialParseResult<T> {

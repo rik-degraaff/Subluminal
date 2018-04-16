@@ -117,7 +117,7 @@
         <task id="105" name="describe software architecture" meeting="false" start="2018-02-26" duration="1" complete="0" expand="true"/>
         <task id="12" name="Milestone 5" color="#8cb6ce" meeting="true" start="2018-05-21" duration="0" complete="0" thirdDate="2018-05-07" thirdDate-constraint="0" expand="true"/>
     </tasks>
-    <resources/>
+    <tech.subluminal.resources/>
     <allocations/>
     <vacations/>
     <previous/>

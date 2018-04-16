@@ -1,12 +1,14 @@
 package tech.subluminal.server.logic;
 
-import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import tech.subluminal.server.stores.LobbyStore;
 import tech.subluminal.server.stores.ReadOnlyUserStore;
 import tech.subluminal.shared.messages.ChatMessageIn;
-import tech.subluminal.shared.messages.ChatMessageIn.Channel;
 import tech.subluminal.shared.messages.ChatMessageOut;
 import tech.subluminal.shared.net.Connection;
-import tech.subluminal.shared.records.User;
+import tech.subluminal.shared.records.Channel;
+import tech.subluminal.shared.stores.records.User;
 
 /**
  * Manages the chat messages that are sent to and received from the clients.
@@ -14,6 +16,7 @@ import tech.subluminal.shared.records.User;
 public class ChatManager {
 
   private final ReadOnlyUserStore userStore;
+  private final LobbyStore lobbyStore;
   private final MessageDistributor distributor;
 
   /**
@@ -22,8 +25,10 @@ public class ChatManager {
    * @param distributor to send new messages.
    * @param userStore to check for active users.
    */
-  public ChatManager(MessageDistributor distributor, ReadOnlyUserStore userStore) {
+  public ChatManager(MessageDistributor distributor, ReadOnlyUserStore userStore,
+      LobbyStore lobbyStore) {
     this.userStore = userStore;
+    this.lobbyStore = lobbyStore;
     this.distributor = distributor;
 
     distributor.addConnectionOpenedListener(this::attachHandlers);
@@ -36,16 +41,14 @@ public class ChatManager {
 
   private void chatMessageReceived(ChatMessageOut msg, String userID) {
     String receiver = msg.getReceiverID();
-    Optional<User> sender = Optional.empty();
-    synchronized (userStore) {
-      sender = userStore.getUserByID(userID);
-    }
-    sender.ifPresent(s -> {
-      if (receiver == null) {
-        sendMessage(s, msg.getMessage(), msg.isGlobal());
-      } else {
-        sendDirectMessage(s, msg.getMessage(), receiver);
-      }
+    userStore.connectedUsers().getByID(userID).ifPresent(syncUser -> {
+      syncUser.consume(sender -> {
+        if (receiver == null) {
+          sendMessage(sender, msg.getMessage(), msg.isGlobal());
+        } else {
+          sendDirectMessage(sender, msg.getMessage(), receiver);
+        }
+      });
     });
   }
 
@@ -58,9 +61,16 @@ public class ChatManager {
     if (global) {
       distributor
           .sendMessageToAllExcept(new ChatMessageIn(message, sender.getUsername(), Channel.GLOBAL),
-              sender.getId());
+              sender.getID());
     } else {
-      // TODO: implement game channel messaging
+      Set<String> users = lobbyStore.lobbies()
+          .getLobbiesWithUser(sender.getID())
+          .use(c -> c.stream().flatMap(s -> s.use(l -> l.getPlayers().stream())))
+          .filter(s -> !s.equals(sender.getID()))
+          .collect(Collectors.toSet());
+
+      distributor
+          .sendMessage(new ChatMessageIn(message, sender.getUsername(), Channel.GAME), users);
     }
   }
 }

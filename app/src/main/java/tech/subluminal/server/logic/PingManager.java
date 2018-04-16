@@ -2,7 +2,6 @@ package tech.subluminal.server.logic;
 
 import static tech.subluminal.shared.util.IdUtils.generateId;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import tech.subluminal.server.stores.PingStore;
@@ -11,8 +10,8 @@ import tech.subluminal.shared.logic.PingResponder;
 import tech.subluminal.shared.messages.Ping;
 import tech.subluminal.shared.messages.Pong;
 import tech.subluminal.shared.net.Connection;
-import tech.subluminal.shared.records.SentPing;
-import tech.subluminal.shared.records.User;
+import tech.subluminal.shared.stores.records.SentPing;
+import tech.subluminal.shared.stores.records.User;
 
 /**
  * Manages the pings that are sent to and received from the clients.
@@ -46,14 +45,12 @@ public class PingManager {
   }
 
   private void attachHandlers(String id, Connection connection) {
-    connection.registerHandler(Pong.class, Pong::fromSON, pong -> pongReceived(pong, id));
+    connection.registerHandler(Pong.class, Pong::fromSON, this::pongReceived);
     pingResponder.attachHandlers(connection);
   }
 
-  private void pongReceived(Pong pong, String userID) {
-    synchronized (userStore) {
-      pingStore.removePing(userID, pong.getId());
-    }
+  private void pongReceived(Pong pong) {
+    pingStore.sentPings().removeByID(pong.getId());
   }
 
   private void pingLoop() {
@@ -63,23 +60,23 @@ public class PingManager {
       } catch (InterruptedException e) {
         e.printStackTrace(); // TODO: do something sensible
       }
-      String id = generateId(6);
-      Ping ping = new Ping(id);
 
-      Set<String> users;
-      synchronized (userStore) {
-        users = userStore.getUsers().stream()
-            .map(User::getId)
-            .collect(Collectors.toCollection(HashSet::new));
-      }
+      Set<SentPing> pings = userStore.connectedUsers().getAll().use(us ->
+          us.stream()
+              .map(syncUser -> syncUser.use(User::getID))
+              .map(id -> new SentPing(System.currentTimeMillis(), id, generateId(8)))
+              .collect(Collectors.toSet())
+      );
 
-      synchronized (pingStore) {
-        pingStore.getUsersWithPings().forEach(toCloseID -> distributor.closeConnection(toCloseID));
-        SentPing sentPing = new SentPing(System.currentTimeMillis(), id);
-        users.forEach(userId -> pingStore.addPing(userId, sentPing));
-      }
+      pings.forEach(p -> distributor.sendMessage(new Ping(p.getID()), p.getUserID()));
 
-      distributor.broadcast(ping);
+      pingStore.sentPings().sync(() -> {
+        Set<String> usersWithPings = pingStore.sentPings().getUsersWithPings();
+        usersWithPings.forEach(System.out::println);
+        usersWithPings.forEach(distributor::closeConnection);
+        pingStore.sentPings().removeAll();
+        pings.forEach(pingStore.sentPings()::add);
+      });
     }
   }
 }

@@ -3,31 +3,49 @@
 ## Basics
 1. Branching model (git-flow)
 2. Issues and merge requests
-3. Checkstyle / Unittests
-[Google CodeStyle](https://github.com/google/styleguide/blob/gh-pages/intellij-java-google-style.xml) with check task via gradle and in IntelliJ.  
-Unit tests for java code with JUnit and Mockito.
-4. Code Metrics
-5. Manuel testing
-Functionality is randomly tested by hand (play tests), i.a. on different physical machines.
-6. Automatic testing  
-  6.1 Continous integration  
-  6.2  Continous deployment  
-  via Docker ([https://hub.docker.com/u/subluminalthegame/](https://hub.docker.com/u/subluminalthegame/))
+3. Code style guides using [Google CodeStyle][1] enforces with gradle task and IntelliJ.  
+4. Unit tests for through JUnit and Mockito.
+5. Code metrics (test coverage via jacoco)
+6. Play testing (functionality is by team on different physical machines)
+7. Automatic testing  
+  7.1 Continuous integration  
+  7.2  Continuous deployment (via Docker -> [Image][2])
+
+## Workflow
+1. After release, pull the ``master`` branch back into ``dev`` to get the latest hotfixes.
+2. Create your new feature branch from ``dev``.
+3. Once you're done, create a merge request from your feature branch in to ``dev``.
+4. Assign a colleague to review your code and complete the merge request.
+5. Once all features for the next version are done, create a new ``release`` branch.
+6. Now you need to update the version number, docs, write the changelog, play test, check the staging environment for bugs, etc.
+7. Lastly merge the ``release`` branch into master and tag the commit with the version number.
+8. Go back to step 1.
 
 
 ## Quality characteristics
 ### 1. Efficiency / Latency
-To ensure a fluid gaming experience, the average roundtrip time of a package from client to server should be no more than 150 ms. This can be tracked with an internal timer and a simple logging statement. Also relevant for this metric could be the effective package size. WireShark will be used to determine the average package size in a test environment.
+To ensure a fluid gaming experience, the server needs to be able to compute the data inside the game loop in a certain time frame. This is called the server tickrate. We target tickrate of 10 *Hz* per hosted game (up to 10 games) on the server (during a 4 player average). Is the server performing normally (faster than 10Hz), the game loop is slowed down artificially with thread.sleep(). The resulting tickrate is logged in the server console in debug mode. Additionally the dT from the game loop is sent to the client and can also be displayed in its debug view.  
+
 
 ### 2. Reliability / Error tolerance
-The software is rigorously tested with unit tests to cover all edge cases. As a metric we use the code coverage percentage ("degree to which the source code of a program is executed when a particular test suite runs". [Wikipedia](https://en.wikipedia.org/w/index.php?title=Code_coverage&oldid=831669504)). Initial goal shall be to achieve a coverage of around 50 %.
+The software is tested with junit unit tests (currently tested is the most important gamestate record and the intermediate message packet, pending are all the network message  packages). For the more intricate test, the mockito framework will be used to construct mock classes and simulate network connection. As a metric we use the code coverage percentage (``"degree to which the source code of a program is executed when a particular test suite runs".`` [Wikipedia][6]). The goal is to achieve a coverage 35 *%* (excluding gui packages). Current status is around 16%.
 
 
 ## Merge requirements
 
-| Branch          |                                               |
-|:----------------|-----------------------------------------------|
-| ``master``    : | Checkstyle ✔️, UnitTest ✔️, Build ✔️, JavaDoc ✔️  |
-| ``rl-branch`` : | Checkstyle ✔, UnitTest ✔️, Build ✔️, JavaDoc ✔️  |
-| ``dev``       : | Checkstyle ✔️, UnitTest ✔️, Build ✔️, JavaDoc ⭕️ |
-| ``ft-branch`` : | Checkstyle ✔, UnitTest ✔, Build ⭕, JavaDoc ⭕ |
+| Branch          | Merge target        | Merge requirements      | Deployed to      |
+|:----------------|:--------------------|:------------------------|:-----------------|
+| ``master``    : | -                   | -                       | [Production][3]  |
+| ``release`` :   | ``️master``          | ✔️ Tests, ✔️ Build, ✔️ Doc | [Staging][4]     |
+| ``hotfix`` :    | ``release, master`` | ✔️ Tests, ✔️ Build, ✔️ Doc | -                |
+| ``dev``       : | ``release``         | ✔️ Tests, ✔️ Build, ✔️ Doc | [Development][5] |
+| ``feature`` :   | ``dev``             | ✔️ Tests, ❌ Build, ❌ Doc | -                |
+
+
+[1]: https://github.com/google/styleguide/blob/gh-pages/intellij-java-google-style.xml
+[2]: https://hub.docker.com/u/subluminalthegame/
+[3]: subluminal.tech:1790
+[4]: staging.subluminal.tech:1790
+[5]: dev.subluminal.tech:1790
+[6]: https://en.wikipedia.org/w/index.php?title=Code_coverage&oldid=831669504
+ 
