@@ -43,6 +43,7 @@ This project uses a variety of external libraries. The following list is divided
 
 ## 2.1 Logging
 We wanted a small logging library that could write to console and a file. Tinylog allows us to do that with an extremely small footprint. It support 5 commons log levels and configuration at runtime.
+
 | Name             | Version | Pros                                                                  | Cons                                                             |
 |:-----------------|:--------|:----------------------------------------------------------------------|:-----------------------------------------------------------------|
 | [**tinylog**][8] | >=1.3.4 | easy to use (static class), console- and file writer, no dependencies | no support for tags                                              |
@@ -52,6 +53,7 @@ We wanted a small logging library that could write to console and a file. Tinylo
 
 ## 2.2 Command line parsing
 Initially we parsed the command line argument as strings by hand. The nice part about picocli is, we can annotate any field in the main class and it will become a command line parameter or option. This is very handy for quickly added new ones. As a bonus, the "--help" command is generated automatically with the provided field description.
+
 | Name             | Version         | Pros                                                                        | Cons                                                                                        |
 |:-----------------|:----------------|:----------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------|
 | [args4j][15]     | -               | Relatively simple to setup, html doc output                                 | Developed by individual, last release more than two years ago, no multiple name for options |
@@ -65,6 +67,7 @@ Usage: client/server settings, highscore, reconnect.
 Settings: Using a textfile based configuration to overwrite default values (no need for recompiling).
 Highscore: Save server highscores in a file, read it on server start.
 Reconnect: When connecting to a server, write userID and server ip in a textfile in a temporary location. If game crashes file will still be there and client can reconnect automatically. On normal shutdown, file will be deleted.
+
 | Name                           | Version | Pros                                  | Cons                                             |
 |:-------------------------------|:--------|:--------------------------------------|:-------------------------------------------------|
 | [**java.util.Properties**][18] | -       | Built in, key/value store, plain text | Can be slow for large amounts of key/value pairs |
@@ -74,6 +77,7 @@ Reconnect: When connecting to a server, write userID and server ip in a textfile
 
 ## 2.4 Unit tests
 Unit tests are part of our quality assurance concept. JUnit allows us to test all our core components for integrity and make sure the application runs stable.
+
 | Name              | Version | Pros                                                              | Cons                                                     |
 |:------------------|:--------|:------------------------------------------------------------------|:---------------------------------------------------------|
 | [**junit**][19]   | =4.12   | Widely used, big community, required/recommended by tutors        | has dependency on                                        |
@@ -82,6 +86,8 @@ Unit tests are part of our quality assurance concept. JUnit allows us to test al
 | [Arquillan][25]   | -       | No contender, junit is a project requirement                      |                                                          |
 
 ## 2.5 Benchmark
+//FOR FUTURE USE
+
 | Name            | Version     | Pros                                                                                                   | Cons                                                                     |
 |:----------------|:------------|:-------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------|
 | [caliper][21]   | =1.0-beta-2 | Recommended by Research Assistant, developed by Google, simple annotation of function to get benchmark |                                                                          |
