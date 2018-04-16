@@ -11,6 +11,7 @@ public class LoginRes implements SONRepresentable {
 
   public static final String USERNAME_KEY = "username";
   public static final String USER_ID_KEY = "userID";
+
   private String username;
   private String userID;
 

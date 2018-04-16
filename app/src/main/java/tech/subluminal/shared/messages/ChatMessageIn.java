@@ -10,9 +10,9 @@ import tech.subluminal.shared.son.SONRepresentable;
  */
 public class ChatMessageIn implements SONRepresentable {
 
-  public static final String MESSAGE_KEY = "message";
-  public static final String USERNAME_KEY = "username";
-  public static final String CHANNEL_KEY = "channel";
+  private static final String MESSAGE_KEY = "message";
+  private static final String USERNAME_KEY = "username";
+  private static final String CHANNEL_KEY = "channel";
   private static final String CLASS_NAME = ChatMessageIn.class.getSimpleName();
   private String message;
   private String username;
@@ -85,6 +85,9 @@ public class ChatMessageIn implements SONRepresentable {
     return channel;
   }
 
+  /**
+   * @return the SON representation of this object.
+   */
   @Override
   public SON asSON() {
     return new SON()

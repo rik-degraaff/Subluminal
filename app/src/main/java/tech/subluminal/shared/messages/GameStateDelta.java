@@ -16,12 +16,12 @@ import tech.subluminal.shared.stores.records.game.Star;
  */
 public class GameStateDelta implements SONRepresentable {
 
-  public static final String PLAYERS_KEY = "players";
-  public static final String STARS_KEY = "stars";
-  public static final String REMOVED_PLAYERS_KEY = "removedPlayers";
-  public static final String REMOVED_FLEETS_KEY = "removedFleets";
-  public static final String KEY = "key";
-  public static final String VALUE = "value";
+  private static final String PLAYERS_KEY = "players";
+  private static final String STARS_KEY = "stars";
+  private static final String REMOVED_PLAYERS_KEY = "removedPlayers";
+  private static final String REMOVED_FLEETS_KEY = "removedFleets";
+  private static final String KEY = "key";
+  private static final String VALUE = "value";
   private static final String CLASS_NAME = GameStateDelta.class.getSimpleName();
   private List<Player> players = new LinkedList<>();
   private List<Star> stars = new LinkedList<>();

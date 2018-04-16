@@ -7,6 +7,9 @@ import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.stores.records.LobbySettings;
 import tech.subluminal.shared.stores.records.SlimLobby;
 
+/**
+ * Represents a lobby update result message.
+ */
 public class LobbyUpdateReq implements SONRepresentable {
 
   private static final String CLASS_NAME = LobbyUpdateReq.class.getSimpleName();
@@ -14,19 +17,34 @@ public class LobbyUpdateReq implements SONRepresentable {
 
   private LobbySettings settings;
 
+  /**
+   * Creates a new LobbyUpdateReq with the LobbySettings to be updated.
+   *
+   * @param settings the {@link LobbySettings} to be updated.
+   */
   public LobbyUpdateReq(LobbySettings settings) {
     this.settings = settings;
   }
 
+  /**
+   * @return the {@link LobbySettings} to be updated.
+   */
   public LobbySettings getSettings() {
     return settings;
   }
 
-  public static LobbyUpdateReq fromSON(SON son) throws SONConversionError{
-     SON settings = son.getObject(SETTINGS_KEY)
+  /**
+   * Creates and returns a new LobbyUpdateReq from its SON representation.
+   *
+   * @param son the SON representation of a LobbyUpdateReq.
+   * @return a new LobbyUpdateReq, converted from its SON representation.
+   * @throws SONConversionError if the conversion fails.
+   */
+  public static LobbyUpdateReq fromSON(SON son) throws SONConversionError {
+    SON settings = son.getObject(SETTINGS_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, SETTINGS_KEY));
 
-     return new LobbyUpdateReq(LobbySettings.fromSON(settings));
+    return new LobbyUpdateReq(LobbySettings.fromSON(settings));
   }
 
   /**
