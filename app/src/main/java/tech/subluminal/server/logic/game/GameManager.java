@@ -80,7 +80,7 @@ public class GameManager implements GameStarter {
       }
 
       @Override
-      public void tick(long elapsedTime) {
+      public void tick(double elapsedTime) {
         gameStore.games()
             .getByID(lobbyID)
             .ifPresent(sync -> sync.consume(gameState -> gameTick(gameState, elapsedTime)));
@@ -169,7 +169,7 @@ public class GameManager implements GameStarter {
     return playerDelta;
   }
 
-  private void gameTick(GameState gameState, long elapsedTime) {
+  private void gameTick(GameState gameState, double elapsedTime) {
     final Map<String, Star> stars = gameState.getStars()
         .entrySet()
         .stream()

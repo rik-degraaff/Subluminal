@@ -17,6 +17,7 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -27,12 +28,13 @@ import javafx.util.Duration;
 
 public class MotherShipComponent extends Group {
 
-  private final ObjectProperty<Color> color = new SimpleObjectProperty<Color>();
+  private final ObjectProperty<Color> color = new SimpleObjectProperty<>();
 
   private final BooleanProperty isRotating = new SimpleBooleanProperty();
   private final int fromCenter = 30;
   private final StringProperty ownerID = new SimpleStringProperty();
-  private final ListProperty<String> targetIDs = new SimpleListProperty<String>();
+  private final ObservableList<String>  targetIDs = FXCollections.observableArrayList();
+  private final ListProperty<String> targetsWrapper = new SimpleListProperty<>(targetIDs);
 
   private final DoubleProperty x = new SimpleDoubleProperty();
   private final DoubleProperty y = new SimpleDoubleProperty();
@@ -64,7 +66,7 @@ public class MotherShipComponent extends Group {
 
     this.setOwnerID(playerId);
 
-    setTargetIDs(targetIDs);
+    setTargetsWrapper(targetIDs);
 
 
 
@@ -87,7 +89,7 @@ public class MotherShipComponent extends Group {
 
 
     Platform.runLater(() -> {
-      targetIDsProperty().addListener((observable, oldValue, newValue) -> {
+      targetsWrapperProperty().addListener((observable, oldValue, newValue) -> {
         if (!oldValue.isEmpty() && newValue.isEmpty()) {
           setIsRotating(true);
         } else if (oldValue.isEmpty() && !newValue.isEmpty()) {
@@ -112,16 +114,17 @@ public class MotherShipComponent extends Group {
     this.getChildren().add(group);
   }
 
-  public ObservableList<String> getTargetIDs() {
-    return targetIDs.get();
+  public ObservableList<String> getTargetsWrapper() {
+    return targetsWrapper.get();
   }
 
-  public ListProperty<String> targetIDsProperty() {
-    return targetIDs;
+  public ListProperty<String> targetsWrapperProperty() {
+    return targetsWrapper;
   }
 
-  public void setTargetIDs(List<String> targetIDs) {
-    targetIDs.forEach(i -> this.targetIDs.add(i));
+  public void setTargetsWrapper(List<String> targetIDs) {
+    this.targetIDs.clear();
+    this.targetIDs.addAll(targetIDs);
   }
 
   public double getX() {

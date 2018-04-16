@@ -22,6 +22,22 @@ public class Star extends tech.subluminal.shared.stores.records.game.Star implem
     this.nextShipgen = nextShipgen;
   }
 
+  public double getDematRate() {
+    return dematRate;
+  }
+
+  public double getNextDemat() {
+    return nextDemat;
+  }
+
+  public double getGenerationRate() {
+    return generationRate;
+  }
+
+  public double getNextShipgen() {
+    return nextShipgen;
+  }
+
   /**
    * Advances time for this star, calculating when ship generation and dematerialiZation take
    * place.

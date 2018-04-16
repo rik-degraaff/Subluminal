@@ -2,6 +2,7 @@ package tech.subluminal.server.logic.game;
 
 import static tech.subluminal.shared.util.function.FunctionalUtils.ifPresent;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import org.pmw.tinylog.Logger;
@@ -52,7 +54,7 @@ public class IntermediateGameState {
   }
 
   public void advance() {
-    stars.keySet().forEach(this::colonisationTick);
+    stars.keySet().forEach(starID -> colonisationTick(starID, deltaTime));
 
     stars.replaceAll((starID, star) ->
         star.advancedBy(deltaTime,
@@ -110,9 +112,14 @@ public class IntermediateGameState {
 
     double timeToArrive = ship.getTimeToReach(star.getCoordinates());
     Logger.debug("TIME TO ARRIVE: " + timeToArrive);
+    Logger.debug("DELTA TIME TO ARIVE: " + deltaTimeLeft);
     if (deltaTimeLeft < timeToArrive) {
-      Logger.debug("old x: " + ship.getCoordinates().getX() + " old y: " + ship.getCoordinates().getY());
-      Logger.debug("new x: " + ship.getPositionMovingTowards(star.getCoordinates(), deltaTimeLeft).getX() + " new y: " + ship.getPositionMovingTowards(star.getCoordinates(), deltaTimeLeft).getY());
+      Logger.debug(
+          "old x: " + ship.getCoordinates().getX() + " old y: " + ship.getCoordinates().getY());
+      Logger.debug(
+          "new x: " + ship.getPositionMovingTowards(star.getCoordinates(), deltaTimeLeft).getX()
+              + " new y: " + ship.getPositionMovingTowards(star.getCoordinates(), deltaTimeLeft)
+              .getY());
       Ship newShip = new Ship(
           ship.getPositionMovingTowards(star.getCoordinates(), deltaTimeLeft), shipID,
           ship.getTargetIDs(), ship.getEndTarget(), ship.getSpeed());
@@ -145,8 +152,30 @@ public class IntermediateGameState {
     // TODO: implement this
   }
 
-  private void colonisationTick(String starID) {
-    // TODO: implement this
+  private void colonisationTick(String starID, double deltaTime) {
+    List<String> highestID = new ArrayList<>();
+    AtomicInteger highest = new AtomicInteger(0);
+    fleetsOnStars.forEach((playerID, stars) -> {
+      int score = stars.get(starID).map(Fleet::getNumberOfShips).orElse(0)
+          + motherShipsOnStars.get(playerID).get(starID).map(s -> 2).orElse(0);
+
+      if (score > highest.get()) {
+        highest.set(score);
+        highestID.set(0, playerID);
+      }
+    });
+
+    if (highestID.size() == 1) {
+      String winner = highestID.get(0);
+      Star star = stars.get(starID);
+      double diff = winner.equals(star.getOwnerID())
+          ? highest.get() * deltaTime
+          : -highest.get() * deltaTime;
+
+      stars.put(starID, new Star(winner, Math.max(Math.min(star.getPossession() + diff, 1.0), 0.0),
+          star.getCoordinates(), starID, star.isGenerating(), star.getJump(), star.getDematRate(),
+          star.getNextDemat(), star.getGenerationRate(), star.getNextShipgen()));
+    }
   }
 
   private void dematerializeTick(String starID) {

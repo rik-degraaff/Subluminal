@@ -135,7 +135,6 @@ public class GameController implements Initializable, GamePresenter {
       pressStore[0] = star;
       pressStore[1] = null;
     }
-    System.out.println(pressStore[0].getName());
     mouseEvent.consume();
   }
 
@@ -267,7 +266,7 @@ public class GameController implements Initializable, GamePresenter {
         if (p.getMotherShip().getID().equals(s.getId())) {
           s.setLayoutX(mothership.getCoordinates().getX());
           s.setLayoutY(mothership.getCoordinates().getY());
-          s.setTargetIDs(mothership.getTargetIDs());
+          s.setTargetsWrapper(mothership.getTargetIDs());
         }
       });
     });
@@ -373,7 +372,10 @@ public class GameController implements Initializable, GamePresenter {
               shipComponent.setY(pair.getValue().getCoordinates().getY());
             }
 
-            shipComponent.setTargetIDs(pair.getValue().getTargetIDs());
+            if(shipComponent.getTargetsWrapper().size() != pair.getValue().getTargetIDs().size()){
+              shipComponent.setTargetsWrapper(pair.getValue().getTargetIDs());
+            }
+
             return shipComponent;
           }
       );

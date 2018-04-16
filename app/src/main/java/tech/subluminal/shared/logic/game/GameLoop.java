@@ -21,7 +21,7 @@ public class GameLoop {
       long currentTime = System.currentTimeMillis();
       long elapsedTime = currentTime - lastTime;
       lastTime = currentTime;
-      delegate.tick(elapsedTime);
+      delegate.tick(elapsedTime / 1000.0);
       delegate.afterTick();
       try {
         Thread.sleep(
@@ -48,7 +48,7 @@ public class GameLoop {
      *
      * @param elapsedTime the time that passed since the last call of the tick method.
      */
-    void tick(long elapsedTime);
+    void tick(double elapsedTime);
 
     /**
      * Is used for the game-updating tasks that are not time-dependant and need to be done after the
