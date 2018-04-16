@@ -1,7 +1,5 @@
 package tech.subluminal.shared.logic.game;
 
-import org.pmw.tinylog.Logger;
-
 /**
  * Represents the repetitive steps that have to be done to update the game.
  */
@@ -26,7 +24,6 @@ public class GameLoop {
       delegate.tick(elapsedTime);
       delegate.afterTick();
       try {
-        Logger.debug("SLEEEEEEEEEEEEEEP: " + (msPerIteration - (System.currentTimeMillis() - timeBeforeBeforeTick)));
         Thread.sleep(
             Math.max(0, msPerIteration - (System.currentTimeMillis() - timeBeforeBeforeTick)));
       } catch (InterruptedException e) {

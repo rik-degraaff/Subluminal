@@ -28,11 +28,13 @@ public class IdentifiableCollection<E extends Identifiable> implements
     obsMap.addListener((MapChangeListener<String, Synchronized<E>>) change -> {
       String key = change.getKey();
       ThreadUtils.runSafly(() -> {
-        if (change.wasRemoved()) {
-          observableList.remove(key);
-        }
-        if (change.wasAdded()) {
-          observableList.add(key);
+        synchronized (observableList) {
+          if (change.wasRemoved()) {
+            observableList.remove(key);
+          }
+          if (change.wasAdded()) {
+            observableList.add(key);
+          }
         }
       });
     });
@@ -44,7 +46,11 @@ public class IdentifiableCollection<E extends Identifiable> implements
    */
   @Override
   public ObservableList<E> observableList() {
-    return new MapperList<>(observableList, key -> getByID(key).get().use(e -> e));
+    return new MapperList<>(observableList, key -> {
+      synchronized (observableList) {
+        return getByID(key).get().use(e -> e);
+      }
+    });
   }
 
   /**

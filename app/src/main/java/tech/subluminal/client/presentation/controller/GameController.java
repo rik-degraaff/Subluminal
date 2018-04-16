@@ -66,6 +66,7 @@ public class GameController implements Initializable, GamePresenter {
 
   private ListView<StarComponent> dummyStarList = new ListView<>();
   private Graph<String> graph;
+  private List<String> path;
 
 
   @Override
@@ -98,7 +99,9 @@ public class GameController implements Initializable, GamePresenter {
       pressStore[0] = null;
       pressStore[1] = null;
       removeJumpPath();
-      jump.clear();
+      if (jump != null) {
+        jump.clear();
+      }
     });
   }
 
@@ -110,7 +113,10 @@ public class GameController implements Initializable, GamePresenter {
       } else {
         Logger.debug("creating JumpPath");
         pressStore[1] = star;
-        List<String> path = graph
+        if (path != null) {
+          path.clear();
+        }
+        this.path = graph
             .findShortestPath(pressStore[0].getStarID(), pressStore[1].getStarID());
         if (!path.isEmpty()) {
           removeJumpPath();
@@ -119,7 +125,9 @@ public class GameController implements Initializable, GamePresenter {
           pressStore[0] = null;
           pressStore[1] = null;
           removeJumpPath();
-          jump.clear();
+          if(!jump.isEmpty()){
+            jump.clear();
+          }
         }
 
       }
@@ -156,11 +164,21 @@ public class GameController implements Initializable, GamePresenter {
   }
 
   public void createJumpBox(StarComponent start) {
-    box = new JumpBox(start.layoutXProperty(), start.layoutYProperty());
-
-    box.shipToSendProperty().addListener((observable, oldValue, newValue) -> {
-      System.out.println("Ships send" + newValue);
-    });
+    box = new JumpBox(start.layoutXProperty(), start.layoutYProperty(),
+        amount -> {
+          gameDelegate.sendShips(path, amount);
+          removeJumpPath();
+          if(!jump.isEmpty()){
+            jump.clear();
+          }
+        },
+        () -> {
+          gameDelegate.sendMothership(path);
+          removeJumpPath();
+          if(!jump.isEmpty()){
+            jump.clear();
+          }
+        });
 
     map.getChildren().add(box);
   }
@@ -290,9 +308,9 @@ public class GameController implements Initializable, GamePresenter {
   public void update() {
     Platform.runLater(() -> {
       dummyStarList.refresh();
-      dummyStarList.getItems().forEach(starComponent -> Logger.debug("star: " + starComponent));
+      dummyStarList.getItems().forEach(starComponent -> Logger.trace("star: " + starComponent));
       dummyShipList.refresh();
-      dummyShipList.getItems().forEach(shipComponent -> Logger.debug("ship: " + shipComponent));
+      dummyShipList.getItems().forEach(shipComponent -> Logger.trace("ship: " + shipComponent));
 
       if (graph != null) {
         return;

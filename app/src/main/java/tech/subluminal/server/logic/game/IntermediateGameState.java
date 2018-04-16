@@ -14,6 +14,7 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.server.stores.records.Star;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Fleet;
@@ -77,7 +78,7 @@ public class IntermediateGameState {
     Star star = stars.get(fleet.getTargetIDs().get(0));
 
     double timeToArrive = fleet.getTimeToReach(star.getCoordinates());
-    if (deltaTimeLeft > timeToArrive) {
+    if (deltaTimeLeft < timeToArrive) {
       Fleet newFleet = new Fleet(
           fleet.getPositionMovingTowards(star.getCoordinates(), deltaTimeLeft),
           fleet.getNumberOfShips(), fleetID, fleet.getTargetIDs(), fleet.getEndTarget(),
@@ -108,7 +109,10 @@ public class IntermediateGameState {
     Star star = stars.get(ship.getTargetIDs().get(0));
 
     double timeToArrive = ship.getTimeToReach(star.getCoordinates());
-    if (deltaTimeLeft > timeToArrive) {
+    Logger.debug("TIME TO ARRIVE: " + timeToArrive);
+    if (deltaTimeLeft < timeToArrive) {
+      Logger.debug("old x: " + ship.getCoordinates().getX() + " old y: " + ship.getCoordinates().getY());
+      Logger.debug("new x: " + ship.getPositionMovingTowards(star.getCoordinates(), deltaTimeLeft).getX() + " new y: " + ship.getPositionMovingTowards(star.getCoordinates(), deltaTimeLeft).getY());
       Ship newShip = new Ship(
           ship.getPositionMovingTowards(star.getCoordinates(), deltaTimeLeft), shipID,
           ship.getTargetIDs(), ship.getEndTarget(), ship.getSpeed());

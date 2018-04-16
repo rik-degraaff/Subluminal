@@ -31,8 +31,8 @@ public interface GamePresenter {
 
   interface Delegate {
 
-    public void sendShips(List<Star> stars, int amount);
+    public void sendShips(List<String> stars, int amount);
 
-    public void sendMothership(List<Star> star);
+    public void sendMothership(List<String> star);
   }
 }

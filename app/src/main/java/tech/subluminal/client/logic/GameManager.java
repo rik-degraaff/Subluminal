@@ -2,7 +2,6 @@ package tech.subluminal.client.logic;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.GamePresenter;
 import tech.subluminal.client.stores.GameStore;
@@ -55,7 +54,6 @@ public class GameManager implements GamePresenter.Delegate {
       removedFleets.forEach(gameStore.fleets()::removeByID);
     });
 
-    Logger.debug("Delta: " + delta.asSON().asString());
     // TODO: removed players
 
     delta.getStars().forEach(star -> {
@@ -70,14 +68,13 @@ public class GameManager implements GamePresenter.Delegate {
   }
 
   @Override
-  public void sendShips(List<Star> stars, int amount) {
-    connection.sendMessage(new FleetMoveReq(stars.get(0).getID(), amount,
-        stars.stream().map(Star::getID).collect(Collectors.toList())));
+  public void sendShips(List<String> stars, int amount) {
+    connection.sendMessage(new FleetMoveReq(stars.get(0), amount, stars));
   }
 
   @Override
-  public void sendMothership(List<Star> star) {
-    connection.sendMessage(
-        new MotherShipMoveReq(star.stream().map(Star::getID).collect(Collectors.toList())));
+  public void sendMothership(List<String> stars) {
+    connection.sendMessage(new MotherShipMoveReq(stars));
+    Logger.debug("YES I GOT CALLED");
   }
 }

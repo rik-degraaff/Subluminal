@@ -23,6 +23,7 @@ import tech.subluminal.shared.messages.GameStateDelta;
 import tech.subluminal.shared.messages.MotherShipMoveReq;
 import tech.subluminal.shared.messages.MoveReq;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.util.IdUtils;
@@ -53,14 +54,21 @@ public class GameManager implements GameStarter {
   }
 
   private void onMoveRequest(MoveReq req, String id) {
-    String gameID = ""; //TODO: get lobbyID from the lobby store and abort if the user is not one
-    gameStore.moveRequests().getByID(gameID)
-        .ifPresent(sync -> sync.consume(list -> list.add(id, req)));
+    Optional<String> optGameID = lobbyStore.lobbies()
+        .getLobbiesWithUser(id)
+        .use(l -> l.stream().map(s -> s.use(Lobby::getID)))
+        .findFirst();
+    Logger.debug("MOVE REQUESTS: " + gameStore.moveRequests().getByID(optGameID.get()));
+    optGameID.ifPresent(gameID -> {
+      gameStore.moveRequests().getByID(gameID)
+          .ifPresent(sync -> sync.consume(list -> list.add(id, req)));
+    });
   }
 
   @Override
   public void startGame(String lobbyID, Set<String> playerIDs) {
     gameStore.games().add(MapGeneration.getNewGameStateForPlayers(playerIDs, lobbyID));
+    gameStore.moveRequests().add(new MoveRequests(lobbyID));
 
     GameLoop gameLoop = new GameLoop(TPS, new GameLoop.Delegate() {
 
@@ -98,7 +106,6 @@ public class GameManager implements GameStarter {
           .get(playerID)
           .getMotherShip()
           .getCurrent();
-      Logger.debug(motherShipEntry.getState());
       if (motherShipEntry.isDestroyed()) {
         delta.addRemovedPlayer(playerID);
         //TODO: inform the player that they lost?
@@ -127,7 +134,6 @@ public class GameManager implements GameStarter {
           starHistory.getLatestForPlayer(playerID, motherShipEntry)
               .flatMap(Either::left)
               .ifPresent(delta::addStar));
-      Logger.debug(delta.asSON().asString());
 
       distributor.sendMessage(delta, playerID);
     });
@@ -205,16 +211,14 @@ public class GameManager implements GameStarter {
 
     intermediateGameState.getFleetsUnderway().forEach((playerID, fleets) -> {
       final Player player = gameState.getPlayers().get(playerID);
-      Logger.debug(player.getFleets());
       fleets.forEach((fleetID, fleet) -> player.updateFleet(fleet));
     });
 
     intermediateGameState.getMotherShipsOnStars().forEach((starID, map) -> {
       map.forEach((playerID, optShip) -> {
         final Player player = gameState.getPlayers().get(playerID);
-        Logger.debug("Player: " + player);
         optShip.ifPresent(
-                ship -> player.getMotherShip().add(new GameHistoryEntry<>(ship)));
+            ship -> player.getMotherShip().add(new GameHistoryEntry<>(ship)));
       });
     });
 
@@ -254,7 +258,7 @@ public class GameManager implements GameStarter {
 
       final GameHistoryEntry<Ship> entry = new GameHistoryEntry<>(
           new Ship(motherShip.getCoordinates(), motherShip.getID(), req.getTargets(),
-              req.getTargets().get(req.getTargets().size() - 1) ,motherShip.getSpeed()));
+              req.getTargets().get(req.getTargets().size() - 1), motherShip.getSpeed()));
 
       // write the updated mother ship directly into the game store.
       player.getMotherShip().add(entry);
@@ -275,27 +279,22 @@ public class GameManager implements GameStarter {
 
   private boolean isValidMove(GameState gameState, String origin, List<String> targets) {
     GameHistory<Star> starHistory = gameState.getStars().get(origin);
-    if (starHistory == null) {
-      return false;
-    }
-
     return isValidMove(gameState, starHistory.getCurrent().getState().getCoordinates(), targets);
   }
 
   private boolean isValidMove(GameState gameState, Coordinates origin, List<String> targets) {
-    if (targets.isEmpty()) {
-      return false;
-    }
-
+    Logger.debug("IS VALID MOVE!!!!!???????");
     Coordinates lastPos = origin;
     for (String target : targets) {
       GameHistory<Star> starHistory = gameState.getStars().get(target);
       if (starHistory == null) {
+        Logger.debug("STARHISTORY IS NULL");
         return false;
       }
 
       Star star = starHistory.getCurrent().getState();
-      if (gameState.getJump() > star.getCoordinates().getDistanceFrom(lastPos)) {
+      if (gameState.getJump() < star.getCoordinates().getDistanceFrom(lastPos)) {
+        Logger.debug("JUMP TOO FAR");
         return false;
       }
 
