@@ -2,7 +2,6 @@ package tech.subluminal.server.logic.game;
 
 import static tech.subluminal.shared.util.function.FunctionalUtils.ifPresent;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -13,7 +12,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import org.pmw.tinylog.Logger;
@@ -35,12 +33,14 @@ public class IntermediateGameState {
   private final Map<String, Map<String, Fleet>> fleetsUnderway;
   private final Map<String, Optional<Ship>> motherShipsUnderway;
   private final Map<String, Star> stars;
+  private final Set<String> players;
   private final PriorityQueue<PriorityRunnable> tasks = new PriorityQueue<>(
       Comparator.reverseOrder());
 
   public IntermediateGameState(double deltaTime, Map<String, Star> stars, Set<String> players) {
     this.deltaTime = deltaTime;
     this.stars = stars;
+    this.players = players;
 
     fleetsOnStars = createMapWithKeys(stars.keySet(),
         () -> createMapWithKeys(players, Optional::empty));
@@ -153,26 +153,27 @@ public class IntermediateGameState {
   }
 
   private void colonisationTick(String starID, double deltaTime) {
-    List<String> highestID = new ArrayList<>();
-    AtomicInteger highest = new AtomicInteger(0);
-    fleetsOnStars.forEach((playerID, stars) -> {
-      int score = stars.get(starID).map(Fleet::getNumberOfShips).orElse(0)
-          + motherShipsOnStars.get(playerID).get(starID).map(s -> 2).orElse(0);
-
-      if (score > highest.get()) {
-        highest.set(score);
-        highestID.set(0, playerID);
+    String highestID = null;
+    int highest = 0;
+    for (String playerID : players) {
+      int score = fleetsOnStars.get(starID).get(playerID).map(Fleet::getNumberOfShips).orElse(0)
+          + motherShipsOnStars.get(starID).get(playerID).map(s -> 2).orElse(0);
+      if (score > highest) {
+        highest = score;
+        highestID = playerID;
       }
+    }
+    fleetsOnStars.get(starID).forEach((fleetID, fleet) -> {
+
     });
 
-    if (highestID.size() == 1) {
-      String winner = highestID.get(0);
+    if (highestID != null) {
       Star star = stars.get(starID);
-      double diff = winner.equals(star.getOwnerID())
-          ? highest.get() * deltaTime
-          : -highest.get() * deltaTime;
+      double diff = highestID.equals(star.getOwnerID())
+          ? highest * deltaTime * 0.1
+          : -highest * deltaTime * 0.1;
 
-      stars.put(starID, new Star(winner, Math.max(Math.min(star.getPossession() + diff, 1.0), 0.0),
+      stars.put(starID, new Star(highestID, Math.max(Math.min(star.getPossession() + diff, 1.0), 0.0),
           star.getCoordinates(), starID, star.isGenerating(), star.getJump(), star.getDematRate(),
           star.getNextDemat(), star.getGenerationRate(), star.getNextShipgen()));
     }

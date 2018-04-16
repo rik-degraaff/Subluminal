@@ -14,6 +14,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.logic.Graph;
 import tech.subluminal.client.presentation.GamePresenter;
@@ -23,6 +24,7 @@ import tech.subluminal.client.presentation.customElements.JumpBox;
 import tech.subluminal.client.presentation.customElements.MotherShipComponent;
 import tech.subluminal.client.presentation.customElements.StarComponent;
 import tech.subluminal.client.stores.GameStore;
+import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.client.stores.records.game.OwnerPair;
 import tech.subluminal.client.stores.records.game.Player;
 import tech.subluminal.shared.stores.records.game.Ship;
@@ -44,6 +46,8 @@ public class GameController implements Initializable, GamePresenter {
   private Collection<Jump> jump = new LinkedList<>();
 
   private JumpBox box;
+
+  private String playerID;
 
   //private List<StarComponent> starList = new LinkedList<StarComponent>();//TODO: remove this
 
@@ -67,6 +71,8 @@ public class GameController implements Initializable, GamePresenter {
   private ListView<StarComponent> dummyStarList = new ListView<>();
   private Graph<String> graph;
   private List<String> path;
+  private UserStore userStore;
+
 
 
   @Override
@@ -211,6 +217,14 @@ public class GameController implements Initializable, GamePresenter {
 
   }
 
+  public String getPlayerID() {
+    return playerID;
+  }
+
+  public void setPlayerID(String playerID) {
+    this.playerID = playerID;
+  }
+
   @Override
   public void updateFleet(List<Player> players) {
     players.stream().forEach(p -> {
@@ -326,6 +340,9 @@ public class GameController implements Initializable, GamePresenter {
     this.gameStore = gameStore;
 
     Platform.runLater(() -> {
+
+      //this.playerID = userStore.currentUser().get().use(opt -> opt.get().getID());
+
       MapperList<StarComponent, Star> starComponents = new MapperList<>(
           gameStore.stars().observableList(),
           star -> {
@@ -334,6 +351,11 @@ public class GameController implements Initializable, GamePresenter {
                   star.getPossession(),
                   star.getCoordinates(),
                   star.getID());
+              /*if(star.getOwnerID().equals(playerID)){
+                starComponent.setColor(Color.RED);
+              }else{*/
+                starComponent.setColor(Color.BLUE);
+              //}
               starComponent.setOnMouseClicked(e -> starClicked(starComponent, e));
               stars.put(star.getID(), starComponent);
               starMap.put(star.getID(), star);
@@ -350,6 +372,7 @@ public class GameController implements Initializable, GamePresenter {
       this.dummyStarList.setItems(starComponents);
 
       MapperList<MotherShipComponent, OwnerPair<Ship>> shipComponents = new MapperList<>(
+
           gameStore.motherShips().observableList(),
           pair -> {
             if (ships.get(pair.getID()) == null) {
@@ -357,6 +380,12 @@ public class GameController implements Initializable, GamePresenter {
                   pair.getValue().getCoordinates().getX(), pair.getValue().getCoordinates().getY(),
                   pair.getKey(), pair.getValue().getTargetIDs());
               ships.put(pair.getID(), shipComponent);
+              if(pair.getKey().equals(playerID)){
+                shipComponent.setColor(Color.RED);
+              }else{
+                shipComponent.setColor(Color.BLUE);
+              }
+
               map.getChildren().add(shipComponent);
               return shipComponent;
 
@@ -383,5 +412,9 @@ public class GameController implements Initializable, GamePresenter {
       this.dummyShipList.setItems(shipComponents);
     });
 
+  }
+
+  public void setUserStore(UserStore userStore) {
+    this.userStore = userStore;
   }
 }

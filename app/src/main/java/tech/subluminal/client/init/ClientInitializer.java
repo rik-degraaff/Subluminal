@@ -80,6 +80,7 @@ public class ClientInitializer extends Application {
     GameStore gameStore = new InMemoryGameStore();
     GameController gamePresenter = controller.getGameController();
     GameManager gameManager = new GameManager(gameStore, connection, gamePresenter);
+    gamePresenter.setUserStore(userStore);
     gamePresenter.setGameStore(gameStore);
 
 

@@ -70,14 +70,13 @@ public class MotherShipComponent extends Group {
 
 
 
-
-
+    setColor(Color.GRAY);
     Polygon ship = new Polygon();
     ship.getPoints().addAll(new Double[]{
         -10.0, -10.0,
         10.0, 0.0,
         0.0, 10.0});
-    ship.setFill(Color.PINK);
+    ship.fillProperty().bind(colorProperty());
 
     group.getChildren().add(ship);
     group.setMouseTransparent(true);
