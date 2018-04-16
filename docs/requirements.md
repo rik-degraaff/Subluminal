@@ -5,10 +5,10 @@
 [1.3 Other](#13-other)  
 [**2.** Libraries](#2-libraries)  
 [2.1 Logging](#21-logging)  
-[2.2 Command line parsing](22-command-line-parsing)  
-[2.3 Settings store](23-settings-store)  
-[2.4 Unit tests](24-unit-test)  
-[2.5 Benchmark](25-benchmark)  
+[2.2 Command line parsing](#22-command-line-parsing)  
+[2.3 Settings store](#23-settings-store)  
+[2.4 Unit tests](#24-unit-test)  
+[2.5 Benchmark](#25-benchmark)  
 
 
 # 1. Software requirements
