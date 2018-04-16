@@ -2,6 +2,7 @@ package tech.subluminal.client.presentation.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -14,6 +15,7 @@ import tech.subluminal.client.presentation.customElements.LobbyUserComponent;
 import tech.subluminal.client.presentation.customElements.MenuComponent;
 import tech.subluminal.client.presentation.customElements.SettingsComponent;
 import tech.subluminal.client.presentation.customElements.WindowContainerComponent;
+import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.client.stores.UserStore;
 
 public class MainController implements Initializable {
@@ -62,10 +64,17 @@ public class MainController implements Initializable {
 
   private UserStore userStore;
 
+  private LobbyStore lobbyStore;
+
+  private GameController gameController;
+
   public LobbyComponent getLobby() {
     return lobby;
   }
 
+  public void setLobbyStore(LobbyStore lobbyStore) {
+    this.lobbyStore = lobbyStore;
+  }
 
   public void setUserStore(UserStore userStore) {
     this.userStore = userStore;
@@ -76,15 +85,15 @@ public class MainController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    background = new BackgroundComponent(2000);
+    background = new BackgroundComponent(200);
     spaceBackgroundDock.getChildren().add(background);
 
     menu = new MenuComponent(this);
-    lobbyList = new LobbyListComponent(this);
     settings = new SettingsComponent(this);
-    lobbyUser = new LobbyUserComponent(this);
-    lobby = new LobbyComponent(lobbyList, lobbyUser);
+    lobby = new LobbyComponent();
+
     game = new GameComponent(this);
+    gameController = game.getController();
 
     playArea.setMouseTransparent(true);
 
@@ -106,6 +115,10 @@ public class MainController implements Initializable {
 
   public void onWindowResizeHandle(int diffX, int diffY) {
     background.onWindowResize(diffX, diffY);
+  }
+
+  public void setLobby(LobbyComponent lobby) {
+    this.lobby = lobby;
   }
 
   public void onLobbyOpenHandle() {
@@ -134,10 +147,12 @@ public class MainController implements Initializable {
   }
 
   public void onMapOpenHandle() {
-    menuDock.getChildren().clear();
+    Platform.runLater(() -> {
+      menuDock.getChildren().clear();
 
-    playArea.setMouseTransparent(false);
-    playArea.getChildren().add(game);
+      playArea.setMouseTransparent(false);
+      playArea.getChildren().add(game);
+    });
   }
 
   public void onMapCloseHandle() {
@@ -157,4 +172,7 @@ public class MainController implements Initializable {
 
   }
 
+  public GameController getGameController() {
+    return gameController;
+  }
 }

@@ -48,7 +48,7 @@ public class GameHistory<E extends GameObject> extends MultiHistory<String, Game
           double timeDiff = (motherShip.getTime() - entry.getTime()) / 1000.0;
           return distance / timeDiff < lightSpeed;
         })
-        .map(e -> e.isDestroyed() ? new Left<E, Void>(e.getState()) : new Right<E, Void>(null))
+        .map(e -> !e.isDestroyed() ? new Left<E, Void>(e.getState()) : new Right<E, Void>(null))
         .map(e -> {
           last.put(playerID, e);
           return e;

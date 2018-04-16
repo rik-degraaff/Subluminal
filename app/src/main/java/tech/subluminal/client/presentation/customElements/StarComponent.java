@@ -23,13 +23,14 @@ import tech.subluminal.shared.stores.records.game.Coordinates;
 public class StarComponent extends Pane {
 
   public static final int BORDER_WIDTH = 3;
-  private final int sizeAll = 200;
+  private final int sizeAll = 60;
   private final DoubleProperty sizeProperty = new SimpleDoubleProperty();
   private final DoubleProperty xProperty = new SimpleDoubleProperty();
   private final DoubleProperty yProperty = new SimpleDoubleProperty();
   private final StringProperty starID = new SimpleStringProperty();
   private final DoubleProperty possession = new SimpleDoubleProperty();
   private final IntegerProperty ships = new SimpleIntegerProperty();
+  private final ObjectProperty color = new SimpleObjectProperty();
   //TODO let planet know that there are ships to move
 
 
@@ -42,7 +43,6 @@ public class StarComponent extends Pane {
   private final Group border;
 
   //private final ObjectProperty
-  private final ObjectProperty<Color> colorProperty = new SimpleObjectProperty<Color>();
 
   public StarComponent(String ownerID, double possession, Coordinates coordinates, String id) {
 
@@ -50,11 +50,12 @@ public class StarComponent extends Pane {
     setXProperty(coordinates.getX());
     setYProperty(coordinates.getY());
     setSizeProperty(0.2);
-    setColorProperty(Color.GRAY);
+    setColor(color);
     setStarID(id);
-    setOwnerIDProperty(ownerID);
+    setOwnerID(ownerID);
 
     setShips(0);
+    setColor(Color.GRAY);
 
     this.layoutXProperty().bind(Bindings
         .createDoubleBinding(
@@ -76,25 +77,25 @@ public class StarComponent extends Pane {
     this.name = "SUBBY";
 
     Circle star = new Circle();
-    star.fillProperty().bind(colorProperty);
-    star.setCenterY(sizeAll / 2);
-    star.setCenterX(sizeAll / 2);
+    star.setFill(Color.GRAY);
+    //star.setCenterY(sizeAll / 2);
+    //star.setCenterX(sizeAll / 2);
     star.radiusProperty().bind(Bindings.createDoubleBinding(
         () -> sizeProperty.doubleValue() * sizeAll, sizeProperty));
-    star.fillProperty().bind(colorProperty);
 
     Circle possessionCount = new Circle();
     possessionCount.setOpacity(0.7);
-    possessionCount.setFill(Color.RED);
-    possessionCount.setCenterX(sizeAll / 2);
-    possessionCount.setCenterY(sizeAll / 2);
+    possessionCount.setFill(Color.GRAY);
+    possessionCount.fillProperty().bind(colorProperty());
+    //possessionCount.setCenterX(sizeAll / 2);
+    //possessionCount.setCenterY(sizeAll / 2);
     possessionCount.radiusProperty().bind(Bindings.createDoubleBinding(() -> star.getRadius()* Math.pow(getPossession(),0.8), possessionProperty(), sizeProperty));
 
     Pane starGroup = new Pane();
     starGroup.setPrefWidth(sizeAll);
     starGroup.setPrefHeight(sizeAll);
-    starGroup.setTranslateX(-sizeAll / 2);
-    starGroup.setTranslateY(-sizeAll / 2);
+    //starGroup.setTranslateX(-sizeAll / 2);
+    //starGroup.setTranslateY(-sizeAll / 2);
 
     border = makeBorder();
     border.setVisible(false);
@@ -117,6 +118,18 @@ public class StarComponent extends Pane {
 
   }
 
+  public Object getColor() {
+    return color.get();
+  }
+
+  public ObjectProperty colorProperty() {
+    return color;
+  }
+
+  public void setColor(Object color) {
+    this.color.set(color);
+  }
+
   public String getStarIDProperty() {
     return starIDProperty.get();
   }
@@ -131,20 +144,6 @@ public class StarComponent extends Pane {
 
   public String getName() {
     return name;
-  }
-
-  public Color getColorProperty() {
-    return colorProperty.get();
-  }
-
-  public void setColorProperty(Color colorProperty) {
-    this.colorProperty.set(colorProperty);
-  }
-  //private final IntegerProperty[] shipAmpountsProperty = new SimpleIntegerProperty()[8];
-  //TODO: multiple Ships
-
-  public ObjectProperty<Color> colorPropertyProperty() {
-    return colorProperty;
   }
 
   public double getSizeProperty() {
@@ -187,7 +186,7 @@ public class StarComponent extends Pane {
     return ownerIDProperty.get();
   }
 
-  public void setOwnerIDProperty(String ownerIDProperty) {
+  public void setOwnerID(String ownerIDProperty) {
     this.ownerIDProperty.set(ownerIDProperty);
   }
 
@@ -239,8 +238,8 @@ public class StarComponent extends Pane {
         Rectangle focus = new Rectangle(BORDER_WIDTH, sizeAll / 5);
 
         focus.setFill(Color.RED);
-        focus.setX(x * (sizeAll - BORDER_WIDTH));
-        focus.setY(y * (sizeAll - sizeAll / 5));
+        focus.setX(x * (sizeAll - BORDER_WIDTH)- (sizeAll/2));
+        focus.setY(y * (sizeAll - sizeAll / 5) - (sizeAll/2));
         border.getChildren().add(focus);
       }
     }
@@ -249,8 +248,8 @@ public class StarComponent extends Pane {
         Rectangle focus = new Rectangle(sizeAll / 5, BORDER_WIDTH);
 
         focus.setFill(Color.RED);
-        focus.setX(x * (sizeAll - sizeAll / 5));
-        focus.setY(y * (sizeAll - BORDER_WIDTH));
+        focus.setX(x * (sizeAll - sizeAll / 5) - (sizeAll/2));
+        focus.setY(y * (sizeAll - BORDER_WIDTH) - (sizeAll/2));
         border.getChildren().add(focus);
       }
     }

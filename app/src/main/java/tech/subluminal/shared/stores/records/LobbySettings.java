@@ -20,7 +20,6 @@ public class LobbySettings implements SONRepresentable {
   private String adminID;
   private int minPlayers = 2;
   private int maxPlayers = 8;
-  private int playerCount = 0;
   //TODO: Make lobbies password protected
   //private boolean protected;
   //private String password;
@@ -34,13 +33,12 @@ public class LobbySettings implements SONRepresentable {
     this.adminID = adminID;
   }
 
-  public LobbySettings(String name, String adminID, int minPlayers, int maxPlayers, int playerCount,
+  public LobbySettings(String name, String adminID, int minPlayers, int maxPlayers,
       double gameSpeed, double mapSize) {
     this.name = name;
     this.adminID = adminID;
     this.minPlayers = minPlayers;
     this.maxPlayers = maxPlayers;
-    this.playerCount = playerCount;
     this.gameSpeed = gameSpeed;
     this.mapSize = mapSize;
   }
@@ -77,14 +75,6 @@ public class LobbySettings implements SONRepresentable {
     this.maxPlayers = maxPlayers;
   }
 
-  public int getPlayerCount() {
-    return playerCount;
-  }
-
-  public void setPlayerCount(int playerCount) {
-    this.playerCount = playerCount;
-  }
-
   public double getGameSpeed() {
     return gameSpeed;
   }
@@ -113,7 +103,6 @@ public class LobbySettings implements SONRepresentable {
         .put(getAdminID(), ADMIN_ID_KEY)
         .put(getMinPlayers(), MIN_PLAYERS_KEY)
         .put(getMaxPlayers(), MAX_PLAYERS_KEY)
-        .put(getPlayerCount(), PLAYER_COUNT_KEY)
         .put(getGameSpeed(), GAME_SPEED_KEY)
         .put(getMapSize(), MAP_SIZE_KEY);
   }
@@ -128,11 +117,9 @@ public class LobbySettings implements SONRepresentable {
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, MIN_PLAYERS_KEY)));
     settings.setMaxPlayers(son.getInt(MAX_PLAYERS_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, MAX_PLAYERS_KEY)));
-    settings.setPlayerCount(son.getInt(PLAYER_COUNT_KEY)
-        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, PLAYER_COUNT_KEY)));
-    settings.setGameSpeed(son.getInt(GAME_SPEED_KEY)
+    settings.setGameSpeed(son.getDouble(GAME_SPEED_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, GAME_SPEED_KEY)));
-    settings.setMapSize(son.getInt(MAP_SIZE_KEY)
+    settings.setMapSize(son.getDouble(MAP_SIZE_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, MAP_SIZE_KEY)));
     return settings;
   }

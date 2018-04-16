@@ -9,7 +9,7 @@ public class GameLoop {
   private Delegate delegate;
 
   public GameLoop(int tps, Delegate delegate) {
-    this.msPerIteration = 1 / tps;
+    this.msPerIteration = 1000 / tps;
     this.delegate = delegate;
   }
 
@@ -21,10 +21,11 @@ public class GameLoop {
       long currentTime = System.currentTimeMillis();
       long elapsedTime = currentTime - lastTime;
       lastTime = currentTime;
-      delegate.tick(elapsedTime);
+      delegate.tick(elapsedTime / 1000.0);
       delegate.afterTick();
       try {
-        Thread.sleep(msPerIteration - (System.currentTimeMillis() - timeBeforeBeforeTick));
+        Thread.sleep(
+            Math.max(0, msPerIteration - (System.currentTimeMillis() - timeBeforeBeforeTick)));
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
@@ -47,7 +48,7 @@ public class GameLoop {
      *
      * @param elapsedTime the time that passed since the last call of the tick method.
      */
-    void tick(long elapsedTime);
+    void tick(double elapsedTime);
 
     /**
      * Is used for the game-updating tasks that are not time-dependant and need to be done after the

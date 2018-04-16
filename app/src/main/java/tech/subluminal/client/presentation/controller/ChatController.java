@@ -68,7 +68,9 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   public void addMessageChat(String message, String username, Channel channel) {
     if (channel == Channel.WHISPER) {
       addMessageChat(username + "@you: " + message, channel);
-    } else {
+    } else if(channel == Channel.GAME){
+      addMessageChat(username + "@game: " + message, channel);
+    }else {
       addMessageChat(username + ": " + message, channel);
     }
   }
@@ -151,7 +153,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     } else if (channel.equals("game")) {
       //send @game
       chatDelegate.sendGameMessage(message);
-      addMessageChat("you: " + message, Channel.GAME);
+      addMessageChat("you@game: " + message, Channel.GAME);
       clearInput();
     } else {
       //send @player

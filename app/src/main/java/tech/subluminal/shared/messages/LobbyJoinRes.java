@@ -11,6 +11,7 @@ import tech.subluminal.shared.stores.records.Lobby;
  */
 public class LobbyJoinRes implements SONRepresentable {
 
+  private static final String CLASS_NAME = LobbyJoinRes.class.getSimpleName();
   private static final String LOBBY_KEY = "lobby";
   private Lobby lobby;
 
@@ -31,7 +32,9 @@ public class LobbyJoinRes implements SONRepresentable {
    * @throws SONConversionError when the conversion fails.
    */
   public static LobbyJoinRes fromSON(SON son) throws SONConversionError {
-    return new LobbyJoinRes(Lobby.fromSON(son));
+    SON lobby = son.getObject(LOBBY_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, LOBBY_KEY));
+    return new LobbyJoinRes(Lobby.fromSON(lobby));
   }
 
   /**

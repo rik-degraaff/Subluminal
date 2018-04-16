@@ -1,6 +1,6 @@
 package tech.subluminal.client.presentation.customElements;
 
-import javafx.beans.binding.Bindings;
+import java.util.function.Consumer;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -19,7 +19,7 @@ public class JumpBox extends Group {
   IntegerProperty shipToSend = new SimpleIntegerProperty();
   //IntegerProperty maxShips = new SimpleIntegerProperty();
 
-  public JumpBox(Property x, Property y) {
+  public JumpBox(Property x, Property y, Consumer<Integer> onSendFleet, Runnable onSendMotherShip) {
     this.layoutXProperty().bind(x);
     this.layoutYProperty().bind(y);
     //this.maxShips.bind(maxAmount);
@@ -39,22 +39,22 @@ public class JumpBox extends Group {
       }
     });
 
-    actual.setOnAction(event -> {
-      tryToSend(Integer.parseInt(actual.getText()));
-    });
-
     shipsAmount.getChildren().addAll(actual, max);
 
     Button send = new Button("Send Ships");
     send.setAlignment(Pos.CENTER);
 
     send.setOnMouseClicked(event -> {
-      String command = actual.getText();
-
+      int amount = Integer.parseInt(actual.getText());
+      onSendFleet.accept(amount);
     });
 
     Button sendMother = new Button("Send Mothership");
     sendMother.setAlignment(Pos.CENTER);
+
+    sendMother.setOnMouseClicked(event -> {
+      onSendMotherShip.run();
+    });
 
     box.getChildren().addAll(shipsAmount, send, sendMother);
 
