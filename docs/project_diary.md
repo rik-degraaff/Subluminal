@@ -13,12 +13,13 @@
 - PowerPoint presentation for milestone 3 was created.
 - Gantt and diary were polished and made milestone-presentable.
 - Missing javadocs were added, checkstyle errors were minimized.
-- The code coverage we strive for is going to be around 35%.
-- To observe the tickrate, we are going to track the current tickrate and make it displayable in the clients.
+- The code coverage we strive for is going to be around 35% (without the GUI files). Our first goal was 50%, but we then realized that this was maybe not a realistic goal.
+- To observe the tickrate, we are going to track the current tickrate and make it displayable in the clients. We decided to measure the tickrate because it determines the performance of the server, which ensures a correct calculation of the game state.
 
 ### Thursday, April 12th, 2018
 - **DAV** and **LUC** started worked on the necessary message packages for lobby functionalities and also the client- and server-sided lobby managers. **LGK** and **RIK** worked on client- and server-sided game logic and game loop.
 - **LUC** optimized CI in GitLab and enabled advanced command line parsing using picocli.
+- The justifications for our library choices can be found in [our requirements file](requirements.md).
 - **LUC** also created the template for our game manual.
 
 ### Monday, April 9th, 2018
