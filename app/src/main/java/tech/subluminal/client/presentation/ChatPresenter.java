@@ -46,5 +46,6 @@ public interface ChatPresenter {
 
     void sendWhisperMessage(String message, String username);
 
+    void requestHighScores();
   }
 }

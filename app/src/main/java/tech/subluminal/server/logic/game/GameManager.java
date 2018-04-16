@@ -7,9 +7,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import tech.subluminal.server.logic.MessageDistributor;
 import tech.subluminal.server.stores.GameStore;
+import tech.subluminal.server.stores.HighScoreStore;
 import tech.subluminal.server.stores.LobbyStore;
 import tech.subluminal.server.stores.records.GameState;
 import tech.subluminal.server.stores.records.MoveRequests;
@@ -19,6 +21,8 @@ import tech.subluminal.server.stores.records.Star;
 import tech.subluminal.shared.logic.game.GameLoop;
 import tech.subluminal.shared.messages.FleetMoveReq;
 import tech.subluminal.shared.messages.GameStateDelta;
+import tech.subluminal.shared.messages.HighScoreReq;
+import tech.subluminal.shared.messages.HighScoreRes;
 import tech.subluminal.shared.messages.MotherShipMoveReq;
 import tech.subluminal.shared.messages.MoveReq;
 import tech.subluminal.shared.net.Connection;
@@ -35,10 +39,13 @@ public class GameManager {
   private final LobbyStore lobbyStore;
   private final MessageDistributor distributor;
   private final Map<String, Thread> gameThreads = new HashMap<>();
+  private final HighScoreStore highScoreStore;
 
-  public GameManager(GameStore gameStore, LobbyStore lobbyStore, MessageDistributor distributor) {
+  public GameManager(GameStore gameStore, LobbyStore lobbyStore, MessageDistributor distributor,
+      HighScoreStore highScoreStore) {
     this.gameStore = gameStore;
     this.lobbyStore = lobbyStore;
+    this.highScoreStore = highScoreStore;
     this.distributor = distributor;
 
     distributor.addConnectionOpenedListener(this::attachHandlers);
@@ -49,6 +56,13 @@ public class GameManager {
         req -> onMoveRequest(req, id));
     connection.registerHandler(MotherShipMoveReq.class, MotherShipMoveReq::fromSON,
         req -> onMoveRequest(req, id));
+    connection.registerHandler(HighScoreReq.class, HighScoreReq::fromSON,
+        req -> onHighScoreReq(id));
+  }
+
+  private void onHighScoreReq(String id) {
+    distributor
+        .sendMessage(new HighScoreRes(highScoreStore.highScores().use(Function.identity())), id);
   }
 
   private void onMoveRequest(MoveReq req, String id) {
@@ -253,7 +267,7 @@ public class GameManager {
 
       final GameHistoryEntry<Ship> entry = new GameHistoryEntry<>(
           new Ship(motherShip.getCoordinates(), motherShip.getID(), req.getTargets(),
-              req.getTargets().get(req.getTargets().size() - 1) ,motherShip.getSpeed()));
+              req.getTargets().get(req.getTargets().size() - 1), motherShip.getSpeed()));
 
       // write the updated mother ship directly into the game store.
       player.getMotherShip().add(entry);
