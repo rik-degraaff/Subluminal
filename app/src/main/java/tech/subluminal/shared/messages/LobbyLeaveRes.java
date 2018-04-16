@@ -1,4 +1,4 @@
-package main.java.tech.subluminal.shared.messages;
+package tech.subluminal.shared.messages;
 
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONRepresentable;

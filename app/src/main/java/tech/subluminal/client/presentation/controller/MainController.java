@@ -2,17 +2,21 @@ package tech.subluminal.client.presentation.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
 import tech.subluminal.client.presentation.customElements.BackgroundComponent;
+import tech.subluminal.client.presentation.customElements.GameComponent;
+import tech.subluminal.client.presentation.customElements.LobbyComponent;
 import tech.subluminal.client.presentation.customElements.LobbyListComponent;
+import tech.subluminal.client.presentation.customElements.LobbyUserComponent;
 import tech.subluminal.client.presentation.customElements.MenuComponent;
+import tech.subluminal.client.presentation.customElements.SettingsComponent;
+import tech.subluminal.client.presentation.customElements.WindowContainerComponent;
+import tech.subluminal.client.stores.UserStore;
 
-public class MainController implements Initializable{
+public class MainController implements Initializable {
 
   @FXML
   private Parent chatView;
@@ -22,7 +26,7 @@ public class MainController implements Initializable{
   @FXML
   private Parent userListView;
   @FXML
-  private UserListController userListController;
+  private UserListController userListViewController;
 
   @FXML
   private AnchorPane spaceBackgroundDock;
@@ -33,11 +37,42 @@ public class MainController implements Initializable{
   @FXML
   private AnchorPane menuDock;
 
+  @FXML
+  private AnchorPane playArea;
+
   private BackgroundComponent background;
 
   private MenuComponent menu;
 
   private LobbyListComponent lobbyList;
+
+  private SettingsComponent settings;
+
+  private LobbyUserComponent lobbyUser;
+
+  private LobbyComponent lobby;
+
+  @FXML
+  private WindowContainerComponent windowContainer;
+
+  @FXML
+  private AnchorPane window;
+
+  private GameComponent game;
+
+  private UserStore userStore;
+
+  public LobbyComponent getLobby() {
+    return lobby;
+  }
+
+
+  public void setUserStore(UserStore userStore) {
+    this.userStore = userStore;
+
+    userListViewController.setUserStore(userStore);
+  }
+
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -46,12 +81,18 @@ public class MainController implements Initializable{
 
     menu = new MenuComponent(this);
     lobbyList = new LobbyListComponent(this);
+    settings = new SettingsComponent(this);
+    lobbyUser = new LobbyUserComponent(this);
+    lobby = new LobbyComponent(lobbyList, lobbyUser);
+    game = new GameComponent(this);
 
-    menuDock.getChildren().add(menu);
+    playArea.setMouseTransparent(true);
+
+    menuDock.getChildren().add(menu); //TODO: reactivate this
+    //onMapOpenHandle();
   }
 
-
-  public MainController getController(){
+  public MainController getController() {
     return this;
   }
 
@@ -59,27 +100,61 @@ public class MainController implements Initializable{
     return this.chatViewController;
   }
 
-  public void onWindowResizeHandle(int diffX, int diffY) {
-    background.onWindowResize(diffX,diffY);
+  public UserListController getUserListController() {
+    return this.userListViewController;
   }
 
-  public void onJoinHandle() {
+  public void onWindowResizeHandle(int diffX, int diffY) {
+    background.onWindowResize(diffX, diffY);
+  }
+
+  public void onLobbyOpenHandle() {
+    menuDock.getChildren().clear();
+
+    windowContainer = new WindowContainerComponent(this, lobby, "Lobbies");
+    //lobby.setUserActive();
+
+    menuDock.getChildren().add(windowContainer);
+    windowContainer.onWindowOpen();
+  }
+
+  public void onSettingOpenHandle() {
     menuDock.getChildren().remove(menu);
 
-    menuDock.getChildren().add(lobbyList);
+    windowContainer = new WindowContainerComponent(this, settings, "Settings");
+
+    menuDock.getChildren().add(windowContainer);
+    windowContainer.onWindowOpen();
   }
 
-  public void onHostHandle() {
-
-  }
-
-  public void onSettingHandle() {
-
-  }
-
-  public void onLobbyListClose(){
-    menuDock.getChildren().remove(lobbyList);
+  public void onWindowClose() {
+    menuDock.getChildren().clear();
 
     menuDock.getChildren().add(menu);
   }
+
+  public void onMapOpenHandle() {
+    menuDock.getChildren().clear();
+
+    playArea.setMouseTransparent(false);
+    playArea.getChildren().add(game);
+  }
+
+  public void onMapCloseHandle() {
+    playArea.getChildren().clear();
+    playArea.setMouseTransparent(true);
+
+    menuDock.getChildren().add(menu);
+  }
+
+  public void removeWindow() {
+    menuDock.getChildren().clear();
+
+    menuDock.getChildren().add(menu);
+  }
+
+  public void onLobbyCreateHandle() {
+
+  }
+
 }

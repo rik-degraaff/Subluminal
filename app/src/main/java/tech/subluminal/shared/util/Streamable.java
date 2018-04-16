@@ -1,5 +1,7 @@
 package tech.subluminal.shared.util;
 
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -9,6 +11,13 @@ import java.util.stream.StreamSupport;
  * @param <E> the element type of the Iterable.
  */
 public interface Streamable<E> extends Iterable<E> {
+
+  /**
+   * @return a list containing the elements in the iterable.
+   */
+  default List<E> toList() {
+    return stream().collect(Collectors.toList());
+  }
 
   /**
    * @return a stream containing the elements in the iterable.

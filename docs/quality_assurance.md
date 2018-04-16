@@ -49,7 +49,3 @@ The software is rigorously tested with unit tests to cover all edge cases. As a 
 [5]: dev.subluminal.tech:1790
 [6]: https://en.wikipedia.org/w/index.php?title=Code_coverage&oldid=831669504
  
-
-## Testing
-{: #tanuki-orange}  
-{: #fa-long-arrow-right}
