@@ -3,7 +3,7 @@
 %<milestone>
 
 # <Feature Title>
-## Descroption
+## Description
 <Describe the new feature which you want to implement>
 
 ## Tasks

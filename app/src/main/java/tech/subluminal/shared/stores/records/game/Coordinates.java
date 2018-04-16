@@ -27,6 +27,17 @@ public class Coordinates implements SONRepresentable {
   }
 
   /**
+   * Calculates the Euclidian distance between this object and another game object.
+   *
+   * @param other the other object to calculate the distance to.
+   * @return the distance calculated with Pythagorean theorem.
+   */
+  public double getDistanceFrom(Coordinates other) {
+    return Math.sqrt(Math.pow(getX() - other.getX(), 2)
+        + Math.pow(getY() - other.getY(), 2));
+  }
+
+  /**
    * Gets the x coordinate.
    *
    * @return the x coordinate.

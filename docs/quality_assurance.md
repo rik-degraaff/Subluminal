@@ -24,22 +24,22 @@
 
 ## Quality characteristics
 ### 1. Efficiency / Latency
-To ensure a fluid gaming experience, the server and client need to be able to compute the data inside the game loop in a certain time frame. This is called the server- respectively the client tick rate. As outlined in out [milestone 1 presentation](../milestone/m1/slides/cs108-FS18-meilenstein1-gruppe11.pdf), we'd like to achieve a tick rate of 20 *Hz* per hosted game on the server and a tick rate of 60 *Hz* on the client (fixed and locked with framerate).  
-The second performance feature we will monitor is the average roundtrip time of a package from client to server (both in the same local network). We estimate this should be no more than **150 *ms***. This can be tracked with an internal timer and a simple logging statement.
+To ensure a fluid gaming experience, the server needs to be able to compute the data inside the game loop in a certain time frame. This is called the server tickrate. We target tickrate of 10 *Hz* per hosted game (up to 10 games) on the server (during a 4 player average). Is the server performing normally (faster than 10Hz), the game loop is slowed down artificially with thread.sleep(). The resulting tickrate is logged in the server console in debug mode. Additionally the dT from the game loop is sent to the client and can also be displayed in its debug view.  
+
 
 ### 2. Reliability / Error tolerance
-The software is rigorously tested with unit tests to cover all edge cases. As a metric we use the code coverage percentage (``"degree to which the source code of a program is executed when a particular test suite runs".`` [Wikipedia][6]). Initial goal shall be to achieve a coverage of close to 50 *%*.
+The software is tested with junit unit tests (currently tested is the most important gamestate record and the intermediate message packet, pending are all the network message  packages). For the more intricate test, the mockito framework will be used to construct mock classes and simulate network connection. As a metric we use the code coverage percentage (``"degree to which the source code of a program is executed when a particular test suite runs".`` [Wikipedia][6]). The goal is to achieve a coverage 35 *%* (excluding gui packages). Current status is around 16%.
 
 
 ## Merge requirements
 
-| Branch          | Merge target        | Merge requirements         | Deployed to      |
-| :-------------- | :------------------ | :------------------------- | :--------------- |
-| ``master``    : | -                   | -                          | [Production][3]  |
-| ``release`` :   | ``️master``         | ✔️ Tests, ✔️ Build, ✔️ Doc | [Staging][4]     |
+| Branch          | Merge target        | Merge requirements      | Deployed to      |
+|:----------------|:--------------------|:------------------------|:-----------------|
+| ``master``    : | -                   | -                       | [Production][3]  |
+| ``release`` :   | ``️master``          | ✔️ Tests, ✔️ Build, ✔️ Doc | [Staging][4]     |
 | ``hotfix`` :    | ``release, master`` | ✔️ Tests, ✔️ Build, ✔️ Doc | -                |
 | ``dev``       : | ``release``         | ✔️ Tests, ✔️ Build, ✔️ Doc | [Development][5] |
-| ``feature`` :   | ``dev``             | ✔️ Tests, ❌ Build, ❌ Doc   | -                |
+| ``feature`` :   | ``dev``             | ✔️ Tests, ❌ Build, ❌ Doc | -                |
 
 
 [1]: https://github.com/google/styleguide/blob/gh-pages/intellij-java-google-style.xml
@@ -49,7 +49,3 @@ The software is rigorously tested with unit tests to cover all edge cases. As a 
 [5]: dev.subluminal.tech:1790
 [6]: https://en.wikipedia.org/w/index.php?title=Code_coverage&oldid=831669504
  
-
-## Testing
-{: #tanuki-orange}  
-{: #fa-long-arrow-right}

@@ -8,13 +8,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.client.logic.ChatManager;
+import tech.subluminal.client.logic.LobbyManager;
 import tech.subluminal.client.logic.PingManager;
 import tech.subluminal.client.logic.UserManager;
 import tech.subluminal.client.presentation.controller.ChatController;
 import tech.subluminal.client.presentation.controller.MainController;
+import tech.subluminal.client.stores.InMemoryLobbyStore;
 import tech.subluminal.client.stores.InMemoryPingStore;
 import tech.subluminal.client.stores.InMemoryUserStore;
+import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.client.stores.PingStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.messages.LogoutReq;
@@ -36,7 +40,8 @@ public class ClientInitializer extends Application {
    * @param port of the server.
    * @param username initial username to request from the server.
    */
-  public static void init(String server, int port, String username) {
+  public static void init(String server, int port, String username, boolean debug) {
+    Logger.info("Starting client ...");
     Socket socket = null;
     try {
       socket = new Socket(server, port);
@@ -49,6 +54,7 @@ public class ClientInitializer extends Application {
 
     UserStore userStore = new InMemoryUserStore();
     PingStore pingStore = new InMemoryPingStore();
+    LobbyStore lobbyStore = new InMemoryLobbyStore();
 
     ChatController chatPresenter = controller.getChatController();
     chatPresenter.setUserStore(userStore);
@@ -57,6 +63,8 @@ public class ClientInitializer extends Application {
     UserManager userManager = new UserManager(connection, userStore, chatPresenter);
     new ChatManager(userStore, chatPresenter, connection);
     new PingManager(connection, pingStore);
+
+    LobbyManager lobbyManager = new LobbyManager(lobbyStore, connection);
 
     userManager.start(username);
 
@@ -103,9 +111,9 @@ public class ClientInitializer extends Application {
     primaryStage.setMaximized(true);
     primaryStage.show();
 
-    String[] cmd = getParameters().getRaw().toArray(new String[3]);
+    String[] cmd = getParameters().getRaw().toArray(new String[4]);
 
-    init(cmd[0], Integer.parseInt(cmd[1]), cmd[2]);
+    init(cmd[0], Integer.parseInt(cmd[1]), cmd[2], Boolean.getBoolean(cmd[3]));
 
     primaryStage.widthProperty().addListener((v, oldV, newV) -> {
       int diff = oldV.intValue() - newV.intValue();
