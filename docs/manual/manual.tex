@@ -1,0 +1,29 @@
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+\documentclass[a5paper,pagesize,10pt,bibliograhpy=totoc,numbers=noenddot,oneside]{book}
+
+\input{package.tex}
+\input{preamble.tex}
+
+\begin{document}
+%=========================================
+\renewcommand{\thepage}{\roman{page}}% Roman numerals for page counter
+%\renewcommand{\scdefault}{\ibm}
+\input{titlepage}
+%=========================================
+\input{chapters/story}
+\tableofcontents
+\clearpage
+%=========================================
+\renewcommand{\thepage}{\arabic{page}}% Arabic numerals for page counter
+\part{Subluminal - The Game}
+\input{chapters/intro/intro}
+\input{chapters/gameconcept/game-concept}
+\input{chapters/gamerules/game-rules}
+
+%=========================================
+\begin{comment}
+  Just some notes, not visible in pdf.
+\end{comment}
+%=========================================
+\end{document}

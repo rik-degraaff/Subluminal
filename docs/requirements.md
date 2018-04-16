@@ -39,48 +39,54 @@
 | WireShark    | =2.4.5  | [``https://www.wireshark.org/#download``][7]        |
 
 # 2. Libraries
-This project uses a variety of external libraries. The following list is divided into groups with libraries of the same purpose. We compare the pros and cons amongst them and decide on which ones to use (final decision marked in bold).
+This project uses a variety of external libraries. The following list is divided into groups with libraries of the same purpose. We compare the pros and cons amongst them and decide on which ones to use (final decision marked in **bold**).
 
 ## 2.1 Logging
-| Name           | Version  | Pros                                                                                                       | Cons      |
-|:---------------|:---------|:-----------------------------------------------------------------------------------------------------------|:----------|
-| [tinylog][8]   | >=1.3.4  | Latest Release: February 23rd, 2018, easy to use (static class), console- and file writer, no dependencies | moon moon |
-| [**Log4J**][9] | >=2.11.0 | Latest Release: March 30th, 2018, moon moon                                                                | moon moon |
-| [Logback][10]  | >=1.2.3  | Latest Release: March 30th, 2017, moon moon                                                                | moon moon |
+We wanted a small logging library that could write to console and a file. Tinylog allows us to do that with an extremely small footprint. It support 5 commons log levels and configuration at runtime.
+| Name             | Version | Pros                                                                  | Cons                                                             |
+|:-----------------|:--------|:----------------------------------------------------------------------|:-----------------------------------------------------------------|
+| [**tinylog**][8] | >=1.3.4 | easy to use (static class), console- and file writer, no dependencies | no support for tags                                              |
+| [**Log4J 2**][9] | -       | Huge functionality, solid documentation, support for filters          | too much overhead (we only need simple logging)                  |
+| [Logback][10]    | -       | Successor of log4j,                                                   | Based on Java7, not as knows as Log4J 2 also bigger than tinylog |
+
 
 ## 2.2 Command line parsing
-| Name              | Version         | Pros | Cons |
-|:------------------|:----------------|:-----|:-----|
-| [args4j][15]      | >=2.33          |      |      |
-| [argparse4j][11]  | >=0.8.1         |      |      |
-| [airline][12]     | >=0.8           |      |      |
-| [Commons CLI][13] | >=1.4           |      |      |
-| [**picoli**][14]  | >=3.0.0-Alpha-3 |      |      |
-| [jopt-simple][16] | >=4.9           |      |      |
-| [jcommander][17]  | >=1.71          |      |      |
+Initially we parsed the command line argument as strings by hand. The nice part about picocli is, we can annotate any field in the main class and it will become a command line parameter or option. This is very handy for quickly added new ones. As a bonus, the "--help" command is generated automatically with the provided field description.
+| Name             | Version         | Pros                                                                        | Cons                                                                                        |
+|:-----------------|:----------------|:----------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------|
+| [args4j][15]     | -               | Relatively simple to setup, html doc output                                 | Developed by individual, last release more than two years ago, no multiple name for options |
+| [airline][12]    | -               |                                                                             | Focused on multi command applications                                                       |
+| [**picoli**][14] | >=3.0.0-Alpha-3 | Automatic usage information, simple annotations, optional parameter support | Creates instance of class to parse arguments                                                |
+| [jcommander][17] | -               | Similar functionality to picocli (contender)                                | Less documentation then picocli                                                             |
 
 
 ## 2.3 Settings store
+Usage: client/server settings, highscore, reconnect.  
+Settings: Using a textfile based configuration to overwrite default values (no need for recompiling).
+Highscore: Save server highscores in a file, read it on server start.
+Reconnect: When connecting to a server, write userID and server ip in a textfile in a temporary location. If game crashes file will still be there and client can reconnect automatically. On normal shutdown, file will be deleted.
 | Name                           | Version | Pros                                  | Cons                                             |
 |:-------------------------------|:--------|:--------------------------------------|:-------------------------------------------------|
 | [**java.util.Properties**][18] | -       | Built in, key/value store, plain text | Can be slow for large amounts of key/value pairs |
+| No alternatives found/needed   | -       | -                                     | -                                                |
 
 
 
 ## 2.4 Unit tests
-| Name              | Version | Pros                                              | Cons |
-|:------------------|:--------|:--------------------------------------------------|:-----|
-| [**junit**][19]   | =4.12   | Widely used, big community, recommended by tutors |      |
-| [**mockito**][20] | =2.17.5 |                                                   |      |
-| [TestNG][24]      |         |                                                   |      |
-| [Arquillan][25]   |         |                                                   |      |
+Unit tests are part of our quality assurance concept. JUnit allows us to test all our core components for integrity and make sure the application runs stable.
+| Name              | Version | Pros                                                              | Cons                                                     |
+|:------------------|:--------|:------------------------------------------------------------------|:---------------------------------------------------------|
+| [**junit**][19]   | =4.12   | Widely used, big community, required/recommended by tutors        | has dependency on                                        |
+| [**mockito**][20] | =2.17.5 | Used in conjunction with junit, easy mock classes from interfaces | more overhead, than only unittests - in the end worth it |
+| [TestNG][24]      | -       | No contender, junit is a project requirement                      |                                                          |
+| [Arquillan][25]   | -       | No contender, junit is a project requirement                      |                                                          |
 
 ## 2.5 Benchmark
-| Name            | Version | Pros | Cons |
-|:----------------|:--------|:-----|:-----|
-| [caliper][21]   |         |      |      |
-| [spf4j][22]     |         |      |      |
-| [javasimon][23] |         |      |      |
+| Name            | Version     | Pros                                                                                                   | Cons                                                                     |
+|:----------------|:------------|:-------------------------------------------------------------------------------------------------------|:-------------------------------------------------------------------------|
+| [caliper][21]   | =1.0-beta-2 | Recommended by Research Assistant, developed by Google, simple annotation of function to get benchmark |                                                                          |
+| [spf4j][22]     |             | Powerful performance testing framework                                                                 | Has too many features and is harder to setup                             |
+| [javasimon][23] |             | Very simple framework                                                                                  | Has only 2 functions, stopwatch needs to be started and stopped manually |
 
 
 [1]: https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html

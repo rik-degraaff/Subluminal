@@ -1,21 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Subluminal" company="Bordeaux Ink" webLink="http://" view-date="2018-03-04" view-index="0" gantt-divider-location="379" resource-divider-location="300" version="2.8.6" locale="en_US">
-    <description>
-        <![CDATA[
+<?xml version="1.0" encoding="UTF-8"?><project name="Subluminal" company="Bordeaux Ink" webLink="http://" view-date="2018-03-19" view-index="0" gantt-divider-location="647" resource-divider-location="300" version="2.8.6" locale="de">
+    <description><![CDATA[
+        
         
         
         Subluminal game for Programmierprojekt UniBas FS2018
     
     
-    ]]>
-    </description>
-    <view zooming-state="default:5" id="gantt-chart">
-        <field id="tpd3" name="Name" width="154" order="0"/>
-        <field id="tpd4" name="Begin date" width="103" order="1"/>
-        <field id="tpd5" name="End date" width="103" order="2"/>
+    
+    ]]></description>
+    <view zooming-state="default:6" id="gantt-chart">
+        <field id="tpd3" name="Vorgang" width="414" order="0"/>
+        <field id="tpd4" name="Anfang" width="108" order="1"/>
+        <field id="tpd5" name="Ende" width="92" order="2"/>
     </view>
     <view id="resource-table">
-        <field id="0" name="Name" width="210" order="0"/>
-        <field id="1" name="Default role" width="86" order="1"/>
+        <field id="0" name="Ressource" width="210" order="0"/>
+        <field id="1" name="Rolle" width="87" order="1"/>
     </view>
     <!-- -->
     <calendars>
@@ -182,12 +182,12 @@
         <task id="140" name="create powerpoint presentation MS 5" color="#8cb6ce" meeting="false" start="2018-05-14" duration="1" complete="0" thirdDate="2018-05-14" thirdDate-constraint="0" expand="true"/>
         <task id="12" name="Milestone 5" color="#8cb6ce" meeting="true" start="2018-05-21" duration="0" complete="0" thirdDate="2018-05-07" thirdDate-constraint="0" expand="true"/>
     </tasks>
-    <tech.subluminal.resources>
+    <resources>
         <resource id="0" name="Rik" function="Default:0" contacts="" phone=""/>
         <resource id="1" name="Luc" function="Default:0" contacts="" phone=""/>
         <resource id="2" name="Lucas" function="Default:0" contacts="" phone=""/>
         <resource id="3" name="Dave" function="Default:0" contacts="" phone=""/>
-    </tech.subluminal.resources>
+    </resources>
     <allocations>
         <allocation task-id="2" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="15" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
