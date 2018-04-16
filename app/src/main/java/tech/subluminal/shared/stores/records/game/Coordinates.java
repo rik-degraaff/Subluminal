@@ -16,38 +16,6 @@ public class Coordinates implements SONRepresentable {
     this.y = y;
   }
 
-  /**
-   * Gets the x coordinate.
-   * @return the x coordinate.
-   */
-  public double getX() {
-    return x;
-  }
-
-  /**
-   * Sets the x coordinate.
-   * @param x the x coordinate to be set.
-   */
-  public void setX(double x) {
-    this.x = x;
-  }
-
-  /**
-   * Gets the y coordinate.
-   * @return the y coordinate.
-   */
-  public double getY() {
-    return y;
-  }
-
-  /**
-   * Sets the y coordinate.
-   * @param y the y coordinate to be set.
-   */
-  public void setY(double y) {
-    this.y = y;
-  }
-
   public static Coordinates fromSON(SON son) throws SONConversionError {
     double x = son.getDouble(X_KEY)
         .orElseThrow(() -> SONRepresentable.error("Coordinates", X_KEY));
@@ -56,6 +24,53 @@ public class Coordinates implements SONRepresentable {
         .orElseThrow(() -> SONRepresentable.error("Coordinates", Y_KEY));
 
     return new Coordinates(x, y);
+  }
+
+  /**
+   * Calculates the Euclidian distance between this object and another game object.
+   *
+   * @param other the other object to calculate the distance to.
+   * @return the distance calculated with Pythagorean theorem.
+   */
+  public double getDistanceFrom(Coordinates other) {
+    return Math.sqrt(Math.pow(getX() - other.getX(), 2)
+        + Math.pow(getY() - other.getY(), 2));
+  }
+
+  /**
+   * Gets the x coordinate.
+   *
+   * @return the x coordinate.
+   */
+  public double getX() {
+    return x;
+  }
+
+  /**
+   * Sets the x coordinate.
+   *
+   * @param x the x coordinate to be set.
+   */
+  public void setX(double x) {
+    this.x = x;
+  }
+
+  /**
+   * Gets the y coordinate.
+   *
+   * @return the y coordinate.
+   */
+  public double getY() {
+    return y;
+  }
+
+  /**
+   * Sets the y coordinate.
+   *
+   * @param y the y coordinate to be set.
+   */
+  public void setY(double y) {
+    this.y = y;
   }
 
   public SON asSON() {

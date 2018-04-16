@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.net.ConnectionManager;
 import tech.subluminal.shared.net.SocketConnection;
@@ -33,6 +34,7 @@ public class SocketConnectionManager implements ConnectionManager {
   private void portListenLoop() {
     try {
       System.out.println("Waiting for connection on port " + serverSocket.getLocalPort() + "...");
+      Logger.info("Waiting for connection on port " + serverSocket.getLocalPort() + "...");
 
       while (!stop) {
         Socket socket = serverSocket.accept();
@@ -57,11 +59,12 @@ public class SocketConnectionManager implements ConnectionManager {
   }
 
   /**
-   * Closes this stream and releases any system tech.subluminal.resources associated with it. If the stream is
-   * already closed then invoking this method has no effect.
+   * Closes this stream and releases any system tech.subluminal.resources associated with it. If the
+   * stream is already closed then invoking this method has no effect.
    *
    * <p>As noted in {@link AutoCloseable#close()}, cases where the close may fail require careful
-   * attention. It is strongly advised to relinquish the underlying tech.subluminal.resources and to internally
+   * attention. It is strongly advised to relinquish the underlying tech.subluminal.resources and to
+   * internally
    * <em>mark</em> the {@code Closeable} as closed, prior to throwing the {@code IOException}.</p>
    *
    * @throws IOException if an I/O error occurs
