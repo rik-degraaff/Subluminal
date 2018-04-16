@@ -7,7 +7,7 @@
 [2.1 Logging](#21-logging)  
 [2.2 Command line parsing](#22-command-line-parsing)  
 [2.3 Settings store](#23-settings-store)  
-[2.4 Unit tests](#24-unit-test)  
+[2.4 Unit tests](#24-unit-tests)  
 [2.5 Benchmark](#25-benchmark)  
 
 
