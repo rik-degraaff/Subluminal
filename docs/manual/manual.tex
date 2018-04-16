@@ -8,6 +8,7 @@
 \begin{document}
 %=========================================
 \renewcommand{\thepage}{\roman{page}}% Roman numerals for page counter
+%\renewcommand{\scdefault}{\ibm}
 \input{titlepage}
 %=========================================
 \input{chapters/story}
@@ -15,9 +16,12 @@
 \clearpage
 %=========================================
 \renewcommand{\thepage}{\arabic{page}}% Arabic numerals for page counter
+\part{Subluminal - The Game}
+\input{chapters/intro/intro}
 \input{chapters/gameconcept/game-concept}
 \input{chapters/gamerules/game-rules}
 
+%=========================================
 \begin{comment}
   Just some notes, not visible in pdf.
 \end{comment}
