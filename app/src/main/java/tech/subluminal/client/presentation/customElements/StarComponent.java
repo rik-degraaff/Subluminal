@@ -23,7 +23,7 @@ import tech.subluminal.shared.stores.records.game.Coordinates;
 public class StarComponent extends Pane {
 
   public static final int BORDER_WIDTH = 3;
-  private final int sizeAll = 80;
+  private final int sizeAll = 60;
   private final DoubleProperty sizeProperty = new SimpleDoubleProperty();
   private final DoubleProperty xProperty = new SimpleDoubleProperty();
   private final DoubleProperty yProperty = new SimpleDoubleProperty();

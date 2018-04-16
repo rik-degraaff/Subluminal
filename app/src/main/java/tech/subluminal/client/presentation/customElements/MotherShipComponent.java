@@ -30,7 +30,7 @@ public class MotherShipComponent extends Group {
   private final ObjectProperty<Color> color = new SimpleObjectProperty<Color>();
 
   private final BooleanProperty isRotating = new SimpleBooleanProperty();
-  private final int fromCenter = 40;
+  private final int fromCenter = 30;
   private final StringProperty ownerID = new SimpleStringProperty();
   private final ListProperty<String> targetIDs = new SimpleListProperty<String>();
 

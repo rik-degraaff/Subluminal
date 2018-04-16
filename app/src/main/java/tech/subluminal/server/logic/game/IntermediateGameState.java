@@ -63,6 +63,10 @@ public class IntermediateGameState {
       fleetMap.keySet().forEach(fleetID -> moveFleet(0.0, playerID, fleetID, deltaTime));
     });
 
+    motherShipsUnderway.forEach((playerID, optShip) -> {
+      optShip.ifPresent(ship -> moveMotherShip(0.0, playerID, ship.getID(), deltaTime));
+    });
+
     while (!tasks.isEmpty()) {
       tasks.poll().run();
     }

@@ -7,12 +7,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Pane;
 import org.pmw.tinylog.Logger;
+import tech.subluminal.client.logic.Graph;
 import tech.subluminal.client.presentation.GamePresenter;
 import tech.subluminal.client.presentation.customElements.FleetComponent;
 import tech.subluminal.client.presentation.customElements.Jump;
@@ -42,7 +44,7 @@ public class GameController implements Initializable, GamePresenter {
 
   private JumpBox box;
 
-  private List<StarComponent> starList = new LinkedList<StarComponent>();//TODO: remove this
+  //private List<StarComponent> starList = new LinkedList<StarComponent>();//TODO: remove this
 
   //private ListProperty<StarComponent> stars = new SimpleListProperty<>();
 
@@ -59,7 +61,10 @@ public class GameController implements Initializable, GamePresenter {
 
   private ListView<MotherShipComponent> dummyShipList = new ListView<>();
 
+  private Map<String, Star> starMap = new HashMap<>();
+
   private ListView<StarComponent> dummyStarList = new ListView<>();
+  private Graph<String> graph;
 
 
   @Override
@@ -97,6 +102,11 @@ public class GameController implements Initializable, GamePresenter {
               pressStore[1] = null;
             } else {
               pressStore[1] = (StarComponent) e;
+              List<String> path = graph
+                  .findShortestPath(pressStore[0].getStarID(), pressStore[1].getStarID());
+              if (!path.isEmpty()) {
+                createJumpPath(path);
+              }
 
             }
           } else {
@@ -119,14 +129,19 @@ public class GameController implements Initializable, GamePresenter {
     });
   }
 
-  public void createJumpPath(List<StarComponent> path) {
+  public void createJumpPath(List<String> path) {
+
+    List<StarComponent> starComponents = path.stream().map(stars::get).collect(Collectors.toList());
+
     for (int i = 0; i < path.size() - 1; i++) {
-      jump.add(new Jump(path.get(i).layoutXProperty(), path.get(i).layoutYProperty(),
-          path.get(i + 1).layoutXProperty(), path.get(i + 1).layoutYProperty()));
+      jump.add(
+          new Jump(starComponents.get(i).layoutXProperty(), starComponents.get(i).layoutYProperty(),
+              starComponents.get(i + 1).layoutXProperty(),
+              starComponents.get(i + 1).layoutYProperty()));
     }
     jump.stream().forEach(j -> map.getChildren().add(j));
 
-    createJumpBox(path.get(0));
+    createJumpBox(starComponents.get(0));
 
   }
 
@@ -156,22 +171,22 @@ public class GameController implements Initializable, GamePresenter {
 
   @Override
   public void displayMap(Collection<Star> stars) {
-    stars.stream().forEach(
+    /*stars.stream().forEach(
         s -> starList.add(new StarComponent(s.getOwnerID(), 0.0, s.getCoordinates(), s.getID())));
 
-    starList.stream().forEach(s -> map.getChildren().add(s));
+    starList.stream().forEach(s -> map.getChildren().add(s));*/
   }
 
   @Override
   public void updateStar(Collection<Star> stars) {
-    stars.stream().forEach(s -> {
+    /*stars.stream().forEach(s -> {
       starList.stream().forEach(e -> {
         if (e.getStarID().equals(s.getID())) {
           e.setOwnerID(s.getOwnerID());
           e.setPossession(s.getPossession());
         }
       });
-    });
+    });*/
 
   }
 
@@ -275,7 +290,13 @@ public class GameController implements Initializable, GamePresenter {
       dummyShipList.refresh();
       dummyShipList.getItems().forEach(shipComponent -> Logger.debug("ship: " + shipComponent));
 
-    
+      if (graph != null) {
+        return;
+      }
+      this.graph = new Graph<>(stars.keySet(),
+          (s1, s2) -> starMap.get(s1).getDistanceFrom(starMap.get(s2)) <= starMap.get(s1).getJump(),
+          (s1, s2) -> starMap.get(s1).getDistanceFrom(starMap.get(s2)),
+          false);
     });
 
   }
@@ -293,6 +314,7 @@ public class GameController implements Initializable, GamePresenter {
                   star.getCoordinates(),
                   star.getID());
               stars.put(star.getID(), starComponent);
+              starMap.put(star.getID(), star);
               map.getChildren().add(starComponent);
               return starComponent;
 
@@ -319,13 +341,14 @@ public class GameController implements Initializable, GamePresenter {
             }
             MotherShipComponent shipComponent = ships.get(pair.getID());
 
-            if(Math.abs(pair.getValue().getCoordinates().getX() - shipComponent.getX()) > 0.000001){
+            if (Math.abs(pair.getValue().getCoordinates().getX() - shipComponent.getX())
+                > 0.000001) {
               shipComponent.setX(pair.getValue().getCoordinates().getX());
             }
-            if(Math.abs(pair.getValue().getCoordinates().getY() - shipComponent.getY()) > 0.000001){
+            if (Math.abs(pair.getValue().getCoordinates().getY() - shipComponent.getY())
+                > 0.000001) {
               shipComponent.setY(pair.getValue().getCoordinates().getY());
             }
-
 
             shipComponent.setTargetIDs(pair.getValue().getTargetIDs());
             return shipComponent;

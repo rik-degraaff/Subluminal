@@ -37,8 +37,8 @@ public class GameStateDeltaTest {
         new Ship(new Coordinates(10.0, 2.3), "4321", Collections.emptyList(), "5", 0.2),
         Collections.emptyList()));
 
-    delta.addStar(new Star("1234", 1, new Coordinates(0, 0), "starid", true));
-    delta.addStar(new Star(null, 0, new Coordinates(0, 42), "starid2", false));
+    delta.addStar(new Star("1234", 1, new Coordinates(0, 0), "starid", true, 0.1));
+    delta.addStar(new Star(null, 0, new Coordinates(0, 42), "starid2", false, 0.3));
 
     delta.addRemovedFleet("1234", "645");
     delta.addRemovedFleet("1234", "123");
@@ -56,8 +56,11 @@ public class GameStateDeltaTest {
     }
     System.out.println(msg);
   }
+
   @Test
-  public void einfachTest(){
-    System.out.println(new SlimLobby("gwewef", new LobbySettings("name", "adminID"),LobbyStatus.OPEN).asSON().asString());
+  public void einfachTest() {
+    System.out.println(
+        new SlimLobby("gwewef", new LobbySettings("name", "adminID"), LobbyStatus.OPEN).asSON()
+            .asString());
   }
 }
