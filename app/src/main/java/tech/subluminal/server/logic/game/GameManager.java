@@ -113,12 +113,12 @@ public class GameManager implements GameStarter {
           .filter(id -> !id.equals(playerID))
           .forEach(deltaPlayerID -> {
             gameState.getPlayers()
-                .get(playerID)
+                .get(deltaPlayerID)
                 .getMotherShip()
                 .getLatestOrLastForPlayer(playerID, motherShipEntry)
                 .apply(
-                    motherShip -> createPlayerDelta(motherShip, motherShipEntry,
-                        gameState.getPlayers().get(deltaPlayerID), delta, playerID),
+                    motherShip -> delta.addPlayer(createPlayerDelta(motherShip, motherShipEntry,
+                        gameState.getPlayers().get(deltaPlayerID), delta, playerID)),
                     v -> delta.addRemovedPlayer(deltaPlayerID)
                 );
           });

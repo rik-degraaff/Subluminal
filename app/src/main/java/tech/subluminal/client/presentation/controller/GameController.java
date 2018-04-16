@@ -95,10 +95,9 @@ public class GameController implements Initializable, GamePresenter {
             if (pressStore[0] == null) {
               pressStore[0] = (StarComponent) e;
               pressStore[1] = null;
-            } else if (pressStore[0] == e) {
-
             } else {
               pressStore[1] = (StarComponent) e;
+
             }
           } else {
             pressStore[0] = (StarComponent) e;
@@ -270,20 +269,19 @@ public class GameController implements Initializable, GamePresenter {
 
   @Override
   public void update() {
-    Logger.debug("REFRESH");
     Platform.runLater(() -> {
       dummyStarList.refresh();
       dummyStarList.getItems().forEach(starComponent -> Logger.debug("star: " + starComponent));
       dummyShipList.refresh();
       dummyShipList.getItems().forEach(shipComponent -> Logger.debug("ship: " + shipComponent));
+
+    
     });
 
   }
 
   public void setGameStore(GameStore gameStore) {
     this.gameStore = gameStore;
-
-    Logger.debug("before Mapperlist.");
 
     Platform.runLater(() -> {
       MapperList<StarComponent, Star> starComponents = new MapperList<>(
@@ -311,7 +309,6 @@ public class GameController implements Initializable, GamePresenter {
           gameStore.motherShips().observableList(),
           pair -> {
             if (ships.get(pair.getID()) == null) {
-              Logger.debug("CREATE A NEW SHIP!!");
               MotherShipComponent shipComponent = new MotherShipComponent(
                   pair.getValue().getCoordinates().getX(), pair.getValue().getCoordinates().getY(),
                   pair.getKey(), pair.getValue().getTargetIDs());
@@ -324,11 +321,9 @@ public class GameController implements Initializable, GamePresenter {
 
             if(Math.abs(pair.getValue().getCoordinates().getX() - shipComponent.getX()) > 0.000001){
               shipComponent.setX(pair.getValue().getCoordinates().getX());
-              Logger.debug("X gets UPDATED");
             }
             if(Math.abs(pair.getValue().getCoordinates().getY() - shipComponent.getY()) > 0.000001){
               shipComponent.setY(pair.getValue().getCoordinates().getY());
-              Logger.debug("y gets UPDATED");
             }
 
 

@@ -3,6 +3,7 @@ package tech.subluminal.client.logic;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.GamePresenter;
 import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.client.stores.records.game.OwnerPair;
@@ -54,6 +55,7 @@ public class GameManager implements GamePresenter.Delegate {
       removedFleets.forEach(gameStore.fleets()::removeByID);
     });
 
+    Logger.debug("Delta: " + delta.asSON().asString());
     // TODO: removed players
 
     delta.getStars().forEach(star -> {
