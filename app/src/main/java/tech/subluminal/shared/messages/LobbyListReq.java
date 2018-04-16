@@ -3,8 +3,17 @@ package tech.subluminal.shared.messages;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONRepresentable;
 
+/**
+ * Represents a lobby list request.
+ */
 public class LobbyListReq implements SONRepresentable {
 
+  /**
+   * Creates and returns a new lobby list request from its SON representation.
+   *
+   * @param son the SON representation of a lobby list request.
+   * @return the lobby list request, converted from its SON representation.
+   */
   public static LobbyListReq fromSON(SON son) {
     return new LobbyListReq();
   }

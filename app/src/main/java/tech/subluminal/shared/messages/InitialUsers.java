@@ -8,12 +8,22 @@ import tech.subluminal.shared.son.SONList;
 import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.User;
 
+/**
+ * Represents the initial users connected to the server.
+ */
 public class InitialUsers implements SONRepresentable {
 
   private static final String USERS_KEY = "users";
   private static final String CLASS_NAME = InitialUsers.class.getSimpleName();
   private final List<User> users = new LinkedList<>();
 
+  /**
+   * Creates an InitialUsers object from its SON representation.
+   *
+   * @param son the SON representation of an InitialUsers object.
+   * @return the InitialUsers object, converted from its SON representation.
+   * @throws SONConversionError if the conversion fails.
+   */
   public static InitialUsers fromSON(SON son) throws SONConversionError {
     InitialUsers initialUsers = new InitialUsers();
 
@@ -25,14 +35,23 @@ public class InitialUsers implements SONRepresentable {
     return initialUsers;
   }
 
+  /**
+   * @return the users.
+   */
   public List<User> getUsers() {
     return users;
   }
 
+  /**
+   * @param user a user to add.
+   */
   public void addUser(User user) {
     users.add(user);
   }
 
+  /**
+   * @return the SON representation of this object.
+   */
   @Override
   public SON asSON() {
     SONList list = new SONList();

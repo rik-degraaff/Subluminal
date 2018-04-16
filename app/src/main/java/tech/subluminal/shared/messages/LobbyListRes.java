@@ -8,17 +8,33 @@ import tech.subluminal.shared.son.SONList;
 import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.SlimLobby;
 
-public class LobbyListRes implements SONRepresentable{
+/**
+ * Represents a lobby list response which was previously requested.
+ */
+public class LobbyListRes implements SONRepresentable {
 
   private static final String CLASS_NAME = LobbyListRes.class.getSimpleName();
   private static final String LOBBIES_KEY = "lobbies";
 
   private List<SlimLobby> slimLobbies = new LinkedList<>();
 
+  /**
+   * Creates a new lobby list response with a slimmed down representation of the lobbies.
+   *
+   * @param slimLobbies the existing lobbies.
+   */
   public LobbyListRes(List<SlimLobby> slimLobbies) {
     this.slimLobbies = slimLobbies;
   }
 
+  /**
+   * Creates and returns a new response to a lobby list request, converted from it SON
+   * representation.
+   *
+   * @param son the SON representation of a lobby list response.
+   * @return the lobby list response, converted from its SON representation.
+   * @throws SONConversionError if the conversion fails.
+   */
   public static LobbyListRes fromSON(SON son) throws SONConversionError {
     SONList slimLobbies = son.getList(LOBBIES_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, LOBBIES_KEY));
@@ -29,6 +45,9 @@ public class LobbyListRes implements SONRepresentable{
     return new LobbyListRes(lobbies);
   }
 
+  /**
+   * @return the requested list of lobbies.
+   */
   public List<SlimLobby> getSlimLobbies() {
     return slimLobbies;
   }

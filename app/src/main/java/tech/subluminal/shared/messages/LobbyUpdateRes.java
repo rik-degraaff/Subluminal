@@ -5,16 +5,27 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.Lobby;
 
+/**
+ * Represents a lobby update request message.
+ */
 public class LobbyUpdateRes implements SONRepresentable {
 
-  public static final String LOBBY_KEY = "lobby";
+  private static final String LOBBY_KEY = "lobby";
 
   private Lobby lobby;
 
+  /**
+   * Creates a new LobbyUpdateRes with the lobby that was updated.
+   *
+   * @param lobby the lobby that was updated.
+   */
   public LobbyUpdateRes(Lobby lobby) {
     this.lobby = lobby;
   }
 
+  /**
+   * @return the lobby that was updated.
+   */
   public Lobby getLobby() {
     return lobby;
   }
@@ -30,6 +41,13 @@ public class LobbyUpdateRes implements SONRepresentable {
         .put(lobby.asSON(), LOBBY_KEY);
   }
 
+  /**
+   * Creates a new LobbyUpdateRes from its SON representation.
+   *
+   * @param son the SON representation of a LobbyUpdateRes.
+   * @return the LobbyUpdateRes converted from its SON representation.
+   * @throws SONConversionError if the conversion fails.
+   */
   public static LobbyUpdateRes fromSON(SON son) throws SONConversionError {
     SON lobby = son.getObject(LOBBY_KEY)
         .orElseThrow(() -> new SONConversionError(

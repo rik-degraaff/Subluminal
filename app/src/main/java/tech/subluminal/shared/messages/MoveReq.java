@@ -8,16 +8,32 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONList;
 import tech.subluminal.shared.son.SONRepresentable;
 
+/**
+ * Represents a request to move a movable object.
+ */
 public abstract class MoveReq implements SONRepresentable {
 
   private static final String CLASS_NAME = MoveReq.class.getSimpleName();
   private static final String STARLIST_KEY = "starList";
   private List<String> stars;
 
+  /**
+   * Creates a new move request and initializes the list symbolizing the jumping path with an new
+   * empty list.
+   */
   public MoveReq() {
     this.stars = new LinkedList<>();
   }
 
+  /**
+   * Creates ans returns a new MoveReq-extending object from its SON representation.
+   *
+   * @param son the SON representation of a move request.
+   * @param reqSupplier the function enabling the input of any child of MoveReq.
+   * @param <E> the type of move request to be converted.
+   * @return the SON representation of a move request.
+   * @throws SONConversionError if the conversion fails.
+   */
   static <E extends MoveReq> E fromSON(SON son, Supplier<E> reqSupplier) throws SONConversionError {
     E moveReq = reqSupplier.get();
     SONList starList = son.getList(STARLIST_KEY)

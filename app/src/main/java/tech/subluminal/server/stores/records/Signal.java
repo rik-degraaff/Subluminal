@@ -62,7 +62,7 @@ public class Signal extends GameObject implements Comparable<Signal> {
   }
 
   /**
-   * @return a value < 0 if this signal will arrive before the other.
+   * @return a value greater than 0 if this signal will arrive before the other.
    */
   @Override
   public int compareTo(Signal o) {

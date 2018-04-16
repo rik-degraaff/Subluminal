@@ -3,6 +3,9 @@ package tech.subluminal.shared.messages;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONRepresentable;
 
+/**
+ * Represents a game start request from a client to the server.
+ */
 public class GameStartReq implements SONRepresentable {
 
   /**
@@ -15,6 +18,9 @@ public class GameStartReq implements SONRepresentable {
     return new SON();
   }
 
+  /**
+   * Returns a new game start request, converted from its SON representation
+   */
   public static GameStartReq fromSON(SON son) {
     return new GameStartReq();
   }
