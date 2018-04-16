@@ -10,6 +10,11 @@ Our implementation of a network protocol is strongly influenced by JSON, now cal
 ***Client***: Closes your connection to the server and exits the client.
 ``/logout`` (no arguments)
 
+### chat
+***Client***
+```@all - Send message to all games```
+```@game - Send message to game/lobby only```
+```@<user> - Send message to specific user```
 
 ## Protocol properties
 - Package length/size is not calculated and transmitted.
@@ -25,6 +30,8 @@ Our implementation of a network protocol is strongly influenced by JSON, now cal
 
 ## Protocol message structure
 Each message can contain zero or more values of the following java variable type: ``boolean (b)``, ``integer (i)``, ``double (d)``, ``String (s)``, ``list<SON> (l)``. The key is always a string enclosed in quotes (parsing help), the value is a string representation of its original value enclosed in quotes (parsing help), prepended with a char to represent its original type for later parsing. The list type is not yet working (required to send multiple values of the same type of more importantly to send other SON objects). The following package types are already implemented and in use: 
+
+**As of milestone 3 the message packets are documented in the source code directly ([go here](../app/src/main/java/tech/subluminal/shared/messages/))** The structure below remains for completeness sake.
 
 ### LoginReq
 ***Client***: Register a new user to the server. Expects response with ``LoginRes`` object.
