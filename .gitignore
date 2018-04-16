@@ -9,8 +9,9 @@
 .idea/*.xml
 *.log
 *.gz
+*.aux
 __*.tex
-
+*.synctex*
 
 #folders
 .app/
