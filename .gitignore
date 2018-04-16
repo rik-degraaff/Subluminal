@@ -1,5 +1,6 @@
 #files
 ~*.*
+*.aux
 *.class
 *.classpath
 *.project
@@ -7,6 +8,8 @@
 .idea/**/*.xml
 .idea/*.xml
 *.log
+*.gz
+__*.tex
 
 
 #folders
@@ -20,5 +23,5 @@ app/out/
 app/build/
 bin/
 build/
-docs/javadocs/
+docs/javadoc/
 assets/fonts/
