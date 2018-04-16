@@ -50,14 +50,23 @@ public class ChatMessageOut implements SONRepresentable {
 
   }
 
+  /**
+   * @return the chatmessage.
+   */
   public String getMessage() {
     return message;
   }
 
+  /**
+   * @return the ID of the receiver of the message
+   */
   public String getReceiverID() {
     return receiverID;
   }
 
+  /**
+   * @return true if a chat message is global, and false otherwise.
+   */
   public boolean isGlobal() {
     return global;
   }
