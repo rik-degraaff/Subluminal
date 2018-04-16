@@ -7,10 +7,14 @@
 **RIK** = Rik de Graaff
 
 ### Friday-Sunday, April 13th-15th, 2018
-- Fine-tuning and optimization of user interface, embedding of lobby functionality in GUI.
-- Implementation of server game logic within game loop was finished.
+- Implementation of lobby-functionality in GUI was done.
+- Embedding of pathfinding algorithm in GUI was done.
+- Implementation of server-side game logic was finished.
+- PowerPoint presentation for milestone 3 was created.
 - Gantt and diary were polished and made milestone-presentable.
-- Added missing javadocs, minimized checkstyle errors.
+- Missing javadocs were added, checkstyle errors were minimized.
+- The code coverage we strive for is going to be around 35%.
+- To observe the tickrate, we are going to track the current tickrate and make it displayable in the clients.
 
 ### Thursday, April 12th, 2018
 - **DAV** and **LUC** started worked on the necessary message packages for lobby functionalities and also the client- and server-sided lobby managers. **LGK** and **RIK** worked on client- and server-sided game logic and game loop.
@@ -30,7 +34,7 @@
     - SON
     - GameStateDelta
     - Graph
-- After milestone 3, we are probably going to unit-test some of the messages to make sure that they are parsed correctly.
+- After milestone 3, we are going to unit-test some of the messages to make sure that they are parsed correctly.
 
 ### Wednesday, April 4th, 2018
 - A game store will store the the game state.
