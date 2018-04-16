@@ -12,6 +12,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.logic.Graph;
@@ -93,40 +94,41 @@ public class GameController implements Initializable, GamePresenter {
     FleetComponent fleet = new FleetComponent(new Coordinates(0.2, 0.3), 30, "wefwef", "22r2f2");
     map.getChildren().add(fleet);*/
 
-    map.getChildren().forEach(e -> {
-      if (e instanceof StarComponent) {
-        e.setOnMouseClicked(mouseEvent -> {
-          if (pressStore[1] == null) {
-            if (pressStore[0] == null) {
-              pressStore[0] = (StarComponent) e;
-              pressStore[1] = null;
-            } else {
-              pressStore[1] = (StarComponent) e;
-              List<String> path = graph
-                  .findShortestPath(pressStore[0].getStarID(), pressStore[1].getStarID());
-              if (!path.isEmpty()) {
-                createJumpPath(path);
-              }
-
-            }
-          } else {
-            pressStore[0] = (StarComponent) e;
-            pressStore[1] = null;
-          }
-          System.out.println(pressStore[0].getName());
-          mouseEvent.consume();
-        });
-      }
-    });
-
     map.setOnMouseClicked(mouseEvent -> {
       pressStore[0] = null;
       pressStore[1] = null;
-      if (map.getChildren().contains(jump)) {
-        map.getChildren().remove(jump);
-      }
-      System.out.println("cleared");
+      removeJumpPath();
+      jump.clear();
     });
+  }
+
+  private void starClicked(StarComponent star, MouseEvent mouseEvent) {
+    if (pressStore[1] == null) {
+      if (pressStore[0] == null) {
+        pressStore[0] = star;
+        pressStore[1] = null;
+      } else {
+        Logger.debug("creating JumpPath");
+        pressStore[1] = star;
+        List<String> path = graph
+            .findShortestPath(pressStore[0].getStarID(), pressStore[1].getStarID());
+        if (!path.isEmpty()) {
+          removeJumpPath();
+          createJumpPath(path);
+        } else {
+          pressStore[0] = null;
+          pressStore[1] = null;
+          removeJumpPath();
+          jump.clear();
+        }
+
+      }
+    } else {
+      pressStore[0] = star;
+      pressStore[1] = null;
+    }
+    System.out.println(pressStore[0].getName());
+    mouseEvent.consume();
   }
 
   public void createJumpPath(List<String> path) {
@@ -146,7 +148,9 @@ public class GameController implements Initializable, GamePresenter {
   }
 
   public void removeJumpPath() {
-    jump.stream().forEach(j -> map.getChildren().remove(j));
+    jump.stream().forEach(j -> {
+      map.getChildren().remove(j);
+    });
 
     removeJumpBox();
   }
@@ -313,6 +317,7 @@ public class GameController implements Initializable, GamePresenter {
                   star.getPossession(),
                   star.getCoordinates(),
                   star.getID());
+              starComponent.setOnMouseClicked(e -> starClicked(starComponent, e));
               stars.put(star.getID(), starComponent);
               starMap.put(star.getID(), star);
               map.getChildren().add(starComponent);
