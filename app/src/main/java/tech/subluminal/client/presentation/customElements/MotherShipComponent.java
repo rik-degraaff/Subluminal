@@ -42,6 +42,7 @@ public class MotherShipComponent extends Group {
 
   private final IntegerProperty parentWidthProperty = new SimpleIntegerProperty();
   private final IntegerProperty parentHeightProperty = new SimpleIntegerProperty();
+  private final RotateTransition rotateTl;
 
   public MotherShipComponent(double x, double y, String playerId, List<String> targetIDs) {
     Group group = new Group();
@@ -82,7 +83,7 @@ public class MotherShipComponent extends Group {
     group.getChildren().add(ship);
     group.setMouseTransparent(true);
 
-    RotateTransition rotateTl = new RotateTransition(Duration.seconds(5), group);
+    rotateTl = new RotateTransition(Duration.seconds(5), group);
     rotateTl.setToAngle(360);
     rotateTl.setCycleCount(RotateTransition.INDEFINITE);
     rotateTl.setInterpolator(Interpolator.LINEAR);
@@ -90,10 +91,10 @@ public class MotherShipComponent extends Group {
 
     Platform.runLater(() -> {
       targetsWrapperProperty().addListener((observable, oldValue, newValue) -> {
-        Logger.debug("MOTHERSHIP GOT: " + targetIDs.toString());
-        if (targetIDs.isEmpty()) {
+        Logger.debug("MOTHERSHIP GOT: " + targetsWrapperProperty().toString());
+        if (targetsWrapperProperty().isEmpty() && !isIsRotating()) {
           setIsRotating(true);
-        } else if (!targetIDs.isEmpty()) {
+        } else if (!targetsWrapperProperty().isEmpty() && isIsRotating()) {
           setIsRotating(false);
         }
       });
@@ -102,14 +103,14 @@ public class MotherShipComponent extends Group {
         if (newValue && !oldValue) {
           rotateTl.play();
         } else if (!newValue && oldValue) {
-          rotateTl.stop();
+          rotateTl.pause();
         }
       });
     });
 
 
     Platform.runLater(() -> {
-      setIsRotating(targetIDs.isEmpty());
+      setIsRotating(targetsWrapperProperty().isEmpty());
     });
 
     this.getChildren().add(group);
@@ -124,8 +125,7 @@ public class MotherShipComponent extends Group {
   }
 
   public void setTargetsWrapper(List<String> targetIDs) {
-    this.targetIDs.clear();
-    this.targetIDs.addAll(targetIDs);
+    this.targetIDs.setAll(targetIDs);
   }
 
   public double getX() {

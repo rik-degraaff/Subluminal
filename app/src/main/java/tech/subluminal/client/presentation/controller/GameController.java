@@ -400,7 +400,7 @@ public class GameController implements Initializable, GamePresenter {
                 > 0.000001) {
               shipComponent.setY(pair.getValue().getCoordinates().getY());
             }
-
+            Logger.debug("Target ID's: " + pair.getValue().getTargetIDs());
             if(shipComponent.getTargetsWrapper().size() != pair.getValue().getTargetIDs().size()){
               shipComponent.setTargetsWrapper(pair.getValue().getTargetIDs());
             }

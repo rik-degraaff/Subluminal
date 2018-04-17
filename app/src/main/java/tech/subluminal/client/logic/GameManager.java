@@ -44,6 +44,7 @@ public class GameManager implements GamePresenter.Delegate {
     //delta.getRemovedPlayers().forEach(gameStore.players()::removeByID);
     delta.getPlayers().forEach(player -> {
       Ship motherShip = player.getMotherShip();
+      Logger.debug("Mothership targets" + motherShip.getTargetIDs());
       gameStore.motherShips().add(new OwnerPair<>(player.getID(), motherShip));
       player.getFleets().forEach(fleet -> {
         gameStore.fleets().add(new OwnerPair<>(player.getID(), fleet));
