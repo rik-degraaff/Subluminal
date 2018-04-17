@@ -25,6 +25,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
+import org.pmw.tinylog.Logger;
 
 public class MotherShipComponent extends Group {
 
@@ -89,9 +90,10 @@ public class MotherShipComponent extends Group {
 
     Platform.runLater(() -> {
       targetsWrapperProperty().addListener((observable, oldValue, newValue) -> {
-        if (!oldValue.isEmpty() && newValue.isEmpty()) {
+        Logger.debug("MOTHERSHIP GOT: " + targetIDs.toString());
+        if (targetIDs.isEmpty()) {
           setIsRotating(true);
-        } else if (oldValue.isEmpty() && !newValue.isEmpty()) {
+        } else if (!targetIDs.isEmpty()) {
           setIsRotating(false);
         }
       });
