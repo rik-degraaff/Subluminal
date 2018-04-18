@@ -28,14 +28,11 @@ public class StarComponent extends Pane {
   private final DoubleProperty xProperty = new SimpleDoubleProperty();
   private final DoubleProperty yProperty = new SimpleDoubleProperty();
   private final StringProperty starID = new SimpleStringProperty();
+  private final StringProperty ownerID = new SimpleStringProperty();
   private final DoubleProperty possession = new SimpleDoubleProperty();
-  private final IntegerProperty ships = new SimpleIntegerProperty();
   private final ObjectProperty color = new SimpleObjectProperty();
-  //TODO let planet know that there are ships to move
 
 
-  private final StringProperty ownerIDProperty = new SimpleStringProperty();
-  private final StringProperty starIDProperty = new SimpleStringProperty();
   private final IntegerProperty parentWidthProperty = new SimpleIntegerProperty();
   private final IntegerProperty parentHeightProperty = new SimpleIntegerProperty();
 
@@ -54,7 +51,6 @@ public class StarComponent extends Pane {
     setStarID(id);
     setOwnerID(ownerID);
 
-    setShips(0);
     setColor(Color.GRAY);
 
     this.layoutXProperty().bind(Bindings
@@ -71,8 +67,6 @@ public class StarComponent extends Pane {
       this.parentWidthProperty.bind(getScene().widthProperty());
       this.parentHeightProperty.bind(getScene().heightProperty());
     });
-
-    ownerIDProperty.set(null);
 
     this.name = "SUBBY";
 
@@ -130,18 +124,6 @@ public class StarComponent extends Pane {
     this.color.set(color);
   }
 
-  public String getStarIDProperty() {
-    return starIDProperty.get();
-  }
-
-  public StringProperty starIDPropertyProperty() {
-    return starIDProperty;
-  }
-
-  public void setStarIDProperty(String starIDProperty) {
-    this.starIDProperty.set(starIDProperty);
-  }
-
   public String getName() {
     return name;
   }
@@ -182,28 +164,16 @@ public class StarComponent extends Pane {
     this.yProperty.set(yProperty);
   }
 
-  public String getOwnerIDProperty() {
-    return ownerIDProperty.get();
+  public String getOwnerID() {
+    return ownerID.get();
   }
 
   public void setOwnerID(String ownerIDProperty) {
-    this.ownerIDProperty.set(ownerIDProperty);
+    this.ownerID.set(ownerIDProperty);
   }
 
-  public StringProperty ownerIDPropertyProperty() {
-    return ownerIDProperty;
-  }
-
-  public int getShips() {
-    return ships.get();
-  }
-
-  public void setShips(int ships) {
-    this.ships.set(ships);
-  }
-
-  public IntegerProperty shipsProperty() {
-    return ships;
+  public StringProperty ownerIDProperty() {
+    return ownerID;
   }
 
   public String getStarID() {

@@ -36,7 +36,7 @@ import tech.subluminal.shared.util.function.Either;
 
 public class GameManager implements GameStarter {
 
-  private static final int TPS = 5;
+  private static final int TPS = 10;
   private final GameStore gameStore;
   private final LobbyStore lobbyStore;
   private final MessageDistributor distributor;

@@ -431,6 +431,8 @@ public class GameController implements Initializable, GamePresenter {
 
   @Override
   public void setUserID(){
-    playerID = userStore.currentUser().get().use(opt -> opt.get().getID());
+    Platform.runLater(() -> {
+      playerID = userStore.currentUser().get().use(opt -> opt.get().getID());
+    });
   }
 }
