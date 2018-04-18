@@ -53,6 +53,10 @@ public class IntermediateGameState {
     motherShipsUnderway = createMapWithKeys(players, Optional::empty);
   }
 
+  private static <E> Map<String, E> createMapWithKeys(Set<String> keys, Supplier<E> supplier) {
+    return keys.stream().collect(Collectors.toMap(id -> id, id -> supplier.get()));
+  }
+
   public void advance() {
     stars.keySet().forEach(starID -> colonisationTick(starID, deltaTime));
 
@@ -173,9 +177,11 @@ public class IntermediateGameState {
           ? highest * deltaTime * 0.1
           : -highest * deltaTime * 0.1;
 
-      stars.put(starID, new Star(highestID, Math.max(Math.min(star.getPossession() + diff, 1.0), 0.0),
-          star.getCoordinates(), starID, star.isGenerating(), star.getJump(), star.getDematRate(),
-          star.getNextDemat(), star.getGenerationRate(), star.getNextShipgen()));
+      stars.put(starID,
+          new Star(highestID, Math.max(Math.min(star.getPossession() + diff, 1.0), 0.0),
+              star.getCoordinates(), starID, star.isGenerating(), star.getJump(),
+              star.getDematRate(),
+              star.getNextDemat(), star.getGenerationRate(), star.getNextShipgen()));
     }
   }
 
@@ -243,10 +249,6 @@ public class IntermediateGameState {
               .put(playerID, Optional.of(newFleet));
         }
     );
-  }
-
-  private static <E> Map<String, E> createMapWithKeys(Set<String> keys, Supplier<E> supplier) {
-    return keys.stream().collect(Collectors.toMap(id -> id, id -> supplier.get()));
   }
 
   public Map<String, List<Fleet>> getDestroyedFleets() {

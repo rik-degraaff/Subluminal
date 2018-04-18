@@ -2,7 +2,6 @@ package tech.subluminal.shared.util;
 
 import javafx.beans.InvalidationListener;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ObjectPropertyBase;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 

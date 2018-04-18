@@ -10,7 +10,6 @@ import tech.subluminal.shared.messages.ChatMessageOut;
 import tech.subluminal.shared.messages.HighScoreReq;
 import tech.subluminal.shared.messages.HighScoreRes;
 import tech.subluminal.shared.net.Connection;
-import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.User;
 
 public class ChatManager implements ChatPresenter.Delegate {

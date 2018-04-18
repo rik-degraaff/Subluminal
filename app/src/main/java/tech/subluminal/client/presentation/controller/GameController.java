@@ -74,7 +74,6 @@ public class GameController implements Initializable, GamePresenter {
   private UserStore userStore;
 
 
-
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     /*StarComponent star = new StarComponent("fewff",0.8,new Coordinates(0.2,0.6), "ANDROMEDAR");
@@ -131,7 +130,7 @@ public class GameController implements Initializable, GamePresenter {
           pressStore[0] = null;
           pressStore[1] = null;
           removeJumpPath();
-          if(!jump.isEmpty()){
+          if (!jump.isEmpty()) {
             jump.clear();
           }
         }
@@ -173,14 +172,14 @@ public class GameController implements Initializable, GamePresenter {
         amount -> {
           gameDelegate.sendShips(path, amount);
           removeJumpPath();
-          if(!jump.isEmpty()){
+          if (!jump.isEmpty()) {
             jump.clear();
           }
         },
         () -> {
           gameDelegate.sendMothership(path);
           removeJumpPath();
-          if(!jump.isEmpty()){
+          if (!jump.isEmpty()) {
             jump.clear();
           }
         });
@@ -351,13 +350,17 @@ public class GameController implements Initializable, GamePresenter {
                   star.getPossession(),
                   star.getCoordinates(),
                   star.getID());
-              /*if(star.getOwnerID().equals(playerID)){
-                starComponent.setColor(Color.RED);
-              }else{*/
-                starComponent.setColor(Color.BLUE);
-              //}
-              starComponent.setOnMouseClicked(e -> starClicked(starComponent, e));
               stars.put(star.getID(), starComponent);
+              if (star.getOwnerID() != null) {
+                if (star.getOwnerID().equals(playerID)) {
+                  starComponent.setColor(Color.RED);
+                } else {
+                  starComponent.setColor(Color.BLUE);
+                }
+              }
+
+              starComponent.setOnMouseClicked(e -> starClicked(starComponent, e));
+
               starMap.put(star.getID(), star);
               map.getChildren().add(starComponent);
               return starComponent;
@@ -366,6 +369,13 @@ public class GameController implements Initializable, GamePresenter {
             StarComponent starComponent = stars.get(star.getID());
             starComponent.setPossession(star.getPossession());
             starComponent.setOwnerID(star.getOwnerID());
+            if (star.getOwnerID() != null) {
+              if (star.getOwnerID().equals(playerID)) {
+                starComponent.setColor(Color.RED);
+              } else {
+                starComponent.setColor(Color.BLUE);
+              }
+            }
             return starComponent;
           });
 
@@ -380,9 +390,9 @@ public class GameController implements Initializable, GamePresenter {
                   pair.getValue().getCoordinates().getX(), pair.getValue().getCoordinates().getY(),
                   pair.getKey(), pair.getValue().getTargetIDs());
               ships.put(pair.getID(), shipComponent);
-              if(pair.getKey().equals(playerID)){
+              if (pair.getKey().equals(playerID)) {
                 shipComponent.setColor(Color.RED);
-              }else{
+              } else {
                 shipComponent.setColor(Color.BLUE);
               }
 
@@ -400,8 +410,8 @@ public class GameController implements Initializable, GamePresenter {
                 > 0.000001) {
               shipComponent.setY(pair.getValue().getCoordinates().getY());
             }
-
-            if(shipComponent.getTargetsWrapper().size() != pair.getValue().getTargetIDs().size()){
+            Logger.debug("Target ID's: " + pair.getValue().getTargetIDs());
+            if (shipComponent.getTargetsWrapper().size() != pair.getValue().getTargetIDs().size()) {
               shipComponent.setTargetsWrapper(pair.getValue().getTargetIDs());
             }
 
@@ -416,5 +426,12 @@ public class GameController implements Initializable, GamePresenter {
 
   public void setUserStore(UserStore userStore) {
     this.userStore = userStore;
+  }
+
+  @Override
+  public void setUserID() {
+    Platform.runLater(() -> {
+      playerID = userStore.currentUser().get().use(opt -> opt.get().getID());
+    });
   }
 }

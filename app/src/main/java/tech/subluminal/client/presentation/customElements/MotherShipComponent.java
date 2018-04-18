@@ -25,6 +25,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
+import org.pmw.tinylog.Logger;
 
 public class MotherShipComponent extends Group {
 
@@ -33,7 +34,7 @@ public class MotherShipComponent extends Group {
   private final BooleanProperty isRotating = new SimpleBooleanProperty();
   private final int fromCenter = 30;
   private final StringProperty ownerID = new SimpleStringProperty();
-  private final ObservableList<String>  targetIDs = FXCollections.observableArrayList();
+  private final ObservableList<String> targetIDs = FXCollections.observableArrayList();
   private final ListProperty<String> targetsWrapper = new SimpleListProperty<>(targetIDs);
 
   private final DoubleProperty x = new SimpleDoubleProperty();
@@ -41,6 +42,7 @@ public class MotherShipComponent extends Group {
 
   private final IntegerProperty parentWidthProperty = new SimpleIntegerProperty();
   private final IntegerProperty parentHeightProperty = new SimpleIntegerProperty();
+  private final RotateTransition rotateTl;
 
   public MotherShipComponent(double x, double y, String playerId, List<String> targetIDs) {
     Group group = new Group();
@@ -68,8 +70,6 @@ public class MotherShipComponent extends Group {
 
     setTargetsWrapper(targetIDs);
 
-
-
     setColor(Color.GRAY);
     Polygon ship = new Polygon();
     ship.getPoints().addAll(new Double[]{
@@ -81,17 +81,17 @@ public class MotherShipComponent extends Group {
     group.getChildren().add(ship);
     group.setMouseTransparent(true);
 
-    RotateTransition rotateTl = new RotateTransition(Duration.seconds(5), group);
+    rotateTl = new RotateTransition(Duration.seconds(5), group);
     rotateTl.setToAngle(360);
     rotateTl.setCycleCount(RotateTransition.INDEFINITE);
     rotateTl.setInterpolator(Interpolator.LINEAR);
 
-
     Platform.runLater(() -> {
       targetsWrapperProperty().addListener((observable, oldValue, newValue) -> {
-        if (!oldValue.isEmpty() && newValue.isEmpty()) {
+        Logger.debug("MOTHERSHIP GOT: " + targetsWrapperProperty().toString());
+        if (targetsWrapperProperty().isEmpty() && !isIsRotating()) {
           setIsRotating(true);
-        } else if (oldValue.isEmpty() && !newValue.isEmpty()) {
+        } else if (!targetsWrapperProperty().isEmpty() && isIsRotating()) {
           setIsRotating(false);
         }
       });
@@ -100,14 +100,13 @@ public class MotherShipComponent extends Group {
         if (newValue && !oldValue) {
           rotateTl.play();
         } else if (!newValue && oldValue) {
-          rotateTl.stop();
+          rotateTl.pause();
         }
       });
     });
 
-
     Platform.runLater(() -> {
-      setIsRotating(targetIDs.isEmpty());
+      setIsRotating(targetsWrapperProperty().isEmpty());
     });
 
     this.getChildren().add(group);
@@ -117,37 +116,36 @@ public class MotherShipComponent extends Group {
     return targetsWrapper.get();
   }
 
-  public ListProperty<String> targetsWrapperProperty() {
-    return targetsWrapper;
+  public void setTargetsWrapper(List<String> targetIDs) {
+    this.targetIDs.setAll(targetIDs);
   }
 
-  public void setTargetsWrapper(List<String> targetIDs) {
-    this.targetIDs.clear();
-    this.targetIDs.addAll(targetIDs);
+  public ListProperty<String> targetsWrapperProperty() {
+    return targetsWrapper;
   }
 
   public double getX() {
     return x.get();
   }
 
-  public DoubleProperty xProperty() {
-    return x;
-  }
-
   public void setX(double x) {
     this.x.set(x);
+  }
+
+  public DoubleProperty xProperty() {
+    return x;
   }
 
   public double getY() {
     return y.get();
   }
 
-  public DoubleProperty yProperty() {
-    return y;
-  }
-
   public void setY(double y) {
     this.y.set(y);
+  }
+
+  public DoubleProperty yProperty() {
+    return y;
   }
 
   public Color getColor() {

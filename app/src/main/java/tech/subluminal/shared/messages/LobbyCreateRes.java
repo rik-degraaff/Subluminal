@@ -3,7 +3,6 @@ package tech.subluminal.shared.messages;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
-import tech.subluminal.shared.stores.records.Lobby;
 
 /**
  * Represents a lobby create response from the server to the client.
@@ -24,18 +23,6 @@ public class LobbyCreateRes implements SONRepresentable {
     this.id = id;
   }
 
-
-  /**
-   * Creates a SON object representing this object.
-   *
-   * @return the SON representation.
-   */
-  @Override
-  public SON asSON() {
-    return new SON()
-        .put(id, ID_KEY);
-  }
-
   /**
    * Creates and returns a new lobby create response, converted from its SON representation.
    *
@@ -47,5 +34,16 @@ public class LobbyCreateRes implements SONRepresentable {
     String id = son.getString(ID_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, ID_KEY));
     return new LobbyCreateRes(id);
+  }
+
+  /**
+   * Creates a SON object representing this object.
+   *
+   * @return the SON representation.
+   */
+  @Override
+  public SON asSON() {
+    return new SON()
+        .put(id, ID_KEY);
   }
 }

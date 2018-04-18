@@ -22,7 +22,7 @@ public class Signal extends GameObject implements Comparable<Signal> {
     this.targets = targets;
     this.playerID = playerID;
     this.amount = amount;
-    this.arrivalTime = (long) (origin.getDistanceFrom(starCoordinates)/lightSpeed);
+    this.arrivalTime = (long) (origin.getDistanceFrom(starCoordinates) / lightSpeed);
   }
 
   /**

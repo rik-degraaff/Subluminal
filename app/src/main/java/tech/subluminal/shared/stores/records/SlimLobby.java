@@ -25,30 +25,6 @@ public class SlimLobby extends Identifiable implements SONRepresentable {
     this.status = status;
   }
 
-  public int getPlayerCount() {
-    return playerCount;
-  }
-
-  public void setPlayerCount(int playerCount) {
-    this.playerCount = playerCount;
-  }
-
-  public LobbySettings getSettings() {
-    return settings;
-  }
-
-  public LobbyStatus getStatus() {
-    return status;
-  }
-
-  public void setStatus(LobbyStatus status) {
-    this.status = status;
-  }
-
-  public void setSettings(LobbySettings settings) {
-    this.settings = settings;
-  }
-
   public static <E extends SlimLobby> E fromSON(SON son, Supplier<E> lobbySupplier)
       throws SONConversionError {
     E lobby = lobbySupplier.get();
@@ -81,6 +57,30 @@ public class SlimLobby extends Identifiable implements SONRepresentable {
 
   public static SlimLobby fromSON(SON son) throws SONConversionError {
     return fromSON(son, () -> new SlimLobby(null, null, null));
+  }
+
+  public int getPlayerCount() {
+    return playerCount;
+  }
+
+  public void setPlayerCount(int playerCount) {
+    this.playerCount = playerCount;
+  }
+
+  public LobbySettings getSettings() {
+    return settings;
+  }
+
+  public void setSettings(LobbySettings settings) {
+    this.settings = settings;
+  }
+
+  public LobbyStatus getStatus() {
+    return status;
+  }
+
+  public void setStatus(LobbyStatus status) {
+    this.status = status;
   }
 
   /**

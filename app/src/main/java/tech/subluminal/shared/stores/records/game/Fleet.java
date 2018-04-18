@@ -44,6 +44,13 @@ public class Fleet extends Movable implements SONRepresentable {
   }
 
   /**
+   * @param numberOfShips the number of ships this fleet contains.
+   */
+  public void setNumberOfShips(int numberOfShips) {
+    this.numberOfShips = numberOfShips;
+  }
+
+  /**
    * Adds a number of ships to this fleet.
    *
    * @param newShips the amount of ships to add.
@@ -52,13 +59,6 @@ public class Fleet extends Movable implements SONRepresentable {
   public Fleet expanded(int newShips) {
     return new Fleet(getCoordinates(), getNumberOfShips() + newShips, getID(), getTargetIDs(),
         getEndTarget(), getSpeed());
-  }
-
-  /**
-   * @param numberOfShips the number of ships this fleet contains.
-   */
-  public void setNumberOfShips(int numberOfShips) {
-    this.numberOfShips = numberOfShips;
   }
 
   public SON asSON() {
