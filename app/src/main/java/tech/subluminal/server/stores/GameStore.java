@@ -1,7 +1,7 @@
 package tech.subluminal.server.stores;
 
-import tech.subluminal.server.stores.records.MoveRequests;
 import tech.subluminal.server.stores.records.GameState;
+import tech.subluminal.server.stores.records.MoveRequests;
 import tech.subluminal.shared.stores.IdentifiableCollection;
 
 public interface GameStore {

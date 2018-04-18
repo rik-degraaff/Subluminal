@@ -17,6 +17,12 @@ public class HighScore implements SONRepresentable {
     this.score = score;
   }
 
+  public static Optional<HighScore> fromSON(SON son) {
+    return son.getString("username").flatMap(username ->
+        son.getDouble("score").map(score ->
+            new HighScore(username, score)));
+  }
+
   /**
    * @return the name of the user the highscore belongs to.
    */
@@ -41,11 +47,5 @@ public class HighScore implements SONRepresentable {
     return new SON()
         .put(username, "username")
         .put(score, "score");
-  }
-
-  public static Optional<HighScore> fromSON(SON son) {
-    return son.getString("username").flatMap(username ->
-        son.getDouble("score").map(score ->
-           new HighScore(username, score)));
   }
 }

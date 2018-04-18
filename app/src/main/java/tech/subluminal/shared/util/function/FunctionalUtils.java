@@ -39,9 +39,9 @@ public class FunctionalUtils {
 
       private static final int CANCEL_CHECK_COUNT = 63;
       private final Spliterator<T> s;
+      private final AtomicBoolean cancel = new AtomicBoolean();
       private int count;
       private T t;
-      private final AtomicBoolean cancel = new AtomicBoolean();
       private boolean takeOrDrop = true;
 
       Taking(Spliterator<T> s) {

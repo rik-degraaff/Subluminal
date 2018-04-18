@@ -9,16 +9,6 @@ import tech.subluminal.shared.son.SONRepresentable;
 public class GameStartRes implements SONRepresentable {
 
   /**
-   * Creates a SON object representing this object.
-   *
-   * @return the SON representation.
-   */
-  @Override
-  public SON asSON() {
-    return new SON();
-  }
-
-  /**
    * Returns a new game start respone object, converted from its SON representation.
    *
    * @param son the SON representation of a game start request.
@@ -26,5 +16,15 @@ public class GameStartRes implements SONRepresentable {
    */
   public static GameStartRes fromSON(SON son) {
     return new GameStartRes();
+  }
+
+  /**
+   * Creates a SON object representing this object.
+   *
+   * @return the SON representation.
+   */
+  @Override
+  public SON asSON() {
+    return new SON();
   }
 }

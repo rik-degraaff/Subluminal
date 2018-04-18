@@ -34,7 +34,7 @@ public class MotherShipComponent extends Group {
   private final BooleanProperty isRotating = new SimpleBooleanProperty();
   private final int fromCenter = 30;
   private final StringProperty ownerID = new SimpleStringProperty();
-  private final ObservableList<String>  targetIDs = FXCollections.observableArrayList();
+  private final ObservableList<String> targetIDs = FXCollections.observableArrayList();
   private final ListProperty<String> targetsWrapper = new SimpleListProperty<>(targetIDs);
 
   private final DoubleProperty x = new SimpleDoubleProperty();
@@ -70,8 +70,6 @@ public class MotherShipComponent extends Group {
 
     setTargetsWrapper(targetIDs);
 
-
-
     setColor(Color.GRAY);
     Polygon ship = new Polygon();
     ship.getPoints().addAll(new Double[]{
@@ -87,7 +85,6 @@ public class MotherShipComponent extends Group {
     rotateTl.setToAngle(360);
     rotateTl.setCycleCount(RotateTransition.INDEFINITE);
     rotateTl.setInterpolator(Interpolator.LINEAR);
-
 
     Platform.runLater(() -> {
       targetsWrapperProperty().addListener((observable, oldValue, newValue) -> {
@@ -108,7 +105,6 @@ public class MotherShipComponent extends Group {
       });
     });
 
-
     Platform.runLater(() -> {
       setIsRotating(targetsWrapperProperty().isEmpty());
     });
@@ -120,36 +116,36 @@ public class MotherShipComponent extends Group {
     return targetsWrapper.get();
   }
 
-  public ListProperty<String> targetsWrapperProperty() {
-    return targetsWrapper;
-  }
-
   public void setTargetsWrapper(List<String> targetIDs) {
     this.targetIDs.setAll(targetIDs);
+  }
+
+  public ListProperty<String> targetsWrapperProperty() {
+    return targetsWrapper;
   }
 
   public double getX() {
     return x.get();
   }
 
-  public DoubleProperty xProperty() {
-    return x;
-  }
-
   public void setX(double x) {
     this.x.set(x);
+  }
+
+  public DoubleProperty xProperty() {
+    return x;
   }
 
   public double getY() {
     return y.get();
   }
 
-  public DoubleProperty yProperty() {
-    return y;
-  }
-
   public void setY(double y) {
     this.y.set(y);
+  }
+
+  public DoubleProperty yProperty() {
+    return y;
   }
 
   public Color getColor() {

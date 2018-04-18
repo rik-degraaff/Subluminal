@@ -1,17 +1,11 @@
 package tech.subluminal.server.stores;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 import tech.subluminal.server.stores.records.HighScore;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONParsingError;
@@ -24,10 +18,6 @@ public class HighScoreStore {
       HighScoreStore::getHighScoresFromFile,
       HighScoreStore::writeHighscoresToFile);
 
-  public Synchronized<List<HighScore>> highScores() {
-    return highScores;
-  }
-
   private static List<HighScore> getHighScoresFromFile() {
     Scanner sc = new Scanner(
         HighScoreStore.class.getResourceAsStream("/tech/subluminal/resources/highscores.son"));
@@ -35,7 +25,8 @@ public class HighScoreStore {
     List<HighScore> list = new LinkedList<>();
 
     while (sc.hasNext()) {
-      try {HighScore.fromSON(SON.parse(sc.next())).ifPresent(list::add);
+      try {
+        HighScore.fromSON(SON.parse(sc.next())).ifPresent(list::add);
       } catch (SONParsingError sonParsingError) {
         sonParsingError.printStackTrace(); // TODO: handle this
       }
@@ -54,5 +45,9 @@ public class HighScoreStore {
     } catch (FileNotFoundException e) {
       e.printStackTrace(); // TODO: handle this more graciously
     }
+  }
+
+  public Synchronized<List<HighScore>> highScores() {
+    return highScores;
   }
 }

@@ -83,7 +83,9 @@ public class StarComponent extends Pane {
     possessionCount.fillProperty().bind(colorProperty());
     //possessionCount.setCenterX(sizeAll / 2);
     //possessionCount.setCenterY(sizeAll / 2);
-    possessionCount.radiusProperty().bind(Bindings.createDoubleBinding(() -> star.getRadius()* Math.pow(getPossession(),0.8), possessionProperty(), sizeProperty));
+    possessionCount.radiusProperty().bind(Bindings
+        .createDoubleBinding(() -> star.getRadius() * Math.pow(getPossession(), 0.8),
+            possessionProperty(), sizeProperty));
 
     Pane starGroup = new Pane();
     starGroup.setPrefWidth(sizeAll);
@@ -116,12 +118,12 @@ public class StarComponent extends Pane {
     return color.get();
   }
 
-  public ObjectProperty colorProperty() {
-    return color;
-  }
-
   public void setColor(Object color) {
     this.color.set(color);
+  }
+
+  public ObjectProperty colorProperty() {
+    return color;
   }
 
   public String getName() {
@@ -208,8 +210,8 @@ public class StarComponent extends Pane {
         Rectangle focus = new Rectangle(BORDER_WIDTH, sizeAll / 5);
 
         focus.setFill(Color.RED);
-        focus.setX(x * (sizeAll - BORDER_WIDTH)- (sizeAll/2));
-        focus.setY(y * (sizeAll - sizeAll / 5) - (sizeAll/2));
+        focus.setX(x * (sizeAll - BORDER_WIDTH) - (sizeAll / 2));
+        focus.setY(y * (sizeAll - sizeAll / 5) - (sizeAll / 2));
         border.getChildren().add(focus);
       }
     }
@@ -218,8 +220,8 @@ public class StarComponent extends Pane {
         Rectangle focus = new Rectangle(sizeAll / 5, BORDER_WIDTH);
 
         focus.setFill(Color.RED);
-        focus.setX(x * (sizeAll - sizeAll / 5) - (sizeAll/2));
-        focus.setY(y * (sizeAll - BORDER_WIDTH) - (sizeAll/2));
+        focus.setX(x * (sizeAll - sizeAll / 5) - (sizeAll / 2));
+        focus.setY(y * (sizeAll - BORDER_WIDTH) - (sizeAll / 2));
         border.getChildren().add(focus);
       }
     }

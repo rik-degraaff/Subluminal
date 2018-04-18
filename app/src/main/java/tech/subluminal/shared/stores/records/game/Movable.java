@@ -19,7 +19,8 @@ public abstract class Movable extends GameObject {
   private String endTarget;
   private double speed;
 
-  public Movable(Coordinates coordinates, String id, List<String> targetIDs, String endTarget, double speed) {
+  public Movable(Coordinates coordinates, String id, List<String> targetIDs, String endTarget,
+      double speed) {
     super(coordinates, id);
     this.targetIDs = targetIDs;
     this.endTarget = endTarget;

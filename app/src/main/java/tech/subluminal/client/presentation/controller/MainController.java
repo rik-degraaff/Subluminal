@@ -72,6 +72,10 @@ public class MainController implements Initializable {
     return lobby;
   }
 
+  public void setLobby(LobbyComponent lobby) {
+    this.lobby = lobby;
+  }
+
   public void setLobbyStore(LobbyStore lobbyStore) {
     this.lobbyStore = lobbyStore;
   }
@@ -81,7 +85,6 @@ public class MainController implements Initializable {
 
     userListViewController.setUserStore(userStore);
   }
-
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -115,10 +118,6 @@ public class MainController implements Initializable {
 
   public void onWindowResizeHandle(int diffX, int diffY) {
     background.onWindowResize(diffX, diffY);
-  }
-
-  public void setLobby(LobbyComponent lobby) {
-    this.lobby = lobby;
   }
 
   public void onLobbyOpenHandle() {

@@ -70,7 +70,8 @@ public class ClientInitializer extends Application {
     new PingManager(connection, pingStore);
 
     LobbyComponent lobbyPresenter = controller.getLobby();
-    LobbyManager lobbyManager = new LobbyManager(lobbyStore, connection, lobbyPresenter, controller);
+    LobbyManager lobbyManager = new LobbyManager(lobbyStore, connection, lobbyPresenter,
+        controller);
 
     lobbyPresenter.setLobbyStore(lobbyStore);
     lobbyPresenter.setUserStore(userStore);
@@ -82,7 +83,6 @@ public class ClientInitializer extends Application {
     GameManager gameManager = new GameManager(gameStore, connection, gamePresenter);
     gamePresenter.setUserStore(userStore);
     gamePresenter.setGameStore(gameStore);
-
 
     final Thread mainThread = Thread.currentThread();
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {

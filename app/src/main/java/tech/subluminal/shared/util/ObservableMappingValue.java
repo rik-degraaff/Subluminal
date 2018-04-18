@@ -9,7 +9,7 @@ public class ObservableMappingValue<S, T> extends ObservableValueBase<T> {
   private final ObservableValue<S> source;
   private final Function<S, T> mapper;
 
-  public ObservableMappingValue(ObservableValue<S> source, Function<S,T> mapper) {
+  public ObservableMappingValue(ObservableValue<S> source, Function<S, T> mapper) {
     this.source = source;
     this.mapper = mapper;
     source.addListener((o, oldVal, newVal) -> {

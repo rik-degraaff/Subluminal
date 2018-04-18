@@ -74,7 +74,6 @@ public class GameController implements Initializable, GamePresenter {
   private UserStore userStore;
 
 
-
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     /*StarComponent star = new StarComponent("fewff",0.8,new Coordinates(0.2,0.6), "ANDROMEDAR");
@@ -131,7 +130,7 @@ public class GameController implements Initializable, GamePresenter {
           pressStore[0] = null;
           pressStore[1] = null;
           removeJumpPath();
-          if(!jump.isEmpty()){
+          if (!jump.isEmpty()) {
             jump.clear();
           }
         }
@@ -173,14 +172,14 @@ public class GameController implements Initializable, GamePresenter {
         amount -> {
           gameDelegate.sendShips(path, amount);
           removeJumpPath();
-          if(!jump.isEmpty()){
+          if (!jump.isEmpty()) {
             jump.clear();
           }
         },
         () -> {
           gameDelegate.sendMothership(path);
           removeJumpPath();
-          if(!jump.isEmpty()){
+          if (!jump.isEmpty()) {
             jump.clear();
           }
         });
@@ -352,10 +351,10 @@ public class GameController implements Initializable, GamePresenter {
                   star.getCoordinates(),
                   star.getID());
               stars.put(star.getID(), starComponent);
-              if(star.getOwnerID() != null){
-                if(star.getOwnerID().equals(playerID)){
+              if (star.getOwnerID() != null) {
+                if (star.getOwnerID().equals(playerID)) {
                   starComponent.setColor(Color.RED);
-                }else{
+                } else {
                   starComponent.setColor(Color.BLUE);
                 }
               }
@@ -370,10 +369,10 @@ public class GameController implements Initializable, GamePresenter {
             StarComponent starComponent = stars.get(star.getID());
             starComponent.setPossession(star.getPossession());
             starComponent.setOwnerID(star.getOwnerID());
-            if(star.getOwnerID() != null){
-              if(star.getOwnerID().equals(playerID)){
+            if (star.getOwnerID() != null) {
+              if (star.getOwnerID().equals(playerID)) {
                 starComponent.setColor(Color.RED);
-              }else{
+              } else {
                 starComponent.setColor(Color.BLUE);
               }
             }
@@ -391,9 +390,9 @@ public class GameController implements Initializable, GamePresenter {
                   pair.getValue().getCoordinates().getX(), pair.getValue().getCoordinates().getY(),
                   pair.getKey(), pair.getValue().getTargetIDs());
               ships.put(pair.getID(), shipComponent);
-              if(pair.getKey().equals(playerID)){
+              if (pair.getKey().equals(playerID)) {
                 shipComponent.setColor(Color.RED);
-              }else{
+              } else {
                 shipComponent.setColor(Color.BLUE);
               }
 
@@ -412,7 +411,7 @@ public class GameController implements Initializable, GamePresenter {
               shipComponent.setY(pair.getValue().getCoordinates().getY());
             }
             Logger.debug("Target ID's: " + pair.getValue().getTargetIDs());
-            if(shipComponent.getTargetsWrapper().size() != pair.getValue().getTargetIDs().size()){
+            if (shipComponent.getTargetsWrapper().size() != pair.getValue().getTargetIDs().size()) {
               shipComponent.setTargetsWrapper(pair.getValue().getTargetIDs());
             }
 
@@ -430,7 +429,7 @@ public class GameController implements Initializable, GamePresenter {
   }
 
   @Override
-  public void setUserID(){
+  public void setUserID() {
     Platform.runLater(() -> {
       playerID = userStore.currentUser().get().use(opt -> opt.get().getID());
     });
