@@ -18,7 +18,6 @@ import javafx.scene.paint.Color;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.logic.Graph;
 import tech.subluminal.client.presentation.GamePresenter;
-import tech.subluminal.client.presentation.customElements.FleetComponent;
 import tech.subluminal.client.presentation.customElements.Jump;
 import tech.subluminal.client.presentation.customElements.JumpBox;
 import tech.subluminal.client.presentation.customElements.MotherShipComponent;
@@ -26,7 +25,6 @@ import tech.subluminal.client.presentation.customElements.StarComponent;
 import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.client.stores.records.game.OwnerPair;
-import tech.subluminal.client.stores.records.game.Player;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.stores.records.game.Star;
 import tech.subluminal.shared.util.MapperList;
@@ -49,16 +47,9 @@ public class GameController implements Initializable, GamePresenter {
 
   private String playerID;
 
-  //private List<StarComponent> starList = new LinkedList<StarComponent>();//TODO: remove this
-
-  //private ListProperty<StarComponent> stars = new SimpleListProperty<>();
 
   private Map<String, StarComponent> stars = new HashMap<>();
   private Map<String, MotherShipComponent> ships = new HashMap<>();
-
-  private List<MotherShipComponent> shipList = new LinkedList<MotherShipComponent>();
-
-  private List<FleetComponent> fleetList = new LinkedList<FleetComponent>();
 
   private GamePresenter.Delegate gameDelegate;
 
@@ -76,30 +67,6 @@ public class GameController implements Initializable, GamePresenter {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    /*StarComponent star = new StarComponent("fewff",0.8,new Coordinates(0.2,0.6), "ANDROMEDAR");
-    StarComponent star1 = new StarComponent("fewff",0.2,new Coordinates(0.6,0.2), "ANDROMEDAR");
-    StarComponent star3 = new StarComponent("fewff",0.5,new Coordinates(0.8,0.5), "ANDROMEDAR");*/
-    /*StarComponent star2 = new StarComponent(1,0.0,0.2, "TITTY IX");
-    star2.setColorProperty(Color.PINK);
-    StarComponent star3 = new StarComponent(0.1,1,0.1, "LUXIS BB");*/
-
-    /*map.getChildren().addAll(star, star1, star3);
-
-    List<StarComponent> test = new LinkedList();
-    test.add(star);
-    /*test.add(star2);
-    test.add(star3);*/
-    //createJumpPath(test);
-    //removeJumpPath();
-
-    /*MotherShipComponent ship = new MotherShipComponent(star.getLayoutX(),star.getLayoutY()), "fwefr1");
-    ship.setIsRotating(true);
-    map.getChildren().add(ship);
-    //removeJumpPath();
-
-    FleetComponent fleet = new FleetComponent(new Coordinates(0.2, 0.3), 30, "wefwef", "22r2f2");
-    map.getChildren().add(fleet);*/
-
     map.setOnMouseClicked(mouseEvent -> {
       pressStore[0] = null;
       pressStore[1] = null;
@@ -195,27 +162,6 @@ public class GameController implements Initializable, GamePresenter {
     this.main = main;
   }
 
-  @Override
-  public void displayMap(Collection<Star> stars) {
-    /*stars.stream().forEach(
-        s -> starList.add(new StarComponent(s.getOwnerID(), 0.0, s.getCoordinates(), s.getID())));
-
-    starList.stream().forEach(s -> map.getChildren().add(s));*/
-  }
-
-  @Override
-  public void updateStar(Collection<Star> stars) {
-    /*stars.stream().forEach(s -> {
-      starList.stream().forEach(e -> {
-        if (e.getStarID().equals(s.getID())) {
-          e.setOwnerID(s.getOwnerID());
-          e.setPossession(s.getPossession());
-        }
-      });
-    });*/
-
-  }
-
   public String getPlayerID() {
     return playerID;
   }
@@ -223,92 +169,6 @@ public class GameController implements Initializable, GamePresenter {
   public void setPlayerID(String playerID) {
     this.playerID = playerID;
   }
-
-  @Override
-  public void updateFleet(List<Player> players) {
-    players.stream().forEach(p -> {
-      p.getFleets().stream().forEach(f -> {
-        fleetList.stream().forEach(fc -> {
-          // TODO: comment what is done here because of complex structure
-          if (f.getID().equals(fc.getFleetID())) {
-            fc.setNumberOfShips(f.getNumberOfShips());
-            fc.setLayoutX(f.getCoordinates().getX());
-            fc.setLayoutY(f.getCoordinates().getY());
-            fc.setTargetIDs(f.getTargetIDs());
-          } else {
-            fleetList.add(
-                new FleetComponent(f.getCoordinates(), f.getNumberOfShips(), f.getID(), p.getID(),
-                    f.getTargetIDs()));
-          }
-        });
-      });
-    });
-  }
-
-  @Override
-  public void addFleet(List<Player> players) {
-    players.stream().forEach(p -> {
-      p.getFleets().stream().forEach(f -> {
-        fleetList.add(
-            new FleetComponent(f.getCoordinates(), f.getNumberOfShips(), f.getID(), p.getID(),
-                f.getTargetIDs()));
-      });
-    });
-    fleetList.stream().forEach(f -> map.getChildren().add(f));
-  }
-
-  @Override
-  public void removeFleet(Map<String, List<String>> removedFleets) {
-    removedFleets.forEach((k, v) -> {
-      v.stream().forEach(f -> {
-        fleetList.stream().forEach(fc -> {
-          // TODO: explain what is done here because of complex code
-          if (f.equals(fc.getFleetID())) {
-            fleetList.remove(fc);
-          }
-        });
-      });
-    });
-  }
-
-  @Override
-  public void updateMothership(List<Player> players) {
-    players.stream().forEach(p -> {
-      Ship mothership = p.getMotherShip();
-      shipList.stream().forEach(s -> {
-        if (p.getMotherShip().getID().equals(s.getId())) {
-          s.setLayoutX(mothership.getCoordinates().getX());
-          s.setLayoutY(mothership.getCoordinates().getY());
-          s.setTargetsWrapper(mothership.getTargetIDs());
-        }
-      });
-    });
-  }
-
-  @Override
-  public void addMothership(List<Player> players) {
-    players.stream().forEach(p -> {
-      Ship mothership = p.getMotherShip();
-
-      shipList.add(new MotherShipComponent(mothership.getCoordinates().getX(),
-          mothership.getCoordinates().getY(), p.getID(), mothership.getTargetIDs()));
-
-      shipList.stream().forEach(s -> map.getChildren().add(s));
-    });
-
-  }
-
-  @Override
-  public void removeMothership(List<String> playerID) {
-    playerID.stream().forEach(p -> {
-      shipList.stream().forEach(s -> {
-        if (s.getOwnerID().equals(p)) {
-          shipList.remove(s);
-        }
-      });
-    });
-  }
-
 
   @Override
   public void setGameDelegate(Delegate delegate) {
@@ -339,8 +199,6 @@ public class GameController implements Initializable, GamePresenter {
     this.gameStore = gameStore;
 
     Platform.runLater(() -> {
-
-      //this.playerID = userStore.currentUser().get().use(opt -> opt.get().getID());
 
       MapperList<StarComponent, Star> starComponents = new MapperList<>(
           gameStore.stars().observableList(),
