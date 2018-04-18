@@ -7,6 +7,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.util.Duration;
 import tech.subluminal.client.presentation.customElements.BackgroundComponent;
 import tech.subluminal.client.presentation.customElements.GameComponent;
 import tech.subluminal.client.presentation.customElements.LobbyComponent;
@@ -34,9 +37,6 @@ public class MainController implements Initializable {
   private AnchorPane spaceBackgroundDock;
 
   @FXML
-  private AnchorPane chatDock;
-
-  @FXML
   private AnchorPane menuDock;
 
   @FXML
@@ -46,11 +46,8 @@ public class MainController implements Initializable {
 
   private MenuComponent menu;
 
-  private LobbyListComponent lobbyList;
-
   private SettingsComponent settings;
 
-  private LobbyUserComponent lobbyUser;
 
   private LobbyComponent lobby;
 
@@ -102,6 +99,8 @@ public class MainController implements Initializable {
 
     menuDock.getChildren().add(menu); //TODO: reactivate this
     //onMapOpenHandle();
+
+
   }
 
   public MainController getController() {
