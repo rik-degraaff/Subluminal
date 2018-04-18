@@ -5,12 +5,22 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.Pane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.customElements.BackgroundComponent;
+import tech.subluminal.client.presentation.customElements.ChatComponent;
 import tech.subluminal.client.presentation.customElements.GameComponent;
 import tech.subluminal.client.presentation.customElements.LobbyComponent;
 import tech.subluminal.client.presentation.customElements.LobbyListComponent;
@@ -22,11 +32,6 @@ import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.client.stores.UserStore;
 
 public class MainController implements Initializable {
-
-  @FXML
-  private Parent chatView;
-  @FXML
-  private ChatController chatViewController;
 
   @FXML
   private Parent userListView;
@@ -41,6 +46,9 @@ public class MainController implements Initializable {
 
   @FXML
   private AnchorPane playArea;
+
+  @FXML
+  private Rectangle chatHandle;
 
   private BackgroundComponent background;
 
@@ -57,6 +65,9 @@ public class MainController implements Initializable {
   @FXML
   private AnchorPane window;
 
+  @FXML
+  private AnchorPane chatDock;
+
   private GameComponent game;
 
   private UserStore userStore;
@@ -64,6 +75,10 @@ public class MainController implements Initializable {
   private LobbyStore lobbyStore;
 
   private GameController gameController;
+
+  private ChatComponent chat;
+
+  private ChatController chatController;
 
   public LobbyComponent getLobby() {
     return lobby;
@@ -88,6 +103,10 @@ public class MainController implements Initializable {
     background = new BackgroundComponent(200);
     spaceBackgroundDock.getChildren().add(background);
 
+    chat = new ChatComponent(this);
+    chatController = chat.getChatcontroller();
+    chatDock.getChildren().add(chat);
+
     menu = new MenuComponent(this);
     settings = new SettingsComponent(this);
     lobby = new LobbyComponent();
@@ -97,8 +116,12 @@ public class MainController implements Initializable {
 
     playArea.setMouseTransparent(true);
 
-    menuDock.getChildren().add(menu); //TODO: reactivate this
-    //onMapOpenHandle();
+    menuDock.getChildren().add(menu);
+
+    chatHandle.onMouseClickedProperty().addListener(e -> {
+      Logger.debug("pressed");
+    });
+
 
 
   }
@@ -108,7 +131,7 @@ public class MainController implements Initializable {
   }
 
   public ChatController getChatController() {
-    return this.chatViewController;
+    return this.chatController;
   }
 
   public UserListController getUserListController() {

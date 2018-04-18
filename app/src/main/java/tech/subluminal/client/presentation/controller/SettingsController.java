@@ -26,7 +26,7 @@ public class SettingsController implements Observer, Initializable {
     initSound();
 
   }
-  
+
   private void initSound() {
     Media media[] = new Media[3];
 
@@ -43,7 +43,7 @@ public class SettingsController implements Observer, Initializable {
     int random = (int) Math.floor(Math.random()*3);
 
     MediaPlayer player = new MediaPlayer(media[random]);
-    player.setVolume(0.75);
+    player.setVolume(0.1);
     player.play();
 
     player.setOnEndOfMedia(() -> player.seek(Duration.ZERO)

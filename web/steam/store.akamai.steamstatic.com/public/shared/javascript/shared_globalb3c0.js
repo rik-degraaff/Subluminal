@@ -1714,7 +1714,7 @@ function GetResponsiveHeaderFixedOffsetAdjustment()
 		return 0;
 }
 
-/* Scroll to an element if it's not already in view.  If it's at the bottom of the viewport, then it will be
+/* Scroll to an element if it's not already in style.  If it's at the bottom of the viewport, then it will be
  scrolled to the top if less than nRequiredPixelsToShow are visible (defaults to the height of the element)
  */
 function ScrollToIfNotInView( elem, nRequiredPixelsToShow, nSpacingBefore, nAnimationSpeed )
@@ -2838,7 +2838,7 @@ function AlignMenu( elemLink, elemPopup, align, valign, bLinkHasBorder )
 		{
 			var nSpaceAbove = nLinkViewportTop;
 			var nSpaceBelow = nViewportHeight - ( nLinkViewportTop + $Link.height() );
-			//otherwise we only want to drop down if we've got enough space below us (measured based on view area)
+			//otherwise we only want to drop down if we've got enough space below us (measured based on style area)
 			// or if there's not enough space above to pop in either direction and there's more space below
 			if ( nSpaceBelow > nPopupHeight || ( nSpaceAbove < nPopupHeight && nSpaceBelow > nSpaceAbove ) )
 				valign = 'bottom';

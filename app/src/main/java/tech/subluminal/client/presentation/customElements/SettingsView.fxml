@@ -46,10 +46,10 @@
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                       </rowConstraints>
                                        <children>
-                            <Slider fx:id="masterVolume" max="1.0" value="0.5" GridPane.columnIndex="2" />
+                            <Slider fx:id="masterVolume" max="1.0" value="0.1" GridPane.columnIndex="2" />
                                           <CheckBox fx:id="muteMasterVolume" mnemonicParsing="false" text="mute" GridPane.columnIndex="1" />
                             <Label text="Master Volume" />
-                            <Slider max="1.0" value="0.5" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                            <Slider max="1.0" value="0.1" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                           <CheckBox mnemonicParsing="false" text="mute" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                             <Label text="Music Volume" GridPane.rowIndex="1" />
                                        </children>

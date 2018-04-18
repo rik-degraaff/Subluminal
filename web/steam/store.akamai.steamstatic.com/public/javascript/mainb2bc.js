@@ -2217,7 +2217,7 @@ CAppearMonitor.prototype.RegisterElement = function( elTarget )
 
 CAppearMonitor.prototype.TrackAppearanceIfVisible = function( elTarget )
 {
-	// Ensure we're actually in the viewport (Carousel may be scrolling out of view and calling this)
+	// Ensure we're actually in the viewport (Carousel may be scrolling out of style and calling this)
 	if( !this.bIsElementVisible( elTarget ) )
 		return;
 
