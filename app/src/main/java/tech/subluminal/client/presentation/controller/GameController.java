@@ -351,13 +351,17 @@ public class GameController implements Initializable, GamePresenter {
                   star.getPossession(),
                   star.getCoordinates(),
                   star.getID());
-              /*if(star.getOwnerID().equals(playerID)){
-                starComponent.setColor(Color.RED);
-              }else{*/
-                starComponent.setColor(Color.BLUE);
-              //}
-              starComponent.setOnMouseClicked(e -> starClicked(starComponent, e));
               stars.put(star.getID(), starComponent);
+              if(star.getOwnerID() != null){
+                if(star.getOwnerID().equals(playerID)){
+                  starComponent.setColor(Color.RED);
+                }else{
+                  starComponent.setColor(Color.BLUE);
+                }
+              }
+
+              starComponent.setOnMouseClicked(e -> starClicked(starComponent, e));
+
               starMap.put(star.getID(), star);
               map.getChildren().add(starComponent);
               return starComponent;
@@ -366,6 +370,13 @@ public class GameController implements Initializable, GamePresenter {
             StarComponent starComponent = stars.get(star.getID());
             starComponent.setPossession(star.getPossession());
             starComponent.setOwnerID(star.getOwnerID());
+            if(star.getOwnerID() != null){
+              if(star.getOwnerID().equals(playerID)){
+                starComponent.setColor(Color.RED);
+              }else{
+                starComponent.setColor(Color.BLUE);
+              }
+            }
             return starComponent;
           });
 
@@ -416,5 +427,10 @@ public class GameController implements Initializable, GamePresenter {
 
   public void setUserStore(UserStore userStore) {
     this.userStore = userStore;
+  }
+
+  @Override
+  public void setUserID(){
+    playerID = userStore.currentUser().get().use(opt -> opt.get().getID());
   }
 }

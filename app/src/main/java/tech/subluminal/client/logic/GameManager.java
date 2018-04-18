@@ -8,6 +8,7 @@ import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.client.stores.records.game.OwnerPair;
 import tech.subluminal.shared.messages.FleetMoveReq;
 import tech.subluminal.shared.messages.GameStateDelta;
+import tech.subluminal.shared.messages.LoginRes;
 import tech.subluminal.shared.messages.MotherShipMoveReq;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.stores.records.game.Ship;
@@ -38,6 +39,11 @@ public class GameManager implements GamePresenter.Delegate {
 
     connection.registerHandler(GameStateDelta.class, GameStateDelta::fromSON,
         this::onGameStateDeltaReceived);
+    connection.registerHandler(LoginRes.class, LoginRes::fromSON, this::onLoginRes);
+  }
+
+  private void onLoginRes(LoginRes res) {
+    gamePresenter.setUserID();
   }
 
   private void onGameStateDeltaReceived(GameStateDelta delta) {

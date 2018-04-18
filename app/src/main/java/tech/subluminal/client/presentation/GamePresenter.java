@@ -27,6 +27,8 @@ public interface GamePresenter {
 
   public void setGameDelegate(Delegate delegate);
 
+  public void setUserID();
+
   void update();
 
   interface Delegate {
