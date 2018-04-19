@@ -2,20 +2,13 @@ package tech.subluminal.client.presentation.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Pane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
@@ -23,8 +16,6 @@ import tech.subluminal.client.presentation.customElements.BackgroundComponent;
 import tech.subluminal.client.presentation.customElements.ChatComponent;
 import tech.subluminal.client.presentation.customElements.GameComponent;
 import tech.subluminal.client.presentation.customElements.LobbyComponent;
-import tech.subluminal.client.presentation.customElements.LobbyListComponent;
-import tech.subluminal.client.presentation.customElements.LobbyUserComponent;
 import tech.subluminal.client.presentation.customElements.MenuComponent;
 import tech.subluminal.client.presentation.customElements.SettingsComponent;
 import tech.subluminal.client.presentation.customElements.WindowContainerComponent;
@@ -67,6 +58,9 @@ public class MainController implements Initializable {
 
   @FXML
   private AnchorPane chatDock;
+
+  @FXML
+  private AnchorPane chatWindow;
 
   private GameComponent game;
 
@@ -118,11 +112,22 @@ public class MainController implements Initializable {
 
     menuDock.getChildren().add(menu);
 
-    chatHandle.onMouseClickedProperty().addListener(e -> {
-      Logger.debug("pressed");
+
+    Platform.runLater(() -> {
+
+      chatWindow.translateXProperty().bind(Bindings.createDoubleBinding(() -> chatDock.getWidth(), chatWindow.widthProperty(), chatDock.widthProperty()));
+
     });
 
 
+    chatHandle.setOnMouseClicked(e -> {
+      Logger.debug("pressed");
+      chatWindow.translateXProperty().unbind();
+      TranslateTransition transTl = new TranslateTransition(Duration.seconds(2), chatWindow);
+      double width = chatDock.widthProperty().getValue();
+      transTl.setToX(0);
+      transTl.play();
+    });
 
   }
 
