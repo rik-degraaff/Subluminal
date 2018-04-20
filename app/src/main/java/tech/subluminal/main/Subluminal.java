@@ -5,11 +5,11 @@ import java.util.List;
 import javafx.application.Application;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine;
-import tech.subluminal.client.init.ClientInitializer;
-import tech.subluminal.server.init.ServerInitializer;
+import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
-import picocli.CommandLine.Command;
+import tech.subluminal.client.init.ClientInitializer;
+import tech.subluminal.server.init.ServerInitializer;
 
 /**
  * The main class of the Subluminal project containing the main function which starts the program.
@@ -49,6 +49,9 @@ public class Subluminal {
   public static void main(String[] args) {
     final Subluminal subl = CommandLine.populateCommand(new Subluminal(), args);
 
+    final String preLevelTag = "[[preLevelTag]]";
+    final String postLevelTag = "[[postLevelTag]]";
+
     if (subl.help) {
       CommandLine.usage(subl, System.out, CommandLine.Help.Ansi.AUTO);
     } else {
@@ -59,10 +62,6 @@ public class Subluminal {
       Logger.debug("mode:" + subl.mode + " hostAndOrPort:" + subl.hostAndOrPort + " debug:" + String.valueOf(subl.debug) + " logfile:" + subl.logfile + " loglevel:" + subl.loglevel + " username:" + subl.username);
 
       String[] parts = subl.hostAndOrPort.split(":");
-
-      //    if (args.length < 2) {
-      //      invalidArguments();
-      //    }
 
       if ("client".equals(subl.mode)) {
         if (parts.length != 2) {
@@ -88,13 +87,6 @@ public class Subluminal {
         System.exit(1);
       }
     }
-
-//  private static void invalidArguments() {
-//    System.err.println("Incorrect commandline arguments.");
-//    System.err
-//        .println("Call either with (client <hostaddress>:<port> [<username>]) or (server <port>)");
-//    System.exit(1);
-//  }
   }
 
   private static void initClient(String host, int port, String username, boolean debug) {
