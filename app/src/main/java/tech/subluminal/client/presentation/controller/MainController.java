@@ -74,6 +74,8 @@ public class MainController implements Initializable {
 
   private ChatController chatController;
 
+  private boolean chatOut = false;
+
   public LobbyComponent getLobby() {
     return lobby;
   }
@@ -94,7 +96,7 @@ public class MainController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    background = new BackgroundComponent(200);
+    background = new BackgroundComponent(2000);
     spaceBackgroundDock.getChildren().add(background);
 
     chat = new ChatComponent(this);
@@ -112,21 +114,28 @@ public class MainController implements Initializable {
 
     menuDock.getChildren().add(menu);
 
-
     Platform.runLater(() -> {
 
-      chatWindow.translateXProperty().bind(Bindings.createDoubleBinding(() -> chatDock.getWidth(), chatWindow.widthProperty(), chatDock.widthProperty()));
+      chatWindow.translateXProperty().bind(Bindings
+          .createDoubleBinding(() -> chatDock.getWidth(), chatWindow.widthProperty(),
+              chatDock.widthProperty()));
 
     });
-
 
     chatHandle.setOnMouseClicked(e -> {
       Logger.debug("pressed");
       chatWindow.translateXProperty().unbind();
-      TranslateTransition transTl = new TranslateTransition(Duration.seconds(2), chatWindow);
+      TranslateTransition transTl = new TranslateTransition(Duration.seconds(0.2), chatWindow);
       double width = chatDock.widthProperty().getValue();
-      transTl.setToX(0);
-      transTl.play();
+      if (chatOut) {
+        transTl.setToX(width);
+        transTl.play();
+        chatOut = false;
+      } else {
+        transTl.setToX(0);
+        transTl.play();
+        chatOut = true;
+      }
     });
 
   }
