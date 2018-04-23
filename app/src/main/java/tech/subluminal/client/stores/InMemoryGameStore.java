@@ -1,44 +1,34 @@
 package tech.subluminal.client.stores;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
-import tech.subluminal.client.stores.records.game.Player;
+import tech.subluminal.client.stores.records.game.OwnerPair;
+import tech.subluminal.shared.stores.IdentifiableCollection;
+import tech.subluminal.shared.stores.records.game.Fleet;
+import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.stores.records.game.Star;
-import tech.subluminal.shared.util.Synchronized;
 
+/**
+ * Keeps the current state of a game in a map of stars and a map of players.
+ */
 public class InMemoryGameStore implements GameStore {
 
-  private Synchronized<Map<String, Synchronized<Star>>> starMap;
-  private Synchronized<Map<String, Synchronized<Player>>> playerMap;
+  private final IdentifiableCollection<Star> stars = new IdentifiableCollection<>();
+  private final IdentifiableCollection<OwnerPair<Fleet>> fleets = new IdentifiableCollection<>();
+  private final IdentifiableCollection<OwnerPair<Ship>> motherShips = new IdentifiableCollection<>();
+
 
   @Override
-  public Synchronized<Collection<Synchronized<Star>>> getStars() {
-    return starMap.map(Map::values);
+  public IdentifiableCollection<Star> stars() {
+    return stars;
   }
 
   @Override
-  public Optional<Synchronized<Star>> getStarByID(String id) {
-    return Optional.ofNullable(starMap.use(map -> map.get(id)));
+  public IdentifiableCollection<OwnerPair<Fleet>> fleets() {
+    return fleets;
   }
 
   @Override
-  public void addStar(Star star) {
-    starMap.use(map -> map.put(star.getID(), new Synchronized<>(star)));
+  public IdentifiableCollection<OwnerPair<Ship>> motherShips() {
+    return motherShips;
   }
 
-  @Override
-  public Synchronized<Collection<Synchronized<Player>>> getPlayers() {
-    return playerMap.map(Map::values);
-  }
-
-  @Override
-  public Optional<Synchronized<Player>> getPlayerByID(String id) {
-    return Optional.ofNullable(playerMap.use(map -> map.get(id)));
-  }
-
-  @Override
-  public void addPlayer(Player player) {
-    playerMap.use(map -> map.put(player.getID(), new Synchronized<>(player)));
-  }
 }

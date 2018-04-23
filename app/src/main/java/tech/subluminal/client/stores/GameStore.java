@@ -1,22 +1,20 @@
 package tech.subluminal.client.stores;
 
-import java.util.Collection;
-import java.util.Optional;
-import tech.subluminal.client.stores.records.game.Player;
+import tech.subluminal.client.stores.records.game.OwnerPair;
+import tech.subluminal.shared.stores.IdentifiableCollection;
+import tech.subluminal.shared.stores.records.game.Fleet;
+import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.stores.records.game.Star;
-import tech.subluminal.shared.util.Synchronized;
 
+/**
+ * The game store keeps the latest game state and is updated constantly.
+ */
 public interface GameStore {
 
-  Synchronized<Collection<Synchronized<Star>>> getStars();
+  IdentifiableCollection<Star> stars();
 
-  Optional<Synchronized<Star>> getStarByID(String id);
+  IdentifiableCollection<OwnerPair<Fleet>> fleets();
 
-  void addStar(Star star);
+  IdentifiableCollection<OwnerPair<Ship>> motherShips();
 
-  Synchronized<Collection<Synchronized<Player>>> getPlayers();
-
-  Optional<Synchronized<Player>> getPlayerByID(String id);
-
-  void addPlayer(Player player);
 }

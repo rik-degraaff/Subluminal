@@ -4,9 +4,13 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.stream.Collectors;
 import tech.subluminal.server.stores.UserStore;
+import tech.subluminal.shared.messages.InitialUsers;
 import tech.subluminal.shared.messages.LoginReq;
 import tech.subluminal.shared.messages.LoginRes;
 import tech.subluminal.shared.messages.LogoutReq;
+import tech.subluminal.shared.messages.PlayerJoin;
+import tech.subluminal.shared.messages.PlayerLeave;
+import tech.subluminal.shared.messages.PlayerUpdate;
 import tech.subluminal.shared.messages.UsernameReq;
 import tech.subluminal.shared.messages.UsernameRes;
 import tech.subluminal.shared.net.Connection;
@@ -17,6 +21,7 @@ import tech.subluminal.shared.stores.records.User;
  */
 public class UserManager {
 
+  private final MessageDistributor distributor;
   private UserStore userStore;
 
   /**
@@ -28,12 +33,15 @@ public class UserManager {
   public UserManager(UserStore userStore, MessageDistributor distributor) {
     this.userStore = userStore;
 
+    this.distributor = distributor;
     distributor.addConnectionOpenedListener(this::attachHandlers);
     distributor.addConnectionClosedListener(this::onConnectionClosed);
   }
 
   private void onConnectionClosed(String id) {
     userStore.connectedUsers().removeByID(id);
+
+    distributor.broadcast(new PlayerLeave(id));
   }
 
   private void attachHandlers(String id, Connection connection) {
@@ -67,6 +75,8 @@ public class UserManager {
         .ifPresent(syncUser -> syncUser.update(u -> new User(username, id)));
 
     connection.sendMessage(new UsernameRes(username));
+
+    distributor.broadcast(new PlayerUpdate(id, username));
   }
 
   /**
@@ -80,16 +90,23 @@ public class UserManager {
     String username = loginReq.getUsername();
 
     username = getUnusedUsername(username);
-    userStore.connectedUsers().add(new User(username, id));
+    User user = new User(username, id);
+    userStore.connectedUsers().add(user);
 
     connection.sendMessage(new LoginRes(username, id));
+    InitialUsers initialUsers = new InitialUsers();
+    userStore.connectedUsers().getAll().consume(
+        users -> users.stream().map(synUser -> synUser.use(u -> u)).forEach(initialUsers::addUser));
+    connection.sendMessage(initialUsers);
+
+    distributor.sendMessageToAllExcept(new PlayerJoin(user), id);
   }
 
   private String getUnusedUsername(String requestedUsername) {
     Set<String> users = userStore.connectedUsers().getAll().use(us ->
         us.stream()
-        .map(syncUser -> syncUser.use(User::getUsername))
-        .collect(Collectors.toSet()));
+            .map(syncUser -> syncUser.use(User::getUsername))
+            .collect(Collectors.toSet()));
 
     String username = requestedUsername;
     int i = 1;

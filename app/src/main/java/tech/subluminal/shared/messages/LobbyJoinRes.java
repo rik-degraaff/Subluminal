@@ -1,10 +1,9 @@
 package tech.subluminal.shared.messages;
 
-import tech.subluminal.server.stores.InMemoryUserStore;
-import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
+import tech.subluminal.shared.stores.records.Lobby;
 
 /**
  * Represents a response from server to client with the joined lobby and sends the users already in
@@ -12,13 +11,14 @@ import tech.subluminal.shared.son.SONRepresentable;
  */
 public class LobbyJoinRes implements SONRepresentable {
 
+  private static final String CLASS_NAME = LobbyJoinRes.class.getSimpleName();
   private static final String LOBBY_KEY = "lobby";
   private Lobby lobby;
 
   /**
-   * Creates a lobby join request with a given id.
+   * Creates a lobby join request with a given lobby.
    *
-   * @param id the id of the lobby.
+   * @param lobby the lobby object.
    */
   public LobbyJoinRes(Lobby lobby) {
     this.lobby = lobby;
@@ -32,7 +32,9 @@ public class LobbyJoinRes implements SONRepresentable {
    * @throws SONConversionError when the conversion fails.
    */
   public static LobbyJoinRes fromSON(SON son) throws SONConversionError {
-    return new LobbyJoinRes(Lobby.fromSON(son));
+    SON lobby = son.getObject(LOBBY_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, LOBBY_KEY));
+    return new LobbyJoinRes(Lobby.fromSON(lobby));
   }
 
   /**

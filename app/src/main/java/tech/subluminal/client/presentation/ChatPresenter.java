@@ -5,6 +5,8 @@ package tech.subluminal.client.presentation;
  */
 public interface ChatPresenter {
 
+  void displaySystemMessage(String message);
+
   /**
    * Fired when a someone sends a message to all users on the server.
    *
@@ -44,5 +46,6 @@ public interface ChatPresenter {
 
     void sendWhisperMessage(String message, String username);
 
+    void requestHighScores();
   }
 }

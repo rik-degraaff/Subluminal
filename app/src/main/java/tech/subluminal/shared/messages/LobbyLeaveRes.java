@@ -1,4 +1,4 @@
-package main.java.tech.subluminal.shared.messages;
+package tech.subluminal.shared.messages;
 
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONRepresentable;
@@ -9,6 +9,12 @@ import tech.subluminal.shared.son.SONRepresentable;
 
 public class LobbyLeaveRes implements SONRepresentable {
 
+  /**
+   * Creates and returns a new {@link LobbyLeaveRes} from its {@link SON} representation.
+   *
+   * @param son the {@link SON} representation of a {@link LobbyLeaveRes}
+   * @return a new {@link LobbyLeaveRes}, converted from its {@link SON} representation (empty).
+   */
   public static LobbyLeaveRes fromSON(SON son) {
     return new LobbyLeaveRes();
   }

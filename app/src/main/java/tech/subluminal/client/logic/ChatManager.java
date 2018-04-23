@@ -1,10 +1,16 @@
 package tech.subluminal.client.logic;
 
+import static tech.subluminal.shared.util.function.FunctionalUtils.ifPresent;
+
+import java.util.Optional;
 import tech.subluminal.client.presentation.ChatPresenter;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.messages.ChatMessageIn;
 import tech.subluminal.shared.messages.ChatMessageOut;
+import tech.subluminal.shared.messages.HighScoreReq;
+import tech.subluminal.shared.messages.HighScoreRes;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.stores.records.User;
 
 public class ChatManager implements ChatPresenter.Delegate {
 
@@ -28,6 +34,15 @@ public class ChatManager implements ChatPresenter.Delegate {
 
     connection
         .registerHandler(ChatMessageIn.class, ChatMessageIn::fromSON, this::onMessageReceived);
+    connection
+        .registerHandler(HighScoreRes.class, HighScoreRes::fromSON, this::onHighScoresReceived);
+  }
+
+  private void onHighScoresReceived(HighScoreRes req) {
+    System.out.println(req.getHighScores());
+    chatPresenter.displaySystemMessage(
+        req.getHighScores().stream().map(hs -> hs.getUsername() + ": " + hs.getScore())
+            .reduce("", (acc, s) -> acc + System.lineSeparator() + s));
   }
 
   private void onMessageReceived(ChatMessageIn message) {
@@ -58,8 +73,18 @@ public class ChatManager implements ChatPresenter.Delegate {
 
   @Override
   public void sendWhisperMessage(String message, String username) {
-    //TODO: handle error
-    connection.sendMessage(
-        new ChatMessageOut(message, userStore.getUserByUsername(username).getUsername(), false));
+    Optional<String> optID = userStore.users()
+        .getByUsername(username)
+        .use(us -> us.stream().map(syncUser -> syncUser.use(User::getID)))
+        .findFirst();
+
+    ifPresent(optID,
+        id -> connection.sendMessage(new ChatMessageOut(message, id, false)),
+        () -> chatPresenter.displaySystemMessage(username + " does not exist or is not online."));
+  }
+
+  public void requestHighScores() {
+    System.out.println("request highscores");
+    connection.sendMessage(new HighScoreReq());
   }
 }
