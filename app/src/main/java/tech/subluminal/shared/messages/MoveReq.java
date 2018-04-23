@@ -1,6 +1,5 @@
 package tech.subluminal.shared.messages;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 import tech.subluminal.shared.son.SON;
@@ -21,9 +20,10 @@ public abstract class MoveReq implements SONRepresentable {
    * Creates a new move request and initializes the list symbolizing the jumping path with an new
    * empty list.
    */
-  public MoveReq() {
-    this.stars = new LinkedList<>();
+  public MoveReq(List<String> stars) {
+    this.stars = stars;
   }
+
 
   /**
    * Creates ans returns a new MoveReq-extending object from its SON representation.

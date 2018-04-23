@@ -48,7 +48,7 @@ public class GameHistory<E extends GameObject> extends MultiHistory<String, Game
           double timeDiff = (motherShip.getTime() - entry.getTime()) / 1000.0;
           return distance / timeDiff < lightSpeed;
         })
-        .map(e -> e.isDestroyed() ? new Left<E, Void>(e.getState()) : new Right<E, Void>(null))
+        .map(e -> !e.isDestroyed() ? new Left<E, Void>(e.getState()) : new Right<E, Void>(null))
         .map(e -> {
           last.put(playerID, e);
           return e;
@@ -56,13 +56,11 @@ public class GameHistory<E extends GameObject> extends MultiHistory<String, Game
   }
 
   /**
-   *
    * @param playerID the id of the player for whom the state should be read.
    * @param motherShip the mother ship entry of the user.
    * @return the latest state if the information could have reached the player's mother ship by now,
-   * the last sent state if no new state is available.
-   * If this function returns a Right (Void) this means that the object was destroyed and that
-   * information has reached the player.
+   * the last sent state if no new state is available. If this function returns a Right (Void) this
+   * means that the object was destroyed and that information has reached the player.
    */
   public Either<E, Void> getLatestOrLastForPlayer(String playerID,
       GameHistoryEntry<Ship> motherShip) {

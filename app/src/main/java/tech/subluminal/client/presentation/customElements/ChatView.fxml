@@ -51,7 +51,8 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
       </rowConstraints>
       <children>
-        <TextField GridPane.columnIndex="1" onAction="#sendMessage" prefHeight="25.0" prefWidth="375.0"
+        <TextField GridPane.columnIndex="1" onAction="#sendMessage" prefHeight="25.0"
+          prefWidth="375.0"
           fx:id="messageText">
           <GridPane.margin>
             <Insets/>

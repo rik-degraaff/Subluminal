@@ -2,23 +2,34 @@ package tech.subluminal.client.presentation.controller;
 
 import java.net.URL;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ListView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import org.pmw.tinylog.Logger;
+import tech.subluminal.client.logic.Graph;
 import tech.subluminal.client.presentation.GamePresenter;
 import tech.subluminal.client.presentation.customElements.FleetComponent;
 import tech.subluminal.client.presentation.customElements.Jump;
 import tech.subluminal.client.presentation.customElements.JumpBox;
 import tech.subluminal.client.presentation.customElements.MotherShipComponent;
 import tech.subluminal.client.presentation.customElements.StarComponent;
+import tech.subluminal.client.stores.GameStore;
+import tech.subluminal.client.stores.UserStore;
+import tech.subluminal.client.stores.records.game.OwnerPair;
 import tech.subluminal.client.stores.records.game.Player;
-import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.stores.records.game.Star;
+import tech.subluminal.shared.util.MapperList;
 
 public class GameController implements Initializable, GamePresenter {
 
@@ -36,13 +47,31 @@ public class GameController implements Initializable, GamePresenter {
 
   private JumpBox box;
 
-  private List<StarComponent> starList = new LinkedList<StarComponent>();
+  private String playerID;
+
+  //private List<StarComponent> starList = new LinkedList<StarComponent>();//TODO: remove this
+
+  //private ListProperty<StarComponent> stars = new SimpleListProperty<>();
+
+  private Map<String, StarComponent> stars = new HashMap<>();
+  private Map<String, MotherShipComponent> ships = new HashMap<>();
 
   private List<MotherShipComponent> shipList = new LinkedList<MotherShipComponent>();
 
   private List<FleetComponent> fleetList = new LinkedList<FleetComponent>();
 
   private GamePresenter.Delegate gameDelegate;
+
+  private GameStore gameStore;
+
+  private ListView<MotherShipComponent> dummyShipList = new ListView<>();
+
+  private Map<String, Star> starMap = new HashMap<>();
+
+  private ListView<StarComponent> dummyStarList = new ListView<>();
+  private Graph<String> graph;
+  private List<String> path;
+  private UserStore userStore;
 
 
   @Override
@@ -71,61 +100,89 @@ public class GameController implements Initializable, GamePresenter {
     FleetComponent fleet = new FleetComponent(new Coordinates(0.2, 0.3), 30, "wefwef", "22r2f2");
     map.getChildren().add(fleet);*/
 
-    map.getChildren().forEach(e -> {
-      if (e instanceof StarComponent) {
-        e.setOnMouseClicked(mouseEvent -> {
-          if (pressStore[1] == null) {
-            if (pressStore[0] == null) {
-              pressStore[0] = (StarComponent) e;
-              pressStore[1] = null;
-            } else if (pressStore[0] == e) {
-
-            } else {
-              pressStore[1] = (StarComponent) e;
-            }
-          } else {
-            pressStore[0] = (StarComponent) e;
-            pressStore[1] = null;
-          }
-          System.out.println(pressStore[0].getName());
-          mouseEvent.consume();
-        });
-      }
-    });
-
     map.setOnMouseClicked(mouseEvent -> {
       pressStore[0] = null;
       pressStore[1] = null;
-      if (map.getChildren().contains(jump)) {
-        map.getChildren().remove(jump);
+      removeJumpPath();
+      if (jump != null) {
+        jump.clear();
       }
-      System.out.println("cleared");
     });
   }
 
-  public void createJumpPath(List<StarComponent> path) {
+  private void starClicked(StarComponent star, MouseEvent mouseEvent) {
+    if (pressStore[1] == null) {
+      if (pressStore[0] == null) {
+        pressStore[0] = star;
+        pressStore[1] = null;
+      } else {
+        Logger.debug("creating JumpPath");
+        pressStore[1] = star;
+        if (path != null) {
+          path.clear();
+        }
+        this.path = graph
+            .findShortestPath(pressStore[0].getStarID(), pressStore[1].getStarID());
+        if (!path.isEmpty()) {
+          removeJumpPath();
+          createJumpPath(path);
+        } else {
+          pressStore[0] = null;
+          pressStore[1] = null;
+          removeJumpPath();
+          if (!jump.isEmpty()) {
+            jump.clear();
+          }
+        }
+
+      }
+    } else {
+      pressStore[0] = star;
+      pressStore[1] = null;
+    }
+    mouseEvent.consume();
+  }
+
+  public void createJumpPath(List<String> path) {
+
+    List<StarComponent> starComponents = path.stream().map(stars::get).collect(Collectors.toList());
+
     for (int i = 0; i < path.size() - 1; i++) {
-      jump.add(new Jump(path.get(i).layoutXProperty(), path.get(i).layoutYProperty(),
-          path.get(i + 1).layoutXProperty(), path.get(i + 1).layoutYProperty()));
+      jump.add(
+          new Jump(starComponents.get(i).layoutXProperty(), starComponents.get(i).layoutYProperty(),
+              starComponents.get(i + 1).layoutXProperty(),
+              starComponents.get(i + 1).layoutYProperty()));
     }
     jump.stream().forEach(j -> map.getChildren().add(j));
 
-    createJumpBox(path.get(0));
+    createJumpBox(starComponents.get(0));
 
   }
 
   public void removeJumpPath() {
-    jump.stream().forEach(j -> map.getChildren().remove(j));
+    jump.stream().forEach(j -> {
+      map.getChildren().remove(j);
+    });
 
     removeJumpBox();
   }
 
   public void createJumpBox(StarComponent start) {
-    box = new JumpBox(start.layoutXProperty(), start.layoutYProperty());
-
-    box.shipToSendProperty().addListener((observable, oldValue, newValue) -> {
-      System.out.println("Ships send" + newValue);
-    });
+    box = new JumpBox(start.layoutXProperty(), start.layoutYProperty(),
+        amount -> {
+          gameDelegate.sendShips(path, amount);
+          removeJumpPath();
+          if (!jump.isEmpty()) {
+            jump.clear();
+          }
+        },
+        () -> {
+          gameDelegate.sendMothership(path);
+          removeJumpPath();
+          if (!jump.isEmpty()) {
+            jump.clear();
+          }
+        });
 
     map.getChildren().add(box);
   }
@@ -140,23 +197,31 @@ public class GameController implements Initializable, GamePresenter {
 
   @Override
   public void displayMap(Collection<Star> stars) {
-    stars.stream().forEach(
+    /*stars.stream().forEach(
         s -> starList.add(new StarComponent(s.getOwnerID(), 0.0, s.getCoordinates(), s.getID())));
 
-    starList.stream().forEach(s -> map.getChildren().add(s));
+    starList.stream().forEach(s -> map.getChildren().add(s));*/
   }
 
   @Override
   public void updateStar(Collection<Star> stars) {
-    stars.stream().forEach(s -> {
+    /*stars.stream().forEach(s -> {
       starList.stream().forEach(e -> {
         if (e.getStarID().equals(s.getID())) {
-          e.setOwnerIDProperty(s.getOwnerID());
+          e.setOwnerID(s.getOwnerID());
           e.setPossession(s.getPossession());
         }
       });
-    });
+    });*/
 
+  }
+
+  public String getPlayerID() {
+    return playerID;
+  }
+
+  public void setPlayerID(String playerID) {
+    this.playerID = playerID;
   }
 
   @Override
@@ -172,7 +237,8 @@ public class GameController implements Initializable, GamePresenter {
             fc.setTargetIDs(f.getTargetIDs());
           } else {
             fleetList.add(
-                new FleetComponent(f.getCoordinates(), f.getNumberOfShips(), f.getID(), p.getID(), f.getTargetIDs() ));
+                new FleetComponent(f.getCoordinates(), f.getNumberOfShips(), f.getID(), p.getID(),
+                    f.getTargetIDs()));
           }
         });
       });
@@ -184,7 +250,8 @@ public class GameController implements Initializable, GamePresenter {
     players.stream().forEach(p -> {
       p.getFleets().stream().forEach(f -> {
         fleetList.add(
-            new FleetComponent(f.getCoordinates(), f.getNumberOfShips(), f.getID(), p.getID(), f.getTargetIDs() ));
+            new FleetComponent(f.getCoordinates(), f.getNumberOfShips(), f.getID(), p.getID(),
+                f.getTargetIDs()));
       });
     });
     fleetList.stream().forEach(f -> map.getChildren().add(f));
@@ -212,7 +279,7 @@ public class GameController implements Initializable, GamePresenter {
         if (p.getMotherShip().getID().equals(s.getId())) {
           s.setLayoutX(mothership.getCoordinates().getX());
           s.setLayoutY(mothership.getCoordinates().getY());
-          s.setTargetIDs(mothership.getTargetIDs());
+          s.setTargetsWrapper(mothership.getTargetIDs());
         }
       });
     });
@@ -239,6 +306,132 @@ public class GameController implements Initializable, GamePresenter {
           shipList.remove(s);
         }
       });
+    });
+  }
+
+
+  @Override
+  public void setGameDelegate(Delegate delegate) {
+    gameDelegate = delegate;
+
+  }
+
+  @Override
+  public void update() {
+    Platform.runLater(() -> {
+      dummyStarList.refresh();
+      dummyStarList.getItems().forEach(starComponent -> Logger.trace("star: " + starComponent));
+      dummyShipList.refresh();
+      dummyShipList.getItems().forEach(shipComponent -> Logger.trace("ship: " + shipComponent));
+
+      if (graph != null) {
+        return;
+      }
+      this.graph = new Graph<>(stars.keySet(),
+          (s1, s2) -> starMap.get(s1).getDistanceFrom(starMap.get(s2)) <= starMap.get(s1).getJump(),
+          (s1, s2) -> starMap.get(s1).getDistanceFrom(starMap.get(s2)),
+          false);
+    });
+
+  }
+
+  public void setGameStore(GameStore gameStore) {
+    this.gameStore = gameStore;
+
+    Platform.runLater(() -> {
+
+      //this.playerID = userStore.currentUser().get().use(opt -> opt.get().getID());
+
+      MapperList<StarComponent, Star> starComponents = new MapperList<>(
+          gameStore.stars().observableList(),
+          star -> {
+            if (stars.get(star.getID()) == null) {
+              StarComponent starComponent = new StarComponent(star.getOwnerID(),
+                  star.getPossession(),
+                  star.getCoordinates(),
+                  star.getID());
+              stars.put(star.getID(), starComponent);
+              if (star.getOwnerID() != null) {
+                if (star.getOwnerID().equals(playerID)) {
+                  starComponent.setColor(Color.RED);
+                } else {
+                  starComponent.setColor(Color.BLUE);
+                }
+              }
+
+              starComponent.setOnMouseClicked(e -> starClicked(starComponent, e));
+
+              starMap.put(star.getID(), star);
+              map.getChildren().add(starComponent);
+              return starComponent;
+
+            }
+            StarComponent starComponent = stars.get(star.getID());
+            starComponent.setPossession(star.getPossession());
+            starComponent.setOwnerID(star.getOwnerID());
+            if (star.getOwnerID() != null) {
+              if (star.getOwnerID().equals(playerID)) {
+                starComponent.setColor(Color.RED);
+              } else {
+                starComponent.setColor(Color.BLUE);
+              }
+            }
+            return starComponent;
+          });
+
+      this.dummyStarList.setItems(starComponents);
+
+      MapperList<MotherShipComponent, OwnerPair<Ship>> shipComponents = new MapperList<>(
+
+          gameStore.motherShips().observableList(),
+          pair -> {
+            if (ships.get(pair.getID()) == null) {
+              MotherShipComponent shipComponent = new MotherShipComponent(
+                  pair.getValue().getCoordinates().getX(), pair.getValue().getCoordinates().getY(),
+                  pair.getKey(), pair.getValue().getTargetIDs());
+              ships.put(pair.getID(), shipComponent);
+              if (pair.getKey().equals(playerID)) {
+                shipComponent.setColor(Color.RED);
+              } else {
+                shipComponent.setColor(Color.BLUE);
+              }
+
+              map.getChildren().add(shipComponent);
+              return shipComponent;
+
+            }
+            MotherShipComponent shipComponent = ships.get(pair.getID());
+
+            if (Math.abs(pair.getValue().getCoordinates().getX() - shipComponent.getX())
+                > 0.000001) {
+              shipComponent.setX(pair.getValue().getCoordinates().getX());
+            }
+            if (Math.abs(pair.getValue().getCoordinates().getY() - shipComponent.getY())
+                > 0.000001) {
+              shipComponent.setY(pair.getValue().getCoordinates().getY());
+            }
+            Logger.debug("Target ID's: " + pair.getValue().getTargetIDs());
+            if (shipComponent.getTargetsWrapper().size() != pair.getValue().getTargetIDs().size()) {
+              shipComponent.setTargetsWrapper(pair.getValue().getTargetIDs());
+            }
+
+            return shipComponent;
+          }
+      );
+
+      this.dummyShipList.setItems(shipComponents);
+    });
+
+  }
+
+  public void setUserStore(UserStore userStore) {
+    this.userStore = userStore;
+  }
+
+  @Override
+  public void setUserID() {
+    Platform.runLater(() -> {
+      playerID = userStore.currentUser().get().use(opt -> opt.get().getID());
     });
   }
 }

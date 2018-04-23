@@ -20,6 +20,7 @@
           prefHeight="40.0"
           prefWidth="200.0">
           <items>
+            <Button mnemonicParsing="false" onAction="#onLobbyRefresh" text="Refresh Lobbies"/>
             <Button mnemonicParsing="false" onAction="#onLobbyCreate" text="Create Lobby"/>
           </items>
         </ToolBar>

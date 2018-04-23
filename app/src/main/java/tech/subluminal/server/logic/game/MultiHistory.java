@@ -10,12 +10,11 @@ import java.util.function.Predicate;
 
 /**
  * Allows the storage of states which can be accessed by multiple clients in FIFO order.
- *
  */
 public class MultiHistory<K, V> {
 
-  private final Set<K> keys;
   protected final Map<K, Queue<V>> history = new HashMap<>();
+  private final Set<K> keys;
   private V current;
 
   /**
@@ -26,9 +25,9 @@ public class MultiHistory<K, V> {
     this.keys = keys;
     keys.forEach(key -> {
       Queue<V> q = new LinkedList<>();
-      q.offer(initial);
       history.put(key, q);
     });
+    add(initial);
   }
 
   /**
@@ -53,12 +52,13 @@ public class MultiHistory<K, V> {
    */
   public Optional<V> getLatestForKeyIf(K key, Predicate<V> predicate) {
     return Optional.ofNullable(history.get(key))
+        .filter(q -> !q.isEmpty())
         .filter(q -> predicate.test(q.peek()))
         .map(q -> {
           V state;
           do {
             state = q.poll();
-          } while (predicate.test(q.peek()));
+          } while (!q.isEmpty() && predicate.test(q.peek()));
           return state;
         });
   }

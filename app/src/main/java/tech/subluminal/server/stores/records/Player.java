@@ -2,7 +2,6 @@ package tech.subluminal.server.stores.records;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import tech.subluminal.server.logic.game.GameHistory;
@@ -25,7 +24,8 @@ public class Player extends Identifiable {
     playerIDs.addAll(otherPlayerIDs);
     otherPlayerIDs.add(id);
 
-    this.motherShip = new GameHistory<>(otherPlayerIDs, GameHistoryEntry.foreverAgo(motherShip), lightSpeed);
+    this.motherShip = new GameHistory<>(otherPlayerIDs, GameHistoryEntry.foreverAgo(motherShip),
+        lightSpeed);
     this.motherShip.add(new GameHistoryEntry<>(motherShip));
   }
 
@@ -35,5 +35,15 @@ public class Player extends Identifiable {
 
   public Map<String, GameHistory<Fleet>> getFleets() {
     return fleets;
+  }
+
+  public void updateFleet(Fleet fleet) {
+    GameHistory<Fleet> fleetGameHistory = getFleets().get(fleet.getID());
+    if (fleetGameHistory == null) {
+      getFleets().put(fleet.getID(),
+          new GameHistory<>(playerIDs, new GameHistoryEntry<>(fleet), lightSpeed));
+    } else {
+      fleetGameHistory.add(new GameHistoryEntry<>(fleet));
+    }
   }
 }

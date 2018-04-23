@@ -2,11 +2,24 @@ package tech.subluminal.client.presentation.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
+import org.pmw.tinylog.Logger;
+import tech.subluminal.client.presentation.LobbyPresenter;
+import tech.subluminal.client.presentation.LobbyPresenter.Delegate;
+import tech.subluminal.client.presentation.customElements.PlayerStatusComponent;
+import tech.subluminal.client.stores.LobbyStore;
+import tech.subluminal.client.stores.UserStore;
+import tech.subluminal.shared.records.PlayerStatus;
+import tech.subluminal.shared.stores.records.User;
+import tech.subluminal.shared.util.MapperList;
 
-public class LobbyUserController implements Initializable, Observer {
+
+public class LobbyUserController implements Initializable {
 
   @FXML
   private AnchorPane lobbyHost;
@@ -17,14 +30,69 @@ public class LobbyUserController implements Initializable, Observer {
   @FXML
   private AnchorPane lobbySettings;
 
-  private MainController main;
+  @FXML
+  private ListView<PlayerStatusComponent> userList;
 
-  @Override
-  public void initialize(URL location, ResourceBundle resources) {
+  private UserStore userStore;
+
+  private LobbyStore lobbyStore;
+
+  private LobbyPresenter.Delegate lobbyDelegate;
+
+  private FilteredList<User> filterdUsers;
+
+  public void setLobbyDelegate(Delegate lobbyDelegate) {
+    this.lobbyDelegate = lobbyDelegate;
   }
 
   @Override
-  public void setMainController(MainController main) {
-    this.main = main;
+  public void initialize(URL location, ResourceBundle resources) {
+    //userList.getItems().add(new PlayerStatusComponent("tester", PlayerStatus.INLOBBY));
+  }
+
+  public void setLobbyStore(LobbyStore lobbyStore) {
+    this.lobbyStore = lobbyStore;
+  }
+
+  public void setUserStore(UserStore userStore) {
+    this.userStore = userStore;
+
+    Logger.trace("WOENFOWBEFOWEOFNWOENFWONEOIFWBNOEIFWEIONFWEIO");
+    this.filterdUsers = new FilteredList<>(userStore.users().observableList());
+    filterdUsers.setPredicate(u -> {
+      Logger.trace("LOBBYUSERVIEW GOT UPDATED");
+      return lobbyStore.currentLobby().get()
+          .use(opt -> opt.map(l -> l.getPlayers().contains(u.getID())).orElse(false));
+
+    });
+
+    Platform.runLater(() -> {
+      userList.setItems(new MapperList<>(filterdUsers,
+          u -> new PlayerStatusComponent(u.getUsername(), PlayerStatus.INLOBBY)));
+    });
+
+
+  }
+
+  @FXML
+  private void onLobbyLeave() {
+    lobbyDelegate.leaveLobby();
+  }
+
+  public void lobbyUpdateReceived() {
+    Logger.trace("LobbyUpdage got received here watch out!");
+    Platform.runLater(() -> {
+      filterdUsers.setPredicate(u -> {
+        Logger.trace("LOBBYUSERVIEW GOT UPDATED");
+        return lobbyStore.currentLobby().get()
+            .use(opt -> opt.map(l -> l.getPlayers().contains(u.getID())).orElse(false));
+
+      });
+    });
+  }
+
+  @FXML
+  private void onGameStart() {
+    lobbyDelegate.startGame();
   }
 }

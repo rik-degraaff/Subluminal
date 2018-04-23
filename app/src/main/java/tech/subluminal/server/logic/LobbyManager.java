@@ -2,21 +2,32 @@ package tech.subluminal.server.logic;
 
 import static tech.subluminal.shared.util.IdUtils.generateId;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import org.pmw.tinylog.Logger;
+import tech.subluminal.server.logic.game.GameStarter;
 import tech.subluminal.server.stores.LobbyStore;
 import tech.subluminal.server.stores.ReadOnlyUserStore;
 import tech.subluminal.shared.messages.GameStartReq;
+import tech.subluminal.shared.messages.GameStartRes;
 import tech.subluminal.shared.messages.LobbyCreateReq;
 import tech.subluminal.shared.messages.LobbyJoinReq;
 import tech.subluminal.shared.messages.LobbyJoinRes;
 import tech.subluminal.shared.messages.LobbyLeaveReq;
+import tech.subluminal.shared.messages.LobbyLeaveRes;
 import tech.subluminal.shared.messages.LobbyListReq;
+import tech.subluminal.shared.messages.LobbyListRes;
 import tech.subluminal.shared.messages.LobbyUpdateReq;
 import tech.subluminal.shared.messages.LobbyUpdateRes;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.records.LobbyStatus;
 import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.stores.records.LobbySettings;
+import tech.subluminal.shared.stores.records.SlimLobby;
 import tech.subluminal.shared.util.Synchronized;
 
 /**
@@ -26,10 +37,12 @@ public class LobbyManager {
 
   private final LobbyStore lobbyStore;
   private final ReadOnlyUserStore userStore;
+  private final GameStarter gameStarter;
   private final MessageDistributor distributor;
 
   public LobbyManager(LobbyStore lobbyStore, ReadOnlyUserStore userStore,
-      MessageDistributor distributor) {
+      MessageDistributor distributor, GameStarter gameStarter) {
+    this.gameStarter = gameStarter;
     this.lobbyStore = lobbyStore;
     this.userStore = userStore;
     this.distributor = distributor;
@@ -48,7 +61,7 @@ public class LobbyManager {
     connection
         .registerHandler(LobbyLeaveReq.class, LobbyLeaveReq::fromSON, req -> onLobbyLeave(id, req));
     connection
-        .registerHandler(LobbyListReq.class, LobbyListReq::fromSON, this::onLobbyList);
+        .registerHandler(LobbyListReq.class, LobbyListReq::fromSON, req -> onLobbyList(id, req));
     connection
         .registerHandler(LobbyCreateReq.class, LobbyCreateReq::fromSON,
             req -> onLobbyCreate(id, req, connection));
@@ -65,11 +78,12 @@ public class LobbyManager {
         .consume(list ->
             list.stream()
                 .filter(s -> s.use(lobby -> lobby.getSettings()
-                                                 .getAdminID()
-                                                 .equals(userID)))
+                    .getAdminID()
+                    .equals(userID)))
                 .forEach(s -> s.consume(lobby -> {
                   lobby.setStatus(LobbyStatus.FULL);
-                  //Start game
+                  distributor.sendMessage(new GameStartRes(), lobby.getPlayers());
+                  gameStarter.startGame(lobby.getID(), new HashSet<>(lobby.getPlayers()));
                 })));
   }
 
@@ -91,6 +105,7 @@ public class LobbyManager {
     String name = req.getName();
     LobbyStatus status = LobbyStatus.OPEN;
     Lobby lobby = new Lobby(lobbyID, new LobbySettings(name, userID), status);
+    lobby.addPlayer(userID, true);
     lobbyStore.lobbies().add(lobby);
     connection.sendMessage(new LobbyJoinRes(lobby));
   }
@@ -107,8 +122,10 @@ public class LobbyManager {
         //TODO: Send message to client: Lobby full
         return l;
       }
+      Set<String> players = new HashSet<>(l.getPlayers());
       l.addPlayer(userID, false);
-      //TODO: Send message to client: Successfully joined lobby
+      distributor.sendMessage(new LobbyJoinRes(l), userID);
+      distributor.sendMessage(new LobbyUpdateRes(l), players);
       return l;
     });
   }
@@ -117,13 +134,27 @@ public class LobbyManager {
     lobbyStore.lobbies()
         .getLobbiesWithUser(userID)
         .consume(lobbies ->
-            lobbies.forEach(syncLobby -> syncLobby.consume(lobby -> lobby.removePlayer(userID)))
+            lobbies.forEach(syncLobby -> syncLobby.consume(lobby -> {
+              if (lobby.getPlayers().size() == 1) {
+                lobbyStore.lobbies().removeByID(lobby.getID());
+                Logger.trace("Deleting lobby");
+              } else {
+                lobby.removePlayer(userID);
+                distributor.sendMessage(new LobbyUpdateRes(lobby), lobby.getPlayers());
+              }
+            }))
         );
-    //TODO: Send message to client: Successfully left lobby
+    distributor.sendMessage(new LobbyLeaveRes(), userID);
   }
 
-  private void onLobbyList(LobbyListReq req) {
+  private void onLobbyList(String id, LobbyListReq req) {
+    List<SlimLobby> lobbies = lobbyStore.lobbies()
+        .getAll()
+        .use(l -> l.stream()
+            .map(s -> s.use(Function.identity()))
+            .collect(Collectors.toList()));
 
+    distributor.sendMessage(new LobbyListRes(lobbies), id);
   }
 
   /**

@@ -58,7 +58,6 @@ public class PlayerUpdate implements SONRepresentable {
 
   /**
    * Creates and returns a SON representation of this PlayerUpdate.
-   * @return
    */
   @Override
   public SON asSON() {

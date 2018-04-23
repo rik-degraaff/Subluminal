@@ -10,6 +10,7 @@ import tech.subluminal.server.logic.UserManager;
 import tech.subluminal.server.logic.game.GameManager;
 import tech.subluminal.server.net.SocketConnectionManager;
 import tech.subluminal.server.stores.GameStore;
+import tech.subluminal.server.stores.HighScoreStore;
 import tech.subluminal.server.stores.InMemoryGameStore;
 import tech.subluminal.server.stores.InMemoryLobbyStore;
 import tech.subluminal.server.stores.InMemoryPingStore;
@@ -39,11 +40,14 @@ public class ServerInitializer {
     PingStore pingStore = new InMemoryPingStore();
     LobbyStore lobbyStore = new InMemoryLobbyStore();
     GameStore gameStore = new InMemoryGameStore();
+    HighScoreStore highScoreStore = new HighScoreStore();
 
     new UserManager(userStore, messageDistributor);
     new PingManager(pingStore, userStore, messageDistributor);
-    new ChatManager(messageDistributor, userStore);
-    new GameManager(gameStore, lobbyStore, messageDistributor);
-    new LobbyManager(lobbyStore, userStore, messageDistributor);
+    new ChatManager(messageDistributor, userStore, lobbyStore);
+    GameManager gameManager = new GameManager(gameStore, lobbyStore, messageDistributor,
+        highScoreStore);
+    new LobbyManager(lobbyStore, userStore, messageDistributor, gameManager);
   }
 }
+

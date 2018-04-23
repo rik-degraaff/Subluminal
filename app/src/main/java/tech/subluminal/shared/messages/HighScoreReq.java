@@ -1,18 +1,13 @@
 package tech.subluminal.shared.messages;
 
 import tech.subluminal.shared.son.SON;
+import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 
-/**
- * Represents a game start request from a client to the server.
- */
-public class GameStartReq implements SONRepresentable {
+public class HighScoreReq implements SONRepresentable {
 
-  /**
-   * Returns a new game start request, converted from its SON representation
-   */
-  public static GameStartReq fromSON(SON son) {
-    return new GameStartReq();
+  public static HighScoreReq fromSON(SON son) throws SONConversionError {
+    return new HighScoreReq();
   }
 
   /**

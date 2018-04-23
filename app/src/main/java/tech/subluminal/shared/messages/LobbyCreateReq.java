@@ -24,6 +24,20 @@ public class LobbyCreateReq implements SONRepresentable {
   }
 
   /**
+   * Creates and Returns a lobby create request, converted from its SON representation.
+   *
+   * @param son the SON representation of a lobby create request.
+   * @return a new lobby create request, converted from its SON representation.
+   * @throws SONConversionError if the conversion fails.
+   */
+  public static LobbyCreateReq fromSON(SON son) throws SONConversionError {
+    String name = son.getString(NAME_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, NAME_KEY));
+    ;
+    return new LobbyCreateReq(name);
+  }
+
+  /**
    * @return the name.
    */
   public String getName() {
@@ -39,19 +53,5 @@ public class LobbyCreateReq implements SONRepresentable {
   public SON asSON() {
     return new SON()
         .put(name, NAME_KEY);
-  }
-
-  /**
-   * Creates and Returns a lobby create request, converted from its SON representation.
-   *
-   * @param son the SON representation of a lobby create request.
-   * @return a new lobby create request, converted from its SON representation.
-   * @throws SONConversionError if the conversion fails.
-   */
-  public static LobbyCreateReq fromSON(SON son) throws SONConversionError {
-    String name = son.getString(NAME_KEY)
-        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, NAME_KEY));
-    ;
-    return new LobbyCreateReq(name);
   }
 }

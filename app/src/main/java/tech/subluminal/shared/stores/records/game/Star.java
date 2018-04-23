@@ -14,18 +14,22 @@ public class Star extends GameObject implements SONRepresentable {
   private static final String POSSESSION_KEY = "possession";
   private static final String GAME_OBJECT_KEY = "gameObject";
   private static final String GENERATING_KEY = "generating";
+  private static final String JUMP_KEY = "jump";
   private String ownerID;
   private double possession;
   private boolean generating;
+  private double jump;
 
 
   public Star(
-      String ownerID, double possession, Coordinates coordinates, String id, boolean generating
+      String ownerID, double possession, Coordinates coordinates, String id, boolean generating,
+      double jump
   ) {
     super(coordinates, id);
     this.ownerID = ownerID;
     this.possession = possession;
     this.generating = generating;
+    this.jump = jump;
   }
 
   public static Star fromSON(SON son) throws SONConversionError {
@@ -37,7 +41,10 @@ public class Star extends GameObject implements SONRepresentable {
     boolean generating = son.getBoolean(GENERATING_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, GENERATING_KEY));
 
-    Star star = new Star(ownerID, possession, null, null, generating);
+    double jump = son.getDouble(JUMP_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, JUMP_KEY));
+
+    Star star = new Star(ownerID, possession, null, null, generating, jump);
 
     SON gameObject = son.getObject(GAME_OBJECT_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, GAME_OBJECT_KEY));
@@ -77,7 +84,8 @@ public class Star extends GameObject implements SONRepresentable {
 
   /**
    * @return true if this star is generating ships, i.e. if the player who currently owns it
-   * colonized it fully. Note that this doesn't mean that the possesion percentage is currently 100.
+   * colonized it fully. Note that this doesn't mean that the possesion percentage is currently
+   * 100.
    */
   public boolean isGenerating() {
     return generating;
@@ -90,11 +98,16 @@ public class Star extends GameObject implements SONRepresentable {
     this.generating = generating;
   }
 
+  public double getJump() {
+    return jump;
+  }
+
   public SON asSON() {
     SON son = new SON()
         .put(possession, POSSESSION_KEY)
         .put(super.asSON(), GAME_OBJECT_KEY)
-        .put(generating, GENERATING_KEY);
+        .put(generating, GENERATING_KEY)
+        .put(jump, JUMP_KEY);
 
     if (ownerID != null) {
       son.put(ownerID, OWNER_ID_KEY);

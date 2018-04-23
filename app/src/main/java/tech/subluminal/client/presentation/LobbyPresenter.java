@@ -10,6 +10,8 @@ public interface LobbyPresenter {
 
   void lobbyListReceived();
 
+  void lobbyUpdateReceived();
+
   void setLobbyDelegate(Delegate delegate);
 
   interface Delegate {
@@ -21,5 +23,7 @@ public interface LobbyPresenter {
     void createLobby(String name);
 
     void getLobbyList();
+
+    void startGame();
   }
 }

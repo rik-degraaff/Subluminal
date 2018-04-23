@@ -1,6 +1,5 @@
 package tech.subluminal.client.presentation.customElements;
 
-import java.util.LinkedList;
 import java.util.List;
 import javafx.animation.RotateTransition;
 import javafx.application.Platform;
@@ -50,9 +49,9 @@ public class FleetComponent extends Group {
     this.setTargetIDs(targetIDs);
 
     targetIDsProperty().addListener((observable, oldValue, newValue) -> {
-      if(!oldValue.isEmpty() && newValue.isEmpty()){
+      if (!oldValue.isEmpty() && newValue.isEmpty()) {
         setIsRotating(true);
-      }else if(oldValue.isEmpty() && !newValue.isEmpty()){
+      } else if (oldValue.isEmpty() && !newValue.isEmpty()) {
         setIsRotating(false);
       }
     });
@@ -72,7 +71,6 @@ public class FleetComponent extends Group {
     amount.textProperty().bind(Bindings.createStringBinding(() ->
         this.numberOfShipsProperty().getValue().toString(), numberOfShipsProperty()));
 
-
     group.getChildren().add(ship);
     group.getChildren().add(amount);
 
@@ -83,7 +81,7 @@ public class FleetComponent extends Group {
     isRotatingProperty().addListener((observable, oldValue, newValue) -> {
       if (newValue == true && oldValue == false) {
         rotateTl.play();
-      } else if(newValue == false && oldValue == true) {
+      } else if (newValue == false && oldValue == true) {
         rotateTl.stop();
       }
     });
@@ -95,12 +93,12 @@ public class FleetComponent extends Group {
     return targetIDs.get();
   }
 
-  public ListProperty<String> targetIDsProperty() {
-    return targetIDs;
-  }
-
   public void setTargetIDs(List<String> targetIDs) {
     targetIDs.forEach(i -> this.targetIDs.add(i));
+  }
+
+  public ListProperty<String> targetIDsProperty() {
+    return targetIDs;
   }
 
   public Color getColor() {

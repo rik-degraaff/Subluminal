@@ -1,6 +1,7 @@
 package tech.subluminal.shared.stores.records.game;
 
 import java.util.List;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONList;
@@ -18,7 +19,8 @@ public abstract class Movable extends GameObject {
   private String endTarget;
   private double speed;
 
-  public Movable(Coordinates coordinates, String id, List<String> targetIDs, String endTarget, double speed) {
+  public Movable(Coordinates coordinates, String id, List<String> targetIDs, String endTarget,
+      double speed) {
     super(coordinates, id);
     this.targetIDs = targetIDs;
     this.endTarget = endTarget;
@@ -73,10 +75,14 @@ public abstract class Movable extends GameObject {
    */
   public Coordinates getPositionMovingTowards(Coordinates target, double travelTime) {
     double travelDistance = travelTime * speed;
+    Logger.debug("travelDistance: " + travelDistance);
     double distance = getCoordinates().getDistanceFrom(target);
+    Logger.debug("distance: " + distance);
 
-    double x = travelDistance * (target.getX() - getCoordinates().getX()) / distance;
-    double y = travelDistance * (target.getY() - getCoordinates().getY()) / distance;
+    double x = getCoordinates().getX()
+        + travelDistance * (target.getX() - getCoordinates().getX()) / distance;
+    double y = getCoordinates().getY()
+        + travelDistance * (target.getY() - getCoordinates().getY()) / distance;
 
     return new Coordinates(x, y);
   }

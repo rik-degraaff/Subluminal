@@ -3,9 +3,7 @@ package tech.subluminal.shared.messages;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
-import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.stores.records.LobbySettings;
-import tech.subluminal.shared.stores.records.SlimLobby;
 
 /**
  * Represents a lobby update result message.
@@ -27,13 +25,6 @@ public class LobbyUpdateReq implements SONRepresentable {
   }
 
   /**
-   * @return the {@link LobbySettings} to be updated.
-   */
-  public LobbySettings getSettings() {
-    return settings;
-  }
-
-  /**
    * Creates and returns a new LobbyUpdateReq from its SON representation.
    *
    * @param son the SON representation of a LobbyUpdateReq.
@@ -45,6 +36,13 @@ public class LobbyUpdateReq implements SONRepresentable {
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, SETTINGS_KEY));
 
     return new LobbyUpdateReq(LobbySettings.fromSON(settings));
+  }
+
+  /**
+   * @return the {@link LobbySettings} to be updated.
+   */
+  public LobbySettings getSettings() {
+    return settings;
   }
 
   /**

@@ -7,9 +7,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.server.logic.MessageDistributor;
 import tech.subluminal.server.stores.GameStore;
+import tech.subluminal.server.stores.HighScoreStore;
 import tech.subluminal.server.stores.LobbyStore;
 import tech.subluminal.server.stores.records.GameState;
 import tech.subluminal.server.stores.records.MoveRequests;
@@ -19,26 +22,32 @@ import tech.subluminal.server.stores.records.Star;
 import tech.subluminal.shared.logic.game.GameLoop;
 import tech.subluminal.shared.messages.FleetMoveReq;
 import tech.subluminal.shared.messages.GameStateDelta;
+import tech.subluminal.shared.messages.HighScoreReq;
+import tech.subluminal.shared.messages.HighScoreRes;
 import tech.subluminal.shared.messages.MotherShipMoveReq;
 import tech.subluminal.shared.messages.MoveReq;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.util.IdUtils;
 import tech.subluminal.shared.util.Synchronized;
 import tech.subluminal.shared.util.function.Either;
 
-public class GameManager {
+public class GameManager implements GameStarter {
 
-  private static final int TPS = 5;
+  private static final int TPS = 10;
   private final GameStore gameStore;
   private final LobbyStore lobbyStore;
   private final MessageDistributor distributor;
   private final Map<String, Thread> gameThreads = new HashMap<>();
+  private final HighScoreStore highScoreStore;
 
-  public GameManager(GameStore gameStore, LobbyStore lobbyStore, MessageDistributor distributor) {
+  public GameManager(GameStore gameStore, LobbyStore lobbyStore, MessageDistributor distributor,
+      HighScoreStore highScoreStore) {
     this.gameStore = gameStore;
     this.lobbyStore = lobbyStore;
+    this.highScoreStore = highScoreStore;
     this.distributor = distributor;
 
     distributor.addConnectionOpenedListener(this::attachHandlers);
@@ -49,16 +58,31 @@ public class GameManager {
         req -> onMoveRequest(req, id));
     connection.registerHandler(MotherShipMoveReq.class, MotherShipMoveReq::fromSON,
         req -> onMoveRequest(req, id));
+    connection.registerHandler(HighScoreReq.class, HighScoreReq::fromSON,
+        req -> onHighScoreReq(id));
+  }
+
+  private void onHighScoreReq(String id) {
+    distributor
+        .sendMessage(new HighScoreRes(highScoreStore.highScores().use(Function.identity())), id);
   }
 
   private void onMoveRequest(MoveReq req, String id) {
-    String gameID = ""; //TODO: get lobbyID from the lobby store and abort if the user is not one
-    gameStore.moveRequests().getByID(gameID)
-        .ifPresent(sync -> sync.consume(list -> list.add(id, req)));
+    Optional<String> optGameID = lobbyStore.lobbies()
+        .getLobbiesWithUser(id)
+        .use(l -> l.stream().map(s -> s.use(Lobby::getID)))
+        .findFirst();
+    Logger.debug("MOVE REQUESTS: " + gameStore.moveRequests().getByID(optGameID.get()));
+    optGameID.ifPresent(gameID -> {
+      gameStore.moveRequests().getByID(gameID)
+          .ifPresent(sync -> sync.consume(list -> list.add(id, req)));
+    });
   }
 
+  @Override
   public void startGame(String lobbyID, Set<String> playerIDs) {
     gameStore.games().add(MapGeneration.getNewGameStateForPlayers(playerIDs, lobbyID));
+    gameStore.moveRequests().add(new MoveRequests(lobbyID));
 
     GameLoop gameLoop = new GameLoop(TPS, new GameLoop.Delegate() {
 
@@ -70,7 +94,7 @@ public class GameManager {
       }
 
       @Override
-      public void tick(long elapsedTime) {
+      public void tick(double elapsedTime) {
         gameStore.games()
             .getByID(lobbyID)
             .ifPresent(sync -> sync.consume(gameState -> gameTick(gameState, elapsedTime)));
@@ -96,7 +120,6 @@ public class GameManager {
           .get(playerID)
           .getMotherShip()
           .getCurrent();
-
       if (motherShipEntry.isDestroyed()) {
         delta.addRemovedPlayer(playerID);
         //TODO: inform the player that they lost?
@@ -111,12 +134,12 @@ public class GameManager {
           .filter(id -> !id.equals(playerID))
           .forEach(deltaPlayerID -> {
             gameState.getPlayers()
-                .get(playerID)
+                .get(deltaPlayerID)
                 .getMotherShip()
                 .getLatestOrLastForPlayer(playerID, motherShipEntry)
                 .apply(
-                    motherShip -> createPlayerDelta(motherShip, motherShipEntry,
-                        gameState.getPlayers().get(deltaPlayerID), delta, playerID),
+                    motherShip -> delta.addPlayer(createPlayerDelta(motherShip, motherShipEntry,
+                        gameState.getPlayers().get(deltaPlayerID), delta, playerID)),
                     v -> delta.addRemovedPlayer(deltaPlayerID)
                 );
           });
@@ -160,7 +183,7 @@ public class GameManager {
     return playerDelta;
   }
 
-  private void gameTick(GameState gameState, long elapsedTime) {
+  private void gameTick(GameState gameState, double elapsedTime) {
     final Map<String, Star> stars = gameState.getStars()
         .entrySet()
         .stream()
@@ -202,19 +225,15 @@ public class GameManager {
 
     intermediateGameState.getFleetsUnderway().forEach((playerID, fleets) -> {
       final Player player = gameState.getPlayers().get(playerID);
-      fleets.forEach((fleetID, fleet) -> {
-        player.getFleets().get(fleet.getID()).add(new GameHistoryEntry<>(fleet));
-      });
+      fleets.forEach((fleetID, fleet) -> player.updateFleet(fleet));
     });
 
-    intermediateGameState.getMotherShipsOnStars().forEach((playerID, map) -> {
-      final Player player = gameState.getPlayers().get(playerID);
-      map.values()
-          .stream()
-          .filter(Optional::isPresent)
-          .map(Optional::get)
-          .forEach(
-              ship -> player.getMotherShip().add(new GameHistoryEntry<>(ship)));
+    intermediateGameState.getMotherShipsOnStars().forEach((starID, map) -> {
+      map.forEach((playerID, optShip) -> {
+        final Player player = gameState.getPlayers().get(playerID);
+        optShip.ifPresent(
+            ship -> player.getMotherShip().add(new GameHistoryEntry<>(ship)));
+      });
     });
 
     intermediateGameState.getMotherShipsUnderway().forEach((playerID, optionalShip) -> {
@@ -253,7 +272,7 @@ public class GameManager {
 
       final GameHistoryEntry<Ship> entry = new GameHistoryEntry<>(
           new Ship(motherShip.getCoordinates(), motherShip.getID(), req.getTargets(),
-              req.getTargets().get(req.getTargets().size() - 1) ,motherShip.getSpeed()));
+              req.getTargets().get(req.getTargets().size() - 1), motherShip.getSpeed()));
 
       // write the updated mother ship directly into the game store.
       player.getMotherShip().add(entry);
@@ -274,27 +293,22 @@ public class GameManager {
 
   private boolean isValidMove(GameState gameState, String origin, List<String> targets) {
     GameHistory<Star> starHistory = gameState.getStars().get(origin);
-    if (starHistory == null) {
-      return false;
-    }
-
     return isValidMove(gameState, starHistory.getCurrent().getState().getCoordinates(), targets);
   }
 
   private boolean isValidMove(GameState gameState, Coordinates origin, List<String> targets) {
-    if (targets.isEmpty()) {
-      return false;
-    }
-
+    Logger.debug("IS VALID MOVE!!!!!???????");
     Coordinates lastPos = origin;
     for (String target : targets) {
       GameHistory<Star> starHistory = gameState.getStars().get(target);
       if (starHistory == null) {
+        Logger.debug("STARHISTORY IS NULL");
         return false;
       }
 
       Star star = starHistory.getCurrent().getState();
-      if (gameState.getJump() > star.getCoordinates().getDistanceFrom(lastPos)) {
+      if (gameState.getJump() < star.getCoordinates().getDistanceFrom(lastPos)) {
+        Logger.debug("JUMP TOO FAR");
         return false;
       }
 
