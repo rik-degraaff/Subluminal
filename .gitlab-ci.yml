@@ -8,21 +8,19 @@ cache:
     - .gradle/
 
 stages:
-  - checkstyle
+  - check
   - build
   - test
   - coverage
   - javadoc
-  - testing
-  - staging
-  - production
+  - deploy
 
 cache:
   paths:
     - .gradle
 
 checkstyle:
-  stage: checkstyle
+  stage: check
   script:
     - gradle check
   tags:
@@ -89,7 +87,7 @@ javadoc:
     - /^rl-.*$/
 
 testing:
-  stage: staging
+  stage: deploy
   image: docker:latest
   variables:
     DOCKER_DRIVER: 'overlay2'
@@ -101,16 +99,16 @@ testing:
   script:
   - VERSION=$(cat VERSION)
   - echo Building and deploying server verison $VERSION to CI_JOB_NAME
-  - docker build -t subluminalthegame/subluminal:latest -t subluminalthegame/subluminal:3.0.0 .
+  - docker build -t subluminalthegame/subluminal:latest -t subluminalthegame/subluminal:$VERSION .
   - docker login -u subluminalthegame -p $DOCKERHUB_PASSWORD
   - docker push subluminalthegame/subluminal
   - apk update
   - apk add --no-cache openssh-client sshpass
   - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no gitlab@$DEPLOYHOST docker stop subluminal_staging || true
-  - sshpass -p $DEPLOY_PASSWORD ssh gitlab@$DEPLOYHOST docker pull subluminalthegame/subluminal:latest
-  - sshpass -p $DEPLOY_PASSWORD ssh gitlab@$DEPLOYHOST docker run --rm -d -p 1727:1729/tcp --name subluminal_staging subluminalthegame/subluminal:latest
+  - sshpass -p $DEPLOY_PASSWORD ssh gitlab@$DEPLOYHOST docker pull subluminalthegame/subluminal:$VERSION
+  - sshpass -p $DEPLOY_PASSWORD ssh gitlab@$DEPLOYHOST docker run --rm -d -p 1727:1729/tcp --label subluminal --name subluminal_$CI_JOB_NAME subluminalthegame/subluminal:$VERSION
   tags:
-    - cs108
+    - cs108-dind
   #when: on_success
   when: manual
   environment:
@@ -120,11 +118,11 @@ testing:
     - ft-buildtools-luc
 
 staging:
-  stage: testing
+  stage: deploy
   script:
     - echo "Missing sh script to setup testing environment."
   tags:
-    - cs108
+    - cs108-dind
   #when: on_success
   when: manual
   environment:
@@ -134,11 +132,11 @@ staging:
 
 
 production:
-  stage: production
+  stage: deploy
   script:
     - echo "Missing sh script to setup production environment."
   tags:
-    - cs108
+    - cs108-dind
   when: manual
   environment:
     name: production
