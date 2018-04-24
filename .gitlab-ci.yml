@@ -96,6 +96,7 @@ testing:
   - docker:dind
   script:
   - VERSION=$(cat VERSION)
+  - DEPLOYHOST=164.132.199.58
   - echo Building and deploying server verison $VERSION to $CI_JOB_NAME
   - docker build -t subluminalthegame/subluminal:latest -t subluminalthegame/subluminal:$(echo $VERSION) --file ./docker/dockerfile-subluminal.yml --build-arg VERSION=$(echo $VERSION) --build-arg PORT=1729 .
   - docker login -u subluminalthegame -p $DOCKERHUB_PASSWORD
