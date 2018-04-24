@@ -38,7 +38,7 @@ build:
   stage: build
   script:
     - gradle clean
-    - gradle build -x check -x test -x javadpc -x javasourcesjar -x javadocjar
+    - gradle build -x check -x test -x javadoc -x sourcesjar -x javadocjar
   tags:
     - cs108
   artifacts:
