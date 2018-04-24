@@ -38,7 +38,7 @@ build:
   stage: build
   script:
     - gradle clean
-    - gradle build -x check -x test
+    - gradle build -x check -x test -x javadpc -x javasourcesjar -x javadocjar
   tags:
     - cs108
   artifacts:
@@ -94,12 +94,10 @@ testing:
     VERSION: 'null'
   services:
   - docker:dind
-  before_script:
-  - docker info
   script:
   - VERSION=$(cat VERSION)
-  - echo Building and deploying server verison $VERSION to CI_JOB_NAME
-  - docker build -t subluminalthegame/subluminal:latest -t subluminalthegame/subluminal:$VERSION --file ./docker/dockerfile-subluminal.yml --build-arg VERSION=$VERISON --build-arg PORT=1729 .
+  - echo Building and deploying server verison $VERSION to $CI_JOB_NAME
+  - docker build -t subluminalthegame/subluminal:latest -t subluminalthegame/subluminal:$(echo $VERSION) --file ./docker/dockerfile-subluminal.yml --build-arg VERSION=$VERISON --build-arg PORT=1729 .
   - docker login -u subluminalthegame -p $DOCKERHUB_PASSWORD
   - docker push subluminalthegame/subluminal
   - apk update
