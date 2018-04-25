@@ -124,6 +124,7 @@ staging:
   script:
     - apk update
     - apk add --no-cache openssh-client sshpass
+    - ping -c 5 vps406724.ovh.net
     - sshpass -p $DEPLOY_PASSWORD ssh gitlab@vps406724.ovh.net exit
   tags:
     - cs108
