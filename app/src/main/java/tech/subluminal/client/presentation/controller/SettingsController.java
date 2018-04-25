@@ -30,13 +30,13 @@ public class SettingsController implements Observer, Initializable {
     Media media[] = new Media[3];
 
     media[0] = new Media(
-        getClass().getResource("/tech/subluminal/resources/music/theyre-here_looping.aac")
+        getClass().getResource("/tech/subluminal/resources/music/theyre-here_looping.wav")
             .toString());
     media[1] = new Media(
-        getClass().getResource("/tech/subluminal/resources/music/dark-techno-city_looping.aac")
+        getClass().getResource("/tech/subluminal/resources/music/dark-techno-city_looping.wav")
             .toString());
     media[2] = new Media(
-        getClass().getResource("/tech/subluminal/resources/music/urban-Jjngle-2061_looping.aac")
+        getClass().getResource("/tech/subluminal/resources/music/urban-Jjngle-2061_looping.wav")
             .toString());
 
     int random = (int) Math.floor(Math.random()*3);
