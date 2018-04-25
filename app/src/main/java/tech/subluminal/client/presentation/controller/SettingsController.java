@@ -2,7 +2,6 @@ package tech.subluminal.client.presentation.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
@@ -31,13 +30,13 @@ public class SettingsController implements Observer, Initializable {
     Media media[] = new Media[3];
 
     media[0] = new Media(
-        getClass().getResource("/tech/subluminal/resources/music/theyre-here_looping.wav")
+        getClass().getResource("/tech/subluminal/resources/music/theyre-here_looping.aac")
             .toString());
     media[1] = new Media(
-        getClass().getResource("/tech/subluminal/resources/music/dark-techno-city_looping.wav")
+        getClass().getResource("/tech/subluminal/resources/music/dark-techno-city_looping.aac")
             .toString());
     media[2] = new Media(
-        getClass().getResource("/tech/subluminal/resources/music/urban-Jjngle-2061_looping.wav")
+        getClass().getResource("/tech/subluminal/resources/music/urban-Jjngle-2061_looping.aac")
             .toString());
 
     int random = (int) Math.floor(Math.random()*3);
