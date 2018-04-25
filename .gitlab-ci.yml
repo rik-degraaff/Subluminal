@@ -20,7 +20,7 @@ checkstyle:
   script:
     - gradle check -x test
   tags:
-    - cs108
+    - cs108-dind
   allow_failure: true
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
@@ -37,7 +37,7 @@ build:
     - gradle clean
     - gradle build -x check -x test -x javadoc -x sourcesjar -x javadocjar
   tags:
-    - cs108
+    - cs108-dind
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     expire_in: 2 hours
@@ -50,13 +50,13 @@ test:
   script:
     - gradle test
   tags:
-    - cs108
-  coverage: '/Total.*?([0-9]{1,3}) %/'
+    - cs108-dind
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     expire_in: 2 hours
     paths:
       - app/build/reports/test/
+      - app/build/test-results/
 
 coverage:
   stage: coverage
@@ -64,7 +64,8 @@ coverage:
     - gradle jacocoTestReport
     - cat app/build/reports/coverage/index.html
   tags:
-    - cs108
+    - cs108-dind
+  coverage: '/Total.*?([0-9]{1,3}) %/'
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     expire_in: 2 hours
@@ -76,7 +77,7 @@ javadoc:
   script:
     - gradle -q javadoc
   tags:
-    - cs108
+    - cs108-dind
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     expire_in: 2 hours
