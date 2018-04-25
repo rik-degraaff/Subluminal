@@ -121,7 +121,10 @@ testing:
 
 staging:
   stage: deploy
+  iamge: alpine:latest
   script:
+    - apk update
+    - apk add --no-cache openssh-client sshpass
     - sshpass -p $DEPLOY_PASSWORD ssh gitlab@164.132.199.58 exit
   tags:
     - cs108
