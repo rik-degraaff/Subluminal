@@ -35,15 +35,14 @@ build:
   stage: build
   script:
     - gradle clean
-    - gradle build -x check -x test -x javadoc -x sourcesjar -x javadocjar
+    - gradle build -x check -x test -x javadoc -x sourcesjar -x javadocjar -x distZip -x distTar
   tags:
     - cs108-dind
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     expire_in: 2 hours
     paths:
-      - app/build/
-      - app/out/
+      - app/out/*.class
 
 test:
   stage: test
@@ -163,6 +162,8 @@ pages:
     - cp -r app/build/reports/test/* public/test
     - mkdir public/coverage
     - cp -r app/build/reports/coverage/* public/coverage
+  tags:
+    - cs108-dind
   artifacts:
     paths:
     - public
