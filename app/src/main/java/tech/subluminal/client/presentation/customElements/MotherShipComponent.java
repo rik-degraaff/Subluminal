@@ -95,10 +95,14 @@ public class MotherShipComponent extends Group {
     Platform.runLater(() -> {
       targetsWrapperProperty().addListener((observable, oldValue, newValue) -> {
         //Logger.debug("MOTHERSHIP GOT: " + targetsWrapperProperty().toString());
+        Logger.debug("SOMETHING CHANGED " + oldValue + " " + newValue);
         if (targetsWrapperProperty().isEmpty() && !isIsRotating()) {
           setIsRotating(true);
         } else if (!targetsWrapperProperty().isEmpty() && isIsRotating()) {
           setIsRotating(false);
+
+        }else{
+          rotateToStar(group);
         }
       });
 
@@ -108,40 +112,9 @@ public class MotherShipComponent extends Group {
           group.getTransforms().add(new Rotate(90));
           rotateTl.play();
         } else if (!newValue && oldValue) {
-          group.getTransforms().clear();
-          group.getTransforms().add(new Rotate(-group.getRotate() + 45));
-
-          double xShip = getX();
-          double yShip = getY();
-          Star star = gamestore.stars().getByID(targetsWrapper.get(0)).get().use(Function.identity());
-
-          double xStar = star.getCoordinates().getX();
-          double yStar = star.getCoordinates().getY();
-
-          Logger.debug("xSTAR: "+ xStar + " - " + xShip);
-          Logger.debug("ySTAR: "+ yStar + " - " + yShip);
-
-          double xD = xStar - xShip;
-          double yD = yStar - yShip;
-
-          double angle = Math.atan(yD/xD);
-
-          Logger.debug("ROTATING: "+ angle);
-          Logger.debug("ROTATING: "+ Math.toDegrees(angle));
-          Logger.debug("xD: "+ xD);
-          Logger.debug("yD: "+ yD);
-          //Platform.runLater(() -> {
-            if(yD < 0){
-              group.getTransforms().add(new Rotate(360 - Math.toDegrees(angle)));
-            }else {
-              group.getTransforms().add(new Rotate(Math.toDegrees(angle)));
-            }
-
-          //});
-
-
-
           rotateTl.pause();
+          rotateToStar(group);
+
           //rotateTl.setToAngle(9);
         }
       });
@@ -152,6 +125,40 @@ public class MotherShipComponent extends Group {
     });
 
     this.getChildren().add(group);
+  }
+
+  private void rotateToStar(Group group) {
+    group.getTransforms().clear();
+    //group.getTransforms().add(new Rotate(-group.getRotate() + 45));
+    double xShip = getX();
+    double yShip = getY();
+    Star star = gamestore.stars().getByID(targetsWrapper.get(0)).get().use(Function.identity());
+
+    double xStar = star.getCoordinates().getX();
+    double yStar = star.getCoordinates().getY();
+
+    Logger.debug("xSTAR: "+ xStar + " - " + xShip);
+    Logger.debug("ySTAR: "+ yStar + " - " + yShip);
+
+    double xD = xStar - xShip;
+    double yD = yStar - yShip;
+
+    double angle = Math.atan(yD/xD);
+
+    Logger.debug("ROTATING: "+ angle);
+    Logger.debug("ROTATING: "+ Math.toDegrees(angle));
+    Logger.debug("xD: "+ xD);
+    Logger.debug("yD: "+ yD);
+
+    RotateTransition rotateTl = new RotateTransition(Duration.seconds(0.2),group);
+    if(xD < 0){
+      rotateTl.setToAngle(Math.toDegrees(angle) + 90 + 180 + 45);
+      //group.getTransforms().add(new Rotate(Math.toDegrees(angle) + 90 + 180));
+    }else {
+      rotateTl.setToAngle(Math.toDegrees(angle) + 90 + 45);
+      //group.getTransforms().add(new Rotate(Math.toDegrees(angle) + 90));
+    }
+    rotateTl.play();
   }
 
   public GameStore getGamestore() {
