@@ -214,7 +214,8 @@ public class GameController implements Initializable, GamePresenter {
               StarComponent starComponent = new StarComponent(star.getOwnerID(),
                   star.getPossession(),
                   star.getCoordinates(),
-                  star.getID());
+                  star.getID(),
+                  star.getJump());
               stars.put(star.getID(), starComponent);
               if (star.getOwnerID() != null) {
                 starComponent.setColor(playerColors.get(star.getOwnerID()));

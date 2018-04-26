@@ -13,6 +13,8 @@ import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Bloom;
+import javafx.scene.effect.Effect;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -31,6 +33,7 @@ public class StarComponent extends Pane {
   private final StringProperty ownerID = new SimpleStringProperty();
   private final DoubleProperty possession = new SimpleDoubleProperty();
   private final ObjectProperty color = new SimpleObjectProperty();
+  private final DoubleProperty jump = new SimpleDoubleProperty();
 
 
   private final IntegerProperty parentWidthProperty = new SimpleIntegerProperty();
@@ -41,7 +44,7 @@ public class StarComponent extends Pane {
 
   //private final ObjectProperty
 
-  public StarComponent(String ownerID, double possession, Coordinates coordinates, String id) {
+  public StarComponent(String ownerID, double possession, Coordinates coordinates, String id, double jump) {
 
     setPossession(possession);
     setXProperty(coordinates.getX());
@@ -49,6 +52,7 @@ public class StarComponent extends Pane {
     setSizeProperty(0.2);
     setStarID(id);
     setOwnerID(ownerID);
+    setJump(jump);
 
     setColor(Color.GRAY);
 
@@ -71,6 +75,9 @@ public class StarComponent extends Pane {
 
     Circle star = new Circle();
     star.setFill(Color.GRAY);
+    Effect bloom = new Bloom();
+    ((Bloom) bloom).setThreshold(0.3);
+    star.setEffect(bloom);
     star.radiusProperty().bind(Bindings.createDoubleBinding(
         () -> sizeProperty.doubleValue() * sizeAll, sizeProperty));
 
@@ -86,8 +93,27 @@ public class StarComponent extends Pane {
     starGroup.setPrefWidth(sizeAll);
     starGroup.setPrefHeight(sizeAll);
 
+
     border = makeBorder();
+    Circle jumpCircle = new Circle();
+    Platform.runLater(() -> {
+      jumpCircle.setRadius(jump*getScene().getHeight());
+    });
+    jumpCircle.setStroke(Color.RED);
+    jumpCircle.setFill(Color.TRANSPARENT);
+    jumpCircle.setMouseTransparent(true);
+    //this.getParent().getChildren().add(jumpCircle);
+    //border.setMouseTransparent(true);
+
     border.setVisible(false);
+
+    Rectangle handle = new Rectangle();
+    handle.setWidth(sizeAll);
+    handle.setTranslateX(-sizeAll/2);
+    handle.setTranslateY(-sizeAll/2);
+    handle.setHeight(sizeAll);
+    handle.setFill(Color.TRANSPARENT);
+
     starGroup.setOnMouseEntered(event -> border.setVisible(true));
 
     starGroup.setOnMouseExited(event -> border.setVisible(false));
@@ -98,13 +124,28 @@ public class StarComponent extends Pane {
     starName.setPrefWidth(sizeAll);
     starName.setTextAlignment(TextAlignment.CENTER);
 
-    starGroup.getChildren().addAll(star, starName, border, possessionCount);
-    this.getChildren().addAll(starGroup);
+
+    starGroup.getChildren().addAll( border, star, starName, possessionCount);
+    Effect glow = new Bloom();
+    starGroup.setEffect(glow);
+    this.getChildren().addAll( starGroup);
 
     //this.getChildren().addAll(star, starName);
 
     //star.fillProperty().bind(colorProperty);
 
+  }
+
+  public double getJump() {
+    return jump.get();
+  }
+
+  public DoubleProperty jumpProperty() {
+    return jump;
+  }
+
+  public void setJump(double jump) {
+    this.jump.set(jump);
   }
 
   public Object getColor() {
