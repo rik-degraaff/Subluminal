@@ -1,5 +1,6 @@
 package tech.subluminal.server.logic.game;
 
+import static tech.subluminal.shared.util.IdUtils.generateId;
 import static tech.subluminal.shared.util.function.FunctionalUtils.ifPresent;
 
 import java.util.Collections;
@@ -20,6 +21,7 @@ import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.Movable;
 import tech.subluminal.shared.stores.records.game.Ship;
+import tech.subluminal.shared.util.IdUtils;
 
 public class IntermediateGameState {
 
@@ -36,11 +38,14 @@ public class IntermediateGameState {
   private final Set<String> players;
   private final PriorityQueue<PriorityRunnable> tasks = new PriorityQueue<>(
       Comparator.reverseOrder());
+  private final double shipSpeed;
 
-  public IntermediateGameState(double deltaTime, Map<String, Star> stars, Set<String> players) {
+  public IntermediateGameState(double deltaTime, Map<String, Star> stars, Set<String> players,
+      double shipSpeed) {
     this.deltaTime = deltaTime;
     this.stars = stars;
     this.players = players;
+    this.shipSpeed = shipSpeed;
 
     fleetsOnStars = createMapWithKeys(stars.keySet(),
         () -> createMapWithKeys(players, Optional::empty));
@@ -190,12 +195,23 @@ public class IntermediateGameState {
   }
 
   private void generateShips(String starID) {
-    // TODO: implement this
+    Star star = stars.get(starID);
+    if (star.isGenerating()) {
+      final Optional<Fleet> optionalFleet = fleetsOnStars.get(starID).get(star.getOwnerID());
+      final Fleet fleet = optionalFleet
+          .map(f ->
+              new Fleet(f.getCoordinates(), f.getNumberOfShips() + 1, f.getID(), f.getTargetIDs(),
+                  f.getEndTarget(), f.getSpeed()))
+          .orElseGet(() ->
+              new Fleet(star.getCoordinates(), 1, generateId(8), Collections.emptyList(), starID,
+                  shipSpeed));
+      addFleetToStar(fleet, star.getOwnerID(), starID);
+    }
   }
 
   public void addFleet(Fleet fleet, String playerID) {
     if (isOnStar(fleet)) {
-      addFleetToStar(fleet, playerID, fleet.getTargetIDs().get(0));
+      addFleetToStar(fleet, playerID, fleet.getEndTarget());
     } else {
       setFleetUnderway(fleet, playerID);
     }

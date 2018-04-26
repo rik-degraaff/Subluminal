@@ -53,6 +53,7 @@ public class GameManager implements GamePresenter.Delegate {
       Logger.debug("Mothership targets" + motherShip.getTargetIDs());
       gameStore.motherShips().add(new OwnerPair<>(player.getID(), motherShip));
       player.getFleets().forEach(fleet -> {
+        Logger.debug("fleet:" + fleet.getID() + ", n: " + fleet.getNumberOfShips());
         gameStore.fleets().add(new OwnerPair<>(player.getID(), fleet));
       });
     });
