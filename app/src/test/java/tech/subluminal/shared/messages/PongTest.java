@@ -9,37 +9,41 @@ import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONParsingError;
 
-public class PingTest {
+public class PongTest {
 
-  private Ping ping;
+  private Pong pong;
   private String ID;
 
   @Before
   public void initialize() {
     this.ID = "1234";
-    this.ping = new Ping(ID);
+    this.pong = new Pong(ID);
   }
 
   @Test
   public void testParsing() {
-    String pingMsg = ping.asSON().asString();
+    String pongMsg = pong.asSON().asString();
     try {
-      Ping parsedPing = Ping.fromSON(SON.parse(pingMsg));
-      String parsedID = parsedPing.getId();
-      assertEquals(ping.getId(), parsedID);
+      Pong parsedPong = Pong.fromSON(SON.parse(pongMsg));
+      String parsedID = parsedPong.getId();
+      assertEquals(pong.getId(), parsedID);
     } catch (SONParsingError | SONConversionError e) {
       e.printStackTrace();
     }
-    System.out.println(pingMsg);
+    System.out.println(pongMsg);
   }
 
+  /**
+   * Tests if the exception {@code SONConversionError} or {@code SONParsingError} is thrown when a
+   * faulty String
+   */
   @Test
   public void SONConversionErrorThrowing() {
     boolean parsingSucceeded = true;
-    String faultyPingMsg = "{\"ID\":s\"1234\"}"; // the ID key correctly should be "id" instead of "ID"
+    String faultyPongMsg = "{\"ID\":s\"1234\"}"; // the ID key correctly should be "id" instead of "ID"
     try {
-      Ping parsedPing = Ping.fromSON(SON.parse(faultyPingMsg));
-      String ID = parsedPing.getId();
+      Pong parsedPong = Pong.fromSON(SON.parse(faultyPongMsg));
+      String ID = parsedPong.getId();
       System.out.println(ID);
     } catch (SONParsingError | SONConversionError e) {
       e.printStackTrace();
