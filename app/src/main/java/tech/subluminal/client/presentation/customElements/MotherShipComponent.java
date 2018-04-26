@@ -1,9 +1,9 @@
 package tech.subluminal.client.presentation.customElements;
 
 import java.util.List;
+import java.util.function.Function;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
-import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
@@ -27,6 +27,8 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
+import tech.subluminal.client.stores.GameStore;
+import tech.subluminal.shared.stores.records.game.Star;
 
 public class MotherShipComponent extends Group {
 
@@ -44,6 +46,9 @@ public class MotherShipComponent extends Group {
   private final IntegerProperty parentWidthProperty = new SimpleIntegerProperty();
   private final IntegerProperty parentHeightProperty = new SimpleIntegerProperty();
   private final RotateTransition rotateTl;
+
+  private GameStore gamestore;
+  private boolean isMoving = false;
 
   public MotherShipComponent(double x, double y, String playerId, List<String> targetIDs) {
     Group group = new Group();
@@ -104,7 +109,40 @@ public class MotherShipComponent extends Group {
           rotateTl.play();
         } else if (!newValue && oldValue) {
           group.getTransforms().clear();
+          group.getTransforms().add(new Rotate(-group.getRotate() + 45));
+
+          double xShip = getX();
+          double yShip = getY();
+          Star star = gamestore.stars().getByID(targetsWrapper.get(0)).get().use(Function.identity());
+
+          double xStar = star.getCoordinates().getX();
+          double yStar = star.getCoordinates().getY();
+
+          Logger.debug("xSTAR: "+ xStar + " - " + xShip);
+          Logger.debug("ySTAR: "+ yStar + " - " + yShip);
+
+          double xD = xStar - xShip;
+          double yD = yStar - yShip;
+
+          double angle = Math.atan(yD/xD);
+
+          Logger.debug("ROTATING: "+ angle);
+          Logger.debug("ROTATING: "+ Math.toDegrees(angle));
+          Logger.debug("xD: "+ xD);
+          Logger.debug("yD: "+ yD);
+          //Platform.runLater(() -> {
+            if(yD < 0){
+              group.getTransforms().add(new Rotate(360 - Math.toDegrees(angle)));
+            }else {
+              group.getTransforms().add(new Rotate(Math.toDegrees(angle)));
+            }
+
+          //});
+
+
+
           rotateTl.pause();
+          //rotateTl.setToAngle(9);
         }
       });
     });
@@ -114,6 +152,14 @@ public class MotherShipComponent extends Group {
     });
 
     this.getChildren().add(group);
+  }
+
+  public GameStore getGamestore() {
+    return gamestore;
+  }
+
+  public void setGamestore(GameStore gamestore) {
+    this.gamestore = gamestore;
   }
 
   public ObservableList<String> getTargetsWrapper() {
