@@ -3,6 +3,7 @@ package tech.subluminal.client.presentation.customElements;
 import java.util.List;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
@@ -88,7 +89,7 @@ public class MotherShipComponent extends Group {
 
     Platform.runLater(() -> {
       targetsWrapperProperty().addListener((observable, oldValue, newValue) -> {
-        Logger.debug("MOTHERSHIP GOT: " + targetsWrapperProperty().toString());
+        //Logger.debug("MOTHERSHIP GOT: " + targetsWrapperProperty().toString());
         if (targetsWrapperProperty().isEmpty() && !isIsRotating()) {
           setIsRotating(true);
         } else if (!targetsWrapperProperty().isEmpty() && isIsRotating()) {
@@ -98,8 +99,11 @@ public class MotherShipComponent extends Group {
 
       isRotatingProperty().addListener((observable, oldValue, newValue) -> {
         if (newValue && !oldValue) {
+          group.getTransforms().add(new Translate(-fromCenter, -fromCenter));
+          group.getTransforms().add(new Rotate(90));
           rotateTl.play();
         } else if (!newValue && oldValue) {
+          group.getTransforms().clear();
           rotateTl.pause();
         }
       });

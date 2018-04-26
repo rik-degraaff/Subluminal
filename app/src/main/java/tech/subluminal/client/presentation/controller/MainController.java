@@ -2,16 +2,20 @@ package tech.subluminal.client.presentation.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.customElements.BackgroundComponent;
+import tech.subluminal.client.presentation.customElements.ChatComponent;
 import tech.subluminal.client.presentation.customElements.GameComponent;
 import tech.subluminal.client.presentation.customElements.LobbyComponent;
-import tech.subluminal.client.presentation.customElements.LobbyListComponent;
-import tech.subluminal.client.presentation.customElements.LobbyUserComponent;
 import tech.subluminal.client.presentation.customElements.MenuComponent;
 import tech.subluminal.client.presentation.customElements.SettingsComponent;
 import tech.subluminal.client.presentation.customElements.WindowContainerComponent;
@@ -19,11 +23,6 @@ import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.client.stores.UserStore;
 
 public class MainController implements Initializable {
-
-  @FXML
-  private Parent chatView;
-  @FXML
-  private ChatController chatViewController;
 
   @FXML
   private Parent userListView;
@@ -34,23 +33,20 @@ public class MainController implements Initializable {
   private AnchorPane spaceBackgroundDock;
 
   @FXML
-  private AnchorPane chatDock;
-
-  @FXML
   private AnchorPane menuDock;
 
   @FXML
   private AnchorPane playArea;
 
+  @FXML
+  private Rectangle chatHandle;
+
   private BackgroundComponent background;
 
   private MenuComponent menu;
 
-  private LobbyListComponent lobbyList;
-
   private SettingsComponent settings;
 
-  private LobbyUserComponent lobbyUser;
 
   private LobbyComponent lobby;
 
@@ -60,6 +56,12 @@ public class MainController implements Initializable {
   @FXML
   private AnchorPane window;
 
+  @FXML
+  private AnchorPane chatDock;
+
+  @FXML
+  private AnchorPane chatWindow;
+
   private GameComponent game;
 
   private UserStore userStore;
@@ -67,6 +69,12 @@ public class MainController implements Initializable {
   private LobbyStore lobbyStore;
 
   private GameController gameController;
+
+  private ChatComponent chat;
+
+  private ChatController chatController;
+
+  private boolean chatOut = false;
 
   public LobbyComponent getLobby() {
     return lobby;
@@ -88,8 +96,12 @@ public class MainController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    background = new BackgroundComponent(200);
+    background = new BackgroundComponent(2000);
     spaceBackgroundDock.getChildren().add(background);
+
+    chat = new ChatComponent(this);
+    chatController = chat.getChatcontroller();
+    chatDock.getChildren().add(chat);
 
     menu = new MenuComponent(this);
     settings = new SettingsComponent(this);
@@ -100,8 +112,32 @@ public class MainController implements Initializable {
 
     playArea.setMouseTransparent(true);
 
-    menuDock.getChildren().add(menu); //TODO: reactivate this
-    //onMapOpenHandle();
+    menuDock.getChildren().add(menu);
+
+    Platform.runLater(() -> {
+
+      chatWindow.translateXProperty().bind(Bindings
+          .createDoubleBinding(() -> chatDock.getWidth(), chatWindow.widthProperty(),
+              chatDock.widthProperty()));
+
+    });
+
+    chatHandle.setOnMouseClicked(e -> {
+      Logger.debug("pressed");
+      chatWindow.translateXProperty().unbind();
+      TranslateTransition transTl = new TranslateTransition(Duration.seconds(0.2), chatWindow);
+      double width = chatDock.widthProperty().getValue();
+      if (chatOut) {
+        transTl.setToX(width);
+        transTl.play();
+        chatOut = false;
+      } else {
+        transTl.setToX(0);
+        transTl.play();
+        chatOut = true;
+      }
+    });
+
   }
 
   public MainController getController() {
@@ -109,7 +145,7 @@ public class MainController implements Initializable {
   }
 
   public ChatController getChatController() {
-    return this.chatViewController;
+    return this.chatController;
   }
 
   public UserListController getUserListController() {

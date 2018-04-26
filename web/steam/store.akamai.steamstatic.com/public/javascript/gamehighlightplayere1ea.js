@@ -406,7 +406,7 @@ HighlightPlayer.prototype.HighlightStripItem = function( elem, bSkipAnimation )
 		bNeedScroll = true;
 		// if we're scrolling to the left, try to scroll all the way
 		//   back to the start if that will work, otherwise scroll such
-		//   that the left edge is in view
+		//   that the left edge is in style
 		if ( nThumbRightEdge < nStripWidth )
 			nTargetScrollOffset = 0;
 		else

@@ -47,7 +47,6 @@ public class StarComponent extends Pane {
     setXProperty(coordinates.getX());
     setYProperty(coordinates.getY());
     setSizeProperty(0.2);
-    setColor(color);
     setStarID(id);
     setOwnerID(ownerID);
 
@@ -72,8 +71,6 @@ public class StarComponent extends Pane {
 
     Circle star = new Circle();
     star.setFill(Color.GRAY);
-    //star.setCenterY(sizeAll / 2);
-    //star.setCenterX(sizeAll / 2);
     star.radiusProperty().bind(Bindings.createDoubleBinding(
         () -> sizeProperty.doubleValue() * sizeAll, sizeProperty));
 
@@ -81,8 +78,6 @@ public class StarComponent extends Pane {
     possessionCount.setOpacity(0.7);
     possessionCount.setFill(Color.GRAY);
     possessionCount.fillProperty().bind(colorProperty());
-    //possessionCount.setCenterX(sizeAll / 2);
-    //possessionCount.setCenterY(sizeAll / 2);
     possessionCount.radiusProperty().bind(Bindings
         .createDoubleBinding(() -> star.getRadius() * Math.pow(getPossession(), 0.8),
             possessionProperty(), sizeProperty));
@@ -90,8 +85,6 @@ public class StarComponent extends Pane {
     Pane starGroup = new Pane();
     starGroup.setPrefWidth(sizeAll);
     starGroup.setPrefHeight(sizeAll);
-    //starGroup.setTranslateX(-sizeAll / 2);
-    //starGroup.setTranslateY(-sizeAll / 2);
 
     border = makeBorder();
     border.setVisible(false);
