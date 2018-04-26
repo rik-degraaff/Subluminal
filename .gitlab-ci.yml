@@ -86,6 +86,7 @@ javadoc:
       - docs/javadoc/
   only:
     - /^rl-.*$/
+    - ft-buildtools-luc
 
 testing:
   stage: deploy
