@@ -76,7 +76,8 @@ coverage:
 javadoc:
   stage: javadoc
   script:
-    - gradle -q javadoc
+    - gradle javadoc
+    - gradle javadoccoverage
   tags:
     - cs108-dind
   artifacts:
@@ -139,6 +140,7 @@ staging:
 
 production:
   stage: deploy
+  image: bash:latest
   script:
     - echo "Missing sh script to setup production environment."
   tags:
@@ -148,3 +150,22 @@ production:
     name: production
   only:
     - master
+
+pages:
+  stage: deploy
+  image: bash:latest
+  script:
+    - mkdir public
+    - cp web/docs/index.html public
+    - mkdir public/javadoc
+    - cp -r docs/javadoc/* public/javadoc
+    - mkdir public/test
+    - cp -r app/build/reports/test/* public/test
+    - mkdir public/coverage
+    - cp -r app/build/reports/coverage/* public/coverage
+  artifacts:
+    paths:
+    - public
+  only:
+    - master
+    - ft-buildtools-luc
