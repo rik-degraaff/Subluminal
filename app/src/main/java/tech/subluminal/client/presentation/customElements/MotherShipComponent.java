@@ -184,4 +184,12 @@ public class MotherShipComponent extends Group {
     return ownerID;
   }
 
+  public ObservableList<String> getTargetIDs() {
+    return targetIDs;
+  }
+
+  public void setTargetsWrapper(ObservableList<String> targetsWrapper) {
+    this.targetsWrapper.set(targetsWrapper);
+  }
+
 }

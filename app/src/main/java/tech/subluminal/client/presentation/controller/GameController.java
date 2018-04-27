@@ -27,6 +27,7 @@ import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.client.stores.records.game.OwnerPair;
 import tech.subluminal.client.stores.records.game.Player;
+import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.stores.records.game.Star;
 import tech.subluminal.shared.util.MapperList;
@@ -55,6 +56,7 @@ public class GameController implements Initializable, GamePresenter {
 
   private Map<String, StarComponent> stars = new HashMap<>();
   private Map<String, MotherShipComponent> ships = new HashMap<>();
+  private Map<String, FleetComponent> fleets = new HashMap<>();
 
   private List<MotherShipComponent> shipList = new LinkedList<MotherShipComponent>();
 
@@ -65,6 +67,7 @@ public class GameController implements Initializable, GamePresenter {
   private GameStore gameStore;
 
   private ListView<MotherShipComponent> dummyShipList = new ListView<>();
+  private ListView<FleetComponent> dummyFleetList = new ListView<>();
 
   private Map<String, Star> starMap = new HashMap<>();
 
@@ -420,6 +423,47 @@ public class GameController implements Initializable, GamePresenter {
       );
 
       this.dummyShipList.setItems(shipComponents);
+
+      MapperList<FleetComponent, OwnerPair<Fleet>> fleetComponents = new MapperList<>(
+
+          gameStore.fleets().observableList(),
+          pair -> {
+            if (fleets.get(pair.getID()) == null) {
+              FleetComponent fleetComponent = new FleetComponent(
+                  pair.getValue().getCoordinates(),
+                  pair.getValue().getNumberOfShips(),pair.getID(), pair.getKey(), pair.getValue().getTargetIDs());
+              fleets.put(pair.getID(), fleetComponent);
+              if (pair.getKey().equals(playerID)) {
+                fleetComponent.setColor(Color.RED);
+              } else {
+                fleetComponent.setColor(Color.BLUE);
+              }
+
+              map.getChildren().add(fleetComponent);
+              return fleetComponent;
+
+            }
+            FleetComponent fleetComponent = fleets.get(pair.getID());
+
+            if (Math.abs(pair.getValue().getCoordinates().getX() - fleetComponent.getX())
+                > 0.000001) {
+              fleetComponent.setX(pair.getValue().getCoordinates().getX());
+            }
+            if (Math.abs(pair.getValue().getCoordinates().getY() - fleetComponent.getY())
+                > 0.000001) {
+              fleetComponent.setY(pair.getValue().getCoordinates().getY());
+            }
+            fleetComponent.setNumberOfShips(pair.getValue().getNumberOfShips());
+            Logger.debug("Fleet Target ID's: " + pair.getValue().getTargetIDs());
+            if (fleetComponent.getTargetsWrapper().size() != pair.getValue().getTargetIDs().size()) {
+              fleetComponent.setTargetsWrapper(pair.getValue().getTargetIDs());
+            }
+
+            return fleetComponent;
+          }
+      );
+
+      this.dummyFleetList.setItems(fleetComponents);
     });
 
   }
