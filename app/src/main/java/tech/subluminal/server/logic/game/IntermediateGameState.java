@@ -199,9 +199,7 @@ public class IntermediateGameState {
     if (star.isGenerating()) {
       final Optional<Fleet> optionalFleet = fleetsOnStars.get(starID).get(star.getOwnerID());
       final Fleet fleet = optionalFleet
-          .map(f ->
-              new Fleet(f.getCoordinates(), f.getNumberOfShips() + 1, f.getID(), f.getTargetIDs(),
-                  f.getEndTarget(), f.getSpeed()))
+          .map(f -> f.expanded(1))
           .orElseGet(() ->
               new Fleet(star.getCoordinates(), 1, generateId(8), Collections.emptyList(), starID,
                   shipSpeed));
@@ -249,14 +247,14 @@ public class IntermediateGameState {
 
   private void addFleetToStar(Fleet fleet, String playerID, String starID) {
     Optional<Fleet> optionalFleet = fleetsOnStars.get(starID).get(playerID);
-    ifPresent(optionalFleet,
+    ifPresent(optionalFleet.filter(f -> !f.getID().equals(fleet.getID())),
         oldFleet -> {
           fleetsOnStars.get(starID)
               .put(playerID, Optional.of(oldFleet.expanded(fleet.getNumberOfShips())));
           destroyedFleets.get(playerID).add(fleet);
         },
         () -> {
-          Fleet newFleet = fleet.getTargetIDs().size() == 0
+          Fleet newFleet = fleet.getTargetIDs().size() == 0 && fleet.getEndTarget().equals(starID)
               ? fleet
               : new Fleet(fleet.getCoordinates(), fleet.getNumberOfShips(), fleet.getID(),
                   Collections.emptyList(), starID, fleet.getSpeed());
