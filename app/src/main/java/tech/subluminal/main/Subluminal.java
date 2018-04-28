@@ -10,6 +10,7 @@ import tech.subluminal.server.init.ServerInitializer;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.Command;
+import tech.subluminal.shared.util.NameGenerator;
 
 /**
  * The main class of the Subluminal project containing the main function which starts the program.
@@ -87,6 +88,10 @@ public class Subluminal {
         System.out.println("Invalid mode argument. Must be one of " + modes);
         System.exit(1);
       }
+
+      NameGenerator ng = new NameGenerator();
+      ng.readStarFiles();
+
     }
 
 //  private static void invalidArguments() {
