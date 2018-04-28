@@ -28,6 +28,7 @@ import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.stores.GameStore;
+import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Star;
 
 public abstract class ShipComponent extends Group {
@@ -49,14 +50,15 @@ public abstract class ShipComponent extends Group {
 
   private GameStore gamestore;
   private boolean isMoving = false;
+  public Group group;
 
-  public ShipComponent(double x, double y, String playerId, List<String> targetIDs) {
+  public ShipComponent(Coordinates coordinates, String playerId, List<String> targetIDs) {
     Group group = new Group();
     group.getTransforms().add(new Translate(-fromCenter, -fromCenter));
     group.getTransforms().add(new Rotate(90));
 
-    setX(x);
-    setY(y);
+    setX(coordinates.getX());
+    setY(coordinates.getY());
 
     Platform.runLater(() -> {
       this.parentWidthProperty.bind(getScene().widthProperty());
