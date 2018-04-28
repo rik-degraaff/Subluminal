@@ -3,12 +3,7 @@
 [![current version](https://img.shields.io/badge/version-3.3.0-blue.svg)](https://subluminal.tech/releases)
 [![javadoc coverage](https://img.shields.io/badge/JavaDoc-71%25-blue.svg)](https://subluminal.tech/docs)
 [![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/subluminalthegame/subluminal/latest.svg)](https://hub.docker.com/r/subluminalthegame/subluminal/tags/)
-[![Twitter Follow](https://img.shields.io/twitter/follow/subluminalgame.svg?style=social&label=Follow)](https://twitter.com/subluminalgame)
-
-
-
-
-
+[![Twitter Follow](https://img.shields.io/twitter/follow/subluminalgame.svg?style=social&label=Follow)](https://twitter.com/subluminalgame)  
 
 **Table of Contents**  
 [1. Overview](#1-overview)  
