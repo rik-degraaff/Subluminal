@@ -9,7 +9,7 @@ import tech.subluminal.shared.son.SONRepresentable;
  */
 public class UsernameRes implements SONRepresentable {
 
-  public static final String USERNAME_KEY = "username";
+  private static final String USERNAME_KEY = "username";
   private String username;
 
   /**

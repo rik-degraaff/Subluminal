@@ -34,13 +34,12 @@ public class PingTest {
   }
 
   @Test
-  public void SONConversionErrorThrowing() {
+  public void testSONConversionErrorThrowing() {
     boolean parsingSucceeded = true;
     String faultyPingMsg = "{\"ID\":s\"1234\"}"; // the ID key correctly should be "id" instead of "ID"
     try {
       Ping parsedPing = Ping.fromSON(SON.parse(faultyPingMsg));
       String ID = parsedPing.getId();
-      System.out.println(ID);
     } catch (SONParsingError | SONConversionError e) {
       e.printStackTrace();
       parsingSucceeded = false;
