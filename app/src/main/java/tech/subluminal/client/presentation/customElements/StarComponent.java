@@ -22,7 +22,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 
-public class StarComponent extends Pane {
+public class StarComponent extends Group {
 
   public static final int BORDER_WIDTH = 3;
   private final int sizeAll = 60;
@@ -75,9 +75,7 @@ public class StarComponent extends Pane {
 
     Circle star = new Circle();
     star.setFill(Color.GRAY);
-    Effect bloom = new Bloom();
-    ((Bloom) bloom).setThreshold(0.3);
-    star.setEffect(bloom);
+
     star.radiusProperty().bind(Bindings.createDoubleBinding(
         () -> sizeProperty.doubleValue() * sizeAll, sizeProperty));
 
@@ -90,9 +88,12 @@ public class StarComponent extends Pane {
             possessionProperty(), sizeProperty));
 
     Pane starGroup = new Pane();
-    starGroup.setPrefWidth(sizeAll);
-    starGroup.setPrefHeight(sizeAll);
 
+    Pane glowBox = new Pane();
+    glowBox.setPrefHeight(sizeAll);
+    glowBox.setPrefWidth(sizeAll);
+    glowBox.setTranslateX(-sizeAll/2);
+    glowBox.setTranslateY(-sizeAll/2);
 
     border = makeBorder();
     Circle jumpCircle = new Circle();
@@ -102,21 +103,19 @@ public class StarComponent extends Pane {
     jumpCircle.setStroke(Color.RED);
     jumpCircle.setFill(Color.TRANSPARENT);
     jumpCircle.setMouseTransparent(true);
-    //this.getParent().getChildren().add(jumpCircle);
-    //border.setMouseTransparent(true);
 
     border.setVisible(false);
+    jumpCircle.setVisible(false);
 
-    Rectangle handle = new Rectangle();
-    handle.setWidth(sizeAll);
-    handle.setTranslateX(-sizeAll/2);
-    handle.setTranslateY(-sizeAll/2);
-    handle.setHeight(sizeAll);
-    handle.setFill(Color.TRANSPARENT);
+    starGroup.setOnMouseEntered(event -> {
+      border.setVisible(true);
+      jumpCircle.setVisible(true);
+    });
 
-    starGroup.setOnMouseEntered(event -> border.setVisible(true));
-
-    starGroup.setOnMouseExited(event -> border.setVisible(false));
+    starGroup.setOnMouseExited(event -> {
+      border.setVisible(false);
+      jumpCircle.setVisible(false);
+    });
 
     Label starName = new Label(name);
     starName.getStyleClass().add("starname-label");
@@ -124,15 +123,15 @@ public class StarComponent extends Pane {
     starName.setPrefWidth(sizeAll);
     starName.setTextAlignment(TextAlignment.CENTER);
 
+    /*Effect bloom = new Bloom();
+    ((Bloom) bloom).setThreshold(0.3);
+    star.setEffect(bloom);*/
 
-    starGroup.getChildren().addAll( border, star, starName, possessionCount);
+
+    starGroup.getChildren().addAll(  glowBox, border, star, starName, possessionCount);
     Effect glow = new Bloom();
-    starGroup.setEffect(glow);
-    this.getChildren().addAll( starGroup);
-
-    //this.getChildren().addAll(star, starName);
-
-    //star.fillProperty().bind(colorProperty);
+    this.setEffect(glow);
+    this.getChildren().addAll(jumpCircle, starGroup);
 
   }
 
