@@ -1,6 +1,8 @@
 package tech.subluminal.client.presentation;
 
 import java.util.List;
+import java.util.Map;
+import javafx.scene.paint.Color;
 
 public interface GamePresenter {
 
@@ -9,6 +11,8 @@ public interface GamePresenter {
   void setUserID();
 
   void update();
+
+  void setPlayerColors(Map<String, Color> playerColors);
 
   interface Delegate {
 

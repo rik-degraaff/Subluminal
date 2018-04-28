@@ -1,9 +1,9 @@
 package tech.subluminal.client.presentation.customElements;
 
 import java.util.List;
+import java.util.function.Function;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
-import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
@@ -27,6 +27,8 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
+import tech.subluminal.client.stores.GameStore;
+import tech.subluminal.shared.stores.records.game.Star;
 
 public class MotherShipComponent extends Group {
 
@@ -44,6 +46,9 @@ public class MotherShipComponent extends Group {
   private final IntegerProperty parentWidthProperty = new SimpleIntegerProperty();
   private final IntegerProperty parentHeightProperty = new SimpleIntegerProperty();
   private final RotateTransition rotateTl;
+
+  private GameStore gamestore;
+  private boolean isMoving = false;
 
   public MotherShipComponent(double x, double y, String playerId, List<String> targetIDs) {
     Group group = new Group();
@@ -90,10 +95,14 @@ public class MotherShipComponent extends Group {
     Platform.runLater(() -> {
       targetsWrapperProperty().addListener((observable, oldValue, newValue) -> {
         //Logger.debug("MOTHERSHIP GOT: " + targetsWrapperProperty().toString());
+        Logger.debug("SOMETHING CHANGED " + oldValue + " " + newValue);
         if (targetsWrapperProperty().isEmpty() && !isIsRotating()) {
           setIsRotating(true);
         } else if (!targetsWrapperProperty().isEmpty() && isIsRotating()) {
           setIsRotating(false);
+
+        }else{
+          rotateToStar(group);
         }
       });
 
@@ -103,8 +112,10 @@ public class MotherShipComponent extends Group {
           group.getTransforms().add(new Rotate(90));
           rotateTl.play();
         } else if (!newValue && oldValue) {
-          group.getTransforms().clear();
           rotateTl.pause();
+          rotateToStar(group);
+
+          //rotateTl.setToAngle(9);
         }
       });
     });
@@ -114,6 +125,48 @@ public class MotherShipComponent extends Group {
     });
 
     this.getChildren().add(group);
+  }
+
+  private void rotateToStar(Group group) {
+    group.getTransforms().clear();
+    //group.getTransforms().add(new Rotate(-group.getRotate() + 45));
+    double xShip = getX();
+    double yShip = getY();
+    Star star = gamestore.stars().getByID(targetsWrapper.get(0)).get().use(Function.identity());
+
+    double xStar = star.getCoordinates().getX();
+    double yStar = star.getCoordinates().getY();
+
+    Logger.debug("xSTAR: "+ xStar + " - " + xShip);
+    Logger.debug("ySTAR: "+ yStar + " - " + yShip);
+
+    double xD = xStar - xShip;
+    double yD = yStar - yShip;
+
+    double angle = Math.atan(yD/xD);
+
+    Logger.debug("ROTATING: "+ angle);
+    Logger.debug("ROTATING: "+ Math.toDegrees(angle));
+    Logger.debug("xD: "+ xD);
+    Logger.debug("yD: "+ yD);
+
+    RotateTransition rotateTl = new RotateTransition(Duration.seconds(0.2),group);
+    if(xD < 0){
+      rotateTl.setToAngle(Math.toDegrees(angle) + 90 + 180 + 45);
+      //group.getTransforms().add(new Rotate(Math.toDegrees(angle) + 90 + 180));
+    }else {
+      rotateTl.setToAngle(Math.toDegrees(angle) + 90 + 45);
+      //group.getTransforms().add(new Rotate(Math.toDegrees(angle) + 90));
+    }
+    rotateTl.play();
+  }
+
+  public GameStore getGamestore() {
+    return gamestore;
+  }
+
+  public void setGamestore(GameStore gamestore) {
+    this.gamestore = gamestore;
   }
 
   public ObservableList<String> getTargetsWrapper() {
