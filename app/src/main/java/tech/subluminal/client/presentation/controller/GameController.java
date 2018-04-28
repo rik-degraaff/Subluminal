@@ -245,7 +245,7 @@ public class GameController implements Initializable, GamePresenter {
           pair -> {
             if (ships.get(pair.getID()) == null) {
               MotherShipComponent shipComponent = new MotherShipComponent(
-                  pair.getValue().getCoordinates().getX(), pair.getValue().getCoordinates().getY(),
+                  pair.getValue().getCoordinates(),
                   pair.getKey(), pair.getValue().getTargetIDs());
               shipComponent.setGamestore(gameStore);
               ships.put(pair.getID(), shipComponent);
