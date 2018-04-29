@@ -94,20 +94,6 @@ public class MenuController implements Initializable, Observer {
     menuButtonsDock.setOpacity(0.0);
     generateLogo();
 
-    //TODO: Iterate over all the files and play random track
-    Media media = null;
-
-    //TODO: Import track with getResources
-    media = new Media(
-        getClass().getResource("/tech/subluminal/resources/music/theyre-here_looping.mp3")
-            .toString());
-
-    MediaPlayer player = new MediaPlayer(media);
-    player.setVolume(0.75);
-    player.play();
-
-    player.setOnEndOfMedia(() -> player.seek(Duration.ZERO)
-    );
   }
 
   @FXML
