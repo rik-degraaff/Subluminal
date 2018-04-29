@@ -27,7 +27,7 @@ public abstract class MoveReq implements SONRepresentable {
 
 
   /**
-   * Creates ans returns a new MoveReq-extending object from its SON representation.
+   * Creates and returns a new MoveReq-extending object from its SON representation.
    *
    * @param son the SON representation of a move request.
    * @param reqSupplier the function enabling the input of any child of MoveReq.
