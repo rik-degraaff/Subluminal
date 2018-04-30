@@ -22,6 +22,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
@@ -82,12 +84,22 @@ public abstract class ShipComponent extends Group {
     setTargetsWrapper(targetIDs);
 
     setColor(Color.GRAY);
-    Polygon ship = new Polygon();
+    /*Polygon ship = new Polygon();
     ship.getPoints().addAll(new Double[]{
         -10.0, -10.0,
         10.0, 0.0,
         0.0, 10.0});
-    ship.fillProperty().bind(colorProperty());
+    ship.fillProperty().bind(colorProperty());*/
+
+    ImageView ship = new ImageView();
+    Image shipImage = new Image("/tech/subluminal/resources/ship_placeholder.png");
+    ship.setFitWidth(30);
+    ship.setFitHeight(30);
+    ship.setPreserveRatio(true);
+    Platform.runLater(() -> {
+      ship.setX(-ship.getFitWidth());
+      ship.setY(-ship.getFitWidth());
+    });
 
     group.getChildren().add(ship);
     group.setMouseTransparent(true);
