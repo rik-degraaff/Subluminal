@@ -52,9 +52,9 @@ public class Star extends tech.subluminal.shared.stores.records.game.Star implem
       double deltaTime,
       Consumer<Double> shipGenHandler, Consumer<Double> dematHandler
   ) {
-    double newDemat = DeltaTimeUtils
+    double newGen = DeltaTimeUtils
         .advanceBy(deltaTime, nextShipgen, generationRate, shipGenHandler);
-    double newGen = DeltaTimeUtils.advanceBy(deltaTime, nextDemat, dematRate, dematHandler);
+    double newDemat = DeltaTimeUtils.advanceBy(deltaTime, nextDemat, dematRate, dematHandler);
 
     return new Star(getOwnerID(), getPossession(), getCoordinates(), getID(), isGenerating(),
         getJump(), dematRate, newDemat, generationRate, newGen);

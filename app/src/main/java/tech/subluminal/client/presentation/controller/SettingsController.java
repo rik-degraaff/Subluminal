@@ -39,7 +39,7 @@ public class SettingsController implements Observer, Initializable {
         getClass().getResource("/tech/subluminal/resources/music/urban-Jjngle-2061_looping.wav")
             .toString());
 
-    int random = (int) Math.floor(Math.random()*3);
+    int random = (int) Math.floor(Math.random() * 3);
 
     MediaPlayer player = new MediaPlayer(media[random]);
     player.setVolume(0.1);
@@ -51,9 +51,9 @@ public class SettingsController implements Observer, Initializable {
     player.volumeProperty().bind(masterVolume.valueProperty());
 
     muteMasterVolume.selectedProperty().addListener(((observable, oldValue, newValue) -> {
-      if(!oldValue && newValue){
+      if (!oldValue && newValue) {
         player.pause();
-      }else if(oldValue && !newValue){
+      } else if (oldValue && !newValue) {
         player.play();
       }
     }));

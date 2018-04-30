@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.logic.Graph;
 import tech.subluminal.client.presentation.GamePresenter;
+import tech.subluminal.client.presentation.customElements.FleetComponent;
 import tech.subluminal.client.presentation.customElements.Jump;
 import tech.subluminal.client.presentation.customElements.JumpBox;
 import tech.subluminal.client.presentation.customElements.MotherShipComponent;
@@ -25,6 +26,7 @@ import tech.subluminal.client.presentation.customElements.StarComponent;
 import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.client.stores.records.game.OwnerPair;
+import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.stores.records.game.Star;
 import tech.subluminal.shared.util.MapperList;
@@ -47,15 +49,24 @@ public class GameController implements Initializable, GamePresenter {
 
   private String playerID;
 
+  //private List<StarComponent> starList = new LinkedList<StarComponent>();//TODO: remove this
+
+  //private ListProperty<StarComponent> stars = new SimpleListProperty<>();
 
   private Map<String, StarComponent> stars = new HashMap<>();
   private Map<String, MotherShipComponent> ships = new HashMap<>();
+  private Map<String, FleetComponent> fleets = new HashMap<>();
+
+  private List<MotherShipComponent> shipList = new LinkedList<MotherShipComponent>();
+
+  private List<FleetComponent> fleetList = new LinkedList<FleetComponent>();
 
   private GamePresenter.Delegate gameDelegate;
 
   private GameStore gameStore;
 
   private ListView<MotherShipComponent> dummyShipList = new ListView<>();
+  private ListView<FleetComponent> dummyFleetList = new ListView<>();
 
   private Map<String, Star> starMap = new HashMap<>();
 
@@ -68,6 +79,30 @@ public class GameController implements Initializable, GamePresenter {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    /*StarComponent star = new StarComponent("fewff",0.8,new Coordinates(0.2,0.6), "ANDROMEDAR");
+    StarComponent star1 = new StarComponent("fewff",0.2,new Coordinates(0.6,0.2), "ANDROMEDAR");
+    StarComponent star3 = new StarComponent("fewff",0.5,new Coordinates(0.8,0.5), "ANDROMEDAR");*/
+    /*StarComponent star2 = new StarComponent(1,0.0,0.2, "TITTY IX");
+    star2.setColorProperty(Color.PINK);
+    StarComponent star3 = new StarComponent(0.1,1,0.1, "LUXIS BB");*/
+
+    /*map.getChildren().addAll(star, star1, star3);
+
+    List<StarComponent> test = new LinkedList();
+    test.add(star);
+    /*test.add(star2);
+    test.add(star3);*/
+    //createJumpPath(test);
+    //removeJumpPath();
+
+    /*MotherShipComponent ship = new MotherShipComponent(star.getLayoutX(),star.getLayoutY()), "fwefr1");
+    ship.setIsRotating(true);
+    map.getChildren().add(ship);
+    //removeJumpPath();
+
+    FleetComponent fleet = new FleetComponent(new Coordinates(0.2, 0.3), 30, "wefwef", "22r2f2");
+    map.getChildren().add(fleet);*/
+
     map.setOnMouseClicked(mouseEvent -> {
       pressStore[0] = null;
       pressStore[1] = null;
@@ -110,7 +145,6 @@ public class GameController implements Initializable, GamePresenter {
     }
     mouseEvent.consume();
   }
-
 
   public void createJumpPath(List<String> path) {
 
@@ -172,6 +206,7 @@ public class GameController implements Initializable, GamePresenter {
     this.playerID = playerID;
   }
 
+
   @Override
   public void setGameDelegate(Delegate delegate) {
     gameDelegate = delegate;
@@ -207,6 +242,8 @@ public class GameController implements Initializable, GamePresenter {
 
     Platform.runLater(() -> {
 
+      //this.playerID = userStore.currentUser().get().use(opt -> opt.get().getID());
+
       MapperList<StarComponent, Star> starComponents = new MapperList<>(
           gameStore.stars().observableList(),
           star -> {
@@ -216,6 +253,7 @@ public class GameController implements Initializable, GamePresenter {
                   star.getCoordinates(),
                   star.getID(),
                   star.getJump());
+              stars.put(star.getID(), starComponent);
               stars.put(star.getID(), starComponent);
               if (star.getOwnerID() != null) {
                 starComponent.setColor(playerColors.get(star.getOwnerID()));
@@ -231,6 +269,7 @@ public class GameController implements Initializable, GamePresenter {
             StarComponent starComponent = stars.get(star.getID());
             starComponent.setPossession(star.getPossession());
             starComponent.setOwnerID(star.getOwnerID());
+            stars.put(star.getID(), starComponent);
             if (star.getOwnerID() != null) {
               starComponent.setColor(playerColors.get(star.getOwnerID()));
             }
@@ -246,8 +285,9 @@ public class GameController implements Initializable, GamePresenter {
             if (ships.get(pair.getID()) == null) {
               MotherShipComponent shipComponent = new MotherShipComponent(
                   pair.getValue().getCoordinates(),
-                  pair.getKey(), pair.getValue().getTargetIDs());
-              shipComponent.setGamestore(gameStore);
+                  pair.getKey(),
+                  pair.getValue().getTargetIDs(),
+                  gameStore);
               ships.put(pair.getID(), shipComponent);
 
               if (pair.getKey() != null) {
@@ -268,7 +308,7 @@ public class GameController implements Initializable, GamePresenter {
                 > 0.000001) {
               shipComponent.setY(pair.getValue().getCoordinates().getY());
             }
-            //Logger.debug("Target ID's: " + pair.getValue().getTargetIDs());
+            Logger.debug("Target ID's: " + pair.getValue().getTargetIDs());
             if (shipComponent.getTargetsWrapper().size() != pair.getValue().getTargetIDs().size()) {
               shipComponent.setTargetsWrapper(pair.getValue().getTargetIDs());
             }
@@ -278,6 +318,51 @@ public class GameController implements Initializable, GamePresenter {
       );
 
       this.dummyShipList.setItems(shipComponents);
+
+      MapperList<FleetComponent, OwnerPair<Fleet>> fleetComponents = new MapperList<>(
+
+          gameStore.fleets().observableList(),
+          pair -> {
+            if (fleets.get(pair.getID()) == null) {
+              FleetComponent fleetComponent = new FleetComponent(
+                  pair.getValue().getCoordinates(),
+                  pair.getValue().getNumberOfShips(),
+                  pair.getID(),
+                  pair.getKey(),
+                  pair.getValue().getTargetIDs(),
+                  gameStore);
+              fleets.put(pair.getID(), fleetComponent);
+
+              if (pair.getKey() != null) {
+                fleetComponent.setColor(playerColors.get(pair.getKey()));
+              }
+
+              map.getChildren().add(fleetComponent);
+              return fleetComponent;
+
+            }
+            FleetComponent fleetComponent = fleets.get(pair.getID());
+
+            if (Math.abs(pair.getValue().getCoordinates().getX() - fleetComponent.getX())
+                > 0.000001) {
+              fleetComponent.setX(pair.getValue().getCoordinates().getX());
+            }
+            if (Math.abs(pair.getValue().getCoordinates().getY() - fleetComponent.getY())
+                > 0.000001) {
+              fleetComponent.setY(pair.getValue().getCoordinates().getY());
+            }
+            fleetComponent.setNumberOfShips(pair.getValue().getNumberOfShips());
+            Logger.debug("Fleet Target ID's: " + pair.getValue().getTargetIDs());
+            if (fleetComponent.getTargetsWrapper().size() != pair.getValue().getTargetIDs()
+                .size()) {
+              fleetComponent.setTargetsWrapper(pair.getValue().getTargetIDs());
+            }
+
+            return fleetComponent;
+          }
+      );
+
+      this.dummyFleetList.setItems(fleetComponents);
     });
 
   }

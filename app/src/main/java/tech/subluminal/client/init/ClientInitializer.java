@@ -113,7 +113,8 @@ public class ClientInitializer extends Application {
   public void start(Stage primaryStage) throws Exception {
     loader = new FXMLLoader();
     loader.setLocation(
-        getClass().getResource("/tech/subluminal/client/presentation/customElements/MainView.fxml"));
+        getClass()
+            .getResource("/tech/subluminal/client/presentation/customElements/MainView.fxml"));
     //loader.setController(new MainController());
     Parent root = loader.load();
     root.getStylesheets().add(

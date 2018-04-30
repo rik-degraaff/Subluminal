@@ -5,10 +5,11 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import tech.subluminal.client.presentation.controller.ChatController;
 import tech.subluminal.client.presentation.controller.MainController;
-import tech.subluminal.client.presentation.controller.SettingsController;
 
-public class ChatComponent extends AnchorPane{
+public class ChatComponent extends AnchorPane {
+
   private ChatController controller;
+
   public ChatComponent(MainController mainController) {
     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ChatView.fxml"));
     fxmlLoader.setRoot(this);
@@ -22,7 +23,8 @@ public class ChatComponent extends AnchorPane{
       throw new RuntimeException(exception);
     }
   }
-  public ChatController getChatcontroller(){
+
+  public ChatController getChatcontroller() {
     return controller;
   }
 }

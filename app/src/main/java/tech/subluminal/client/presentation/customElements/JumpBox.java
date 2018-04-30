@@ -15,7 +15,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.transform.Translate;
 import org.pmw.tinylog.Logger;
 
 public class JumpBox extends Group {
@@ -62,27 +61,31 @@ public class JumpBox extends Group {
     box.getStyleClass().add("jumpbox");
 
     Platform.runLater(() -> {
-      if((double) x.getValue() >= getScene().getWidth()/2){
+      if ((double) x.getValue() >= getScene().getWidth() / 2) {
         //right side
-        if((double) y.getValue() >= getScene().getHeight()/2){
+        if ((double) y.getValue() >= getScene().getHeight() / 2) {
           //up
           Logger.debug("right down");
           box.layoutXProperty().unbind();
-          box.layoutXProperty().bind(Bindings.createDoubleBinding(()-> -box.getWidth(), box.widthProperty()));
-          box.layoutYProperty().bind(Bindings.createDoubleBinding(()-> -box.getHeight(), box.heightProperty()));
-        }else{
+          box.layoutXProperty()
+              .bind(Bindings.createDoubleBinding(() -> -box.getWidth(), box.widthProperty()));
+          box.layoutYProperty()
+              .bind(Bindings.createDoubleBinding(() -> -box.getHeight(), box.heightProperty()));
+        } else {
           Logger.debug("right up");
           box.layoutXProperty().unbind();
-          box.layoutXProperty().bind(Bindings.createDoubleBinding(()-> -box.getWidth(), box.widthProperty()));
+          box.layoutXProperty()
+              .bind(Bindings.createDoubleBinding(() -> -box.getWidth(), box.widthProperty()));
         }
-      }else{
+      } else {
         //left side
-        if((double) y.getValue() >= getScene().getHeight()/2){
+        if ((double) y.getValue() >= getScene().getHeight() / 2) {
           //up
           Logger.debug("left down");
           box.layoutYProperty().unbind();
-          box.layoutYProperty().bind(Bindings.createDoubleBinding(()-> -box.getHeight(), box.heightProperty()));
-        }else{
+          box.layoutYProperty()
+              .bind(Bindings.createDoubleBinding(() -> -box.getHeight(), box.heightProperty()));
+        } else {
           Logger.debug("left up");
           box.layoutYProperty().unbind();
           box.layoutYProperty().setValue(0);

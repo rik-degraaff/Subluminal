@@ -21,6 +21,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
+import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
@@ -36,7 +37,8 @@ public abstract class ShipComponent extends Group {
   private final ObjectProperty<Color> color = new SimpleObjectProperty<>();
 
   private final BooleanProperty isRotating = new SimpleBooleanProperty();
-  private final int fromCenter = 30;
+  private final int fromCenter = 15;
+  private final int fromCenterFleet = 30;
   private final StringProperty ownerID = new SimpleStringProperty();
   private final ObservableList<String> targetIDs = FXCollections.observableArrayList();
   private final ListProperty<String> targetsWrapper = new SimpleListProperty<>(targetIDs);
@@ -46,13 +48,14 @@ public abstract class ShipComponent extends Group {
 
   private final IntegerProperty parentWidthProperty = new SimpleIntegerProperty();
   private final IntegerProperty parentHeightProperty = new SimpleIntegerProperty();
+  private final IntegerProperty numberOfShips = new SimpleIntegerProperty();
   private final RotateTransition rotateTl;
-
-  private GameStore gamestore;
-  private boolean isMoving = false;
   public Group group;
+  private GameStore gamestore;
 
-  public ShipComponent(Coordinates coordinates, String playerId, List<String> targetIDs) {
+  public ShipComponent(Coordinates coordinates, String playerId, List<String> targetIDs,
+      GameStore gamestore) {
+    this.gamestore = gamestore;
     Group group = new Group();
     group.getTransforms().add(new Translate(-fromCenter, -fromCenter));
     group.getTransforms().add(new Rotate(90));
@@ -103,7 +106,7 @@ public abstract class ShipComponent extends Group {
         } else if (!targetsWrapperProperty().isEmpty() && isIsRotating()) {
           setIsRotating(false);
 
-        }else{
+        } else {
           rotateToStar(group);
         }
       });
@@ -127,6 +130,101 @@ public abstract class ShipComponent extends Group {
     });
 
     this.getChildren().add(group);
+
+  }
+
+  public ShipComponent(Coordinates coordinates, int numberOfShips, String ID, String ownerID,
+      List<String> targetIDs, GameStore gamestore) {
+
+    this.gamestore = gamestore;
+    Group group = new Group();
+    group.getTransforms().add(new Translate(-fromCenter, -fromCenter));
+    group.getTransforms().add(new Rotate(90));
+
+    setX(coordinates.getX());
+    setY(coordinates.getY());
+
+    Platform.runLater(() -> {
+      this.parentWidthProperty.bind(getScene().widthProperty());
+      this.parentHeightProperty.bind(getScene().heightProperty());
+
+      this.layoutXProperty().bind(Bindings
+          .createDoubleBinding(() -> parentWidthProperty.doubleValue() / 2 + (getX() - 0.5) * Math
+                  .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue()),
+              xProperty(), parentWidthProperty, parentHeightProperty));
+      this.layoutYProperty().bind(Bindings
+          .createDoubleBinding(() -> parentHeightProperty.doubleValue() / 2 + (getY() - 0.5) * Math
+                  .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue()),
+              yProperty(), parentWidthProperty, parentHeightProperty));
+    });
+
+    this.setOwnerID(ownerID);
+
+    setTargetsWrapper(targetIDs);
+
+    setColor(Color.GRAY);
+    Polygon ship = new Polygon();
+    ship.getPoints().addAll(new Double[]{
+        -10.0, -10.0,
+        10.0, 0.0,
+        0.0, 10.0});
+    ship.fillProperty().bind(colorProperty());
+
+    group.getChildren().add(ship);
+    group.setMouseTransparent(true);
+
+    rotateTl = new RotateTransition(Duration.seconds(5), group);
+    rotateTl.setToAngle(360);
+    rotateTl.setCycleCount(RotateTransition.INDEFINITE);
+    rotateTl.setInterpolator(Interpolator.LINEAR);
+
+    Platform.runLater(() -> {
+      targetsWrapperProperty().addListener((observable, oldValue, newValue) -> {
+        //Logger.debug("SHIP GOT: " + targetsWrapperProperty().toString());
+        Logger.debug("SOMETHING CHANGED " + oldValue + " " + newValue);
+        if (targetsWrapperProperty().isEmpty() && !isIsRotating()) {
+          setIsRotating(true);
+        } else if (!targetsWrapperProperty().isEmpty() && isIsRotating()) {
+          setIsRotating(false);
+
+        } else {
+          rotateToStar(group);
+        }
+      });
+
+      isRotatingProperty().addListener((observable, oldValue, newValue) -> {
+        if (newValue && !oldValue) {
+          group.getTransforms().add(new Translate(-fromCenter, -fromCenter));
+          group.getTransforms().add(new Rotate(90));
+          rotateTl.play();
+        } else if (!newValue && oldValue) {
+          rotateTl.pause();
+          rotateToStar(group);
+
+          //rotateTl.setToAngle(9);
+        }
+      });
+    });
+
+    Platform.runLater(() -> {
+      setIsRotating(targetsWrapperProperty().isEmpty());
+    });
+
+    this.getChildren().add(group);
+
+
+    this.setNumberOfShips(numberOfShips);
+
+    Logger.debug("CREATING SHIP LABEL");
+    Label amount = new Label();
+    amount.setTextFill(Color.WHITE);
+
+    amount.textProperty().bind(Bindings.createStringBinding(() ->
+        this.numberOfShipsProperty().getValue().toString(), numberOfShipsProperty()));
+    group.getChildren().add(amount);
+
+
+
   }
 
   private void rotateToStar(Group group) {
@@ -134,33 +232,37 @@ public abstract class ShipComponent extends Group {
     //group.getTransforms().add(new Rotate(-group.getRotate() + 45));
     double xShip = getX();
     double yShip = getY();
-    Star star = gamestore.stars().getByID(targetsWrapper.get(0)).get().use(Function.identity());
+    Platform.runLater(() -> {
+      Logger.debug("ALL STARS" + gamestore.stars().toString());
+      Star star = gamestore.stars().getByID(targetsWrapper.get(0)).get().use(Function.identity());
 
-    double xStar = star.getCoordinates().getX();
-    double yStar = star.getCoordinates().getY();
+      double xStar = star.getCoordinates().getX();
+      double yStar = star.getCoordinates().getY();
 
-    Logger.debug("xSTAR: "+ xStar + " - " + xShip);
-    Logger.debug("ySTAR: "+ yStar + " - " + yShip);
+      Logger.debug("xSTAR: " + xStar + " - " + xShip);
+      Logger.debug("ySTAR: " + yStar + " - " + yShip);
 
-    double xD = xStar - xShip;
-    double yD = yStar - yShip;
+      double xD = xStar - xShip;
+      double yD = yStar - yShip;
 
-    double angle = Math.atan(yD/xD);
+      double angle = Math.atan(yD / xD);
 
-    Logger.debug("ROTATING: "+ angle);
-    Logger.debug("ROTATING: "+ Math.toDegrees(angle));
-    Logger.debug("xD: "+ xD);
-    Logger.debug("yD: "+ yD);
+      Logger.debug("ROTATING: " + angle);
+      Logger.debug("ROTATING: " + Math.toDegrees(angle));
+      Logger.debug("xD: " + xD);
+      Logger.debug("yD: " + yD);
 
-    RotateTransition rotateTl = new RotateTransition(Duration.seconds(0.2),group);
-    if(xD < 0){
-      rotateTl.setToAngle(Math.toDegrees(angle) + 90 + 180 + 45);
-      //group.getTransforms().add(new Rotate(Math.toDegrees(angle) + 90 + 180));
-    }else {
-      rotateTl.setToAngle(Math.toDegrees(angle) + 90 + 45);
-      //group.getTransforms().add(new Rotate(Math.toDegrees(angle) + 90));
-    }
-    rotateTl.play();
+      RotateTransition rotateTl = new RotateTransition(Duration.seconds(0.2), group);
+      if (xD < 0) {
+        rotateTl.setToAngle(Math.toDegrees(angle) + 90 + 180 + 45);
+        //group.getTransforms().add(new Rotate(Math.toDegrees(angle) + 90 + 180));
+      } else {
+        rotateTl.setToAngle(Math.toDegrees(angle) + 90 + 45);
+        //group.getTransforms().add(new Rotate(Math.toDegrees(angle) + 90));
+      }
+      rotateTl.play();
+    });
+
   }
 
   public GameStore getGamestore() {
@@ -241,6 +343,18 @@ public abstract class ShipComponent extends Group {
 
   public StringProperty ownerIDProperty() {
     return ownerID;
+  }
+
+  public int getNumberOfShips() {
+    return numberOfShips.get();
+  }
+
+  public void setNumberOfShips(int numberOfShips) {
+    this.numberOfShips.set(numberOfShips);
+  }
+
+  public IntegerProperty numberOfShipsProperty() {
+    return numberOfShips;
   }
 
 }
