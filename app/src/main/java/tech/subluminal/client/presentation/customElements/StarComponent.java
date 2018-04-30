@@ -44,7 +44,8 @@ public class StarComponent extends Group {
 
   //private final ObjectProperty
 
-  public StarComponent(String ownerID, double possession, Coordinates coordinates, String id, double jump) {
+  public StarComponent(String ownerID, double possession, Coordinates coordinates, String id,
+      double jump) {
 
     setPossession(possession);
     setXProperty(coordinates.getX());
@@ -92,13 +93,13 @@ public class StarComponent extends Group {
     Pane glowBox = new Pane();
     glowBox.setPrefHeight(sizeAll);
     glowBox.setPrefWidth(sizeAll);
-    glowBox.setTranslateX(-sizeAll/2);
-    glowBox.setTranslateY(-sizeAll/2);
+    glowBox.setTranslateX(-sizeAll / 2);
+    glowBox.setTranslateY(-sizeAll / 2);
 
     border = makeBorder();
     Circle jumpCircle = new Circle();
     Platform.runLater(() -> {
-      jumpCircle.setRadius(jump*getScene().getHeight());
+      jumpCircle.setRadius(jump * getScene().getHeight());
     });
     jumpCircle.setStroke(Color.RED);
     jumpCircle.setFill(Color.TRANSPARENT);
@@ -127,8 +128,7 @@ public class StarComponent extends Group {
     ((Bloom) bloom).setThreshold(0.3);
     star.setEffect(bloom);*/
 
-
-    starGroup.getChildren().addAll(  glowBox, border, star, starName, possessionCount);
+    starGroup.getChildren().addAll(glowBox, border, star, starName, possessionCount);
     Effect glow = new Bloom();
     this.setEffect(glow);
     this.getChildren().addAll(jumpCircle, starGroup);
@@ -139,12 +139,12 @@ public class StarComponent extends Group {
     return jump.get();
   }
 
-  public DoubleProperty jumpProperty() {
-    return jump;
-  }
-
   public void setJump(double jump) {
     this.jump.set(jump);
+  }
+
+  public DoubleProperty jumpProperty() {
+    return jump;
   }
 
   public Object getColor() {

@@ -10,7 +10,8 @@
   fx:controller="tech.subluminal.client.presentation.controller.LobbyUserController"
   fx:id="lobbyHost">
   <children>
-    <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
+    <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+      AnchorPane.topAnchor="0.0"
       alignment="CENTER" prefHeight="600.0" prefWidth="800.0">
       <children>
         <HBox alignment="CENTER" prefHeight="481.0" prefWidth="800.0">

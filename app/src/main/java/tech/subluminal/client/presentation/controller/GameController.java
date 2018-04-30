@@ -286,7 +286,8 @@ public class GameController implements Initializable, GamePresenter {
               MotherShipComponent shipComponent = new MotherShipComponent(
                   pair.getValue().getCoordinates(),
                   pair.getKey(),
-                  pair.getValue().getTargetIDs());
+                  pair.getValue().getTargetIDs(),
+                  gameStore);
               ships.put(pair.getID(), shipComponent);
 
               if (pair.getKey() != null) {
@@ -328,7 +329,8 @@ public class GameController implements Initializable, GamePresenter {
                   pair.getValue().getNumberOfShips(),
                   pair.getID(),
                   pair.getKey(),
-                  pair.getValue().getTargetIDs());
+                  pair.getValue().getTargetIDs(),
+                  gameStore);
               fleets.put(pair.getID(), fleetComponent);
 
               if (pair.getKey() != null) {

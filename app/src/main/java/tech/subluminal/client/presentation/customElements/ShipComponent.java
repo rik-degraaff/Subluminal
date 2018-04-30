@@ -37,7 +37,7 @@ public abstract class ShipComponent extends Group {
   private final ObjectProperty<Color> color = new SimpleObjectProperty<>();
 
   private final BooleanProperty isRotating = new SimpleBooleanProperty();
-  private final int fromCenter = 10;
+  private final int fromCenter = 15;
   private final int fromCenterFleet = 30;
   private final StringProperty ownerID = new SimpleStringProperty();
   private final ObservableList<String> targetIDs = FXCollections.observableArrayList();
@@ -50,12 +50,12 @@ public abstract class ShipComponent extends Group {
   private final IntegerProperty parentHeightProperty = new SimpleIntegerProperty();
   private final IntegerProperty numberOfShips = new SimpleIntegerProperty();
   private final RotateTransition rotateTl;
-
-  private GameStore gamestore;
-  private boolean isMoving = false;
   public Group group;
+  private GameStore gamestore;
 
-  public ShipComponent(Coordinates coordinates, String playerId, List<String> targetIDs) {
+  public ShipComponent(Coordinates coordinates, String playerId, List<String> targetIDs,
+      GameStore gamestore) {
+    this.gamestore = gamestore;
     Group group = new Group();
     group.getTransforms().add(new Translate(-fromCenter, -fromCenter));
     group.getTransforms().add(new Rotate(90));
@@ -130,11 +130,13 @@ public abstract class ShipComponent extends Group {
     });
 
     this.getChildren().add(group);
+
   }
 
   public ShipComponent(Coordinates coordinates, int numberOfShips, String ID, String ownerID,
-      List<String> targetIDs) {
+      List<String> targetIDs, GameStore gamestore) {
 
+    this.gamestore = gamestore;
     Group group = new Group();
     group.getTransforms().add(new Translate(-fromCenter, -fromCenter));
     group.getTransforms().add(new Rotate(90));
@@ -192,7 +194,7 @@ public abstract class ShipComponent extends Group {
 
       isRotatingProperty().addListener((observable, oldValue, newValue) -> {
         if (newValue && !oldValue) {
-          group.getTransforms().add(new Translate(-fromCenterFleet, -fromCenterFleet));
+          group.getTransforms().add(new Translate(-fromCenter, -fromCenter));
           group.getTransforms().add(new Rotate(90));
           rotateTl.play();
         } else if (!newValue && oldValue) {
@@ -209,17 +211,19 @@ public abstract class ShipComponent extends Group {
     });
 
     this.getChildren().add(group);
+
+
     this.setNumberOfShips(numberOfShips);
 
-    Platform.runLater(() -> {
-      Logger.debug("CREATING SHIP LABEL");
-      Label amount = new Label();
-      amount.setTextFill(Color.WHITE);
+    Logger.debug("CREATING SHIP LABEL");
+    Label amount = new Label();
+    amount.setTextFill(Color.WHITE);
 
-      amount.textProperty().bind(Bindings.createStringBinding(() ->
-          this.numberOfShipsProperty().getValue().toString(), numberOfShipsProperty()));
-      group.getChildren().add(amount);
-    });
+    amount.textProperty().bind(Bindings.createStringBinding(() ->
+        this.numberOfShipsProperty().getValue().toString(), numberOfShipsProperty()));
+    group.getChildren().add(amount);
+
+
 
   }
 
@@ -229,6 +233,7 @@ public abstract class ShipComponent extends Group {
     double xShip = getX();
     double yShip = getY();
     Platform.runLater(() -> {
+      Logger.debug("ALL STARS" + gamestore.stars().toString());
       Star star = gamestore.stars().getByID(targetsWrapper.get(0)).get().use(Function.identity());
 
       double xStar = star.getCoordinates().getX();
@@ -344,12 +349,12 @@ public abstract class ShipComponent extends Group {
     return numberOfShips.get();
   }
 
-  public IntegerProperty numberOfShipsProperty() {
-    return numberOfShips;
-  }
-
   public void setNumberOfShips(int numberOfShips) {
     this.numberOfShips.set(numberOfShips);
+  }
+
+  public IntegerProperty numberOfShipsProperty() {
+    return numberOfShips;
   }
 
 }
