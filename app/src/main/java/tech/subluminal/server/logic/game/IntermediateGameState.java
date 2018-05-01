@@ -175,7 +175,7 @@ public class IntermediateGameState {
 
       stars.put(starID, new Star(highestID, Math.max(Math.min(star.getPossession() + diff, 1.0), 0.0),
           star.getCoordinates(), starID, star.isGenerating(), star.getJump(), star.getDematRate(),
-          star.getNextDemat(), star.getGenerationRate(), star.getNextShipgen()));
+          star.getNextDemat(), star.getGenerationRate(), star.getNextShipgen(), star.getName()));
     }
   }
 

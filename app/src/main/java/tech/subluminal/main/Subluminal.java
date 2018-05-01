@@ -5,12 +5,11 @@ import java.util.List;
 import javafx.application.Application;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine;
-import tech.subluminal.client.init.ClientInitializer;
-import tech.subluminal.server.init.ServerInitializer;
+import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
-import picocli.CommandLine.Command;
-import tech.subluminal.shared.util.NameGenerator;
+import tech.subluminal.client.init.ClientInitializer;
+import tech.subluminal.server.init.ServerInitializer;
 
 /**
  * The main class of the Subluminal project containing the main function which starts the program.
@@ -89,9 +88,9 @@ public class Subluminal {
         System.exit(1);
       }
 
-      NameGenerator ng = new NameGenerator();
-      ng.readStarFiles();
-
+      //NameGenerator ng = new NameGenerator();
+      //ng.readStarFiles();
+      //System.out.println(ng.toString());
     }
 
 //  private static void invalidArguments() {

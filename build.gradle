@@ -37,6 +37,7 @@ sourceCompatibility = 1.8
 project.buildDir = 'app/build/'
 compileJava.options.fork = true
 mainClassName = 'tech.subluminal.main.Subluminal'
+applicationDefaultJvmArgs = ["-Dfile.encoding=UTF-8"]
 
 def description = """
     Project: ${project.name}-
@@ -141,4 +142,8 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 artifacts {
     archives sourcesJar
     archives javadocJar
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
