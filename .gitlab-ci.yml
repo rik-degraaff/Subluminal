@@ -42,7 +42,7 @@ build:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     expire_in: 2 hours
     paths:
-      - "*.class"
+      - app/out/**/*.class
 
 test:
   stage: test
