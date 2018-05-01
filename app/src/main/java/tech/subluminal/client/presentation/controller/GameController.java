@@ -237,6 +237,19 @@ public class GameController implements Initializable, GamePresenter {
     this.playerColors = playerColors;
   }
 
+  @Override
+  public void removeFleets(List<String> fleetIDs) {
+    fleetIDs.forEach(f -> {
+      FleetComponent remFleet = fleets.get(f);
+      if(remFleet != null){
+        fleets.remove(f);
+        Platform.runLater(() -> {
+          map.getChildren().remove(remFleet);
+        });
+      }
+    });
+  }
+
   public void setGameStore(GameStore gameStore) {
     this.gameStore = gameStore;
 
