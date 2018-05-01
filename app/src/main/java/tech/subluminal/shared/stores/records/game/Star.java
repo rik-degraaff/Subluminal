@@ -102,7 +102,8 @@ public class Star extends GameObject implements SONRepresentable {
 
   /**
    * @return true if this star is generating ships, i.e. if the player who currently owns it
-   * colonized it fully. Note that this doesn't mean that the possesion percentage is currently 100.
+   * colonized it fully. Note that this doesn't mean that the possesion percentage is currently
+   * 100.
    */
   public boolean isGenerating() {
     return generating;

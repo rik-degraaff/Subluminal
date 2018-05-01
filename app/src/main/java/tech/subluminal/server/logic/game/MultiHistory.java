@@ -13,8 +13,8 @@ import java.util.function.Predicate;
  */
 public class MultiHistory<K, V> {
 
-  private final Set<K> keys;
   protected final Map<K, Queue<V>> history = new HashMap<>();
+  private final Set<K> keys;
   private V current;
 
   /**

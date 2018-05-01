@@ -1,6 +1,5 @@
 package tech.subluminal.client.presentation.controller;
 
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.animation.FadeTransition;
@@ -17,8 +16,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 
 public class MenuController implements Initializable, Observer {
 
@@ -95,18 +92,6 @@ public class MenuController implements Initializable, Observer {
     menuButtonsDock.setOpacity(0.0);
     generateLogo();
 
-    //TODO: Iterate over all the files and play random track
-    Media media = null;
-
-    //TODO: Import track with getResources
-    media = new Media(getClass().getResource("/tech/subluminal/resources/music/theyre-here_looping.mp3").toString());
-
-    MediaPlayer player = new MediaPlayer(media);
-    player.setVolume(0.75);
-    player.play();
-
-    player.setOnEndOfMedia(() -> player.seek(Duration.ZERO)
-    );
   }
 
   @FXML
@@ -119,8 +104,8 @@ public class MenuController implements Initializable, Observer {
     main.onSettingOpenHandle();
   }
 
-    @Override
-    public void setMainController (MainController main){
-      this.main = main;
-    }
+  @Override
+  public void setMainController(MainController main) {
+    this.main = main;
   }
+}

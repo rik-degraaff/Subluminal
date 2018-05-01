@@ -14,10 +14,10 @@ import tech.subluminal.shared.records.LobbyStatus;
 public class LobbyStatusComponent extends HBox {
 
   private final StringProperty lobbyToJoin = new SimpleStringProperty();
+  private final LobbyPresenter.Delegate lobbyDelegate;
   private String lobbyID;
   private Rectangle statusBox;
   private Label playersNow;
-  private final LobbyPresenter.Delegate lobbyDelegate;
 
   public LobbyStatusComponent(String lobbyName, String lobbyID, int players, int max,
       LobbyStatus status, LobbyPresenter.Delegate delegate) {
@@ -44,7 +44,6 @@ public class LobbyStatusComponent extends HBox {
 
     Pane spacer = new Pane();
     HBox.setHgrow(spacer, Priority.ALWAYS);
-
 
     hbox.getChildren().addAll(statusBox, name, playersNow, playersMax);
     this.getChildren().addAll(hbox, spacer, join);

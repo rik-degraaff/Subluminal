@@ -11,7 +11,8 @@ public class Ship extends Movable implements SONRepresentable {
   private static final String CLASS_NAME = Movable.class.getSimpleName();
   private static final String MOVABLE_KEY = "movable";
 
-  public Ship(Coordinates coordinates, String id, List<String> targetIDs, String endTarget, double speed) {
+  public Ship(Coordinates coordinates, String id, List<String> targetIDs, String endTarget,
+      double speed) {
     super(coordinates, id, targetIDs, endTarget, speed);
   }
 

@@ -18,12 +18,10 @@ import tech.subluminal.shared.util.MapperList;
 
 public class LobbyListController implements Initializable {
 
+  private final ListProperty<SlimLobby> slimLobbies = new SimpleListProperty<>();
   @FXML
   private ListView<LobbyStatusComponent> lobbyList;
-
   private LobbyPresenter.Delegate lobbyDelegate;
-
-  private final ListProperty<SlimLobby> slimLobbies = new SimpleListProperty<>();
 
   public void setLobbyDelegate(Delegate lobbyDelegate) {
     this.lobbyDelegate = lobbyDelegate;
@@ -33,12 +31,12 @@ public class LobbyListController implements Initializable {
     return slimLobbies.get();
   }
 
-  public ListProperty<SlimLobby> slimLobbiesProperty() {
-    return slimLobbies;
-  }
-
   public void setSlimLobbies(ObservableList<SlimLobby> slimLobbies) {
     this.slimLobbies.set(slimLobbies);
+  }
+
+  public ListProperty<SlimLobby> slimLobbiesProperty() {
+    return slimLobbies;
   }
 
   public void setLobbyStore(LobbyStore store) {
@@ -51,7 +49,8 @@ public class LobbyListController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    lobbyList.getItems().forEach(l -> l.lobbyToJoinProperty().addListener(e -> Logger.trace("help me !!!")));
+    lobbyList.getItems()
+        .forEach(l -> l.lobbyToJoinProperty().addListener(e -> Logger.trace("help me !!!")));
   }
 
   @FXML
@@ -62,7 +61,7 @@ public class LobbyListController implements Initializable {
   }
 
   @FXML
-  private void onLobbyRefresh(){
+  private void onLobbyRefresh() {
     lobbyDelegate.getLobbyList();
   }
 

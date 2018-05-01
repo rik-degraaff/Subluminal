@@ -25,3 +25,4 @@ app/build/
 bin/
 build/
 docs/javadoc/
+log\.txt

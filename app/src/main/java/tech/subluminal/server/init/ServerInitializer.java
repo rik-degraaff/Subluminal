@@ -45,7 +45,8 @@ public class ServerInitializer {
     new UserManager(userStore, messageDistributor);
     new PingManager(pingStore, userStore, messageDistributor);
     new ChatManager(messageDistributor, userStore, lobbyStore);
-    GameManager gameManager = new GameManager(gameStore, lobbyStore, messageDistributor, highScoreStore);
+    GameManager gameManager = new GameManager(gameStore, lobbyStore, messageDistributor,
+        highScoreStore);
     new LobbyManager(lobbyStore, userStore, messageDistributor, gameManager);
   }
 }

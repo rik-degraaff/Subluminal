@@ -9,31 +9,26 @@ cache:
     - .gradle/
 
 stages:
-  - checkstyle
+  - check
   - build
   - test
   - coverage
   - javadoc
-  - testing
-  - staging
-  - production
-
-cache:
-  paths:
-    - .gradle
+  - deploy
 
 checkstyle:
-  stage: checkstyle
+  stage: check
   script:
-    - gradle check
+    - gradle check -x test
   tags:
-    - cs108
+    - cs108-dind
   allow_failure: true
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
+    expire_in: 2 hours
     paths:
-      - app/build/
-      - app/out
+     - app/build/reports/checkstyle/
+
   only:
     - /^rl-.*$/
 
@@ -41,26 +36,28 @@ build:
   stage: build
   script:
     - gradle clean
-    - gradle build -x check -x test
+    - gradle build -x check -x test -x javadoc -x sourcesjar -x javadocjar -x distZip -x distTar
   tags:
-    - cs108
+    - cs108-dind
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
+    expire_in: 2 hours
     paths:
-      - app/build/
-      - app/out
+      - app/out/**/*.class
 
 test:
   stage: test
   script:
     - gradle test
   tags:
-    - cs108
+    - cs108-dind
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
+    expire_in: 2 hours
     paths:
-      - app/build/
-      - app/out
+      - app/build/reports/test/
+      - app/build/test-results/
+      - app/build/jacoco/
 
 coverage:
   stage: coverage
@@ -68,50 +65,52 @@ coverage:
     - gradle jacocoTestReport
     - cat app/build/reports/coverage/index.html
   tags:
-    - cs108
+    - cs108-dind
+  coverage: '/Total.*?([0-9]{1,3}) %/'
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
+    expire_in: 2 hours
     paths:
-      - app/build/
-      - app/out
+      - app/build/reports/coverage/
 
 javadoc:
   stage: javadoc
   script:
-    - gradle -q javadoc
+    - gradle javadoc
+    - gradle javadoccoverage
   tags:
-    - cs108
+    - cs108-dind
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
+    expire_in: 2 hours
     paths:
-      - app/build/
-      - app/out
+      - docs/javadoc/
   only:
     - /^rl-.*$/
 
 testing:
-  stage: staging
+  stage: deploy
   image: docker:latest
   variables:
     DOCKER_DRIVER: 'overlay2'
     VERSION: 'null'
   services:
   - docker:dind
-  before_script:
-  - docker info
   script:
   - VERSION=$(cat VERSION)
-  - echo Building and deploying server verison $VERSION to CI_JOB_NAME
-  - docker build -t subluminalthegame/subluminal:latest -t subluminalthegame/subluminal:3.0.0 .
+  - DEPLOYHOST=164.132.199.58
+  - echo Building and deploying server verison $VERSION to $CI_JOB_NAME
+  - docker build -t subluminalthegame/subluminal:latest -t subluminalthegame/subluminal:$(echo $VERSION) --file ./docker/dockerfile-subluminal.yml --build-arg VERSION=$(echo $VERSION) --build-arg PORT=1729 .
   - docker login -u subluminalthegame -p $DOCKERHUB_PASSWORD
   - docker push subluminalthegame/subluminal
   - apk update
   - apk add --no-cache openssh-client sshpass
+  - ssh gitlab@164.132.199.58 exit
   - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no gitlab@$DEPLOYHOST docker stop subluminal_staging || true
-  - sshpass -p $DEPLOY_PASSWORD ssh gitlab@$DEPLOYHOST docker pull subluminalthegame/subluminal:latest
-  - sshpass -p $DEPLOY_PASSWORD ssh gitlab@$DEPLOYHOST docker run --rm -d -p 1727:1729/tcp --name subluminal_staging subluminalthegame/subluminal:latest
+  - sshpass -p $DEPLOY_PASSWORD ssh gitlab@$DEPLOYHOST docker pull subluminalthegame/subluminal:$VERSION
+  - sshpass -p $DEPLOY_PASSWORD ssh gitlab@$DEPLOYHOST docker run --rm -d -p 1727:1729/tcp --label subluminal --name subluminal_$CI_JOB_NAME subluminalthegame/subluminal:$VERSION
   tags:
-    - cs108
+    - cs108-dind
   #when: on_success
   when: manual
   environment:
@@ -121,9 +120,13 @@ testing:
     - ft-buildtools-luc
 
 staging:
-  stage: testing
+  stage: deploy
+  image: alpine:latest
   script:
-    - echo "Missing sh script to setup testing environment."
+    - apk update
+    - apk add --no-cache openssh-client sshpass
+    - ping -c 5 vps406724.ovh.net
+    - sshpass -p $DEPLOY_PASSWORD ssh gitlab@vps406724.ovh.net exit
   tags:
     - cs108
   #when: on_success
@@ -132,16 +135,39 @@ staging:
     name: staging
   only:
     - /^rl-.*$/
+    - ft-buildtools-luc
 
 
 production:
-  stage: production
+  stage: deploy
+  image: bash:latest
   script:
     - echo "Missing sh script to setup production environment."
   tags:
-    - cs108
+    - cs108-dind
   when: manual
   environment:
     name: production
   only:
     - master
+
+pages:
+  stage: deploy
+  image: bash:latest
+  script:
+    - mkdir public
+    - cp web/docs/index.html public
+    - mkdir public/javadoc
+    - cp -r docs/javadoc/* public/javadoc
+    - mkdir public/test
+    - cp -r app/build/reports/test/* public/test
+    - mkdir public/coverage
+    - cp -r app/build/reports/coverage/* public/coverage
+  tags:
+    - cs108-dind
+  artifacts:
+    paths:
+    - public
+  only:
+    - master
+    - ft-buildtools-luc
