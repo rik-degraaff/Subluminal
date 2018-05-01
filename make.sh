@@ -38,7 +38,7 @@ function show_usage {
 if [[ "$1" = "help" ]] || [[ $# -eq 0 ]];then
   show_usage
 elif [[ "$1" = "watch" ]];then
-  gradle build -x check -x test -x javadoc -x sourcesjar -x javadocjar -x distZip -x distTars
+  gradle build -x check -x test -x javadoc -x sourcesjar -x javadocjar -x distZip -x distTar --continuous
 elif [[ "$1" = "testenv" ]];then
   echo "//TODO: Make client and server start"
 else

@@ -90,6 +90,10 @@ public class Subluminal {
         System.out.println("Invalid mode argument. Must be one of " + modes);
         System.exit(1);
       }
+
+      //NameGenerator ng = new NameGenerator();
+      //ng.readStarFiles();
+      //System.out.println(ng.toString());
     }
 
 //  private static void invalidArguments() {
