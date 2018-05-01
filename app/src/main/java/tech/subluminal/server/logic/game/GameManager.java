@@ -1,6 +1,7 @@
 package tech.subluminal.server.logic.game;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -159,6 +160,8 @@ public class GameManager implements GameStarter {
         new tech.subluminal.client.stores.records.game.Player(player.getID(), motherShip,
             new LinkedList<>());
 
+    Set<String> removedHistories = new HashSet<>();
+
     // loop through all fleets of the player
     player.getFleets().forEach((fleetID, fleetHistory) -> {
       fleetHistory.getLatestForPlayer(forPlayerID, motherShipEntry)
@@ -169,13 +172,15 @@ public class GameManager implements GameStarter {
                 // if the fleet was destroyed, add it to the removed fleet list and remove the history if possible
                 v -> {
                   if (fleetHistory.canBeRemoved()) {
-                    player.getFleets().remove(fleetID);
+                    removedHistories.add(fleetID);
                   }
                   delta.addRemovedFleet(player.getID(), fleetID);
                 }
             );
           });
     });
+
+    removedHistories.forEach(player.getFleets()::remove);
 
     return playerDelta;
   }

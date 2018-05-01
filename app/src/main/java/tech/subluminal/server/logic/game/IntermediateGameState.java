@@ -217,11 +217,22 @@ public class IntermediateGameState {
           ? highest * deltaTime * 0.1
           : -highest * deltaTime * 0.1;
 
+      double possession = star.getPossession() + diff;
+      String ownerID = star.getOwnerID();
+      boolean isGenerating = star.isGenerating();
+
+      if (possession < 0) {
+        possession = -possession;
+        ownerID = highestID;
+        isGenerating = false;
+      }
+
+      isGenerating |= possession > 0.999;
+
       stars.put(starID,
-          new Star(highestID, Math.max(Math.min(star.getPossession() + diff, 1.0), 0.0),
-              star.getCoordinates(), starID, star.isGenerating(), star.getJump(),
-              star.getDematRate(),
-              star.getNextDemat(), star.getGenerationRate(), star.getNextShipgen()));
+          new Star(ownerID, Math.min(possession, 1.0), star.getCoordinates(), starID, isGenerating,
+              star.getJump(), star.getDematRate(), star.getNextDemat(), star.getGenerationRate(),
+              star.getNextShipgen()));
     }
   }
 
@@ -281,6 +292,7 @@ public class IntermediateGameState {
   }
 
   private void addFleetToStar(Fleet fleet, String playerID, String starID) {
+    fleetsUnderway.remove(fleet.getID());
     Optional<Fleet> optionalFleet = fleetsOnStars.get(starID).get(playerID);
     ifPresent(optionalFleet.filter(f -> !f.getID().equals(fleet.getID())),
         oldFleet -> {
