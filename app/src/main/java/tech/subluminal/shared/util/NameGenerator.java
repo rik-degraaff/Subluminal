@@ -1,6 +1,5 @@
 package tech.subluminal.shared.util;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -61,7 +60,7 @@ public class NameGenerator {
 //      e.printStackTrace();
 //    }
 
-    Scanner sc = new Scanner(NameGenerator.class.getResourceAsStream("/" + path), StandardCharsets.UTF_8.name());
+    Scanner sc = new Scanner(NameGenerator.class.getResourceAsStream("/" + path), "UTF-8");
     while (sc.hasNext()) {
       String line = sc.nextLine();
       //System.out.println(line);
