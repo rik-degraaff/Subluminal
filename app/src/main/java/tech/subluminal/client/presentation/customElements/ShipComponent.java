@@ -189,8 +189,8 @@ public abstract class ShipComponent extends Group {
     //group.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY,Insets.EMPTY)));
     ImageView shipBody = new ImageView();
     ImageView shipDetails = new ImageView();
-    Image shipImageBody = new Image("/tech/subluminal/resources/100w/shipBody.png");
-    Image shipImageDetail = new Image("/tech/subluminal/resources/100w/shipDetails.png");
+    Image shipImageBody = new Image("/tech/subluminal/resources/100w/fleetBody.png");
+    Image shipImageDetail = new Image("/tech/subluminal/resources/100w/fleetDetails.png");
     shipBody.setFitWidth(30);
     shipBody.setFitHeight(30);
     shipBody.setImage(shipImageBody);
