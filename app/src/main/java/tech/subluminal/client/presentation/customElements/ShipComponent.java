@@ -20,8 +20,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -88,9 +90,15 @@ public abstract class ShipComponent extends Group {
 
     Pane ship = new Pane();
     //group.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY,Insets.EMPTY)));
-    ImageView shipBody = new ImageView();
+
     ImageView shipDetails = new ImageView();
     Image shipImageBody = new Image("/tech/subluminal/resources/100w/shipBody.png");
+    ImageView shipBody = new ImageView(shipImageBody);
+
+    shipBody.setImage(shipImageBody);
+
+    setShipColor(shipBody);
+
     Image shipImageDetail = new Image("/tech/subluminal/resources/100w/shipDetails.png");
     shipBody.setFitWidth(40);
     shipBody.setFitHeight(40);
@@ -154,6 +162,22 @@ public abstract class ShipComponent extends Group {
 
   }
 
+  private void setShipColor(ImageView shipBody) {
+
+    ColorAdjust monochrome = new ColorAdjust();
+    monochrome.hueProperty().bind(Bindings.createDoubleBinding(() -> colorProperty().getValue().getHue(), colorProperty()));
+    //monochrome.setSaturation(color.getValue().getSaturation());
+    //monochrome.setHue(color.getValue().getHue());
+    //monochrome.setBrightness(color.getValue().getBrightness());
+
+    shipBody.setEffect(monochrome);
+
+    shipBody.setCache(true);
+    shipBody.setCacheHint(CacheHint.SPEED);
+
+
+  }
+
   public ShipComponent(Coordinates coordinates, int numberOfShips, String ID, String ownerID,
       List<String> targetIDs, GameStore gamestore) {
 
@@ -200,6 +224,8 @@ public abstract class ShipComponent extends Group {
     shipDetails.setImage(shipImageDetail);
     shipDetails.setPreserveRatio(true);
 
+
+    setShipColor(shipBody);
 
     ship.getChildren().addAll(shipBody, shipDetails);
     ship.setRotate(-45);
