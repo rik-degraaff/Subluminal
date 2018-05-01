@@ -10,7 +10,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.effect.Bloom;
@@ -19,7 +18,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.TextAlignment;
+import javafx.scene.text.Font;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 
 public class StarComponent extends Group {
@@ -44,7 +43,7 @@ public class StarComponent extends Group {
 
   //private final ObjectProperty
 
-  public StarComponent(String ownerID, double possession, Coordinates coordinates, String id,
+  public StarComponent(String ownerID, String name, double possession, Coordinates coordinates, String id,
       double jump) {
 
     setPossession(possession);
@@ -72,7 +71,7 @@ public class StarComponent extends Group {
       this.parentHeightProperty.bind(getScene().heightProperty());
     });
 
-    this.name = "SUBBY";
+    this.name = name;
 
     Circle star = new Circle();
     star.setFill(Color.GRAY);
@@ -120,9 +119,12 @@ public class StarComponent extends Group {
 
     Label starName = new Label(name);
     starName.getStyleClass().add("starname-label");
-    starName.setAlignment(Pos.BOTTOM_CENTER);
-    starName.setPrefWidth(sizeAll);
-    starName.setTextAlignment(TextAlignment.CENTER);
+    starName.setLayoutY(30);
+    Platform.runLater(() -> {
+      starName.setLayoutX(-starName.getWidth()/2);
+    });
+
+    starName.setFont(new Font("PxPlus IBM VGA9", 10));
 
     starGroup.getChildren().addAll(glowBox, border, star, starName, possessionCount);
     Effect glow = new Bloom();

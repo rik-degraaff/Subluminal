@@ -249,6 +249,7 @@ public class GameController implements Initializable, GamePresenter {
           star -> {
             if (stars.get(star.getID()) == null) {
               StarComponent starComponent = new StarComponent(star.getOwnerID(),
+                  star.getName(),
                   star.getPossession(),
                   star.getCoordinates(),
                   star.getID(),

@@ -14,11 +14,11 @@ import org.reflections.scanners.ResourcesScanner;
 
 public class NameGenerator {
 
-  private List<String> starNames;
+  private List<String> starNames = new ArrayList<>();
   private List<String> planetNames; //for later use
 
   public NameGenerator() {
-    this.starNames = new ArrayList<>();
+    readStarFiles();
   }
 
   public void readStarFiles() {
