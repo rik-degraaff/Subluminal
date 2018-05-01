@@ -189,7 +189,7 @@ public class GameManager implements GameStarter {
 
     final IntermediateGameState intermediateGameState =
         new IntermediateGameState(elapsedTime, stars, gameState.getPlayers().keySet(),
-            gameState.getShipSpeed());
+            gameState.getShipSpeed(), gameState.getSignals());
 
     gameState.getPlayers().forEach((playerID, player) -> {
       player.getFleets()
@@ -235,6 +235,8 @@ public class GameManager implements GameStarter {
         player.getMotherShip().add(new GameHistoryEntry<>(ship));
       });
     });
+
+    gameState.setSignals(intermediateGameState.getSignals());
   }
 
   private void processMoveRequests(

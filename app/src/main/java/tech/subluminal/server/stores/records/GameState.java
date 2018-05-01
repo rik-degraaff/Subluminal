@@ -1,6 +1,7 @@
 package tech.subluminal.server.stores.records;
 
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
@@ -19,7 +20,7 @@ public class GameState extends Identifiable {
   private final double shipSpeed;
   private final Map<String, GameHistory<Star>> stars;
   private final Map<String, Player> players;
-  private final PriorityQueue<Signal> signals;
+  private Set<Signal> signals = new HashSet<>();
 
   public GameState(String id, Set<Star> stars, Set<Player> players, double lightSpeed, double jump,
       double shipSpeed) {
@@ -29,8 +30,6 @@ public class GameState extends Identifiable {
     this.shipSpeed = shipSpeed;
 
     this.players = players.stream().collect(Collectors.toMap(Player::getID, p -> p));
-
-    this.signals = new PriorityQueue<>(Comparator.reverseOrder());
 
     Set<String> playerIDs = players.stream()
         .map(Player::getID)
@@ -80,7 +79,11 @@ public class GameState extends Identifiable {
   /**
    * @return all the unprocessed signals in this gameState.
    */
-  public PriorityQueue<Signal> getSignals() {
+  public Set<Signal> getSignals() {
     return signals;
+  }
+
+  public void setSignals(Set<Signal> signals) {
+    this.signals = signals;
   }
 }
