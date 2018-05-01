@@ -124,10 +124,6 @@ public class StarComponent extends Group {
     starName.setPrefWidth(sizeAll);
     starName.setTextAlignment(TextAlignment.CENTER);
 
-    /*Effect bloom = new Bloom();
-    ((Bloom) bloom).setThreshold(0.3);
-    star.setEffect(bloom);*/
-
     starGroup.getChildren().addAll(glowBox, border, star, starName, possessionCount);
     Effect glow = new Bloom();
     this.setEffect(glow);
