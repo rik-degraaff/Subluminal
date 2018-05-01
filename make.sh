@@ -21,7 +21,7 @@ function show_usage {
   echo ""
   echo -e "\tOPTIONS1:"
   echo -e "\thelp \t\tThis message"
-  echo -e "\twatch \t\tStart gradle continuous build ("gradle build -x check -x test -x javadoc -x sourcesjar -x javadocjar -x distZip -x distTars")."
+  echo -e "\twatch \t\tStart gradle continuous build ("gradle build -x check -x test -x javadoc -x sourcesjar -x javadocjar -x distZip -x distTar --continous")."
   echo -e "\tclient \t\tStart the client GUI and connect to $SERVER."
   echo -e "\localclient \t\t Start the client GUI and connect to localhost."
   echo -e "\tserver \t\tStarts the server on localhost."
