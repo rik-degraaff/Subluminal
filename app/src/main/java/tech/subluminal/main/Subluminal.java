@@ -1,8 +1,12 @@
 package tech.subluminal.main;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javafx.application.Application;
+import org.pmw.tinylog.Configurator;
+import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -22,7 +26,7 @@ import tech.subluminal.server.init.ServerInitializer;
 public class Subluminal {
 
   @Option(names = {"-ll", "--loglevel"}, description = "Sets the loglevel for the application. ")
-  private String loglevel = "OFF";
+  private String loglevel = "off";
   @Option(names = {"-lf", "--logfile"}, description = "Sets the path and filename for the logfile")
   private String logfile = "log.txt";
   @Option(names = {"-d", "--debug"}, description = "Enables the debug mode.")
@@ -56,7 +60,21 @@ public class Subluminal {
       CommandLine.usage(subl, System.out, CommandLine.Help.Ansi.AUTO);
     } else {
       List<String> modes = Arrays.asList("server", "client");
-      List<String> logleves = Arrays.asList("trace", "debug", "info", "error", "fatal");
+      Map<String, Level> levelMap = new HashMap<String, Level>() {{
+        put("off", Level.OFF);
+        put("trace", Level.TRACE);
+        put("debug", Level.DEBUG);
+        put("info", Level.INFO);
+        put("warning", Level.WARNING);
+        put("error", Level.ERROR);
+      }};
+
+      if (levelMap.get(subl.loglevel) != null) {
+        Configurator.currentConfig().level(levelMap.get(subl.loglevel)).activate();
+      } else {
+        Configurator.currentConfig().level(Level.OFF);
+      }
+
       String host = "localhost";
       int port = 1729;
       Logger.debug("mode:" + subl.mode + " hostAndOrPort:" + subl.hostAndOrPort + " debug:" + String.valueOf(subl.debug) + " logfile:" + subl.logfile + " loglevel:" + subl.loglevel + " username:" + subl.username);
