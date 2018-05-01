@@ -50,6 +50,7 @@ public class Subluminal {
     final Subluminal subl = CommandLine.populateCommand(new Subluminal(), args);
 
     if (subl.help) {
+      System.out.println(printASCII());
       CommandLine.usage(subl, System.out, CommandLine.Help.Ansi.AUTO);
     } else {
       List<String> modes = Arrays.asList("server", "client");
@@ -112,6 +113,18 @@ public class Subluminal {
 
   private static void initServer(int port, boolean debug) {
     ServerInitializer.init(port, debug);
+  }
+
+  private static String printASCII() {
+    String logo = ""+"\n"+
+    "  _____       _     _                 _             _ "+"\n"+
+    " / ____|     | |   | |               (_)           | |"+"\n"+
+    "| (___  _   _| |__ | |_   _ _ __ ___  _ _ __   __ _| |"+"\n"+
+    " \\___ \\| | | | '_ \\| | | | | '_ ` _ \\| | '_ \\ / _` | |"+"\n"+
+    " ____) | |_| | |_) | | |_| | | | | | | | | | | (_| | |"+"\n"+
+    "|_____/ \\__,_|_.__/|_|\\__,_|_| |_| |_|_|_| |_|\\__,_|_|"+"\n"+
+    "";
+    return logo;
   }
 }
 
