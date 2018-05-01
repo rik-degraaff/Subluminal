@@ -22,8 +22,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
@@ -50,15 +52,15 @@ public abstract class ShipComponent extends Group {
   private final IntegerProperty parentHeightProperty = new SimpleIntegerProperty();
   private final IntegerProperty numberOfShips = new SimpleIntegerProperty();
   private final RotateTransition rotateTl;
-  public Group group;
+  public Pane group;
   private GameStore gamestore;
 
   public ShipComponent(Coordinates coordinates, String playerId, List<String> targetIDs,
       GameStore gamestore) {
     this.gamestore = gamestore;
-    Group group = new Group();
+    Pane group = new Pane();
     group.getTransforms().add(new Translate(-fromCenter, -fromCenter));
-    group.getTransforms().add(new Rotate(90));
+    //group.getTransforms().add(new Rotate(90));
 
     setX(coordinates.getX());
     setY(coordinates.getY());
@@ -82,12 +84,31 @@ public abstract class ShipComponent extends Group {
     setTargetsWrapper(targetIDs);
 
     setColor(Color.GRAY);
-    Polygon ship = new Polygon();
-    ship.getPoints().addAll(new Double[]{
-        -10.0, -10.0,
-        10.0, 0.0,
-        0.0, 10.0});
-    ship.fillProperty().bind(colorProperty());
+
+
+    Pane ship = new Pane();
+    //group.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY,Insets.EMPTY)));
+    ImageView shipBody = new ImageView();
+    ImageView shipDetails = new ImageView();
+    Image shipImageBody = new Image("/tech/subluminal/resources/100w/shipBody.png");
+    Image shipImageDetail = new Image("/tech/subluminal/resources/100w/shipDetails.png");
+    shipBody.setFitWidth(40);
+    shipBody.setFitHeight(40);
+    shipBody.setImage(shipImageBody);
+    //shipBody.setPreserveRatio(true);
+    shipDetails.setFitWidth(40);
+    shipDetails.setFitHeight(40);
+    shipDetails.setImage(shipImageDetail);
+    //shipDetails.setPreserveRatio(true);
+
+
+    ship.getChildren().addAll(shipBody, shipDetails);
+    ship.setRotate(-45);
+
+    Platform.runLater(() -> {
+      group.setLayoutX(-shipBody.getFitWidth()/2);
+      group.setLayoutY(-shipBody.getFitHeight()/2);
+    });
 
     group.getChildren().add(ship);
     group.setMouseTransparent(true);
@@ -137,9 +158,9 @@ public abstract class ShipComponent extends Group {
       List<String> targetIDs, GameStore gamestore) {
 
     this.gamestore = gamestore;
-    Group group = new Group();
-    group.getTransforms().add(new Translate(-fromCenter, -fromCenter));
-    group.getTransforms().add(new Rotate(90));
+    Pane group = new Pane();
+    group.getTransforms().add(new Translate(-fromCenterFleet, -fromCenterFleet));
+    //group.getTransforms().add(new Rotate(90));
 
     setX(coordinates.getX());
     setY(coordinates.getY());
@@ -163,12 +184,30 @@ public abstract class ShipComponent extends Group {
     setTargetsWrapper(targetIDs);
 
     setColor(Color.GRAY);
-    Polygon ship = new Polygon();
-    ship.getPoints().addAll(new Double[]{
-        -10.0, -10.0,
-        10.0, 0.0,
-        0.0, 10.0});
-    ship.fillProperty().bind(colorProperty());
+
+    Pane ship = new Pane();
+    //group.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY,Insets.EMPTY)));
+    ImageView shipBody = new ImageView();
+    ImageView shipDetails = new ImageView();
+    Image shipImageBody = new Image("/tech/subluminal/resources/100w/fleetBody.png");
+    Image shipImageDetail = new Image("/tech/subluminal/resources/100w/fleetDetails.png");
+    shipBody.setFitWidth(30);
+    shipBody.setFitHeight(30);
+    shipBody.setImage(shipImageBody);
+    shipBody.setPreserveRatio(true);
+    shipDetails.setFitWidth(30);
+    shipDetails.setFitHeight(30);
+    shipDetails.setImage(shipImageDetail);
+    shipDetails.setPreserveRatio(true);
+
+
+    ship.getChildren().addAll(shipBody, shipDetails);
+    ship.setRotate(-45);
+
+    Platform.runLater(() -> {
+      group.setLayoutX(-shipBody.getFitWidth()/2);
+      group.setLayoutY(-shipBody.getFitHeight()/2);
+    });
 
     group.getChildren().add(ship);
     group.setMouseTransparent(true);
@@ -194,7 +233,7 @@ public abstract class ShipComponent extends Group {
 
       isRotatingProperty().addListener((observable, oldValue, newValue) -> {
         if (newValue && !oldValue) {
-          group.getTransforms().add(new Translate(-fromCenter, -fromCenter));
+          group.getTransforms().add(new Translate(-fromCenterFleet, -fromCenterFleet));
           group.getTransforms().add(new Rotate(90));
           rotateTl.play();
         } else if (!newValue && oldValue) {
@@ -227,7 +266,7 @@ public abstract class ShipComponent extends Group {
 
   }
 
-  private void rotateToStar(Group group) {
+  private void rotateToStar(Pane group) {
     group.getTransforms().clear();
     //group.getTransforms().add(new Rotate(-group.getRotate() + 45));
     double xShip = getX();
