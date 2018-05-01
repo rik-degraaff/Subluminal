@@ -15,21 +15,22 @@ public class Star extends GameObject implements SONRepresentable {
   private static final String GAME_OBJECT_KEY = "gameObject";
   private static final String GENERATING_KEY = "generating";
   private static final String JUMP_KEY = "jump";
+  private static final String NAME_KEY = "name";
   private String ownerID;
   private double possession;
   private boolean generating;
   private double jump;
+  private String name;
 
 
-  public Star(
-      String ownerID, double possession, Coordinates coordinates, String id, boolean generating,
-      double jump
-  ) {
+  public Star(String ownerID, double possession, Coordinates coordinates, String id, boolean generating,
+      double jump, String name) {
     super(coordinates, id);
     this.ownerID = ownerID;
     this.possession = possession;
     this.generating = generating;
     this.jump = jump;
+    this.name = name;
   }
 
   public static Star fromSON(SON son) throws SONConversionError {
@@ -44,7 +45,10 @@ public class Star extends GameObject implements SONRepresentable {
     double jump = son.getDouble(JUMP_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, JUMP_KEY));
 
-    Star star = new Star(ownerID, possession, null, null, generating, jump);
+    String name = son.getString(NAME_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, JUMP_KEY));
+
+    Star star = new Star(ownerID, possession, null, null, generating, jump, name);
 
     SON gameObject = son.getObject(GAME_OBJECT_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, GAME_OBJECT_KEY));
@@ -55,7 +59,21 @@ public class Star extends GameObject implements SONRepresentable {
   }
 
   /**
-   * @return the ID of the owner of this star. Null if the star has no owner
+   * @return the name of the star.
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * @param name the name for the star.
+   */
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  /**
+   * @return the ID of the owner of this star. Null if the star has no owner.
    */
   public String getOwnerID() {
     return ownerID;
@@ -84,7 +102,8 @@ public class Star extends GameObject implements SONRepresentable {
 
   /**
    * @return true if this star is generating ships, i.e. if the player who currently owns it
-   * colonized it fully. Note that this doesn't mean that the possesion percentage is currently 100.
+   * colonized it fully. Note that this doesn't mean that the possesion percentage is currently
+   * 100.
    */
   public boolean isGenerating() {
     return generating;
@@ -106,7 +125,8 @@ public class Star extends GameObject implements SONRepresentable {
         .put(possession, POSSESSION_KEY)
         .put(super.asSON(), GAME_OBJECT_KEY)
         .put(generating, GENERATING_KEY)
-        .put(jump, JUMP_KEY);
+        .put(jump, JUMP_KEY)
+        .put(name, NAME_KEY);
 
     if (ownerID != null) {
       son.put(ownerID, OWNER_ID_KEY);

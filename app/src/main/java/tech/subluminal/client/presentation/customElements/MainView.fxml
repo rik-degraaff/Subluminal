@@ -5,6 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/8"
   fx:controller="tech.subluminal.client.presentation.controller.MainController"
   fx:id="window">
@@ -31,16 +32,24 @@
     </AnchorPane>
     <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
       prefHeight="600.0" prefWidth="800.0" fx:id="playArea"/>
-    <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" prefHeight="300.0"
-      fx:id="chatDock">
-      <children>
-        <fx:include source="../customElements/ChatView.fxml" fx:id="chatView"/>
-      </children>
-    </AnchorPane>
-    <AnchorPane AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0" prefHeight="200.0"
+    <AnchorPane AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" prefHeight="200.0"
       prefWidth="400.0" fx:id="playerBoardDock">
       <children>
-        <fx:include source="../customElements/UserListView.fxml" fx:id="userListView"/>
+        <fx:include source="UserListView.fxml" fx:id="userListView"/>
+      </children>
+    </AnchorPane>
+    <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" prefHeight="323.0"
+      prefWidth="49.0" fx:id="chatWindow">
+      <children>
+        <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+          AnchorPane.topAnchor="0.0" prefHeight="323.0" prefWidth="447.0">
+          <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="339.0"
+              stroke="BLACK" strokeType="INSIDE" width="30.0" fx:id="chatHandle"/>
+            <AnchorPane prefHeight="300.0" fx:id="chatDock">
+            </AnchorPane>
+          </children>
+        </HBox>
       </children>
     </AnchorPane>
 

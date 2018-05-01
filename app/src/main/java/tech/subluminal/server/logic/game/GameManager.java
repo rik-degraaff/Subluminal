@@ -29,6 +29,7 @@ import tech.subluminal.shared.messages.MoveReq;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.stores.records.game.Coordinates;
+import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.util.IdUtils;
 import tech.subluminal.shared.util.Synchronized;
@@ -36,7 +37,7 @@ import tech.subluminal.shared.util.function.Either;
 
 public class GameManager implements GameStarter {
 
-  private static final int TPS = 5;
+  private static final int TPS = 10;
   private final GameStore gameStore;
   private final LobbyStore lobbyStore;
   private final MessageDistributor distributor;
@@ -128,21 +129,17 @@ public class GameManager implements GameStarter {
             gameState.getPlayers().get(playerID), delta, playerID));
       }
 
-      gameState.getPlayers()
-          .keySet()
-          .stream()
-          .filter(id -> !id.equals(playerID))
-          .forEach(deltaPlayerID -> {
-            gameState.getPlayers()
-                .get(deltaPlayerID)
-                .getMotherShip()
-                .getLatestOrLastForPlayer(playerID, motherShipEntry)
-                .apply(
-                    motherShip -> delta.addPlayer(createPlayerDelta(motherShip, motherShipEntry,
-                        gameState.getPlayers().get(deltaPlayerID), delta, playerID)),
-                    v -> delta.addRemovedPlayer(deltaPlayerID)
-                );
-          });
+      gameState.getPlayers().forEach((deltaPlayerID, player) -> {
+        if (!deltaPlayerID.equals(playerID)) {
+          player.getMotherShip()
+              .getLatestOrLastForPlayer(playerID, motherShipEntry)
+              .apply(
+                  motherShip -> delta.addPlayer(createPlayerDelta(motherShip, motherShipEntry,
+                      gameState.getPlayers().get(deltaPlayerID), delta, playerID)),
+                  v -> delta.addRemovedPlayer(deltaPlayerID)
+              );
+        }
+      });
 
       gameState.getStars().forEach((starID, starHistory) ->
           starHistory.getLatestForPlayer(playerID, motherShipEntry)
@@ -168,7 +165,7 @@ public class GameManager implements GameStarter {
           .ifPresent(fleetState -> {
             fleetState.apply(
                 // if a new state for the fleet is available for the player, write it in the playerDelta.
-                playerDelta::updateFleet,
+                playerDelta.getFleets()::add,
                 // if the fleet was destroyed, add it to the removed fleet list and remove the history if possible
                 v -> {
                   if (fleetHistory.canBeRemoved()) {
@@ -191,7 +188,8 @@ public class GameManager implements GameStarter {
         .collect(Collectors.toMap(Entry::getKey, e -> e.getValue().getCurrent().getState()));
 
     final IntermediateGameState intermediateGameState =
-        new IntermediateGameState(elapsedTime, stars, gameState.getPlayers().keySet());
+        new IntermediateGameState(elapsedTime, stars, gameState.getPlayers().keySet(),
+            gameState.getShipSpeed());
 
     gameState.getPlayers().forEach((playerID, player) -> {
       player.getFleets()
@@ -200,9 +198,7 @@ public class GameManager implements GameStarter {
           .map(GameHistory::getCurrent)
           .filter(s -> !s.isDestroyed())
           .map(GameHistoryEntry::getState)
-          .forEach(fleet -> {
-            intermediateGameState.addFleet(fleet, playerID);
-          });
+          .forEach(fleet -> intermediateGameState.addFleet(fleet, playerID));
 
       intermediateGameState.addMotherShip(player.getMotherShip().getCurrent().getState(), playerID);
     });
@@ -213,14 +209,11 @@ public class GameManager implements GameStarter {
       gameState.getStars().get(starID).add(new GameHistoryEntry<>(star));
     });
 
-    intermediateGameState.getFleetsOnStars().forEach((playerID, map) -> {
-      final Player player = gameState.getPlayers().get(playerID);
-      map.values()
-          .stream()
-          .filter(Optional::isPresent)
-          .map(Optional::get)
-          .forEach(
-              fleet -> player.getFleets().get(fleet.getID()).add(new GameHistoryEntry<>(fleet)));
+    intermediateGameState.getFleetsOnStars().forEach((starID, map) -> {
+      map.forEach((playerID, optFleet) -> {
+        final Player player = gameState.getPlayers().get(playerID);
+        optFleet.ifPresent(player::updateFleet);
+      });
     });
 
     intermediateGameState.getFleetsUnderway().forEach((playerID, fleets) -> {

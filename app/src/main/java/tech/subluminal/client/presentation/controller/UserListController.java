@@ -42,35 +42,16 @@ public class UserListController implements Initializable, UserPresenter {
 
   }
 
-  public void addPlayerStatus(String username, PlayerStatus status) {
-
-  }
-
-/**    private void removePlayerStatus(String username){
- for(PlayerStatusComponent player: playerBoard.getItems()){
- if(player.getText().equals(username)){
- Platform.runLater(() ->{
- playerBoard.getItems().remove(player);
-
- });
- break;
- }
- }
- }**/
-
-  /**
-   * public void updatePlayerStatus(String username, PlayerStatusComponent status){ for(Label
-   * player: playerBoard.getItems()){ if(player.getText().equals(username)){
-   * player.setTextFill(Color.web(getStatusColor(status))); } } }
-   **/
 
   public void switchPlayerBoard(ActionEvent actionEvent) {
     if (isBoardShown) {
       playerBoard.setVisible(false);
+      playerBoard.setMouseTransparent(true);
       isBoardShown = false;
       updaterPlayerBoard.setText("Show Players");
     } else {
       playerBoard.setVisible(true);
+      playerBoard.setMouseTransparent(false);
       isBoardShown = true;
       updaterPlayerBoard.setText("Hide Players");
     }

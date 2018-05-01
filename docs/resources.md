@@ -45,3 +45,4 @@ Copy your entry into the category which best describes the resource. If necessar
 - Markdown Cheatsheet. [https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).  
 - Flaticon [2018]. [https://www.flaticon.com/](https://www.flaticon.com/)  
 - A free e-book dedicated to game dev. [http://gameprogrammingpatterns.com/contents.html](http://gameprogrammingpatterns.com/contents.html)
+- Git-flow workflow and pull-requests - a slideshow [2016]. [https://www.slideshare.net/BartoszKosarzycki/gitflow-workflow-and-pullrequests](https://www.slideshare.net/BartoszKosarzycki/gitflow-workflow-and-pullrequests)

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import org.pmw.tinylog.Logger;
+import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.GameObject;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.util.function.Either;
@@ -56,13 +58,11 @@ public class GameHistory<E extends GameObject> extends MultiHistory<String, Game
   }
 
   /**
-   *
    * @param playerID the id of the player for whom the state should be read.
    * @param motherShip the mother ship entry of the user.
    * @return the latest state if the information could have reached the player's mother ship by now,
-   * the last sent state if no new state is available.
-   * If this function returns a Right (Void) this means that the object was destroyed and that
-   * information has reached the player.
+   * the last sent state if no new state is available. If this function returns a Right (Void) this
+   * means that the object was destroyed and that information has reached the player.
    */
   public Either<E, Void> getLatestOrLastForPlayer(String playerID,
       GameHistoryEntry<Ship> motherShip) {

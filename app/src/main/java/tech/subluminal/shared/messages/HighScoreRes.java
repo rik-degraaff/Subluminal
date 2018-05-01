@@ -17,6 +17,19 @@ public class HighScoreRes implements SONRepresentable {
     this.highScores = highScores;
   }
 
+  public static HighScoreRes fromSON(SON son) throws SONConversionError {
+    final List<HighScore> highScores = son.getList("highScores")
+        .orElse(new SONList())
+        .objects()
+        .stream()
+        .map(HighScore::fromSON)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .collect(Collectors.toList());
+
+    return new HighScoreRes(highScores);
+  }
+
   public List<HighScore> getHighScores() {
     return highScores;
   }
@@ -32,18 +45,5 @@ public class HighScoreRes implements SONRepresentable {
     highScores.stream().map(HighScore::asSON).forEach(list::add);
 
     return new SON().put(list, "highScores");
-  }
-
-  public static HighScoreRes fromSON(SON son) throws SONConversionError {
-    final List<HighScore> highScores = son.getList("highScores")
-        .orElse(new SONList())
-        .objects()
-        .stream()
-        .map(HighScore::fromSON)
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .collect(Collectors.toList());
-
-    return new HighScoreRes(highScores);
   }
 }
