@@ -236,6 +236,12 @@ public class GameManager implements GameStarter {
       });
     });
 
+    intermediateGameState.getDestroyedFleets().forEach((playerID, fleets) -> {
+      final Map<String, GameHistory<Fleet>> fleetHistories = gameState.getPlayers().get(playerID)
+          .getFleets();
+      fleets.forEach(f -> fleetHistories.get(f.getID()).add(GameHistoryEntry.destroyed(f)));
+    });
+
     gameState.setSignals(intermediateGameState.getSignals());
   }
 
