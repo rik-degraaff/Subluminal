@@ -73,6 +73,7 @@ public class StarComponent extends Group {
 
     this.name = name;
 
+
     Circle star = new Circle();
     star.setFill(Color.GRAY);
 

@@ -1,7 +1,6 @@
 package tech.subluminal.shared.util;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,6 +9,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.regex.Pattern;
+import org.pmw.tinylog.Logger;
+import org.reflections.Reflections;
+import org.reflections.scanners.ResourcesScanner;
 
 public class NameGenerator {
 
@@ -23,9 +27,19 @@ public class NameGenerator {
   }
 
   public void readStarFiles() {
-    File folder = new File("/tech/subluminal/resources/namegenerator/stars");
-    File[] listOfFiles = folder.listFiles();
-    //Logger.debug(listOfFiles.toString());
+    Reflections reflections = new Reflections("tech.subluminal", new ResourcesScanner());
+    Set<String> fileNames = reflections.getResources(Pattern.compile(".*\\.txt"));
+
+    if (fileNames.isEmpty()) {
+      throw new IllegalArgumentException("No list with starnames in resources found!");
+    } else {
+      Logger.info(".txt files found:");
+      fileNames.forEach(file -> {
+        //Logger.info(file);
+        readLines(file);
+      });
+    }
+
 
     /*for (int i = 0; i < listOfFiles.length; i++) {
       if (listOfFiles[i].isFile()) {
@@ -48,11 +62,12 @@ public class NameGenerator {
   }
 
   private void readLines(String path) {
-    System.out.println(NameGenerator.class.getResource(path).getPath());
+    Logger.debug(path);
+    //System.out.println(NameGenerator.class.getResource("/" + path).getPath());
     BufferedReader br = null;
     try {
       br = new BufferedReader(new InputStreamReader(
-          NameGenerator.class.getResource(path).openStream(), "UTF-8"));
+          NameGenerator.class.getResource("/" + path).openStream(), "UTF-8"));
     } catch (UnsupportedEncodingException e) {
       e.printStackTrace();
     } catch (FileNotFoundException e) {
@@ -63,7 +78,7 @@ public class NameGenerator {
 
     br.lines().forEach(l -> {
       starNames.add(l);
-      System.out.println(l);
+      //System.out.println(l);
     });
 
   }
