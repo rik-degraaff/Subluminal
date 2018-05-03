@@ -211,7 +211,10 @@ public class GameManager implements GameStarter {
           .map(GameHistoryEntry::getState)
           .forEach(fleet -> intermediateGameState.addFleet(fleet, playerID));
 
-      intermediateGameState.addMotherShip(player.getMotherShip().getCurrent().getState(), playerID);
+      if (!player.getMotherShip().getCurrent().isDestroyed()) {
+        intermediateGameState
+            .addMotherShip(player.getMotherShip().getCurrent().getState(), playerID);
+      }
     });
 
     intermediateGameState.advance();
