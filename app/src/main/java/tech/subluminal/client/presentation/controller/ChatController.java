@@ -119,10 +119,9 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     } else if (channel.equals("changename")) {
       handleNameChangeCmd(line, channel);
       clearInput();
-    } else if (channel.equals("changelobby")) {
-      //TODO: add functionality to change lobby
     } else if (channel.equals("scores")) {
       chatDelegate.requestHighScores();
+      clearInput();
     }
   }
 

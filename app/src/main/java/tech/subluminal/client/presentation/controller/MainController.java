@@ -5,9 +5,12 @@ import java.util.ResourceBundle;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -235,6 +238,8 @@ public class MainController implements Initializable {
 
   public void onMapCloseHandle() {
     playArea.getChildren().clear();
+    rightSideDock.getChildren().clear();
+    leftSideDock.getChildren().clear();
     playArea.setMouseTransparent(true);
 
     menuDock.getChildren().add(menu);
@@ -252,6 +257,13 @@ public class MainController implements Initializable {
 
   public void sendRecipiantToChat(String recipiant) {
     chatController.writeAt(recipiant);
+    if (!chatOut) {
+      MouseEvent event = new MouseEvent(MouseEvent.MOUSE_CLICKED,
+          chatHandle.getX(), chatHandle.getY(), chatHandle.getX(), chatHandle.getY(),
+          MouseButton.PRIMARY, 1,
+          true, true, true, true, true, true, true, true, true, true, null);
+      Event.fireEvent(chatHandle, event);
+    }
   }
 
   public GameController getGameController() {
