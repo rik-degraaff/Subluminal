@@ -25,7 +25,7 @@ public class UserListController implements Initializable, UserPresenter {
   @FXML
   private VBox playerBoardWrapper;
   @FXML
-  private Button updaterPlayerBoard;
+  private Button handlePlayerBoard;
 
   private LinkedList<Label> players;
 
@@ -33,6 +33,7 @@ public class UserListController implements Initializable, UserPresenter {
   private UserStore userStore;
 
   private UserPresenter.Delegate userDelegate;
+  private MainController main;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
@@ -48,12 +49,12 @@ public class UserListController implements Initializable, UserPresenter {
       playerBoard.setVisible(false);
       playerBoard.setMouseTransparent(true);
       isBoardShown = false;
-      updaterPlayerBoard.setText("Show Players");
+      handlePlayerBoard.setText("P");
     } else {
       playerBoard.setVisible(true);
       playerBoard.setMouseTransparent(false);
       isBoardShown = true;
-      updaterPlayerBoard.setText("Hide Players");
+      handlePlayerBoard.setText("X");
     }
 
   }
@@ -63,9 +64,13 @@ public class UserListController implements Initializable, UserPresenter {
 
     Platform.runLater(() -> {
       playerBoard.setItems(new MapperList<>(userStore.users().observableList(),
-          user -> new PlayerStatusComponent(user.getUsername(), PlayerStatus.INGAME)));
+          user -> new PlayerStatusComponent(user.getUsername(), PlayerStatus.INGAME, main)));
     });
 
+  }
+
+  public void setMainController(MainController main){
+    this.main = main;
   }
 
   @Override
