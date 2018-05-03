@@ -87,7 +87,6 @@ public abstract class ShipComponent extends Group {
 
     setColor(Color.GRAY);
 
-
     Pane ship = new Pane();
     //group.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY,Insets.EMPTY)));
 
@@ -109,13 +108,12 @@ public abstract class ShipComponent extends Group {
     shipDetails.setImage(shipImageDetail);
     //shipDetails.setPreserveRatio(true);
 
-
     ship.getChildren().addAll(shipBody, shipDetails);
     ship.setRotate(-45);
 
     Platform.runLater(() -> {
-      group.setLayoutX(-shipBody.getFitWidth()/2);
-      group.setLayoutY(-shipBody.getFitHeight()/2);
+      group.setLayoutX(-shipBody.getFitWidth() / 2);
+      group.setLayoutY(-shipBody.getFitHeight() / 2);
     });
 
     group.getChildren().add(ship);
@@ -162,22 +160,6 @@ public abstract class ShipComponent extends Group {
 
   }
 
-  private void setShipColor(ImageView shipBody) {
-
-    ColorAdjust monochrome = new ColorAdjust();
-    monochrome.hueProperty().bind(Bindings.createDoubleBinding(() -> colorProperty().getValue().getHue(), colorProperty()));
-    //monochrome.setSaturation(color.getValue().getSaturation());
-    //monochrome.setHue(color.getValue().getHue());
-    //monochrome.setBrightness(color.getValue().getBrightness());
-
-    shipBody.setEffect(monochrome);
-
-    shipBody.setCache(true);
-    shipBody.setCacheHint(CacheHint.SPEED);
-
-
-  }
-
   public ShipComponent(Coordinates coordinates, int numberOfShips, String ID, String ownerID,
       List<String> targetIDs, GameStore gamestore) {
 
@@ -211,19 +193,19 @@ public abstract class ShipComponent extends Group {
 
     Pane ship = new Pane();
     //group.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY,Insets.EMPTY)));
-    ImageView shipBody = new ImageView();
-    ImageView shipDetails = new ImageView();
+
     Image shipImageBody = new Image("/tech/subluminal/resources/100w/fleetBody.png");
     Image shipImageDetail = new Image("/tech/subluminal/resources/100w/fleetDetails.png");
+    ImageView shipBody = new ImageView();
+    ImageView shipDetails = new ImageView();
     shipBody.setFitWidth(30);
     shipBody.setFitHeight(30);
-    shipBody.setImage(shipImageBody);
     shipBody.setPreserveRatio(true);
+    shipBody.setImage(shipImageBody);
     shipDetails.setFitWidth(30);
     shipDetails.setFitHeight(30);
     shipDetails.setImage(shipImageDetail);
     shipDetails.setPreserveRatio(true);
-
 
     setShipColor(shipBody);
 
@@ -231,8 +213,8 @@ public abstract class ShipComponent extends Group {
     ship.setRotate(-45);
 
     Platform.runLater(() -> {
-      group.setLayoutX(-shipBody.getFitWidth()/2);
-      group.setLayoutY(-shipBody.getFitHeight()/2);
+      group.setLayoutX(-shipBody.getFitWidth() / 2);
+      group.setLayoutY(-shipBody.getFitHeight() / 2);
     });
 
     group.getChildren().add(ship);
@@ -277,7 +259,6 @@ public abstract class ShipComponent extends Group {
 
     this.getChildren().add(group);
 
-
     this.setNumberOfShips(numberOfShips);
 
     Logger.debug("CREATING SHIP LABEL");
@@ -288,6 +269,33 @@ public abstract class ShipComponent extends Group {
         this.numberOfShipsProperty().getValue().toString(), numberOfShipsProperty()));
     group.getChildren().add(amount);
 
+
+  }
+
+  private void setShipColor(ImageView shipBody) {
+
+    ColorAdjust monochrome = new ColorAdjust();
+
+    monochrome.hueProperty().bind(
+        Bindings.createDoubleBinding(() -> (
+                ((getColor().getHue()-Color.RED.getHue()) / 180) + 1) % 2 - 1,
+            colorProperty()));
+    //monochrome.setHue(1);
+
+
+    monochrome.saturationProperty().bind(
+        Bindings.createDoubleBinding(
+            () -> Color.RED.getSaturation() - getColor().getSaturation(),
+            colorProperty()));
+    monochrome.brightnessProperty().bind(
+        Bindings.createDoubleBinding(
+            () -> Color.RED.getBrightness() - getColor().getBrightness(),
+            colorProperty()));
+
+    shipBody.setEffect(monochrome);
+
+    shipBody.setCache(true);
+    shipBody.setCacheHint(CacheHint.SPEED);
 
 
   }
