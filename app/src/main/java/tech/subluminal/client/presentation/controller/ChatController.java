@@ -38,9 +38,14 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
   private ObservableList<Label> chatList = FXCollections.observableArrayList();
   private FilteredList<Label> filteredList = new FilteredList<>(chatList);
+  private MainController main;
 
   public ChatController getController() {
     return this;
+  }
+
+  public void setMainController(MainController main){
+    this.main = main;
   }
 
   public void setUserStore(UserStore store) {
@@ -157,6 +162,10 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     userDelegate.changeUsername(username);
   }
 
+  public void changeName(String username){
+    userDelegate.changeUsername(username);
+  }
+
   private void handleDirectedChatMessage(String line) {
     String specifier = getSpecifier(line);
     String channel = specifier.toLowerCase();
@@ -200,6 +209,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   @Override
   public void displaySystemMessage(String message) {
     addMessageChat(message, Channel.CRITICAL);
+
   }
 
   /**
@@ -222,6 +232,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   @Override
   public void whisperMessageReceived(String message, String username) {
     addMessageChat(message, username, Channel.WHISPER);
+    main.openChat();
   }
 
   /**
@@ -272,6 +283,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   @Override
   public void nameChangeSucceeded() {
     addMessageChat("Your username got changed to: " + getCurrentUsername(), Channel.INFO);
+    main.openChat();
   }
 
   @Override

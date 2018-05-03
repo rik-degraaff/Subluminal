@@ -8,6 +8,7 @@ import javafx.beans.binding.Bindings;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -19,6 +20,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
@@ -27,6 +29,7 @@ import tech.subluminal.client.presentation.customElements.ChatComponent;
 import tech.subluminal.client.presentation.customElements.GameComponent;
 import tech.subluminal.client.presentation.customElements.LobbyComponent;
 import tech.subluminal.client.presentation.customElements.MenuComponent;
+import tech.subluminal.client.presentation.customElements.NameChangeComponent;
 import tech.subluminal.client.presentation.customElements.SettingsComponent;
 import tech.subluminal.client.presentation.customElements.UserListComponent;
 import tech.subluminal.client.presentation.customElements.WindowContainerComponent;
@@ -39,10 +42,10 @@ public class MainController implements Initializable {
   private AnchorPane spaceBackgroundDock;
 
   @FXML
-  private AnchorPane leftSideDock;
+  private VBox leftSideDock;
 
   @FXML
-  private AnchorPane rightSideDock;
+  private VBox rightSideDock;
 
   @FXML
   private AnchorPane menuDock;
@@ -124,8 +127,11 @@ public class MainController implements Initializable {
     chatDock.getChildren().add(chat);
 
     userList = new UserListComponent(this);
-    playerBoardDock.getChildren().add(userList);
+    rightSideDock.getChildren().add(userList);
     userListController = userList.getController();
+
+    NameChangeComponent nameChange = new NameChangeComponent(this);
+    rightSideDock.getChildren().add(nameChange);
 
     menu = new MenuComponent(this);
     settings = new SettingsComponent(this);
@@ -258,8 +264,18 @@ public class MainController implements Initializable {
   public void sendRecipiantToChat(String recipiant) {
     chatController.writeAt(recipiant);
     if (!chatOut) {
+      openChat();
+    }
+  }
+
+  public void openChat(){
+    fireMouseClick(chatHandle);
+  }
+
+  private void fireMouseClick(Node node) {
+    if(!chatOut){
       MouseEvent event = new MouseEvent(MouseEvent.MOUSE_CLICKED,
-          chatHandle.getX(), chatHandle.getY(), chatHandle.getX(), chatHandle.getY(),
+          node.getLayoutX(), node.getLayoutY(), node.getLayoutX(), node.getLayoutY(),
           MouseButton.PRIMARY, 1,
           true, true, true, true, true, true, true, true, true, true, null);
       Event.fireEvent(chatHandle, event);
