@@ -126,6 +126,25 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     }
   }
 
+  public void writeAt(String recipiant){
+    String temp = messageText.getText();
+    clearInput();
+    if(temp == null){
+      messageText.setText("@" + recipiant + " ");
+    }else if(temp.contains("@")){
+      String parts[] = temp.split(" ", 2);
+      if(parts.length >= 2){
+        messageText.setText("@" + recipiant + " " + parts[1]);
+      }else{
+        messageText.setText("@" + recipiant + " ");
+      }
+    }else{
+      messageText.setText("@" + recipiant + " " + temp);
+    }
+    messageText.requestFocus();
+    messageText.selectPositionCaret(messageText.getText().length());
+  }
+
   private void handleNameChangeCmd(String line, String channel) {
     String newUsername = extractMessageBody(line, channel);
     //removes all whitespaces //TODO: may change later

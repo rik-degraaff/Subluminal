@@ -28,13 +28,9 @@
       </children>
     </AnchorPane>
     <AnchorPane fx:id="playArea" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="0.0" />
-    <AnchorPane fx:id="playerBoardDock" prefHeight="200.0" prefWidth="400.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-      <children>
-        <fx:include fx:id="userListView" source="UserListView.fxml" />
-      </children>
-    </AnchorPane>
       <AnchorPane fx:id="leftSideDock" layoutX="780.0" layoutY="10.0" prefHeight="200.0" prefWidth="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <AnchorPane fx:id="rightSideDock" prefHeight="200.0" prefWidth="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+    <AnchorPane fx:id="playerBoardDock" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
     <AnchorPane fx:id="chatWindow" prefHeight="323.0" prefWidth="49.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
       <children>
         <HBox prefHeight="323.0" prefWidth="447.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">

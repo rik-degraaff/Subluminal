@@ -5,6 +5,7 @@ import javafx.scene.Group;
 import tech.subluminal.client.presentation.LobbyPresenter;
 import tech.subluminal.client.presentation.controller.LobbyListController;
 import tech.subluminal.client.presentation.controller.LobbyUserController;
+import tech.subluminal.client.presentation.controller.MainController;
 import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.client.stores.UserStore;
 
@@ -17,6 +18,7 @@ public class LobbyComponent extends Group implements LobbyPresenter {
   private UserStore userStore;
   private LobbyStore lobbyStore;
   private LobbyPresenter.Delegate lobbyDelegate;
+  private MainController main;
 
   public LobbyComponent() {
 
@@ -29,6 +31,11 @@ public class LobbyComponent extends Group implements LobbyPresenter {
     this.lobbyUser = lobbyUser;
 
     this.getChildren().add(lobbyList);
+  }
+
+  public void setMainController(MainController main){
+    this.main = main;
+    lobbyUserController.setMainController(main);
   }
 
   public void setListActive() {

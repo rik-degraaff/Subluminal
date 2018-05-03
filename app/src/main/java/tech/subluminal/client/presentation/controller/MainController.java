@@ -7,10 +7,15 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
@@ -20,16 +25,12 @@ import tech.subluminal.client.presentation.customElements.GameComponent;
 import tech.subluminal.client.presentation.customElements.LobbyComponent;
 import tech.subluminal.client.presentation.customElements.MenuComponent;
 import tech.subluminal.client.presentation.customElements.SettingsComponent;
+import tech.subluminal.client.presentation.customElements.UserListComponent;
 import tech.subluminal.client.presentation.customElements.WindowContainerComponent;
 import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.client.stores.UserStore;
 
 public class MainController implements Initializable {
-
-  @FXML
-  private Parent userListView;
-  @FXML
-  private UserListController userListViewController;
 
   @FXML
   private AnchorPane spaceBackgroundDock;
@@ -70,6 +71,9 @@ public class MainController implements Initializable {
   @FXML
   private AnchorPane chatWindow;
 
+  @FXML
+  private AnchorPane playerBoardDock;
+
   private GameComponent game;
 
   private UserStore userStore;
@@ -81,6 +85,10 @@ public class MainController implements Initializable {
   private ChatComponent chat;
 
   private ChatController chatController;
+
+  private UserListComponent userList;
+
+  private UserListController userListController;
 
   private boolean chatOut = false;
 
@@ -99,7 +107,8 @@ public class MainController implements Initializable {
   public void setUserStore(UserStore userStore) {
     this.userStore = userStore;
 
-    userListViewController.setUserStore(userStore);
+    userListController.setUserStore(userStore);
+    userListController.setMainController(this);
   }
 
   @Override
@@ -110,6 +119,10 @@ public class MainController implements Initializable {
     chat = new ChatComponent(this);
     chatController = chat.getChatcontroller();
     chatDock.getChildren().add(chat);
+
+    userList = new UserListComponent(this);
+    playerBoardDock.getChildren().add(userList);
+    userListController = userList.getController();
 
     menu = new MenuComponent(this);
     settings = new SettingsComponent(this);
@@ -157,7 +170,7 @@ public class MainController implements Initializable {
   }
 
   public UserListController getUserListController() {
-    return this.userListViewController;
+    return this.userListController;
   }
 
   public void onWindowResizeHandle(int diffX, int diffY) {
@@ -196,16 +209,25 @@ public class MainController implements Initializable {
       playArea.setMouseTransparent(false);
 
       HBox box = new HBox();
-      Rectangle leftSide = new Rectangle();
-      leftSide.setWidth(rightSideDock.getWidth());
-      leftSide.heightProperty().bind(chat.getScene().heightProperty());
-      leftSide.setFill(Color.GREEN);
-      Rectangle rightSide = new Rectangle();
-      rightSide.setWidth(leftSideDock.getWidth());
-      rightSide.heightProperty().bind(chat.getScene().heightProperty());
-      rightSide.setFill(Color.GREEN);
+      Pane leftSide = new Pane();
+      leftSide.setPrefWidth(rightSideDock.getWidth());
+      leftSide.prefHeightProperty().bind(chat.getScene().heightProperty());
+      Background bg = new Background(
+          new BackgroundImage(
+              new Image("/tech/subluminal/resources/tile_texture.jpg", 50, 50, true, false),
+              BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
+              BackgroundSize.DEFAULT));
+      leftSide.setBackground(bg);
+      Pane rightSide = new Pane();
+      rightSide.setPrefWidth(leftSideDock.getWidth());
+      rightSide.prefHeightProperty().bind(chat.getScene().heightProperty());
+      rightSide.setBackground(bg);
       leftSideDock.getChildren().add(leftSide);
       rightSideDock.getChildren().add(rightSide);
+
+      playerBoardDock.getChildren().remove(userList);
+      leftSide.getChildren().add(userList);
+      //rightSide.getChildren().add(new Label("this is a test"));
 
       playArea.getChildren().add(game);
     });
@@ -226,6 +248,10 @@ public class MainController implements Initializable {
 
   public void onLobbyCreateHandle() {
 
+  }
+
+  public void sendRecipiantToChat(String recipiant) {
+    chatController.writeAt(recipiant);
   }
 
   public GameController getGameController() {
