@@ -74,7 +74,7 @@ public class GameManager implements GameStarter {
         .getLobbiesWithUser(id)
         .use(l -> l.stream().map(s -> s.use(Lobby::getID)))
         .findFirst();
-    Logger.debug("MOVE REQUESTS: " + gameStore.moveRequests().getByID(optGameID.get()));
+    Logger.trace("MOVE REQUESTS: " + gameStore.moveRequests().getByID(optGameID.get()));
     optGameID.ifPresent(gameID -> {
       gameStore.moveRequests().getByID(gameID)
           .ifPresent(sync -> sync.consume(list -> list.add(id, req)));
@@ -267,8 +267,11 @@ public class GameManager implements GameStarter {
 
     // get the game state from the store and loop over the move requests, handling each one.
     gameStore.games().getByID(lobbyID).ifPresent(sync -> sync.consume(gameState -> {
-      requestMap.forEach((playerID, requests) ->
-          requests.forEach(req -> handleRequest(gameState, playerID, req)));
+      requestMap.forEach((playerID, requests) -> {
+        if (!gameState.getPlayers().get(playerID).getMotherShip().getCurrent().isDestroyed()) {
+          requests.forEach(req -> handleRequest(gameState, playerID, req));
+        }
+      });
     }));
   }
 
