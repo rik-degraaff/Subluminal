@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import org.pmw.tinylog.Logger;
@@ -206,9 +207,6 @@ public class IntermediateGameState {
         highestID = playerID;
       }
     }
-    fleetsOnStars.get(starID).forEach((fleetID, fleet) -> {
-
-    });
 
     if (highestID != null) {
       Star star = stars.get(starID);
@@ -236,7 +234,62 @@ public class IntermediateGameState {
   }
 
   private void dematerializeTick(String starID) {
-    // TODO: implement this
+    final Map<String, Optional<Fleet>> fleets = fleetsOnStars.get(starID);
+    final Map<String, Optional<Ship>> motherShips = motherShipsOnStars.get(starID);
+    final Map<String, Integer> playerStrengths = players.stream()
+        .filter(player -> fleets.get(player).isPresent()
+            || motherShips.get(player).isPresent()
+        )
+        .collect(Collectors.toMap(Function.identity(), player -> getPlayerStrength(
+            fleets.get(player).map(Fleet::getNumberOfShips).orElse(0),
+            motherShips.get(player).isPresent()
+        )));
+
+    final Map<String, Integer> newPlayerStrengths = new HashMap<>(playerStrengths);
+
+    playerStrengths.forEach((playerID, strength) -> {
+      final int totalOpponentDefense = playerStrengths.keySet().stream()
+          .filter(p -> !p.equals(playerID))
+          .mapToInt(playerStrengths::get)
+          .sum();
+
+      final double dematPercentage = getDematStrength(strength) / totalOpponentDefense;
+
+      playerStrengths.keySet().stream()
+          .filter(p -> !p.equals(playerID))
+          .forEach(opponent -> {
+            newPlayerStrengths.compute(opponent,
+                (o, str) -> str - (int) (playerStrengths.get(opponent)/dematPercentage));
+          });
+    });
+
+    newPlayerStrengths.forEach((player, newStrength) -> {
+      if (newStrength <= 0) {
+        motherShips.get(player).ifPresent(ship -> {
+          destroyedPlayers.add(player);
+          motherShips.put(player, Optional.empty());
+        });
+      }
+
+      final int shipsLeft = newStrength - motherShips.get(player).map(s -> 5).orElse(0);
+
+      if (shipsLeft <= 0) {
+        fleets.get(player).ifPresent(fleet -> {
+          destroyedFleets.get(player).add(fleet);
+          fleets.put(player, Optional.empty());
+        });
+      } else {
+        fleets.get(player).map(fleet -> fleet.expanded(shipsLeft - fleet.getNumberOfShips()));
+      }
+    });
+  }
+
+  private double getDematStrength(int strength) {
+    return 1 + Math.sqrt(strength - 1);
+  }
+
+  private int getPlayerStrength(int ships, boolean motherShip) {
+    return ships + (motherShip ? 5 : 0);
   }
 
   private void generateShips(String starID) {
