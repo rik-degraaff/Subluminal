@@ -24,6 +24,21 @@ public class LobbyUpdateRes implements SONRepresentable {
   }
 
   /**
+   * Creates a new LobbyUpdateRes from its SON representation.
+   *
+   * @param son the SON representation of a LobbyUpdateRes.
+   * @return the LobbyUpdateRes converted from its SON representation.
+   * @throws SONConversionError if the conversion fails.
+   */
+  public static LobbyUpdateRes fromSON(SON son) throws SONConversionError {
+    SON lobby = son.getObject(LOBBY_KEY)
+        .orElseThrow(() -> new SONConversionError(
+            "Login Response did not contain valid " + LOBBY_KEY + "."));
+
+    return new LobbyUpdateRes(Lobby.fromSON(lobby));
+  }
+
+  /**
    * @return the lobby that was updated.
    */
   public Lobby getLobby() {
@@ -39,20 +54,5 @@ public class LobbyUpdateRes implements SONRepresentable {
   public SON asSON() {
     return new SON()
         .put(lobby.asSON(), LOBBY_KEY);
-  }
-
-  /**
-   * Creates a new LobbyUpdateRes from its SON representation.
-   *
-   * @param son the SON representation of a LobbyUpdateRes.
-   * @return the LobbyUpdateRes converted from its SON representation.
-   * @throws SONConversionError if the conversion fails.
-   */
-  public static LobbyUpdateRes fromSON(SON son) throws SONConversionError {
-    SON lobby = son.getObject(LOBBY_KEY)
-        .orElseThrow(() -> new SONConversionError(
-            "Login Response did not contain valid " + LOBBY_KEY + "."));
-
-    return new LobbyUpdateRes(Lobby.fromSON(lobby));
   }
 }

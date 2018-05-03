@@ -32,6 +32,7 @@ public class ServerInitializer {
    */
   public static void init(int port, boolean debug) {
     Logger.info("Starting server ...");
+
     ConnectionManager connectionManager = new SocketConnectionManager(port);
 
     MessageDistributor messageDistributor = new ConnectionMessageDistributor(connectionManager);
@@ -45,8 +46,8 @@ public class ServerInitializer {
     new UserManager(userStore, messageDistributor);
     new PingManager(pingStore, userStore, messageDistributor);
     new ChatManager(messageDistributor, userStore, lobbyStore);
-    GameManager gameManager = new GameManager(gameStore, lobbyStore, messageDistributor, highScoreStore);
+    GameManager gameManager = new GameManager(gameStore, lobbyStore, messageDistributor,
+        highScoreStore);
     new LobbyManager(lobbyStore, userStore, messageDistributor, gameManager);
   }
 }
-

@@ -1,7 +1,6 @@
 package tech.subluminal.shared.records;
 
 import javafx.scene.paint.Color;
-import org.pmw.tinylog.Logger;
 
 public enum LobbyStatus {
 

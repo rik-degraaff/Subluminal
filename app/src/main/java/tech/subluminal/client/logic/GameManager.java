@@ -2,12 +2,15 @@ package tech.subluminal.client.logic;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.GamePresenter;
 import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.client.stores.records.game.OwnerPair;
 import tech.subluminal.shared.messages.FleetMoveReq;
+import tech.subluminal.shared.messages.GameStartRes;
 import tech.subluminal.shared.messages.GameStateDelta;
+import tech.subluminal.shared.messages.LoginRes;
 import tech.subluminal.shared.messages.MotherShipMoveReq;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.stores.records.game.Ship;
@@ -38,12 +41,25 @@ public class GameManager implements GamePresenter.Delegate {
 
     connection.registerHandler(GameStateDelta.class, GameStateDelta::fromSON,
         this::onGameStateDeltaReceived);
+    connection.registerHandler(LoginRes.class, LoginRes::fromSON, this::onLoginRes);
+    connection
+        .registerHandler(GameStartRes.class, GameStartRes::fromSON, this::onGameStart);
+  }
+
+  private void onGameStart(GameStartRes res) {
+    gamePresenter.setPlayerColors(res.getPlayerColor());
+
+  }
+
+  private void onLoginRes(LoginRes res) {
+    gamePresenter.setUserID();
   }
 
   private void onGameStateDeltaReceived(GameStateDelta delta) {
     //delta.getRemovedPlayers().forEach(gameStore.players()::removeByID);
     delta.getPlayers().forEach(player -> {
       Ship motherShip = player.getMotherShip();
+      //Logger.debug("Mothership targets" + motherShip.getTargetIDs());
       gameStore.motherShips().add(new OwnerPair<>(player.getID(), motherShip));
       player.getFleets().forEach(fleet -> {
         gameStore.fleets().add(new OwnerPair<>(player.getID(), fleet));
@@ -52,7 +68,10 @@ public class GameManager implements GamePresenter.Delegate {
 
     delta.getRemovedFleets().forEach((playerID, removedFleets) -> {
       removedFleets.forEach(gameStore.fleets()::removeByID);
+      ;
     });
+    gamePresenter.removeFleets(delta.getRemovedFleets().values().stream().flatMap(List::stream)
+        .collect(Collectors.toList()));
 
     // TODO: removed players
 

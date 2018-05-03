@@ -1,8 +1,11 @@
 package tech.subluminal.server.stores.records;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.GameObject;
+import tech.subluminal.shared.util.DeltaTimeUtils;
 
 /**
  * Represents a signal a player sent request a fleet to be sent from a star.
@@ -11,26 +14,24 @@ public class Signal extends GameObject implements Comparable<Signal> {
 
   private final String starID;
   private final String playerID;
-  private final long arrivalTime;
+  private final double timeToArrive;
   private final int amount;
   private final List<String> targets;
 
   public Signal(Coordinates origin, String id, String starID, List<String> targets, String playerID,
       Coordinates starCoordinates, int amount, double lightSpeed) {
-    super(origin, id);
-    this.starID = starID;
-    this.targets = targets;
-    this.playerID = playerID;
-    this.amount = amount;
-    this.arrivalTime = (long) (origin.getDistanceFrom(starCoordinates)/lightSpeed);
+    this(origin, id, starID, playerID, origin.getDistanceFrom(starCoordinates) / lightSpeed, amount,
+        targets);
   }
 
-  /**
-   * @param currentTime the time at which the status of the signal is evaluated.
-   * @return the time since the signal has arrived
-   */
-  public long timeSinceArrival(long currentTime) {
-    return currentTime - arrivalTime;
+  public Signal(Coordinates origin, String id, String starID, String playerID,
+      double timeToArrive, int amount, List<String> targets) {
+    super(origin, id);
+    this.starID = starID;
+    this.playerID = playerID;
+    this.timeToArrive = timeToArrive;
+    this.amount = amount;
+    this.targets = targets;
   }
 
   /**
@@ -62,10 +63,35 @@ public class Signal extends GameObject implements Comparable<Signal> {
   }
 
   /**
+   * @return the time needed for the signal to arrive at the target.
+   */
+  public double getTimeToArrive() {
+    return timeToArrive;
+  }
+
+  /**
+   * Returns a copy of this signal from the future.
+   *
+   * @param deltaTime the time in seconds to skip ahead by.
+   * @param signalArrivedHandler the handler that will be called when the signal arrives.
+   * @return the updated signal if the signal doesn't arrive, empty otherwise.
+   */
+  public Optional<Signal> advanced(double deltaTime, Consumer<Double> signalArrivedHandler) {
+    double newArrival = DeltaTimeUtils
+        .advanceBy(deltaTime, timeToArrive, Double.MAX_VALUE, signalArrivedHandler);
+
+    return newArrival > 0
+        ? Optional
+        .of(new Signal(getCoordinates(), getID(), getStarID(), getPlayerID(),
+            newArrival, getAmount(), getTargets()))
+        : Optional.empty();
+  }
+
+  /**
    * @return a value greater than 0 if this signal will arrive before the other.
    */
   @Override
   public int compareTo(Signal o) {
-    return Long.compare(arrivalTime, o.arrivalTime);
+    return Double.compare(o.timeToArrive, timeToArrive);
   }
 }

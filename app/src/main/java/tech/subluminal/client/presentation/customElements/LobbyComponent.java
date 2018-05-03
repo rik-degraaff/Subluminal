@@ -25,7 +25,6 @@ public class LobbyComponent extends Group implements LobbyPresenter {
     lobbyListController = lobbyList.getController();
     lobbyUserController = lobbyUser.getController();
 
-
     this.lobbyList = lobbyList;
     this.lobbyUser = lobbyUser;
 
@@ -57,17 +56,17 @@ public class LobbyComponent extends Group implements LobbyPresenter {
     return lobbyStore;
   }
 
-  public void setUserStore(UserStore userStore) {
-    this.userStore = userStore;
-
-    lobbyUserController.setUserStore(userStore);
-  }
-
   public void setLobbyStore(LobbyStore lobbyStore) {
     this.lobbyStore = lobbyStore;
 
     lobbyListController.setLobbyStore(lobbyStore);
     lobbyUserController.setLobbyStore(lobbyStore);
+  }
+
+  public void setUserStore(UserStore userStore) {
+    this.userStore = userStore;
+
+    lobbyUserController.setUserStore(userStore);
   }
 
   @Override

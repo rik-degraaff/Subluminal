@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.server.logic.game.GameHistory;
 import tech.subluminal.server.logic.game.GameHistoryEntry;
 import tech.subluminal.shared.stores.records.Identifiable;
@@ -22,7 +23,7 @@ public class Player extends Identifiable {
 
     this.lightSpeed = lightSpeed;
     playerIDs.addAll(otherPlayerIDs);
-    otherPlayerIDs.add(id);
+    playerIDs.add(id);
 
     this.motherShip = new GameHistory<>(otherPlayerIDs, GameHistoryEntry.foreverAgo(motherShip),
         lightSpeed);

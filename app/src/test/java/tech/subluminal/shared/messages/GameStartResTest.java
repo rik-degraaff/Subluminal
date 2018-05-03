@@ -1,27 +1,43 @@
 package tech.subluminal.shared.messages;
 
-import static org.junit.Assert.assertNotNull;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
+import java.util.HashMap;
+import java.util.Map;
+import javafx.scene.paint.Color;
 import org.junit.Test;
 import tech.subluminal.shared.son.SON;
-import tech.subluminal.shared.son.SONParsing;
+import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONParsingError;
 
 public class GameStartResTest {
 
   @Test
-  public void testStringifyAndParsing() {
-    GameStartRes g = new GameStartRes();
-    String gMsg = g.asSON().asString();
-    GameStartRes parsedG = null;
+  public void stringifyAndParseGameStartRes(){
+    Map<String, Color> playerColors = new HashMap<>();
+    playerColors.put("1234", new Color(Math.random(), Math.random(), Math.random(), 1));
+    playerColors.put("1235", new Color(Math.random(), Math.random(), Math.random(), 1));
+    playerColors.put("3234", new Color(Math.random(), Math.random(), Math.random(), 1));
+    GameStartRes res = new GameStartRes(playerColors);
 
     try {
-      parsedG = GameStartRes.fromSON(SON.parse(gMsg));
-    } catch (SONParsingError e) {
-      e.printStackTrace();
+      Map<String, Color> parsed = GameStartRes.fromSON(SON.parse(res.asSON().asString())).getPlayerColor();
+      playerColors.forEach((id, color) -> {
+        assertNotNull(parsed.get(id));
+        assertEquals(color.getRed(), parsed.get(id).getRed(), 0.00000001);
+        assertEquals(color.getGreen(), parsed.get(id).getGreen(), 0.00000001);
+        assertEquals(color.getBlue(), parsed.get(id).getBlue(), 0.00000001);
+      });
+    } catch (SONConversionError sonConversionError) {
+      sonConversionError.printStackTrace();
+      fail("unexpected error converting GameStartRes");
+    } catch (SONParsingError sonParsingError) {
+      sonParsingError.printStackTrace();
+      fail("unexpected error parsing GameStartRes");
     }
-    assertNotNull(parsedG);
-    System.out.println(gMsg);
   }
 
 }

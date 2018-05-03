@@ -23,7 +23,6 @@ public abstract class MoveReq implements SONRepresentable {
   public MoveReq(List<String> stars) {
     this.stars = stars;
   }
-  
 
 
   /**
