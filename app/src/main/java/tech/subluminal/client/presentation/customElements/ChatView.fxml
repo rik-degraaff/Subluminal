@@ -10,9 +10,12 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<fx:root xmlns:fx="http://javafx.com/fxml/1" prefHeight="300.0" type="javafx.scene.layout.AnchorPane"
+<?import javafx.scene.layout.HBox?>
+<fx:root xmlns:fx="http://javafx.com/fxml/1" prefHeight="300.0"
+  type="javafx.scene.layout.AnchorPane"
   xmlns="http://javafx.com/javafx/8"
-  fx:controller="tech.subluminal.client.presentation.controller.ChatController">
+  fx:controller="tech.subluminal.client.presentation.controller.ChatController"
+  fx:id="chat">
   <GridPane>
     <columnConstraints>
       <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="434.0" minWidth="10.0"
@@ -34,15 +37,18 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
         </rowConstraints>
         <children>
-          <Button GridPane.columnIndex="1" GridPane.halignment="RIGHT" contentDisplay="CENTER"
-            mnemonicParsing="false" onAction="#sendMessage" prefHeight="25.0" prefWidth="87.0"
-            text="Send">
-            <GridPane.margin>
-              <Insets/>
-            </GridPane.margin>
-          </Button>
-          <CheckBox mnemonicParsing="false" onAction="#updateFilter" selected="true"
-            text="Show Global Chat" fx:id="isGlobalShown"/>
+          <HBox fx:id="chatOptions">
+            <Button GridPane.columnIndex="1" contentDisplay="CENTER"
+              mnemonicParsing="false" onAction="#sendMessage" prefHeight="25.0"
+              text="Send">
+            </Button>
+            <Button fx:id="sendAllButton" GridPane.columnIndex="1" contentDisplay="CENTER"
+              mnemonicParsing="false" onAction="#sendMessageAll" prefHeight="25.0"
+              text="Send All">
+            </Button>
+            <CheckBox mnemonicParsing="false" onAction="#updateFilter" selected="true"
+              text="Show Global Chat" fx:id="isGlobalShown"/>
+          </HBox>
         </children>
       </GridPane>
       <GridPane style="-fx-background-color: black;" GridPane.rowIndex="1">

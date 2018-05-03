@@ -18,7 +18,6 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
@@ -26,6 +25,7 @@ import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.customElements.BackgroundComponent;
 import tech.subluminal.client.presentation.customElements.ChatComponent;
+import tech.subluminal.client.presentation.customElements.ControlButton;
 import tech.subluminal.client.presentation.customElements.GameComponent;
 import tech.subluminal.client.presentation.customElements.LobbyComponent;
 import tech.subluminal.client.presentation.customElements.MenuComponent;
@@ -80,6 +80,9 @@ public class MainController implements Initializable {
   @FXML
   private AnchorPane playerBoardDock;
 
+  @FXML
+  private VBox statusBoxDock;
+
   private GameComponent game;
 
   private UserStore userStore;
@@ -97,6 +100,9 @@ public class MainController implements Initializable {
   private UserListController userListController;
 
   private boolean chatOut = false;
+  private NameChangeComponent nameChange;
+  private ControlButton playerListButton;
+  private ControlButton nameChangeButton;
 
   public LobbyComponent getLobby() {
     return lobby;
@@ -127,11 +133,15 @@ public class MainController implements Initializable {
     chatDock.getChildren().add(chat);
 
     userList = new UserListComponent(this);
-    rightSideDock.getChildren().add(userList);
+    playerListButton = new ControlButton(this, "P", userList, statusBoxDock);
+    rightSideDock.getChildren().add(playerListButton);
+
     userListController = userList.getController();
 
-    NameChangeComponent nameChange = new NameChangeComponent(this);
-    rightSideDock.getChildren().add(nameChange);
+    nameChange = new NameChangeComponent(this);
+    nameChangeButton = new ControlButton(this, "C", nameChange, statusBoxDock);
+    rightSideDock.getChildren().add(nameChangeButton);
+    //rightSideDock.getChildren().add(nameChange);
 
     menu = new MenuComponent(this);
     settings = new SettingsComponent(this);
@@ -143,6 +153,9 @@ public class MainController implements Initializable {
     playArea.setMouseTransparent(true);
 
     menuDock.getChildren().add(menu);
+
+
+
 
     Platform.runLater(() -> {
 
@@ -217,7 +230,7 @@ public class MainController implements Initializable {
 
       playArea.setMouseTransparent(false);
 
-      HBox box = new HBox();
+      rightSideDock.getChildren().clear();
       Pane leftSide = new Pane();
       leftSide.setPrefWidth(rightSideDock.getWidth());
       leftSide.prefHeightProperty().bind(chat.getScene().heightProperty());
@@ -227,17 +240,18 @@ public class MainController implements Initializable {
               BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
               BackgroundSize.DEFAULT));
       leftSide.setBackground(bg);
-      Pane rightSide = new Pane();
+      VBox rightSide = new VBox();
       rightSide.setPrefWidth(leftSideDock.getWidth());
       rightSide.prefHeightProperty().bind(chat.getScene().heightProperty());
       rightSide.setBackground(bg);
       leftSideDock.getChildren().add(leftSide);
       rightSideDock.getChildren().add(rightSide);
 
-      playerBoardDock.getChildren().remove(userList);
-      leftSide.getChildren().add(userList);
+      rightSideDock.getChildren().removeAll(playerListButton, nameChangeButton);
+      rightSide.getChildren().addAll(playerListButton,nameChangeButton);
       //rightSide.getChildren().add(new Label("this is a test"));
 
+      chatController.setInGame(true);
       playArea.getChildren().add(game);
     });
   }
@@ -268,12 +282,12 @@ public class MainController implements Initializable {
     }
   }
 
-  public void openChat(){
+  public void openChat() {
     fireMouseClick(chatHandle);
   }
 
   private void fireMouseClick(Node node) {
-    if(!chatOut){
+    if (!chatOut) {
       MouseEvent event = new MouseEvent(MouseEvent.MOUSE_CLICKED,
           node.getLayoutX(), node.getLayoutY(), node.getLayoutX(), node.getLayoutY(),
           MouseButton.PRIMARY, 1,
