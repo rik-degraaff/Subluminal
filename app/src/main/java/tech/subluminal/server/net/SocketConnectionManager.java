@@ -1,6 +1,7 @@
 package tech.subluminal.server.net;
 
 import java.io.IOException;
+import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
@@ -23,11 +24,7 @@ public class SocketConnectionManager implements ConnectionManager {
    * @param port to bind the socket to.
    */
   public SocketConnectionManager(int port) {
-    try {
-      serverSocket = new ServerSocket(port);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
+    createSocket(port);
     new Thread(this::portListenLoop).start();
   }
 
@@ -45,6 +42,22 @@ public class SocketConnectionManager implements ConnectionManager {
     } catch (IOException e) {
       e.printStackTrace();
       System.exit(1);
+    }
+  }
+
+  /**
+   * Creates the server socket to listen for incoming connections.
+   * @param port to listen on.
+   */
+  private void createSocket(int port) {
+    try {
+      serverSocket = new ServerSocket(port);
+    } catch (BindException e) {
+      System.out.println("Port " + port + " is already in use. Trying next port.");
+      Logger.info("Port " + port + " is already in use. Trying next port.");
+      createSocket(port+1);
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 

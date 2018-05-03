@@ -11,6 +11,7 @@ import tech.subluminal.server.stores.records.Star;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.util.IdUtils;
+import tech.subluminal.shared.util.NameGenerator;
 
 public class MapGeneration {
 
@@ -22,6 +23,7 @@ public class MapGeneration {
   private static final double MOTHER_SHIP_SPEED = LIGHT_SPEED * 0.4;
   private static final double DEMAT_RATE = 0.5;
   private static final double GENERATION_RATE = 5.0;
+  private static NameGenerator ng = new NameGenerator();
 
   public static GameState getNewGameStateForPlayers(Set<String> playerIDs, String gameID) {
     final Set<Star> stars = new HashSet<>();
@@ -30,7 +32,7 @@ public class MapGeneration {
     playerIDs.forEach(playerID -> {
       Coordinates homeCoords = new Coordinates(Math.random(), Math.random());
       Star homeStar = new Star(playerID, 1, homeCoords, IdUtils.generateId(8),
-          true, JUMP_DISTANCE, DEMAT_RATE, DEMAT_RATE, GENERATION_RATE, GENERATION_RATE);
+          true, JUMP_DISTANCE, DEMAT_RATE, DEMAT_RATE, GENERATION_RATE, GENERATION_RATE, ng.getName());
       stars.add(homeStar);
 
       Set<String> otherPlayers = playerIDs.stream()
@@ -47,7 +49,7 @@ public class MapGeneration {
     int additionalStars = (int) Math.pow(10 + 3 * playerIDs.size(), 0.75);
     Stream.generate(() -> new Star(null, 0, new Coordinates(Math.random(), Math.random()),
         IdUtils.generateId(8), false, JUMP_DISTANCE, DEMAT_RATE, DEMAT_RATE, GENERATION_RATE,
-        GENERATION_RATE))
+        GENERATION_RATE, ng.getName()))
         .limit(additionalStars)
         .forEach(stars::add);
 

@@ -79,29 +79,6 @@ public class GameController implements Initializable, GamePresenter {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    /*StarComponent star = new StarComponent("fewff",0.8,new Coordinates(0.2,0.6), "ANDROMEDAR");
-    StarComponent star1 = new StarComponent("fewff",0.2,new Coordinates(0.6,0.2), "ANDROMEDAR");
-    StarComponent star3 = new StarComponent("fewff",0.5,new Coordinates(0.8,0.5), "ANDROMEDAR");*/
-    /*StarComponent star2 = new StarComponent(1,0.0,0.2, "TITTY IX");
-    star2.setColorProperty(Color.PINK);
-    StarComponent star3 = new StarComponent(0.1,1,0.1, "LUXIS BB");*/
-
-    /*map.getChildren().addAll(star, star1, star3);
-
-    List<StarComponent> test = new LinkedList();
-    test.add(star);
-    /*test.add(star2);
-    test.add(star3);*/
-    //createJumpPath(test);
-    //removeJumpPath();
-
-    /*MotherShipComponent ship = new MotherShipComponent(star.getLayoutX(),star.getLayoutY()), "fwefr1");
-    ship.setIsRotating(true);
-    map.getChildren().add(ship);
-    //removeJumpPath();
-
-    FleetComponent fleet = new FleetComponent(new Coordinates(0.2, 0.3), 30, "wefwef", "22r2f2");
-    map.getChildren().add(fleet);*/
 
     map.setOnMouseClicked(mouseEvent -> {
       pressStore[0] = null;
@@ -262,6 +239,7 @@ public class GameController implements Initializable, GamePresenter {
           star -> {
             if (stars.get(star.getID()) == null) {
               StarComponent starComponent = new StarComponent(star.getOwnerID(),
+                  star.getName(),
                   star.getPossession(),
                   star.getCoordinates(),
                   star.getID(),

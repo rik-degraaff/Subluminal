@@ -232,7 +232,7 @@ public class IntermediateGameState {
       stars.put(starID,
           new Star(ownerID, Math.min(possession, 1.0), star.getCoordinates(), starID, isGenerating,
               star.getJump(), star.getDematRate(), star.getNextDemat(), star.getGenerationRate(),
-              star.getNextShipgen()));
+              star.getNextShipgen(), star.getName()));
     }
   }
 

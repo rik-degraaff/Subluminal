@@ -21,7 +21,7 @@ function show_usage {
   echo ""
   echo -e "\tOPTIONS1:"
   echo -e "\thelp \t\tThis message"
-  echo -e "\twatch \t\tStart gradle continuous build ("gradle build -x check -x test -x javadoc -x sourcesjar -x javadocjar -x distZip -x distTars")."
+  echo -e "\twatch \t\tStart gradle continuous build ("gradle build -x check -x test -x javadoc -x sourcesjar -x javadocjar -x distZip -x distTar --continous")."
   echo -e "\tclient \t\tStart the client GUI and connect to $SERVER."
   echo -e "\localclient \t\t Start the client GUI and connect to localhost."
   echo -e "\tserver \t\tStarts the server on localhost."
@@ -38,7 +38,7 @@ function show_usage {
 if [[ "$1" = "help" ]] || [[ $# -eq 0 ]];then
   show_usage
 elif [[ "$1" = "watch" ]];then
-  gradle build -x check -x test -x javadoc -x sourcesjar -x javadocjar -x distZip -x distTars
+  gradle build -x check -x test -x javadoc -x sourcesjar -x javadocjar -x distZip -x distTar --continuous
 elif [[ "$1" = "testenv" ]];then
   echo "//TODO: Make client and server start"
 else
