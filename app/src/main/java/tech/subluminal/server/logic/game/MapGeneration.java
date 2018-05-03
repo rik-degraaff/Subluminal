@@ -21,7 +21,7 @@ public class MapGeneration {
   private static final double JUMP_DISTANCE = 1 / 2.5;
   private static final double SHIP_SPEED = LIGHT_SPEED * 0.5;
   private static final double MOTHER_SHIP_SPEED = LIGHT_SPEED * 0.4;
-  private static final double DEMAT_RATE = 0.5;
+  private static final double DEMAT_RATE = 1.0;
   private static final double GENERATION_RATE = 5.0;
   private static NameGenerator ng = new NameGenerator();
 

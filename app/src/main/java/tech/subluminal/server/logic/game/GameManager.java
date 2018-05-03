@@ -123,22 +123,28 @@ public class GameManager implements GameStarter {
           .getMotherShip()
           .getCurrent();
       if (motherShipEntry.isDestroyed()) {
-        delta.addRemovedPlayer(playerID);
+        delta.addRemovedMotherShip(motherShipEntry.getState().getID());
         //TODO: inform the player that they lost?
       } else {
-        delta.addPlayer(createPlayerDelta(motherShipEntry.getState(), motherShipEntry,
+        final Optional<Ship> ship = motherShipEntry.isDestroyed()
+            ? Optional.empty()
+            : Optional.ofNullable(motherShipEntry.getState());
+        delta.addPlayer(createPlayerDelta(ship, motherShipEntry,
             gameState.getPlayers().get(playerID), delta, playerID));
       }
 
       gameState.getPlayers().forEach((deltaPlayerID, player) -> {
         if (!deltaPlayerID.equals(playerID)) {
-          player.getMotherShip()
+          final Optional<Ship> motherShip = player.getMotherShip()
               .getLatestOrLastForPlayer(playerID, motherShipEntry)
-              .apply(
-                  motherShip -> delta.addPlayer(createPlayerDelta(motherShip, motherShipEntry,
-                      gameState.getPlayers().get(deltaPlayerID), delta, playerID)),
-                  v -> delta.addRemovedPlayer(deltaPlayerID)
-              );
+              .left();
+
+          delta.addPlayer(createPlayerDelta(motherShip, motherShipEntry,
+              gameState.getPlayers().get(deltaPlayerID), delta, playerID));
+
+          if (!motherShip.isPresent()) {
+            delta.addRemovedMotherShip(player.getMotherShip().getCurrent().getState().getID());
+          }
         }
       });
 
@@ -152,7 +158,7 @@ public class GameManager implements GameStarter {
   }
 
   private tech.subluminal.client.stores.records.game.Player createPlayerDelta(
-      Ship motherShip,
+      Optional<Ship> motherShip,
       GameHistoryEntry<Ship> motherShipEntry, Player player, GameStateDelta delta,
       String forPlayerID
   ) {

@@ -45,7 +45,7 @@ public class GameStateDeltaTest {
     delta.addRemovedFleet("4321", "345");
     delta.addRemovedFleet("4321", "134vj");
 
-    delta.addRemovedPlayer("ftdq");
+    delta.addRemovedMotherShip("ftdq");
 
     String msg = delta.asSON().asString();
     try {

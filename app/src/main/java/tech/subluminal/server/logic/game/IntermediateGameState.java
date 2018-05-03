@@ -236,6 +236,7 @@ public class IntermediateGameState {
   private void dematerializeTick(String starID) {
     final Map<String, Optional<Fleet>> fleets = fleetsOnStars.get(starID);
     final Map<String, Optional<Ship>> motherShips = motherShipsOnStars.get(starID);
+
     final Map<String, Integer> playerStrengths = players.stream()
         .filter(player -> fleets.get(player).isPresent()
             || motherShips.get(player).isPresent()
