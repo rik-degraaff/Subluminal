@@ -9,6 +9,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
@@ -31,6 +33,12 @@ public class MainController implements Initializable {
 
   @FXML
   private AnchorPane spaceBackgroundDock;
+
+  @FXML
+  private AnchorPane leftSideDock;
+
+  @FXML
+  private AnchorPane rightSideDock;
 
   @FXML
   private AnchorPane menuDock;
@@ -96,7 +104,7 @@ public class MainController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    background = new BackgroundComponent(2000);
+    background = new BackgroundComponent(100);
     spaceBackgroundDock.getChildren().add(background);
 
     chat = new ChatComponent(this);
@@ -186,6 +194,19 @@ public class MainController implements Initializable {
       menuDock.getChildren().clear();
 
       playArea.setMouseTransparent(false);
+
+      HBox box = new HBox();
+      Rectangle leftSide = new Rectangle();
+      leftSide.setWidth(rightSideDock.getWidth());
+      leftSide.heightProperty().bind(chat.getScene().heightProperty());
+      leftSide.setFill(Color.GREEN);
+      Rectangle rightSide = new Rectangle();
+      rightSide.setWidth(leftSideDock.getWidth());
+      rightSide.heightProperty().bind(chat.getScene().heightProperty());
+      rightSide.setFill(Color.GREEN);
+      leftSideDock.getChildren().add(leftSide);
+      rightSideDock.getChildren().add(rightSide);
+
       playArea.getChildren().add(game);
     });
   }
