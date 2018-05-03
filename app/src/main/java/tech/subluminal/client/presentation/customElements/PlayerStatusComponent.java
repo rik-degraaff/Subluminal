@@ -3,6 +3,7 @@ package tech.subluminal.client.presentation.customElements;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Rectangle;
+import tech.subluminal.client.presentation.controller.MainController;
 import tech.subluminal.shared.records.PlayerStatus;
 
 
@@ -19,7 +20,7 @@ public class PlayerStatusComponent extends HBox {
    * @param username is the name of the player.
    * @param status is the active status of the player.
    */
-  public PlayerStatusComponent(String username, PlayerStatus status) {
+  public PlayerStatusComponent(String username, PlayerStatus status, MainController main) {
     HBox hbox = new HBox();
 
     statusBox = new Rectangle();
@@ -29,6 +30,9 @@ public class PlayerStatusComponent extends HBox {
     hbox.getChildren().add(statusBox);
     hbox.setSpacing(5);
     hbox.getChildren().add(name);
+    Label msg = new Label("msg");
+    msg.setOnMouseClicked(e -> main.sendRecipiantToChat(username));
+    hbox.getChildren().add(msg);
     this.getChildren().add(hbox);
 
     statusBox.setHeight(20);

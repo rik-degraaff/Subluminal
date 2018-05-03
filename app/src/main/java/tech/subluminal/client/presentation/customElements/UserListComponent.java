@@ -3,15 +3,24 @@ package tech.subluminal.client.presentation.customElements;
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
-import tech.subluminal.client.presentation.controller.ChatController;
 import tech.subluminal.client.presentation.controller.MainController;
+import tech.subluminal.client.presentation.controller.UserListController;
 
-public class ChatComponent extends AnchorPane {
 
-  private ChatController controller;
+public class UserListComponent extends AnchorPane {
 
-  public ChatComponent(MainController mainController) {
-    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ChatView.fxml"));
+  UserListController controller;
+
+  public UserListController getController() {
+    return controller;
+  }
+
+  public void setController(UserListController controller) {
+    this.controller = controller;
+  }
+
+  public UserListComponent(MainController mainController) {
+    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("UserListView.fxml"));
     fxmlLoader.setRoot(this);
     //fxmlLoader.setController(this);
 
@@ -22,9 +31,5 @@ public class ChatComponent extends AnchorPane {
     } catch (IOException exception) {
       throw new RuntimeException(exception);
     }
-  }
-
-  public ChatController getChatcontroller() {
-    return controller;
   }
 }

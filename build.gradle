@@ -106,6 +106,13 @@ test {
 
 jacocoTestReport {
     reports.html.destination file("app/build/reports/coverage")
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    '**/*tech/subluminal/client/presentation**'
+            ])
+        })
+    }
 }
 
 // task openBrowser(type:Exec) {
