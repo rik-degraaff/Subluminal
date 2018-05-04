@@ -14,7 +14,9 @@ import tech.subluminal.shared.messages.GameStartRes;
 import tech.subluminal.shared.messages.GameStateDelta;
 import tech.subluminal.shared.messages.LoginRes;
 import tech.subluminal.shared.messages.MotherShipMoveReq;
+import tech.subluminal.shared.messages.YouLose;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.game.Star;
 import tech.subluminal.shared.util.Synchronized;
 
@@ -40,11 +42,12 @@ public class GameManager implements GamePresenter.Delegate {
 
     gamePresenter.setGameDelegate(this);
 
-    connection.registerHandler(GameStateDelta.class, GameStateDelta::fromSON,
-        this::onGameStateDeltaReceived);
-    connection.registerHandler(LoginRes.class, LoginRes::fromSON, this::onLoginRes);
-    connection
-        .registerHandler(GameStartRes.class, GameStartRes::fromSON, this::onGameStart);
+    connection.registerHandler(
+        GameStateDelta.class, GameStateDelta::fromSON, this::onGameStateDeltaReceived);
+    connection.registerHandler(
+        LoginRes.class, LoginRes::fromSON, this::onLoginRes);
+    connection.registerHandler(
+        GameStartRes.class, GameStartRes::fromSON, this::onGameStart);
   }
 
   private void onGameStart(GameStartRes res) {

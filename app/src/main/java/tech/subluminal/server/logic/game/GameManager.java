@@ -27,6 +27,7 @@ import tech.subluminal.shared.messages.HighScoreReq;
 import tech.subluminal.shared.messages.HighScoreRes;
 import tech.subluminal.shared.messages.MotherShipMoveReq;
 import tech.subluminal.shared.messages.MoveReq;
+import tech.subluminal.shared.messages.YouLose;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.stores.records.game.Coordinates;
@@ -124,7 +125,7 @@ public class GameManager implements GameStarter {
           .getCurrent();
       if (motherShipEntry.isDestroyed()) {
         delta.addRemovedMotherShip(motherShipEntry.getState().getID());
-        //TODO: inform the player that they lost?
+        distributor.sendMessage(new YouLose(), playerID);
       } else {
         final Optional<Ship> ship = motherShipEntry.isDestroyed()
             ? Optional.empty()
