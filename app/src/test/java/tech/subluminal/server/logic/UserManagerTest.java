@@ -1,66 +1,88 @@
 package tech.subluminal.server.logic;
 
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.AdditionalMatchers.not;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.function.Function;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
+import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import tech.subluminal.server.stores.InMemoryUserStore;
-import tech.subluminal.server.stores.UserStore;
 import tech.subluminal.shared.messages.LoginReq;
 import tech.subluminal.shared.messages.LoginRes;
+import tech.subluminal.shared.messages.LogoutReq;
+import tech.subluminal.shared.messages.UsernameReq;
+import tech.subluminal.shared.messages.UsernameRes;
 import tech.subluminal.shared.net.Connection;
-import tech.subluminal.shared.son.SONConversionError;
-import tech.subluminal.shared.son.SONConverter;
+import tech.subluminal.test.DistributorTester;
+import tech.subluminal.test.MessageHandlerTester;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserManagerTest {
 
-  @Captor
-  private ArgumentCaptor<BiConsumer<String, Connection>> onOpenedCaptor;
+  @Mock
+  private MessageDistributor distributor;
+  private UserManager userManager;
+  private InMemoryUserStore userStore;
 
-  @Captor
-  private ArgumentCaptor<SONConverter<LoginReq>> loginConverterCaptor;
-
-  @Captor
-  private ArgumentCaptor<Consumer<LoginReq>> onLoginCaptor;
+  @Before
+  public void setup() {
+    this.userStore = new InMemoryUserStore();
+    userManager = new UserManager(userStore, distributor);
+  }
 
   @Test
-  public void test() {
-    Connection c = mock(Connection.class);
-    UserStore userStore = new InMemoryUserStore();
-    MessageDistributor messageDistributor = mock(MessageDistributor.class);
+  public void testLogin() {
+    Connection connection = mock(Connection.class);
 
-    UserManager userManager = new UserManager(userStore, messageDistributor);
+    new DistributorTester(distributor, connection);
+    new MessageHandlerTester<>(connection, LoginReq.class, new LoginReq("test"));
 
-    System.out.println(onOpenedCaptor);
+    verify(connection).sendMessage(refEq(new LoginRes("test", "0")));
+  }
 
-    verify(messageDistributor).addConnectionOpenedListener(onOpenedCaptor.capture());
+  @Test
+  public void testNameChange() {
+    Connection connection = mock(Connection.class);
 
-    onOpenedCaptor.getValue().accept("1", c);
+    new DistributorTester(distributor, connection);
 
-    verify(c, times(1))
-        .registerHandler(eq(LoginReq.class), loginConverterCaptor.capture(), onLoginCaptor.capture());
-    //verify(c, times(2)).registerHandler(any(), any(), any());
+    new MessageHandlerTester<>(connection, LoginReq.class, new LoginReq("test"));
+    MessageHandlerTester<UsernameReq> messageHandlerTester = new MessageHandlerTester<>(connection,
+        UsernameReq.class, new UsernameReq("Bob"));
 
-    LoginReq loginReq = null;
+    verify(connection, atLeast(0)).sendMessage(not(isA(UsernameRes.class)));
+    verify(connection).sendMessage(refEq(new UsernameRes("Bob")));
+
+    messageHandlerTester.sendMessage(new UsernameReq("Bob"));
+
+    verify(connection, atLeast(0)).sendMessage(not(isA(UsernameRes.class)));
+    verify(connection).sendMessage(refEq(new UsernameRes("Bob1")));
+  }
+
+  @Test
+  public void testLogout() {
+    Connection connection = mock(Connection.class);
+
+    new DistributorTester(distributor, connection);
+    new MessageHandlerTester<>(connection, LoginReq.class, new LoginReq("test"));
+    new MessageHandlerTester<>(connection, LogoutReq.class, new LogoutReq());
     try {
-      loginReq = loginConverterCaptor.getValue().convert(new LoginReq("test").asSON());
-    } catch (SONConversionError sonConversionError) {
-      fail("UserManager failed to parse LoginReq correctly");
+      verify(connection).close();
+    } catch (IOException e) {
+      fail("Verifying connection close was called inexplicably threw an error");
     }
-    onLoginCaptor.getValue().accept(loginReq);
-
-    verify(c).sendMessage(any(LoginRes.class));
   }
 }
