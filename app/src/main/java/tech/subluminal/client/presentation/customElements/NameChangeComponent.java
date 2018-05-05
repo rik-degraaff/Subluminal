@@ -9,7 +9,7 @@ import tech.subluminal.client.presentation.controller.MainController;
 
 public class NameChangeComponent extends HBox {
 
-  private TextField field = new TextField();
+  public TextField field = new TextField();
   Button change;
 
   public NameChangeComponent(MainController main){

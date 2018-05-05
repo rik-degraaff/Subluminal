@@ -1,14 +1,8 @@
 package tech.subluminal.client.presentation.customElements;
 
-import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import tech.subluminal.client.presentation.controller.MainController;
 
 public class ControlButton extends Button {
@@ -30,6 +24,7 @@ public class ControlButton extends Button {
 
         if (!isOpen) {
           ((VBox)parent).getChildren().add(node);
+          node.requestFocus();
           this.setText("X");
           isOpen = true;
         } else {

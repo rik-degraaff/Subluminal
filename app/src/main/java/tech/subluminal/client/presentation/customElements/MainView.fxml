@@ -52,7 +52,7 @@
         <HBox prefHeight="323.0" prefWidth="447.0" AnchorPane.bottomAnchor="0.0"
           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
           <children>
-            <Rectangle fx:id="chatHandle" arcHeight="5.0" arcWidth="5.0" 
+            <Rectangle fx:id="chatHandle" arcHeight="5.0" arcWidth="5.0"
               height="339.0" stroke="BLACK" strokeType="INSIDE" width="30.0"/>
             <AnchorPane fx:id="chatDock" prefHeight="300.0">
             </AnchorPane>
