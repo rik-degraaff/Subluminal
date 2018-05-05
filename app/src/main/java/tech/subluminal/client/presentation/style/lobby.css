@@ -120,3 +120,8 @@
 .jumpbox {
   -fx-background-color: black;
 }
+
+.fps-counter{
+  -fx-background-color: black;
+  -fx-text-fill: red;
+}

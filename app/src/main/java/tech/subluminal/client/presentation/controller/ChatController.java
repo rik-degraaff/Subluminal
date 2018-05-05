@@ -19,7 +19,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
-import javax.swing.Action;
 import tech.subluminal.client.presentation.ChatPresenter;
 import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.stores.ReadOnlyUserStore;
@@ -360,10 +359,13 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     chatOptions.getChildren().remove(sendButton);
 
     inGameProperty().addListener((observable, oldValue, newValue) -> {
-      if(newValue && !oldValue){
-        chatOptions.getChildren().add(sendButton);
-      }else if(!newValue && oldValue) {
-        chatOptions.getChildren().remove(sendButton);
+      if(newValue != oldValue){
+        if(chatOptions.getChildren().contains(sendButton)){
+          chatOptions.getChildren().remove(sendButton);
+        }else {
+          chatOptions.getChildren().add(sendButton);
+        }
+
       }
     });
 

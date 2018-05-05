@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -26,6 +28,7 @@ import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.customElements.BackgroundComponent;
 import tech.subluminal.client.presentation.customElements.ChatComponent;
 import tech.subluminal.client.presentation.customElements.ControlButton;
+import tech.subluminal.client.presentation.customElements.DebugComponent;
 import tech.subluminal.client.presentation.customElements.GameComponent;
 import tech.subluminal.client.presentation.customElements.LobbyComponent;
 import tech.subluminal.client.presentation.customElements.MenuComponent;
@@ -103,6 +106,7 @@ public class MainController implements Initializable {
   private NameChangeComponent nameChange;
   private ControlButton playerListButton;
   private ControlButton nameChangeButton;
+  private DebugComponent debug;
 
   public LobbyComponent getLobby() {
     return lobby;
@@ -154,7 +158,17 @@ public class MainController implements Initializable {
 
     menuDock.getChildren().add(menu);
 
+    debug = new DebugComponent();
 
+    window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
+      if(keyEvent.getCode() == KeyCode.F4){
+        if(window.getChildren().contains(debug)){
+          window.getChildren().remove(debug);
+        }else{
+          window.getChildren().add(debug);
+        }
+      }
+    });
 
 
     Platform.runLater(() -> {
