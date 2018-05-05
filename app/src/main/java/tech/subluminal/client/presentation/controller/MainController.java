@@ -297,6 +297,8 @@ public class MainController implements Initializable {
     playArea.getChildren().clear();
     rightSideDock.getChildren().clear();
     leftSideDock.getChildren().clear();
+
+    rightSideDock.getChildren().addAll(settingsButton,playerListButton, nameChangeButton);
     playArea.setMouseTransparent(true);
 
     menuDock.getChildren().add(menu);

@@ -22,6 +22,7 @@ import org.pmw.tinylog.Logger;
 import tech.subluminal.client.logic.Graph;
 import tech.subluminal.client.presentation.GamePresenter;
 import tech.subluminal.client.presentation.customElements.ArrowComponent;
+import tech.subluminal.client.presentation.customElements.EndGameComponent;
 import tech.subluminal.client.presentation.customElements.FleetComponent;
 import tech.subluminal.client.presentation.customElements.Jump;
 import tech.subluminal.client.presentation.customElements.JumpBox;
@@ -30,6 +31,7 @@ import tech.subluminal.client.presentation.customElements.StarComponent;
 import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.client.stores.records.game.OwnerPair;
+import tech.subluminal.shared.stores.records.User;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.Ship;
@@ -237,6 +239,17 @@ public class GameController implements Initializable, GamePresenter {
         });
       }
     });
+  }
+
+  @Override
+  public void onEndGame(String winnerID) {
+    if(winnerID != null){
+      String winnerName = userStore.users().getByID(winnerID).get().use(User::getUsername);
+      map.getChildren().add(new EndGameComponent(main, winnerName));
+    }else{
+      map.getChildren().add(new EndGameComponent(main));
+    }
+    main.onMapCloseHandle();
   }
 
   public void setGameStore(GameStore gameStore) {

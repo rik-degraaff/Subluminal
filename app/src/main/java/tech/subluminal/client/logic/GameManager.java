@@ -7,6 +7,7 @@ import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.GamePresenter;
 import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.client.stores.records.game.OwnerPair;
+import tech.subluminal.shared.messages.EndGameRes;
 import tech.subluminal.shared.messages.FleetMoveReq;
 import tech.subluminal.shared.messages.GameStartRes;
 import tech.subluminal.shared.messages.GameStateDelta;
@@ -44,6 +45,11 @@ public class GameManager implements GamePresenter.Delegate {
     connection.registerHandler(LoginRes.class, LoginRes::fromSON, this::onLoginRes);
     connection
         .registerHandler(GameStartRes.class, GameStartRes::fromSON, this::onGameStart);
+    connection.registerHandler(EndGameRes.class, EndGameRes::fromSON, this::onEndGameRes);
+  }
+
+  private void onEndGameRes(EndGameRes res) {
+    gamePresenter.onEndGame(res.getWinnerID());
   }
 
   private void onGameStart(GameStartRes res) {
