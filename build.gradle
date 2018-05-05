@@ -27,6 +27,7 @@ dependencies {
     compile 'org.tinylog:tinylog:1.3.4'
     compile 'info.picocli:picocli:3.0.0-alpha-4'
     compile 'org.reflections:reflections:0.9.11'
+    compile 'org.apache.commons:commons-lang3:3.7'
 
     javadocCoverage 'com.manoelcampos:javadoc-coverage:1.1.0'
 }
