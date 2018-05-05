@@ -16,7 +16,12 @@ import javafx.scene.effect.Bloom;
 import javafx.scene.effect.Effect;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathBuilder;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import tech.subluminal.shared.stores.records.game.Coordinates;
@@ -43,7 +48,8 @@ public class StarComponent extends Group {
 
   //private final ObjectProperty
 
-  public StarComponent(String ownerID, String name, double possession, Coordinates coordinates, String id,
+  public StarComponent(String ownerID, String name, double possession, Coordinates coordinates,
+      String id,
       double jump) {
 
     setPossession(possession);
@@ -73,7 +79,6 @@ public class StarComponent extends Group {
 
     this.name = name;
 
-
     Circle star = new Circle();
     star.setFill(Color.GRAY);
 
@@ -88,7 +93,7 @@ public class StarComponent extends Group {
         .createDoubleBinding(() -> star.getRadius() * Math.pow(getPossession(), 0.8),
             possessionProperty(), sizeProperty));
 
-    Pane starGroup = new Pane();
+    Group starGroup = new Group();
 
     Pane glowBox = new Pane();
     glowBox.setPrefHeight(sizeAll);
@@ -101,36 +106,74 @@ public class StarComponent extends Group {
     Platform.runLater(() -> {
       jumpCircle.setRadius(jump * getScene().getHeight());
     });
-    jumpCircle.setStroke(Color.RED);
-    jumpCircle.setFill(Color.TRANSPARENT);
-    jumpCircle.setMouseTransparent(true);
+
+    ArcTo jumpPath = new ArcTo();
+    jumpPath.setX(0);
+    jumpPath.setY(0);
+    jumpPath.setSweepFlag(false);
+    jumpPath.setLargeArcFlag(true);
+    jumpPath.setRadiusX(star.radiusProperty().getValue());
+    jumpPath.radiusXProperty().bind(Bindings
+        .createDoubleBinding(() -> parentHeightProperty.getValue() * jumpProperty().getValue(),
+            parentHeightProperty, jumpProperty()));
+
+    jumpPath.radiusYProperty().bind(jumpPath.radiusXProperty());
+    jumpPath.setXAxisRotation(360);
+
+    Path path = PathBuilder.create()
+        .elements(
+            new MoveTo(0 - sizeProperty.getValue(), 0 - sizeProperty.getValue()),
+            jumpPath,
+            new ClosePath()) // close 1 px gap.
+        .build();
+    path.setStroke(Color.RED);
+    path.setMouseTransparent(true);
+
+    DoubleProperty cathetus = new SimpleDoubleProperty();
+    cathetus.bind(Bindings
+        .createDoubleBinding(() -> Math.sqrt(jumpPath.getRadiusX() * jumpPath.getRadiusX() / 2),
+            jumpPath.radiusXProperty()));
+
+    path.translateXProperty().bind(Bindings
+        .createDoubleBinding(() -> cathetus.getValue(),
+            cathetus));
+
+    path.translateYProperty().bind(Bindings
+        .createDoubleBinding(() -> -cathetus.getValue(),
+            cathetus));
 
     border.setVisible(false);
-    jumpCircle.setVisible(false);
+    path.setVisible(false);
+
+    //starGroup.setB(new Background(new BackgroundFill(Color.RED,CornerRadii.EMPTY,Insets.EMPTY)));
 
     starGroup.setOnMouseEntered(event -> {
+
       border.setVisible(true);
-      jumpCircle.setVisible(true);
+      path.setVisible(true);
+
     });
 
     starGroup.setOnMouseExited(event -> {
+
       border.setVisible(false);
-      jumpCircle.setVisible(false);
+      path.setVisible(false);
+
     });
 
     Label starName = new Label(name);
     starName.getStyleClass().add("starname-label");
     starName.setLayoutY(30);
     Platform.runLater(() -> {
-      starName.setLayoutX(-starName.getWidth()/2);
+      starName.setLayoutX(-starName.getWidth() / 2);
     });
 
     starName.setFont(new Font("PxPlus IBM VGA9", 10));
 
     starGroup.getChildren().addAll(glowBox, border, star, starName, possessionCount);
     Effect glow = new Bloom();
-    this.setEffect(glow);
-    this.getChildren().addAll(jumpCircle, starGroup);
+    starGroup.setEffect(glow);
+    this.getChildren().addAll(path, starGroup);
 
   }
 
