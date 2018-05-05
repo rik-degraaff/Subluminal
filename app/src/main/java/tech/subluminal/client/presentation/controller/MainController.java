@@ -1,6 +1,7 @@
 package tech.subluminal.client.presentation.controller;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
@@ -31,6 +32,7 @@ import tech.subluminal.client.presentation.customElements.ControlButton;
 import tech.subluminal.client.presentation.customElements.DebugComponent;
 import tech.subluminal.client.presentation.customElements.FpsUpdater;
 import tech.subluminal.client.presentation.customElements.GameComponent;
+import tech.subluminal.client.presentation.customElements.HighscoreComponent;
 import tech.subluminal.client.presentation.customElements.LobbyComponent;
 import tech.subluminal.client.presentation.customElements.MenuComponent;
 import tech.subluminal.client.presentation.customElements.MonitorComponent;
@@ -40,6 +42,7 @@ import tech.subluminal.client.presentation.customElements.UserListComponent;
 import tech.subluminal.client.presentation.customElements.WindowContainerComponent;
 import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.client.stores.UserStore;
+import tech.subluminal.server.stores.records.HighScore;
 
 public class MainController implements Initializable {
 
@@ -108,8 +111,10 @@ public class MainController implements Initializable {
   private NameChangeComponent nameChange;
   private ControlButton playerListButton;
   private ControlButton nameChangeButton;
+  private ControlButton settingsButton;
   private DebugComponent debug;
   private MonitorComponent monitor;
+  private HighscoreComponent highscore;
 
   public LobbyComponent getLobby() {
     return lobby;
@@ -152,6 +157,11 @@ public class MainController implements Initializable {
 
     menu = new MenuComponent(this);
     settings = new SettingsComponent(this);
+    settingsButton = new ControlButton(this, "S", settings, statusBoxDock);
+    rightSideDock.getChildren().add(settingsButton);
+
+    highscore = new HighscoreComponent();
+
     lobby = new LobbyComponent();
 
     game = new GameComponent(this);
@@ -169,24 +179,21 @@ public class MainController implements Initializable {
     VBox debugDock = new VBox();
     window.getChildren().add(debugDock);
 
-
-
     window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
-      if(keyEvent.getCode() == KeyCode.F4){
-        if(debugDock.getChildren().contains(debug)){
+      if (keyEvent.getCode() == KeyCode.F4) {
+        if (debugDock.getChildren().contains(debug)) {
           debugDock.getChildren().remove(debug);
-        }else{
+        } else {
           debugDock.getChildren().add(debug);
         }
-      }else if(keyEvent.getCode() == KeyCode.F5){
-        if(debugDock.getChildren().contains(monitor)){
+      } else if (keyEvent.getCode() == KeyCode.F5) {
+        if (debugDock.getChildren().contains(monitor)) {
           debugDock.getChildren().remove(monitor);
-        }else{
+        } else {
           debugDock.getChildren().add(monitor);
         }
       }
     });
-
 
     Platform.runLater(() -> {
       chatWindow.translateXProperty().bind(Bindings
@@ -277,8 +284,8 @@ public class MainController implements Initializable {
       leftSideDock.getChildren().add(leftSide);
       rightSideDock.getChildren().add(rightSide);
 
-      rightSideDock.getChildren().removeAll(playerListButton, nameChangeButton);
-      rightSide.getChildren().addAll(playerListButton,nameChangeButton);
+      rightSideDock.getChildren().removeAll(playerListButton, nameChangeButton, settingsButton);
+      rightSide.getChildren().addAll(settingsButton, playerListButton, nameChangeButton);
       //rightSide.getChildren().add(new Label("this is a test"));
 
       chatController.setInGame(true);
@@ -328,5 +335,19 @@ public class MainController implements Initializable {
 
   public GameController getGameController() {
     return gameController;
+  }
+
+  public void onHighscoreHandle() {
+    chatController.requestHighscores();
+    menuDock.getChildren().remove(menu);
+
+    windowContainer = new WindowContainerComponent(this, highscore, "Highscore");
+
+    menuDock.getChildren().add(windowContainer);
+    windowContainer.onWindowOpen();
+  }
+
+  public void onUpdateHighscoreHandle(List<HighScore> highScores) {
+    highscore.update(highScores);
   }
 }

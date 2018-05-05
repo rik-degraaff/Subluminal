@@ -1,5 +1,8 @@
 package tech.subluminal.client.presentation;
 
+import java.util.List;
+import tech.subluminal.server.stores.records.HighScore;
+
 /**
  * Handles the presentation of the chat.
  */
@@ -37,6 +40,8 @@ public interface ChatPresenter {
    * @param delegate is the delegate which will be set.
    */
   void setChatDelegate(Delegate delegate);
+
+  void updateHighscore(List<HighScore> highScores);
 
   public static interface Delegate {
 

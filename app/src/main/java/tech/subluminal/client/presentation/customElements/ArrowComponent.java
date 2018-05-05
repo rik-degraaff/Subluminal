@@ -78,7 +78,7 @@ public class ArrowComponent extends Pane {
         return to;
       }
     }));
-    
+
     transTl.setCycleCount(TranslateTransition.INDEFINITE);
     transTl.setAutoReverse(true);
     transTl.play();

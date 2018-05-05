@@ -1,1 +1,0 @@
-https://gist.github.com/kn0412/2086581e98a32c8dfa1f69772f14bca4

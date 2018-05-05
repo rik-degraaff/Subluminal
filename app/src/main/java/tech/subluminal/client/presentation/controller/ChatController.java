@@ -1,6 +1,7 @@
 package tech.subluminal.client.presentation.controller;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -23,6 +24,7 @@ import tech.subluminal.client.presentation.ChatPresenter;
 import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.stores.ReadOnlyUserStore;
 import tech.subluminal.client.stores.UserStore;
+import tech.subluminal.server.stores.records.HighScore;
 import tech.subluminal.shared.records.Channel;
 import tech.subluminal.shared.stores.records.User;
 
@@ -245,6 +247,9 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     return line.substring(channel.length() + 1);
   }
 
+  public void requestHighscores(){
+    chatDelegate.requestHighScores();
+  }
 
   public void clearInput() {
     messageText.setText("");
@@ -299,6 +304,11 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   @Override
   public void setChatDelegate(ChatPresenter.Delegate delegate) {
     this.chatDelegate = delegate;
+  }
+
+  @Override
+  public void updateHighscore(List<HighScore> highScores) {
+    main.onUpdateHighscoreHandle(highScores);
   }
 
   /**
