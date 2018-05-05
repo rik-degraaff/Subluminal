@@ -18,7 +18,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.GridPane;
 import tech.subluminal.client.presentation.ChatPresenter;
 import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.stores.ReadOnlyUserStore;
@@ -41,7 +41,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   @FXML
   private Button sendAllButton;
   @FXML
-  private HBox chatOptions;
+  private GridPane chatOptions;
 
   private ReadOnlyUserStore userStore;
   private ChatPresenter.Delegate chatDelegate;

@@ -205,7 +205,7 @@ public class MainController implements Initializable {
         transTl.play();
         chatOut = false;
       } else {
-        transTl.setToX(0);
+        transTl.setToX(-30);
         transTl.play();
         chatOut = true;
       }
