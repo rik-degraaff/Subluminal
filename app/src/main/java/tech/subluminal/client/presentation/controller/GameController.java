@@ -403,4 +403,8 @@ public class GameController implements Initializable, GamePresenter {
   public void setUserStore(UserStore userStore) {
     this.userStore = userStore;
   }
+
+  public void clearMap(){
+    map.getChildren().clear();
+  }
 }

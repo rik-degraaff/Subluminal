@@ -17,7 +17,7 @@ public class EndGameComponent extends HBox {
   private MainController main;
   private VBox box;
 
-  public EndGameComponent(MainController main, String winnerName){
+  public EndGameComponent(MainController main, String winnerName) {
     this.main = main;
 
     this.setAlignment(Pos.CENTER);
@@ -25,13 +25,12 @@ public class EndGameComponent extends HBox {
     Label endText = new Label("End of Game" + "\n" + "Winner is: " + winnerName);
     box.getChildren().add(endText);
 
-
     this.getChildren().add(box);
 
     addButtons();
   }
 
-  public EndGameComponent(MainController main){
+  public EndGameComponent(MainController main) {
     this.main = main;
 
     this.setAlignment(Pos.CENTER);
@@ -59,7 +58,8 @@ public class EndGameComponent extends HBox {
     this.getChildren().add(box);
     addButtons();
   }
-  public void addButtons(){
+
+  public void addButtons() {
     Label backToLobby = new Label("Back to Lobby");
     this.getChildren().add(backToLobby);
     backToLobby.setOnMouseClicked(event -> {

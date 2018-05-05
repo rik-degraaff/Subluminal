@@ -300,6 +300,7 @@ public class MainController implements Initializable {
 
     rightSideDock.getChildren().addAll(settingsButton,playerListButton, nameChangeButton);
     playArea.setMouseTransparent(true);
+    gameController.clearMap();
 
     menuDock.getChildren().add(menu);
   }
