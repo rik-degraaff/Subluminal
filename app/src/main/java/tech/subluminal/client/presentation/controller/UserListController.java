@@ -22,14 +22,9 @@ public class UserListController implements Initializable, UserPresenter {
 
   @FXML
   private ListView<PlayerStatusComponent> playerBoard;
-  @FXML
-  private VBox playerBoardWrapper;
-  @FXML
-  private Button handlePlayerBoard;
 
   private LinkedList<Label> players;
 
-  private boolean isBoardShown = false;
   private UserStore userStore;
 
   private UserPresenter.Delegate userDelegate;
@@ -37,27 +32,8 @@ public class UserListController implements Initializable, UserPresenter {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    if (!isBoardShown) {
-      playerBoard.setVisible(false);
-    }
-
   }
 
-
-  public void switchPlayerBoard(ActionEvent actionEvent) {
-    if (isBoardShown) {
-      playerBoard.setVisible(false);
-      playerBoard.setMouseTransparent(true);
-      isBoardShown = false;
-      handlePlayerBoard.setText("P");
-    } else {
-      playerBoard.setVisible(true);
-      playerBoard.setMouseTransparent(false);
-      isBoardShown = true;
-      handlePlayerBoard.setText("X");
-    }
-
-  }
 
   public void setUserStore(UserStore userStore) {
     this.userStore = userStore;
