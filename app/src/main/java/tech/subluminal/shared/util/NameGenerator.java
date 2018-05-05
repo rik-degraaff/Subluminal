@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.regex.Pattern;
-import org.pmw.tinylog.Logger;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 
@@ -21,49 +20,25 @@ public class NameGenerator {
   private List<String> planetNames; //for later use
 
   public NameGenerator() {
-
     readStarFiles();
-
   }
 
   public void readStarFiles() {
     Reflections reflections = new Reflections("tech.subluminal", new ResourcesScanner());
-    Set<String> fileNames = reflections.getResources(Pattern.compile(".*\\.txt"));
+    Set<String> fileNames = reflections.getResources(Pattern.compile("stars.*txt"));
+
+    System.out.println(fileNames);
 
     if (fileNames.isEmpty()) {
       throw new IllegalArgumentException("No list with starnames in resources found!");
     } else {
-      Logger.info(".txt files found:");
       fileNames.forEach(file -> {
-        //Logger.info(file);
         readLines(file);
       });
     }
-
-
-    /*for (int i = 0; i < listOfFiles.length; i++) {
-      if (listOfFiles[i].isFile()) {
-        String file = listOfFiles[i].getName();
-        System.out.println("File " + file);
-        // get last index for '.' char
-        int lastIndex = file.lastIndexOf('.');
-
-        // get extension
-        String str = file.substring(lastIndex);
-
-        // match path name extension
-        if (str.equals(".txt")) {
-          readLines("/tech/subluminal/resources/namegenerator/stars/" + listOfFiles[i].getName());
-        }
-
-      }
-    }*/
-    //readLines("/tech/subluminal/resources/namegenerator/stars/nearest-stars-single.txt");
   }
 
   private void readLines(String path) {
-    Logger.debug(path);
-    //System.out.println(NameGenerator.class.getResource("/" + path).getPath());
     BufferedReader br = null;
     try {
       br = new BufferedReader(new InputStreamReader(
@@ -78,7 +53,6 @@ public class NameGenerator {
 
     br.lines().forEach(l -> {
       starNames.add(l);
-      //System.out.println(l);
     });
 
   }
