@@ -142,9 +142,9 @@ public abstract class ShipComponent extends Group {
         if (newValue && !oldValue) {
           group.getTransforms().add(new Translate(-fromCenter, -fromCenter));
           group.getTransforms().add(new Rotate(90));
-          rotateTl.play();
+          //rotateTl.play();
         } else if (!newValue && oldValue) {
-          rotateTl.pause();
+          //rotateTl.pause();
           rotateToStar(group);
 
           //rotateTl.setToAngle(9);
