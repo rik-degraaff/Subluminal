@@ -13,12 +13,15 @@ public class MonitorComponent extends Pane {
   private final NumberAxis yAxis = new NumberAxis();
   private LineChart lineChart;
   private XYChart.Series series;
+  private int index = 0;
 
-  public MonitorComponent(IntegerProperty averageFps){
+  public MonitorComponent(IntegerProperty averageFps) {
     xAxis.setLabel("Time");
+    xAxis.setForceZeroInRange(false);
     yAxis.setLabel("FPS");
+    yAxis.setForceZeroInRange(false);
 
-    lineChart = new LineChart<>(xAxis,yAxis);
+    lineChart = new LineChart<>(xAxis, yAxis);
     lineChart.setTitle("Average FPS");
 
     series = new XYChart.Series<Number, Number>();
@@ -35,8 +38,14 @@ public class MonitorComponent extends Pane {
 
   }
 
-  public void append(int fps){
-    series.getData().add(new Data(series.getData().size() + 1, fps));
+  public void append(int fps) {
+    if (series.getData().size() > 20) {
+      series.getData().remove(0);
+      xAxis.setLowerBound(xAxis.getLowerBound()-1);
+    }
+    series.getData().add(new Data(index, fps));
+
+    index++;
   }
 
 }

@@ -38,7 +38,7 @@
         </rowConstraints>
         <children>
           <HBox fx:id="chatOptions">
-            <Button GridPane.columnIndex="1" contentDisplay="CENTER"
+            <Button fx:id="sendButton" GridPane.columnIndex="1" contentDisplay="CENTER"
               mnemonicParsing="false" onAction="#sendMessage" prefHeight="25.0"
               text="Send">
             </Button>

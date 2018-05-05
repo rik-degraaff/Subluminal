@@ -10,7 +10,7 @@ import tech.subluminal.shared.util.FxUtils;
 public class FpsUpdater {
 
   private final IntegerProperty averageFps= new SimpleIntegerProperty();
-  private final Integer DELAY = 1000;
+  private final Integer DELAY = 500;
 
   public FpsUpdater(){
     TimerTask fpsUpdater = new TimerTask() {
