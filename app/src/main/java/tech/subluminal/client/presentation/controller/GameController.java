@@ -407,4 +407,9 @@ public class GameController implements Initializable, GamePresenter {
   public void clearMap(){
     map.getChildren().clear();
   }
+
+  public void leaveGame(){
+    gameDelegate.leaveGame();
+    main.onMapCloseHandle();
+  }
 }

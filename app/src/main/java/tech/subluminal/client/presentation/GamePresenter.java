@@ -23,5 +23,7 @@ public interface GamePresenter {
     void sendShips(List<String> stars, int amount);
 
     void sendMothership(List<String> star);
+
+    void leaveGame();
   }
 }
