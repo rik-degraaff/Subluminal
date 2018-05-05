@@ -16,12 +16,7 @@ import javafx.scene.effect.Bloom;
 import javafx.scene.effect.Effect;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathBuilder;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import tech.subluminal.shared.stores.records.game.Coordinates;
@@ -103,61 +98,28 @@ public class StarComponent extends Group {
 
     border = makeBorder();
     Circle jumpCircle = new Circle();
-    Platform.runLater(() -> {
-      jumpCircle.setRadius(jump * getScene().getHeight());
-    });
-
-    ArcTo jumpPath = new ArcTo();
-    jumpPath.setX(0);
-    jumpPath.setY(0);
-    jumpPath.setSweepFlag(false);
-    jumpPath.setLargeArcFlag(true);
-    jumpPath.setRadiusX(star.radiusProperty().getValue());
-    jumpPath.radiusXProperty().bind(Bindings
-        .createDoubleBinding(() -> parentHeightProperty.getValue() * jumpProperty().getValue(),
-            parentHeightProperty, jumpProperty()));
-
-    jumpPath.radiusYProperty().bind(jumpPath.radiusXProperty());
-    jumpPath.setXAxisRotation(360);
-
-    Path path = PathBuilder.create()
-        .elements(
-            new MoveTo(0 - sizeProperty.getValue(), 0 - sizeProperty.getValue()),
-            jumpPath,
-            new ClosePath()) // close 1 px gap.
-        .build();
-    path.setStroke(Color.RED);
-    path.setMouseTransparent(true);
-
-    DoubleProperty cathetus = new SimpleDoubleProperty();
-    cathetus.bind(Bindings
-        .createDoubleBinding(() -> Math.sqrt(jumpPath.getRadiusX() * jumpPath.getRadiusX() / 2),
-            jumpPath.radiusXProperty()));
-
-    path.translateXProperty().bind(Bindings
-        .createDoubleBinding(() -> cathetus.getValue(),
-            cathetus));
-
-    path.translateYProperty().bind(Bindings
-        .createDoubleBinding(() -> -cathetus.getValue(),
-            cathetus));
+    jumpCircle.radiusProperty().bind(Bindings
+        .createDoubleBinding(() -> jump * parentHeightProperty.getValue(), parentHeightProperty,
+            jumpProperty()));
+    jumpCircle.setFill(Color.TRANSPARENT);
+    jumpCircle.setStroke(Color.RED);
 
     border.setVisible(false);
-    path.setVisible(false);
+    jumpCircle.setVisible(false);
 
     //starGroup.setB(new Background(new BackgroundFill(Color.RED,CornerRadii.EMPTY,Insets.EMPTY)));
 
     starGroup.setOnMouseEntered(event -> {
 
       border.setVisible(true);
-      path.setVisible(true);
+      jumpCircle.setVisible(true);
 
     });
 
     starGroup.setOnMouseExited(event -> {
 
       border.setVisible(false);
-      path.setVisible(false);
+      jumpCircle.setVisible(false);
 
     });
 
@@ -173,7 +135,7 @@ public class StarComponent extends Group {
     starGroup.getChildren().addAll(glowBox, border, star, starName, possessionCount);
     Effect glow = new Bloom();
     starGroup.setEffect(glow);
-    this.getChildren().addAll(path, starGroup);
+    this.getChildren().addAll(jumpCircle, starGroup);
 
   }
 
