@@ -29,9 +29,11 @@ import tech.subluminal.client.presentation.customElements.BackgroundComponent;
 import tech.subluminal.client.presentation.customElements.ChatComponent;
 import tech.subluminal.client.presentation.customElements.ControlButton;
 import tech.subluminal.client.presentation.customElements.DebugComponent;
+import tech.subluminal.client.presentation.customElements.FpsUpdater;
 import tech.subluminal.client.presentation.customElements.GameComponent;
 import tech.subluminal.client.presentation.customElements.LobbyComponent;
 import tech.subluminal.client.presentation.customElements.MenuComponent;
+import tech.subluminal.client.presentation.customElements.MonitorComponent;
 import tech.subluminal.client.presentation.customElements.NameChangeComponent;
 import tech.subluminal.client.presentation.customElements.SettingsComponent;
 import tech.subluminal.client.presentation.customElements.UserListComponent;
@@ -107,6 +109,7 @@ public class MainController implements Initializable {
   private ControlButton playerListButton;
   private ControlButton nameChangeButton;
   private DebugComponent debug;
+  private MonitorComponent monitor;
 
   public LobbyComponent getLobby() {
     return lobby;
@@ -158,21 +161,34 @@ public class MainController implements Initializable {
 
     menuDock.getChildren().add(menu);
 
-    debug = new DebugComponent();
+    FpsUpdater updater = new FpsUpdater();
+
+    debug = new DebugComponent(updater.averageFpsProperty());
+    monitor = new MonitorComponent(updater.averageFpsProperty());
+
+    VBox debugDock = new VBox();
+    window.getChildren().add(debugDock);
+
+
 
     window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
       if(keyEvent.getCode() == KeyCode.F4){
-        if(window.getChildren().contains(debug)){
-          window.getChildren().remove(debug);
+        if(debugDock.getChildren().contains(debug)){
+          debugDock.getChildren().remove(debug);
         }else{
-          window.getChildren().add(debug);
+          debugDock.getChildren().add(debug);
+        }
+      }else if(keyEvent.getCode() == KeyCode.F5){
+        if(debugDock.getChildren().contains(monitor)){
+          debugDock.getChildren().remove(monitor);
+        }else{
+          debugDock.getChildren().add(monitor);
         }
       }
     });
 
 
     Platform.runLater(() -> {
-
       chatWindow.translateXProperty().bind(Bindings
           .createDoubleBinding(() -> chatDock.getWidth(), chatWindow.widthProperty(),
               chatDock.widthProperty()));
