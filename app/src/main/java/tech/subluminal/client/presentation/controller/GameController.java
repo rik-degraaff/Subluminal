@@ -249,7 +249,6 @@ public class GameController implements Initializable, GamePresenter {
     }else{
       map.getChildren().add(new EndGameComponent(main));
     }
-    main.onMapCloseHandle();
   }
 
   public void setGameStore(GameStore gameStore) {
