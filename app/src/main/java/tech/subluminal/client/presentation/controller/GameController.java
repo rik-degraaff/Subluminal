@@ -214,6 +214,19 @@ public class GameController implements Initializable, GamePresenter {
     this.playerColors = playerColors;
   }
 
+  @Override
+  public void removeFleets(List<String> fleetIDs) {
+    fleetIDs.forEach(f -> {
+      FleetComponent remFleet = fleets.get(f);
+      if(remFleet != null){
+        fleets.remove(f);
+        Platform.runLater(() -> {
+          map.getChildren().remove(remFleet);
+        });
+      }
+    });
+  }
+
   public void setGameStore(GameStore gameStore) {
     this.gameStore = gameStore;
 
@@ -286,7 +299,7 @@ public class GameController implements Initializable, GamePresenter {
                 > 0.000001) {
               shipComponent.setY(pair.getValue().getCoordinates().getY());
             }
-            Logger.debug("Target ID's: " + pair.getValue().getTargetIDs());
+            //Logger.debug("Target ID's: " + pair.getValue().getTargetIDs());
             if (shipComponent.getTargetsWrapper().size() != pair.getValue().getTargetIDs().size()) {
               shipComponent.setTargetsWrapper(pair.getValue().getTargetIDs());
             }
@@ -330,7 +343,7 @@ public class GameController implements Initializable, GamePresenter {
               fleetComponent.setY(pair.getValue().getCoordinates().getY());
             }
             fleetComponent.setNumberOfShips(pair.getValue().getNumberOfShips());
-            Logger.debug("Fleet Target ID's: " + pair.getValue().getTargetIDs());
+            //Logger.debug("Fleet Target ID's: " + pair.getValue().getTargetIDs());
             if (fleetComponent.getTargetsWrapper().size() != pair.getValue().getTargetIDs()
                 .size()) {
               fleetComponent.setTargetsWrapper(pair.getValue().getTargetIDs());

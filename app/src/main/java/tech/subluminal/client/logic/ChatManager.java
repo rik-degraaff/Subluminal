@@ -1,6 +1,6 @@
 package tech.subluminal.client.logic;
 
-import static tech.subluminal.shared.util.function.FunctionalUtils.ifPresent;
+import static tech.subluminal.shared.util.function.IfPresent.ifPresent;
 
 import java.util.Optional;
 import tech.subluminal.client.presentation.ChatPresenter;
@@ -78,9 +78,9 @@ public class ChatManager implements ChatPresenter.Delegate {
         .use(us -> us.stream().map(syncUser -> syncUser.use(User::getID)))
         .findFirst();
 
-    ifPresent(optID,
-        id -> connection.sendMessage(new ChatMessageOut(message, id, false)),
-        () -> chatPresenter.displaySystemMessage(username + " does not exist or is not online."));
+    ifPresent(optID)
+        .then(id -> connection.sendMessage(new ChatMessageOut(message, id, false)))
+        .els(() -> chatPresenter.displaySystemMessage(username + " does not exist or is not online."));
   }
 
   public void requestHighScores() {

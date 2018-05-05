@@ -18,7 +18,7 @@ public class ChatComponent extends AnchorPane {
     try {
       fxmlLoader.load();
       controller = fxmlLoader.getController();
-      //controller.setMainController(mainController);
+      controller.setMainController(mainController);
     } catch (IOException exception) {
       throw new RuntimeException(exception);
     }

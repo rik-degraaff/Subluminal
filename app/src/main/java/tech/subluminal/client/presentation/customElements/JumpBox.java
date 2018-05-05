@@ -31,6 +31,10 @@ public class JumpBox extends Group {
     Label max = new Label();
 
     TextField actual = new TextField();
+    Platform.runLater(() -> {
+      actual.requestFocus();
+    });
+
 
     actual.addEventFilter(KeyEvent.KEY_TYPED, keyEvent -> {
       if (!"0123456789".contains(keyEvent.getCharacter()) && keyEvent.getCode() != KeyCode.ENTER) {
@@ -43,7 +47,8 @@ public class JumpBox extends Group {
     Button send = new Button("Send Ships");
     send.setAlignment(Pos.CENTER);
 
-    send.setOnMouseClicked(event -> {
+
+    send.setOnAction(event -> {
       int amount = Integer.parseInt(actual.getText());
       onSendFleet.accept(amount);
     });
@@ -51,8 +56,19 @@ public class JumpBox extends Group {
     Button sendMother = new Button("Send Mothership");
     sendMother.setAlignment(Pos.CENTER);
 
-    sendMother.setOnMouseClicked(event -> {
+    sendMother.setOnAction(event -> {
       onSendMotherShip.run();
+    });
+
+    actual.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
+      if(keyEvent.getCode() == KeyCode.ENTER){
+        keyEvent.consume();
+        if(!actual.getText().equals("")){
+          send.fire();
+        }else{
+          sendMother.fire();
+        }
+      }
     });
 
     box.getChildren().addAll(shipsAmount, send, sendMother);

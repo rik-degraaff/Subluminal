@@ -38,9 +38,14 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
   private ObservableList<Label> chatList = FXCollections.observableArrayList();
   private FilteredList<Label> filteredList = new FilteredList<>(chatList);
+  private MainController main;
 
   public ChatController getController() {
     return this;
+  }
+
+  public void setMainController(MainController main){
+    this.main = main;
   }
 
   public void setUserStore(UserStore store) {
@@ -119,11 +124,29 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     } else if (channel.equals("changename")) {
       handleNameChangeCmd(line, channel);
       clearInput();
-    } else if (channel.equals("changelobby")) {
-      //TODO: add functionality to change lobby
     } else if (channel.equals("scores")) {
       chatDelegate.requestHighScores();
+      clearInput();
     }
+  }
+
+  public void writeAt(String recipiant){
+    String temp = messageText.getText();
+    clearInput();
+    if(temp == null){
+      messageText.setText("@" + recipiant + " ");
+    }else if(temp.contains("@")){
+      String parts[] = temp.split(" ", 2);
+      if(parts.length >= 2){
+        messageText.setText("@" + recipiant + " " + parts[1]);
+      }else{
+        messageText.setText("@" + recipiant + " ");
+      }
+    }else{
+      messageText.setText("@" + recipiant + " " + temp);
+    }
+    messageText.requestFocus();
+    messageText.selectPositionCaret(messageText.getText().length());
   }
 
   private void handleNameChangeCmd(String line, String channel) {
@@ -136,6 +159,10 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
       username = "ThisisPatrick!";
     }
 
+    userDelegate.changeUsername(username);
+  }
+
+  public void changeName(String username){
     userDelegate.changeUsername(username);
   }
 
@@ -182,6 +209,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   @Override
   public void displaySystemMessage(String message) {
     addMessageChat(message, Channel.CRITICAL);
+
   }
 
   /**
@@ -204,6 +232,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   @Override
   public void whisperMessageReceived(String message, String username) {
     addMessageChat(message, username, Channel.WHISPER);
+    main.openChat();
   }
 
   /**
@@ -254,6 +283,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   @Override
   public void nameChangeSucceeded() {
     addMessageChat("Your username got changed to: " + getCurrentUsername(), Channel.INFO);
+    main.openChat();
   }
 
   @Override

@@ -58,7 +58,7 @@ public class GameStateDeltaTest {
   }
 
   @Test
-  public void einfachTest() {
+  public void easyTest() {
     System.out.println(
         new SlimLobby("gwewef", new LobbySettings("name", "adminID"), LobbyStatus.OPEN).asSON()
             .asString());

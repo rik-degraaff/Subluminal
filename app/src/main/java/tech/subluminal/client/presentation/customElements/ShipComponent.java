@@ -20,8 +20,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -85,12 +87,17 @@ public abstract class ShipComponent extends Group {
 
     setColor(Color.GRAY);
 
-
     Pane ship = new Pane();
     //group.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY,Insets.EMPTY)));
-    ImageView shipBody = new ImageView();
+
     ImageView shipDetails = new ImageView();
     Image shipImageBody = new Image("/tech/subluminal/resources/100w/shipBody.png");
+    ImageView shipBody = new ImageView(shipImageBody);
+
+    shipBody.setImage(shipImageBody);
+
+    setShipColor(shipBody);
+
     Image shipImageDetail = new Image("/tech/subluminal/resources/100w/shipDetails.png");
     shipBody.setFitWidth(40);
     shipBody.setFitHeight(40);
@@ -101,13 +108,12 @@ public abstract class ShipComponent extends Group {
     shipDetails.setImage(shipImageDetail);
     //shipDetails.setPreserveRatio(true);
 
-
     ship.getChildren().addAll(shipBody, shipDetails);
     ship.setRotate(-45);
 
     Platform.runLater(() -> {
-      group.setLayoutX(-shipBody.getFitWidth()/2);
-      group.setLayoutY(-shipBody.getFitHeight()/2);
+      group.setLayoutX(-shipBody.getFitWidth() / 2);
+      group.setLayoutY(-shipBody.getFitHeight() / 2);
     });
 
     group.getChildren().add(ship);
@@ -187,26 +193,28 @@ public abstract class ShipComponent extends Group {
 
     Pane ship = new Pane();
     //group.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY,Insets.EMPTY)));
-    ImageView shipBody = new ImageView();
-    ImageView shipDetails = new ImageView();
+
     Image shipImageBody = new Image("/tech/subluminal/resources/100w/fleetBody.png");
     Image shipImageDetail = new Image("/tech/subluminal/resources/100w/fleetDetails.png");
+    ImageView shipBody = new ImageView();
+    ImageView shipDetails = new ImageView();
     shipBody.setFitWidth(30);
     shipBody.setFitHeight(30);
-    shipBody.setImage(shipImageBody);
     shipBody.setPreserveRatio(true);
+    shipBody.setImage(shipImageBody);
     shipDetails.setFitWidth(30);
     shipDetails.setFitHeight(30);
     shipDetails.setImage(shipImageDetail);
     shipDetails.setPreserveRatio(true);
 
+    setShipColor(shipBody);
 
     ship.getChildren().addAll(shipBody, shipDetails);
     ship.setRotate(-45);
 
     Platform.runLater(() -> {
-      group.setLayoutX(-shipBody.getFitWidth()/2);
-      group.setLayoutY(-shipBody.getFitHeight()/2);
+      group.setLayoutX(-shipBody.getFitWidth() / 2);
+      group.setLayoutY(-shipBody.getFitHeight() / 2);
     });
 
     group.getChildren().add(ship);
@@ -251,7 +259,6 @@ public abstract class ShipComponent extends Group {
 
     this.getChildren().add(group);
 
-
     this.setNumberOfShips(numberOfShips);
 
     Logger.debug("CREATING SHIP LABEL");
@@ -262,6 +269,33 @@ public abstract class ShipComponent extends Group {
         this.numberOfShipsProperty().getValue().toString(), numberOfShipsProperty()));
     group.getChildren().add(amount);
 
+
+  }
+
+  private void setShipColor(ImageView shipBody) {
+
+    ColorAdjust monochrome = new ColorAdjust();
+
+    monochrome.hueProperty().bind(
+        Bindings.createDoubleBinding(() -> (
+                ((getColor().getHue()-Color.RED.getHue()) / 180) + 1) % 2 - 1,
+            colorProperty()));
+    //monochrome.setHue(1);
+
+
+    monochrome.saturationProperty().bind(
+        Bindings.createDoubleBinding(
+            () -> Color.RED.getSaturation() - getColor().getSaturation(),
+            colorProperty()));
+    monochrome.brightnessProperty().bind(
+        Bindings.createDoubleBinding(
+            () -> Color.RED.getBrightness() - getColor().getBrightness(),
+            colorProperty()));
+
+    shipBody.setEffect(monochrome);
+
+    shipBody.setCache(true);
+    shipBody.setCacheHint(CacheHint.SPEED);
 
 
   }

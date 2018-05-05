@@ -14,6 +14,8 @@ public interface GamePresenter {
 
   void setPlayerColors(Map<String, Color> playerColors);
 
+  void removeFleets(List<String> fleetIDs);
+
   interface Delegate {
 
     void sendShips(List<String> stars, int amount);

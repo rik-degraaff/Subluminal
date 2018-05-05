@@ -1,6 +1,6 @@
 package tech.subluminal.client.logic;
 
-import static tech.subluminal.shared.util.function.FunctionalUtils.ifPresent;
+import static tech.subluminal.shared.util.function.IfPresent.ifPresent;
 
 import java.io.IOException;
 import tech.subluminal.client.presentation.UserPresenter;
@@ -74,9 +74,9 @@ public class UserManager implements UserPresenter.Delegate {
     userStore.users().getByID(id)
         .ifPresent(syncUser -> syncUser.update(user -> new User(newUsername, id)));
 
-    ifPresent(userStore.users().getByID(id).map(syncUser -> syncUser.use(User::getUsername)),
-        System.out::println,
-        () -> System.out.println("User ain't here bro."));
+    ifPresent(userStore.users().getByID(id).map(syncUser -> syncUser.use(User::getUsername)))
+        .then(System.out::println)
+        .els(() -> System.out.println("User ain't here bro."));
 
     userPresenter.onPlayerUpdate(oldUsername, newUsername);
 
