@@ -100,10 +100,14 @@ public class GameController implements Initializable, GamePresenter {
   private void starClicked(StarComponent star, MouseEvent mouseEvent) {
     if (pressStore[1] == null) {
       if (pressStore[0] == null) {
+        removeJumpPath();
         pressStore[0] = star;
         pressStore[1] = null;
-      } else {
+      } else if(pressStore[0] == star){
+
+      }else{
         Logger.debug("creating JumpPath");
+        removeJumpPath();
         pressStore[1] = star;
         if (path != null) {
           path.clear();
@@ -124,6 +128,7 @@ public class GameController implements Initializable, GamePresenter {
 
       }
     } else {
+      removeJumpPath();
       pressStore[0] = star;
       pressStore[1] = null;
     }
@@ -150,6 +155,7 @@ public class GameController implements Initializable, GamePresenter {
     jump.stream().forEach(j -> {
       map.getChildren().remove(j);
     });
+    jump.clear();
 
     removeJumpBox();
   }
