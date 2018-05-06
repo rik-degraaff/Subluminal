@@ -201,11 +201,15 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     String username = newUsername.replaceAll(" ", "");
 
     if (username.equals("")) {
-      addMessageChat("You did not enter a new username, I got you covered, fam.", Channel.INFO);
+      printPatrick();
       username = "ThisisPatrick!";
     }
 
     userDelegate.changeUsername(username);
+  }
+
+  public void printPatrick() {
+    addMessageChat("You did not enter a new username, I got you covered, fam.", Channel.INFO);
   }
 
   public void changeName(String username) {
