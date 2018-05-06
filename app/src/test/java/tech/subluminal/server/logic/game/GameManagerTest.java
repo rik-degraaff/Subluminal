@@ -20,17 +20,23 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import org.junit.Before;
 import org.junit.Test;
 import tech.subluminal.server.logic.MessageDistributor;
 import tech.subluminal.server.stores.GameStore;
 import tech.subluminal.server.stores.InMemoryGameStore;
+import tech.subluminal.server.stores.InMemoryLobbyStore;
+import tech.subluminal.server.stores.LobbyStore;
 import tech.subluminal.server.stores.records.GameState;
 import tech.subluminal.server.stores.records.Player;
 import tech.subluminal.server.stores.records.Star;
 import tech.subluminal.shared.logic.game.GameLoop.Delegate;
 import tech.subluminal.shared.messages.YouLose;
+import tech.subluminal.shared.records.LobbyStatus;
+import tech.subluminal.shared.stores.records.Lobby;
+import tech.subluminal.shared.stores.records.LobbySettings;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.Ship;
@@ -43,11 +49,13 @@ public class GameManagerTest {
   private static final double JUMP = 0.2;
 
   private GameStore gameStore;
+  private LobbyStore lobbyStore;
   private MessageDistributor distributor;
 
   @Before
   public void setup() {
     gameStore = new InMemoryGameStore();
+    lobbyStore = new InMemoryLobbyStore();
     distributor = mock(MessageDistributor.class);
   }
 
@@ -59,14 +67,14 @@ public class GameManagerTest {
         "0",
         new Player("0", Collections.singleton("1"),
             new Ship(new Coordinates(0, 0), "0", Collections.emptyList(), "0", SHIP_SPEED),
-            LIGHT_SPEED)
+            LIGHT_SPEED, true)
     );
 
     players.put(
         "1",
         new Player("1", Collections.singleton("0"),
             new Ship(new Coordinates(0, 0), "1", Collections.emptyList(), "0", SHIP_SPEED),
-            LIGHT_SPEED)
+            LIGHT_SPEED, true)
     );
 
     players.get("0").getFleets().put(
@@ -106,14 +114,14 @@ public class GameManagerTest {
         "0",
         new Player("0", Collections.singleton("1"),
             new Ship(shipCoordinates, "0", Collections.singletonList("0"), "0", SHIP_SPEED),
-            LIGHT_SPEED)
+            LIGHT_SPEED, true)
     );
 
     players.put(
         "1",
         new Player("1", Collections.singleton("0"),
             new Ship(shipCoordinates, "1", Collections.singletonList("0"), "0", SHIP_SPEED),
-            LIGHT_SPEED)
+            LIGHT_SPEED, true)
     );
 
     players.get("0").updateFleet(
@@ -159,22 +167,30 @@ public class GameManagerTest {
       MessageDistributor distributor, Map<String, Player> players,
       Set<Star> stars, GameStore gameStore, Consumer<Delegate> gameLoop
   ) {
-    BlockingQueue<Object> queue = new LinkedBlockingDeque<>();
+    BlockingQueue<Boolean> queue = new LinkedBlockingDeque<>();
+    lobbyStore.lobbies().add(new Lobby("game", null, LobbyStatus.FULL));
 
     final GameManager gameManager = new GameManager(
-        gameStore, null, distributor, null,
+        gameStore, lobbyStore, distributor, null,
         (ps, id) -> new GameState(id, stars, new HashSet<>(players.values()), 0.05, JUMP,
             SHIP_SPEED),
         (tps, delegate) -> () -> {
-          gameLoop.accept(delegate);
-          queue.add(new Object());
+          try {
+            gameLoop.accept(delegate);
+            queue.add(false);
+          } catch (Exception e) {
+            e.printStackTrace();
+            queue.add(true);
+          }
         }
     );
 
     gameManager.startGame("game", players.keySet());
 
     try {
-      queue.take();
+      if (queue.take()) {
+        fail("The game loop threw an exception.");
+      }
     } catch (InterruptedException e) {
       fail("The game loop didn't finish running.");
     }
