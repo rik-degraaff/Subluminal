@@ -455,13 +455,13 @@ public class GameController implements Initializable, GamePresenter {
     this.userStore = userStore;
   }
 
-  @Override
   public void clearMap() {
     map.getChildren().clear();
   }
 
-  public void leaveGame() {
-    gameDelegate.leaveGame();
+  @Override
+  public void clearGame() {
+    System.out.println("clearing game");
     dummyFleetList = new ListView<>();
     dummyShipList = new ListView<>();
     dummyShipList = new ListView<>();
@@ -472,6 +472,11 @@ public class GameController implements Initializable, GamePresenter {
     stars.clear();
     graph = null;
     gameID = null;
+  }
+
+  public void leaveGame() {
+    gameDelegate.leaveGame();
+    clearGame();
     Logger.debug("END GAME GOT CALLED!!");
     main.onMapCloseHandle();
   }

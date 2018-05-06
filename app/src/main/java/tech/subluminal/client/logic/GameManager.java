@@ -2,8 +2,6 @@ package tech.subluminal.client.logic;
 
 import static tech.subluminal.shared.util.function.IfPresent.ifPresent;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -20,7 +18,6 @@ import tech.subluminal.shared.messages.GameStateDelta;
 import tech.subluminal.shared.messages.LoginRes;
 import tech.subluminal.shared.messages.MotherShipMoveReq;
 import tech.subluminal.shared.net.Connection;
-import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.game.Star;
 import tech.subluminal.shared.util.Synchronized;
 
@@ -64,7 +61,7 @@ public class GameManager implements GamePresenter.Delegate {
   }
 
   private void onGameStart(GameStartRes res) {
-    gamePresenter.clearMap();
+    gamePresenter.clearGame();
     gameStore.inGame().set(true);
     gamePresenter.setPlayerColors(res.getPlayerColor());
     gamePresenter.setGameID(res.getGameID());
@@ -76,6 +73,7 @@ public class GameManager implements GamePresenter.Delegate {
   }
 
   private void onGameStateDeltaReceived(GameStateDelta delta) {
+    System.out.println("delta!!!");
     delta.getRemovedMotherShips().forEach(gameStore.motherShips()::removeByID);
     delta.getPlayers().forEach(player -> {
       ifPresent(player.getMotherShip())
@@ -107,6 +105,8 @@ public class GameManager implements GamePresenter.Delegate {
       gamePresenter.removeFleets(delta.getRemovedFleets().values().stream().flatMap(List::stream)
           .collect(Collectors.toList()));
       gamePresenter.update();
+    } else {
+      System.out.println("delta but no game");
     }
   }
 
@@ -126,9 +126,11 @@ public class GameManager implements GamePresenter.Delegate {
   }
 
   private void onGameLeave() {
+    System.out.println("gameleave!!!");
     gameStore.inGame().set(false);
     gameStore.motherShips().clear();
     gameStore.stars().clear();
     gameStore.fleets().clear();
+    gamePresenter.clearGame();
   }
 }

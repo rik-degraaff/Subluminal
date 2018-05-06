@@ -25,7 +25,7 @@ public interface GamePresenter {
 
   void setGameStore(GameStore gameStore);
 
-  void clearMap();
+  void clearGame();
 
   interface Delegate {
 
