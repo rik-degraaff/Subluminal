@@ -280,7 +280,7 @@ public class IntermediateGameState {
           fleets.put(player, Optional.empty());
         });
       } else {
-        fleets.get(player).map(fleet -> fleet.expanded(shipsLeft - fleet.getNumberOfShips()));
+        fleets.put(player, fleets.get(player).map(fleet -> fleet.expanded(shipsLeft - fleet.getNumberOfShips())));
       }
     });
   }
