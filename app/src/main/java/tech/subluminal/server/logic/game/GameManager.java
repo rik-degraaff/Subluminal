@@ -107,6 +107,7 @@ public class GameManager implements GameStarter {
           });
         });
     distributor.sendMessage(new GameLeaveRes(), id);
+    System.out.println("Distributed " + id);
   }
 
   private void onHighScoreReq(String id) {
