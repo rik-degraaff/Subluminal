@@ -31,6 +31,7 @@ import tech.subluminal.client.presentation.customElements.StarComponent;
 import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.client.stores.records.game.OwnerPair;
+import tech.subluminal.shared.records.Channel;
 import tech.subluminal.shared.stores.records.User;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Fleet;
@@ -74,6 +75,7 @@ public class GameController implements Initializable, GamePresenter {
   private List<String> path;
   private UserStore userStore;
   private Map<String, Color> playerColors;
+  private String gameID;
 
 
   @Override
@@ -240,13 +242,25 @@ public class GameController implements Initializable, GamePresenter {
   }
 
   @Override
-  public void onEndGame(String winnerID) {
-    if (winnerID != null) {
-      String winnerName = userStore.users().getByID(winnerID).get().use(User::getUsername);
-      map.getChildren().add(new EndGameComponent(main, winnerName));
+  public void onEndGame(String gameID, String winnerID) {
+    if (gameID.equals(this.gameID)) {
+      if (winnerID != null) {
+        String winnerName = userStore.users().getByID(winnerID).get().use(User::getUsername);
+        map.getChildren().add(new EndGameComponent(main, winnerName));
+      } else {
+        map.getChildren().add(new EndGameComponent(main));
+      }
     } else {
-      map.getChildren().add(new EndGameComponent(main));
+      if (winnerID != null) {
+        String winnerName = userStore.users().getByID(winnerID).get().use(User::getUsername);
+        main.getChatController()
+            .addMessageChat(winnerName + " won one of the last games you where in.", Channel.INFO);
+      } else {
+        main.getChatController()
+            .addMessageChat("You all failed Bob...", Channel.INFO);
+      }
     }
+
   }
 
   @Override
@@ -260,6 +274,11 @@ public class GameController implements Initializable, GamePresenter {
         });
       }
     });
+  }
+
+  @Override
+  public void setGameID(String gameID) {
+    this.gameID = gameID;
   }
 
   public void setGameStore(GameStore gameStore) {
@@ -423,5 +442,6 @@ public class GameController implements Initializable, GamePresenter {
   public void leaveGame() {
     gameDelegate.leaveGame();
     main.onMapCloseHandle();
+    gameID = null;
   }
 }

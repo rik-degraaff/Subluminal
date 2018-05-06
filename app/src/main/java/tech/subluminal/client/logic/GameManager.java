@@ -52,11 +52,12 @@ public class GameManager implements GamePresenter.Delegate {
   }
 
   private void onEndGameRes(EndGameRes res) {
-    gamePresenter.onEndGame(res.getWinnerID());
+    gamePresenter.onEndGame(res.getGameID(), res.getWinnerID());
   }
 
   private void onGameStart(GameStartRes res) {
     gamePresenter.setPlayerColors(res.getPlayerColor());
+    gamePresenter.setGameID(res.getGameID());
 
   }
 

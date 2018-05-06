@@ -90,11 +90,12 @@ public class LobbyManager {
                   List<Color> colors = getNiceColors(lobby.getPlayerCount());
                   int i = 0;
                   Map<String, Color> playerColors = new HashMap<>();
-                  for(String player : lobby.getPlayers()){
+                  for (String player : lobby.getPlayers()) {
                     playerColors.put(player, colors.get(i));
                     i++;
                   }
-                  distributor.sendMessage(new GameStartRes(playerColors), lobby.getPlayers());
+                  distributor.sendMessage(new GameStartRes(lobby.getID(), playerColors),
+                      lobby.getPlayers());
                   gameStarter.startGame(lobby.getID(), new HashSet<>(lobby.getPlayers()));
                 })));
   }
