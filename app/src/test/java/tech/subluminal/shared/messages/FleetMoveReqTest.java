@@ -26,19 +26,17 @@ public class FleetMoveReqTest {
   }
 
   @Test
-  public void testParsing() {
+  public void testParsing() throws SONParsingError, SONConversionError {
     String fMoveReqMsg = this.fMoveReq.asSON().asString();
     String parsedOriginID = "";
     int parsedAmount = 0;
     List<String> parsedStars = null;
-    try {
-      FleetMoveReq parsedfMoveReq = FleetMoveReq.fromSON(SON.parse(fMoveReqMsg));
-      parsedOriginID = parsedfMoveReq.getOriginID();
-      parsedAmount = parsedfMoveReq.getAmount();
-      parsedStars = parsedfMoveReq.getTargets();
-    } catch (SONParsingError | SONConversionError e) {
-      e.printStackTrace();
-    }
+
+    FleetMoveReq parsedfMoveReq = FleetMoveReq.fromSON(SON.parse(fMoveReqMsg));
+    parsedOriginID = parsedfMoveReq.getOriginID();
+    parsedAmount = parsedfMoveReq.getAmount();
+    parsedStars = parsedfMoveReq.getTargets();
+
     Assert.assertEquals(this.amount, parsedAmount);
     Assert.assertEquals(this.originID, parsedOriginID);
     Assert.assertTrue(this.stars.containsAll(parsedStars));
@@ -62,19 +60,16 @@ public class FleetMoveReqTest {
     try {
       FleetMoveReq faultyAmountFMoveReq = FleetMoveReq.fromSON(SON.parse(faultyAmountKey));
     } catch (SONParsingError | SONConversionError e) {
-      e.printStackTrace();
       amountSuccessfullyParsed = false;
     }
     try {
       FleetMoveReq faultyOriginIDFMoveReq = FleetMoveReq.fromSON(SON.parse(faultyOriginIDKey));
     } catch (SONParsingError | SONConversionError e) {
-      e.printStackTrace();
       originIDSuccessfullyParsed = false;
     }
     try {
       FleetMoveReq faultyStarListFMoveReq = FleetMoveReq.fromSON(SON.parse(faultyStarListKey));
     } catch (SONParsingError | SONConversionError e) {
-      e.printStackTrace();
       starListSuccessfullyParsed = false;
     }
 
