@@ -90,11 +90,12 @@ public class LobbyManager {
                   List<Color> colors = getNiceColors(lobby.getPlayerCount());
                   int i = 0;
                   Map<String, Color> playerColors = new HashMap<>();
-                  for(String player : lobby.getPlayers()){
+                  for (String player : lobby.getPlayers()) {
                     playerColors.put(player, colors.get(i));
                     i++;
                   }
-                  distributor.sendMessage(new GameStartRes(playerColors), lobby.getPlayers());
+                  distributor.sendMessage(new GameStartRes(lobby.getID(), playerColors),
+                      lobby.getPlayers());
                   gameStarter.startGame(lobby.getID(), new HashSet<>(lobby.getPlayers()));
                 })));
   }
@@ -147,7 +148,7 @@ public class LobbyManager {
         .getLobbiesWithUser(userID)
         .consume(lobbies ->
             lobbies.forEach(syncLobby -> syncLobby.consume(lobby -> {
-              if (lobby.getPlayers().size() == 1) {
+              if (lobby.getPlayers().size() == 1 && lobby.getStatus() == LobbyStatus.OPEN) {
                 lobbyStore.lobbies().removeByID(lobby.getID());
                 Logger.trace("Deleting lobby");
               } else {
