@@ -2,6 +2,7 @@ package tech.subluminal.client.presentation.customElements;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -28,8 +29,11 @@ public class EndGameComponent extends HBox {
 
     this.getChildren().add(box);
 
-    this.prefWidthProperty().bind(getScene().widthProperty());
-    this.prefHeightProperty().bind(getScene().heightProperty());
+    Platform.runLater(() -> {
+      this.prefWidthProperty().bind(getScene().widthProperty());
+      this.prefHeightProperty().bind(getScene().heightProperty());
+    });
+
 
     addButtons();
   }
