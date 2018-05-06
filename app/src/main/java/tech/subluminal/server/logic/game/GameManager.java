@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -23,6 +24,7 @@ import tech.subluminal.server.stores.records.Signal;
 import tech.subluminal.server.stores.records.Star;
 import tech.subluminal.shared.logic.game.GameLoop;
 import tech.subluminal.shared.logic.game.SleepGameLoop;
+import tech.subluminal.shared.messages.EndGameRes;
 import tech.subluminal.shared.messages.FleetMoveReq;
 import tech.subluminal.shared.messages.GameStateDelta;
 import tech.subluminal.shared.messages.HighScoreReq;
@@ -31,6 +33,7 @@ import tech.subluminal.shared.messages.MotherShipMoveReq;
 import tech.subluminal.shared.messages.MoveReq;
 import tech.subluminal.shared.messages.YouLose;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.records.LobbyStatus;
 import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Fleet;
@@ -115,10 +118,23 @@ public class GameManager implements GameStarter {
       }
 
       @Override
-      public void afterTick() {
+      public boolean afterTick() {
+        AtomicBoolean stop = new AtomicBoolean(false);
+
         gameStore.games()
             .getByID(lobbyID)
-            .ifPresent(sync -> sync.consume(gameState -> sendUpdatesToPlayers(gameState)));
+            .ifPresent(sync -> sync.consume(gameState -> {
+              if (sendUpdatesToPlayers(gameState)) {
+                stop.set(true);
+                gameThreads.remove(lobbyID);
+                lobbyStore.lobbies()
+                    .getByID(lobbyID)
+                    .ifPresent(syncLobby -> {
+                      syncLobby.consume(lobby -> lobby.setStatus(LobbyStatus.LOCKED));
+                    });
+              }
+            }));
+        return stop.get();
       }
     });
     Thread gameThread = new Thread(gameLoop::start);
@@ -126,17 +142,23 @@ public class GameManager implements GameStarter {
     gameThreads.put(lobbyID, gameThread);
   }
 
-  private void sendUpdatesToPlayers(GameState gameState) {
+  private boolean sendUpdatesToPlayers(GameState gameState) {
+    AtomicBoolean playersDestroyed = new AtomicBoolean(false);
     gameState.getPlayers().keySet().forEach(playerID -> {
       final GameStateDelta delta = new GameStateDelta();
 
-      final GameHistoryEntry<Ship> motherShipEntry = gameState.getPlayers()
-          .get(playerID)
-          .getMotherShip()
-          .getCurrent();
+      final Player currentPlayer = gameState.getPlayers()
+          .get(playerID);
+
+      final GameHistoryEntry<Ship> motherShipEntry = currentPlayer.getMotherShip().getCurrent();
+
       if (motherShipEntry.isDestroyed()) {
-        delta.addRemovedMotherShip(motherShipEntry.getState().getID());
-        distributor.sendMessage(new YouLose(), playerID);
+        if (currentPlayer.isAlive()) {
+          delta.addRemovedMotherShip(motherShipEntry.getState().getID());
+          distributor.sendMessage(new YouLose(), playerID);
+          currentPlayer.kill();
+          playersDestroyed.set(true);
+        }
       } else {
         final Optional<Ship> ship = motherShipEntry.isDestroyed()
             ? Optional.empty()
@@ -167,6 +189,20 @@ public class GameManager implements GameStarter {
 
       distributor.sendMessage(delta, playerID);
     });
+
+    if (playersDestroyed.get()) {
+      final List<Player> livingPlayers = gameState.getPlayers().values().stream()
+          .filter(Player::isAlive)
+          .collect(Collectors.toList());
+
+      if (livingPlayers.size() <= 1) {
+        String winner = livingPlayers.size() == 1 ? livingPlayers.get(0).getID() : null;
+        distributor.sendMessage(new EndGameRes(gameState.getID(), winner), gameState.getPlayers().keySet());
+        gameThreads.remove(gameState.getID());
+        return true;
+      }
+    }
+    return false;
   }
 
   private tech.subluminal.client.stores.records.game.Player createPlayerDelta(

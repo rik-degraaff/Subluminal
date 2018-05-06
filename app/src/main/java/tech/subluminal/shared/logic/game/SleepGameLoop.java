@@ -23,7 +23,9 @@ public class SleepGameLoop implements GameLoop {
       long elapsedTime = currentTime - lastTime;
       lastTime = currentTime;
       delegate.tick(elapsedTime / 1000.0);
-      delegate.afterTick();
+      if (delegate.afterTick()) {
+        break;
+      }
       try {
         Thread.sleep(
             Math.max(0, msPerIteration - (System.currentTimeMillis() - timeBeforeBeforeTick)));

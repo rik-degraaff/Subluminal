@@ -7,7 +7,7 @@ public interface GameLoop {
   /**
    * Defines the tasks that have to be done in each game loop.
    */
-  public static interface Delegate {
+  interface Delegate {
 
     /**
      * Is used for the game-updating tasks that are not time-dependant and need to be done before
@@ -25,7 +25,9 @@ public interface GameLoop {
     /**
      * Is used for the game-updating tasks that are not time-dependant and need to be done after the
      * time-critical game-updating tasks.
+     *
+     * @return true is the loop should be stopped.
      */
-    void afterTick();
+    boolean afterTick();
   }
 }
