@@ -8,6 +8,7 @@ import tech.subluminal.server.logic.MessageDistributor;
 import tech.subluminal.server.logic.PingManager;
 import tech.subluminal.server.logic.UserManager;
 import tech.subluminal.server.logic.game.GameManager;
+import tech.subluminal.server.logic.game.MapGeneration;
 import tech.subluminal.server.net.SocketConnectionManager;
 import tech.subluminal.server.stores.GameStore;
 import tech.subluminal.server.stores.HighScoreStore;
@@ -18,6 +19,7 @@ import tech.subluminal.server.stores.InMemoryUserStore;
 import tech.subluminal.server.stores.LobbyStore;
 import tech.subluminal.server.stores.PingStore;
 import tech.subluminal.server.stores.UserStore;
+import tech.subluminal.shared.logic.game.SleepGameLoop;
 import tech.subluminal.shared.net.ConnectionManager;
 
 /**
@@ -47,7 +49,7 @@ public class ServerInitializer {
     new PingManager(pingStore, userStore, messageDistributor);
     new ChatManager(messageDistributor, userStore, lobbyStore);
     GameManager gameManager = new GameManager(gameStore, lobbyStore, messageDistributor,
-        highScoreStore);
+        highScoreStore, MapGeneration::getNewGameStateForPlayers, SleepGameLoop::new);
     new LobbyManager(lobbyStore, userStore, messageDistributor, gameManager);
   }
 }

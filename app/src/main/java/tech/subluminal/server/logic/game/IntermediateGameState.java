@@ -140,7 +140,7 @@ public class IntermediateGameState {
           addFleetToStar(fleet, playerID, star.getID());
         }));
       } else {
-        fleet.getTargetIDs().remove(0);
+        fleet.setTargetIDs(fleet.getTargetIDs().subList(1, fleet.getTargetIDs().size()));
         tasks.add(new PriorityRunnable(newStart,
             () -> {
               passFleetByStar(playerID, fleetID, star.getID());
@@ -178,7 +178,7 @@ public class IntermediateGameState {
           addMotherShipToStar(ship, playerID, star.getID());
         }));
       } else {
-        ship.getTargetIDs().remove(0);
+        ship.setTargetIDs(ship.getTargetIDs().subList(1, ship.getTargetIDs().size()));
         tasks.add(new PriorityRunnable(newStart,
             () -> {
               passMotherShipByStar(playerID, shipID, star.getID());
@@ -260,7 +260,7 @@ public class IntermediateGameState {
           .filter(p -> !p.equals(playerID))
           .forEach(opponent -> {
             newPlayerStrengths.compute(opponent,
-                (o, str) -> str - (int) (playerStrengths.get(opponent)/dematPercentage));
+                (o, str) -> str - (int) (playerStrengths.get(opponent)*dematPercentage));
           });
     });
 
@@ -286,7 +286,7 @@ public class IntermediateGameState {
   }
 
   private double getDematStrength(int strength) {
-    return 1 + Math.sqrt(strength - 1);
+    return 5 + Math.sqrt(Math.max(strength - 5, 0));
   }
 
   private int getPlayerStrength(int ships, boolean motherShip) {

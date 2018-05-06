@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.pmw.tinylog.Logger;
@@ -21,6 +22,7 @@ import tech.subluminal.server.stores.records.Player;
 import tech.subluminal.server.stores.records.Signal;
 import tech.subluminal.server.stores.records.Star;
 import tech.subluminal.shared.logic.game.GameLoop;
+import tech.subluminal.shared.logic.game.SleepGameLoop;
 import tech.subluminal.shared.messages.FleetMoveReq;
 import tech.subluminal.shared.messages.GameStateDelta;
 import tech.subluminal.shared.messages.HighScoreReq;
@@ -45,13 +47,22 @@ public class GameManager implements GameStarter {
   private final MessageDistributor distributor;
   private final Map<String, Thread> gameThreads = new HashMap<>();
   private final HighScoreStore highScoreStore;
+  private final BiFunction<Set<String>, String, GameState> mapGenerator;
+  private final BiFunction<Integer, SleepGameLoop.Delegate, GameLoop> gameLoopProvider;
 
-  public GameManager(GameStore gameStore, LobbyStore lobbyStore, MessageDistributor distributor,
-      HighScoreStore highScoreStore) {
+  public GameManager(
+      GameStore gameStore, LobbyStore lobbyStore, MessageDistributor distributor,
+      HighScoreStore highScoreStore,
+      BiFunction<Set<String>, String, GameState> mapGenerator,
+      BiFunction<Integer, SleepGameLoop.Delegate, GameLoop> gameLoopProvider
+  ) {
     this.gameStore = gameStore;
     this.lobbyStore = lobbyStore;
     this.highScoreStore = highScoreStore;
     this.distributor = distributor;
+
+    this.mapGenerator = mapGenerator;
+    this.gameLoopProvider = gameLoopProvider;
 
     distributor.addConnectionOpenedListener(this::attachHandlers);
   }
@@ -84,10 +95,10 @@ public class GameManager implements GameStarter {
 
   @Override
   public void startGame(String lobbyID, Set<String> playerIDs) {
-    gameStore.games().add(MapGeneration.getNewGameStateForPlayers(playerIDs, lobbyID));
+    gameStore.games().add(mapGenerator.apply(playerIDs, lobbyID));
     gameStore.moveRequests().add(new MoveRequests(lobbyID));
 
-    GameLoop gameLoop = new GameLoop(TPS, new GameLoop.Delegate() {
+    GameLoop gameLoop = gameLoopProvider.apply(TPS, new SleepGameLoop.Delegate() {
 
       @Override
       public void beforeTick() {
@@ -255,6 +266,11 @@ public class GameManager implements GameStarter {
       final Map<String, GameHistory<Fleet>> fleetHistories = gameState.getPlayers().get(playerID)
           .getFleets();
       fleets.forEach(f -> fleetHistories.get(f.getID()).add(GameHistoryEntry.destroyed(f)));
+    });
+
+    intermediateGameState.getDestroyedPlayers().forEach(player -> {
+      final GameHistory<Ship> history = gameState.getPlayers().get(player).getMotherShip();
+      history.add(GameHistoryEntry.destroyed(history.getCurrent().getState()));
     });
 
     gameState.setSignals(intermediateGameState.getSignals());
