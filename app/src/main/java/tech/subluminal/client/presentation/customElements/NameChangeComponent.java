@@ -17,7 +17,13 @@ public class NameChangeComponent extends HBox {
 
     change = new Button("Change Name");
     change.setOnAction(e -> {
-      main.getChatController().changeName(field.getText());
+      if(!field.getText().equals("")){
+        main.getChatController().changeName(field.getText());
+      }else{
+        main.getChatController().printPatrick();
+        main.getChatController().changeName("ThisIsPatrick!");
+      }
+
       field.setText("");
     });
 

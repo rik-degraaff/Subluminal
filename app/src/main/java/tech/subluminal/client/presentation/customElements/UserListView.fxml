@@ -12,7 +12,7 @@
   <children>
     <HBox>
       <children>
-        <ListView fx:id="playerBoard" style="-fx-background-color: black;" />
+        <ListView fx:id="playerBoard" prefHeight="200.0" style="-fx-background-color: black;" />
       </children>
     </HBox>
   </children>

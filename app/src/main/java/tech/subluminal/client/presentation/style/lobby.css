@@ -125,3 +125,8 @@
   -fx-background-color: black;
   -fx-text-fill: red;
 }
+
+.console{
+  -fx-background-color: black;
+  -fx-padding: 10px;
+}

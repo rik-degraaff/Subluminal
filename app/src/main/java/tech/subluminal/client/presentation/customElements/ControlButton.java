@@ -24,7 +24,6 @@ public class ControlButton extends Button {
 
         if (!isOpen) {
           ((VBox)parent).getChildren().add(node);
-          node.requestFocus();
           this.setText("X");
           isOpen = true;
         } else {
