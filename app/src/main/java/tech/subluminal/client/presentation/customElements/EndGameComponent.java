@@ -26,6 +26,7 @@ public class EndGameComponent extends HBox {
     Label endText = new Label("End of Game" + "\n" + "Winner is: " + winnerName);
     box.getChildren().add(endText);
     box.getStyleClass().add("console");
+    box.setPrefHeight(300);
 
     this.getChildren().add(box);
 
