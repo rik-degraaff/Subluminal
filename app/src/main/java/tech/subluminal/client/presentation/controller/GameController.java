@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,9 +17,11 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.logic.Graph;
 import tech.subluminal.client.presentation.GamePresenter;
+import tech.subluminal.client.presentation.customElements.ArrowComponent;
 import tech.subluminal.client.presentation.customElements.FleetComponent;
 import tech.subluminal.client.presentation.customElements.Jump;
 import tech.subluminal.client.presentation.customElements.JumpBox;
@@ -26,6 +30,7 @@ import tech.subluminal.client.presentation.customElements.StarComponent;
 import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.client.stores.records.game.OwnerPair;
+import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.stores.records.game.Star;
@@ -191,6 +196,13 @@ public class GameController implements Initializable, GamePresenter {
   }
 
   @Override
+  public void setUserID() {
+    Platform.runLater(() -> {
+      playerID = userStore.currentUser().get().use(opt -> opt.get().getID());
+    });
+  }
+
+  @Override
   public void update() {
     Platform.runLater(() -> {
       dummyStarList.refresh();
@@ -218,7 +230,7 @@ public class GameController implements Initializable, GamePresenter {
   public void removeFleets(List<String> fleetIDs) {
     fleetIDs.forEach(f -> {
       FleetComponent remFleet = fleets.get(f);
-      if(remFleet != null){
+      if (remFleet != null) {
         fleets.remove(f);
         Platform.runLater(() -> {
           map.getChildren().remove(remFleet);
@@ -286,6 +298,24 @@ public class GameController implements Initializable, GamePresenter {
               }
 
               map.getChildren().add(shipComponent);
+
+              if (pair.getKey().equals(playerID)) {
+                Coordinates coordinates = pair.getValue().getCoordinates();
+                ArrowComponent arrow = new ArrowComponent(shipComponent.layoutYProperty());
+                arrow.layoutXProperty().bind(shipComponent.layoutXProperty());
+                arrow.layoutYProperty().bind(shipComponent.layoutYProperty());
+                arrow.setFill(playerColors.get(pair.getKey()));
+
+                Platform.runLater(() -> {
+                  Timeline timeTl = new Timeline();
+                  timeTl.getKeyFrames()
+                      .add(new KeyFrame(Duration.seconds(0), event -> map.getChildren().add(arrow)));
+                  timeTl.getKeyFrames().add(
+                      new KeyFrame(Duration.seconds(03), event -> map.getChildren().remove(arrow)));
+                  timeTl.play();
+                });
+
+              }
               return shipComponent;
 
             }
@@ -360,12 +390,5 @@ public class GameController implements Initializable, GamePresenter {
 
   public void setUserStore(UserStore userStore) {
     this.userStore = userStore;
-  }
-
-  @Override
-  public void setUserID() {
-    Platform.runLater(() -> {
-      playerID = userStore.currentUser().get().use(opt -> opt.get().getID());
-    });
   }
 }
