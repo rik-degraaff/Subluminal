@@ -15,6 +15,7 @@ import tech.subluminal.shared.messages.GameLeaveReq;
 import tech.subluminal.shared.messages.GameLeaveRes;
 import tech.subluminal.shared.messages.GameStartRes;
 import tech.subluminal.shared.messages.GameStateDelta;
+import tech.subluminal.shared.messages.LobbyLeaveReq;
 import tech.subluminal.shared.messages.LoginRes;
 import tech.subluminal.shared.messages.MotherShipMoveReq;
 import tech.subluminal.shared.net.Connection;
@@ -126,6 +127,7 @@ public class GameManager implements GamePresenter.Delegate {
   }
 
   private void onGameLeave() {
+    connection.sendMessage(new LobbyLeaveReq());
     new Thread(() -> {
       try {
         Thread.sleep(1000);
