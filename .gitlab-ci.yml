@@ -1,50 +1,173 @@
-image: gradle:4.6.0-jdk8-alpine
+image: subluminalthegame/gradle:4.6.0-jdk8-openjfx-alpine
 
 before_script:
-  - echo "----- Start CI -----"
-  - pwd
   - export GRADLE_USER_HOME=`pwd`/.gradle
+  - export GRADLE_OPTS="-Dfile.encoding=utf-8"
 
 cache:
   paths:
-    - .gradle/wrapper
-    - .gradle/caches
+    - .gradle/
 
 stages:
-  - checkstyle
+  - check
   - build
   - test
+  - coverage
   - javadoc
+  - deploy
 
 checkstyle:
-  stage: checkstyle
+  stage: check
   script:
-    - gradle check
+    - gradle check -x test
   tags:
-    - cs108
+    - cs108-dind
   allow_failure: true
+  artifacts:
+    name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
+    expire_in: 2 hours
+    paths:
+     - app/build/reports/checkstyle/
+
+  only:
+    - /^rl-.*$/
+
+build:
+  stage: build
+  script:
+    - gradle clean
+    - gradle build -x check -x test -x javadoc -x sourcesjar -x javadocjar -x distZip -x distTar
+  tags:
+    - cs108-dind
+  artifacts:
+    name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
+    expire_in: 2 hours
+    paths:
+      - app/out/**/*.class
 
 test:
   stage: test
   script:
     - gradle test
   tags:
-  - cs108
+    - cs108-dind
+  artifacts:
+    name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
+    expire_in: 2 hours
+    paths:
+      - app/build/reports/test/
+      - app/build/test-results/
+      - app/build/jacoco/
 
-build:
-  stage: build
+coverage:
+  stage: coverage
   script:
-  - gradle build
+    - gradle jacocoTestReport
+    - cat app/build/reports/coverage/index.html
   tags:
-  - cs108
+    - cs108-dind
+  coverage: '/Total.*?([0-9]{1,3}) %/'
+  artifacts:
+    name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
+    expire_in: 2 hours
+    paths:
+      - app/build/reports/coverage/
 
 javadoc:
   stage: javadoc
   script:
     - gradle javadoc
+    - gradle javadoccoverage
+  tags:
+    - cs108-dind
+  artifacts:
+    name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
+    expire_in: 2 hours
+    paths:
+      - docs/javadoc/
+  only:
+    - /^rl-.*$/
+
+testing:
+  stage: deploy
+  image: docker:latest
+  variables:
+    DOCKER_DRIVER: 'overlay2'
+    VERSION: 'null'
+  services:
+  - docker:dind
+  script:
+  - VERSION=$(cat VERSION)
+  - DEPLOYHOST=164.132.199.58
+  - echo Building and deploying server verison $VERSION to $CI_JOB_NAME
+  - docker build -t subluminalthegame/subluminal:latest -t subluminalthegame/subluminal:$(echo $VERSION) --file ./docker/dockerfile-subluminal.yml --build-arg VERSION=$(echo $VERSION) --build-arg PORT=1729 .
+  - docker login -u subluminalthegame -p $DOCKERHUB_PASSWORD
+  - docker push subluminalthegame/subluminal
+  - apk update
+  - apk add --no-cache openssh-client sshpass
+  - ssh gitlab@164.132.199.58 exit
+  - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no gitlab@$DEPLOYHOST docker stop subluminal_staging || true
+  - sshpass -p $DEPLOY_PASSWORD ssh gitlab@$DEPLOYHOST docker pull subluminalthegame/subluminal:$VERSION
+  - sshpass -p $DEPLOY_PASSWORD ssh gitlab@$DEPLOYHOST docker run --rm -d -p 1727:1729/tcp --label subluminal --name subluminal_$CI_JOB_NAME subluminalthegame/subluminal:$VERSION
+  tags:
+    - cs108-dind
+  #when: on_success
+  when: manual
+  environment:
+    name: staging
+  only:
+    - dev
+    - ft-buildtools-luc
+
+staging:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - apk update
+    - apk add --no-cache openssh-client sshpass
+    - ping -c 5 vps406724.ovh.net
+    - sshpass -p $DEPLOY_PASSWORD ssh gitlab@vps406724.ovh.net exit
   tags:
     - cs108
-  allow_failure: true
+  #when: on_success
+  when: manual
+  environment:
+    name: staging
+  only:
+    - /^rl-.*$/
+    - ft-buildtools-luc
 
-after_script:
-  - echo "----- End CI -----"
+
+production:
+  stage: deploy
+  image: bash:latest
+  script:
+    - echo "Missing sh script to setup production environment."
+  tags:
+    - cs108-dind
+  when: manual
+  environment:
+    name: production
+  only:
+    - master
+
+pages:
+  stage: deploy
+  image: bash:latest
+  script:
+    - mkdir public
+    - cp web/docs/index.html public
+    - mkdir public/javadoc
+    - cp -r docs/javadoc/* public/javadoc
+    - mkdir public/test
+    - cp -r app/build/reports/test/* public/test
+    - mkdir public/coverage
+    - cp -r app/build/reports/coverage/* public/coverage
+  tags:
+    - cs108-dind
+  artifacts:
+    paths:
+    - public
+  only:
+    - master
+    - ft-buildtools-luc

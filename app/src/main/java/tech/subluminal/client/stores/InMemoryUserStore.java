@@ -1,42 +1,23 @@
 package tech.subluminal.client.stores;
 
-import tech.subluminal.shared.records.User;
+import tech.subluminal.shared.stores.SingleEntity;
+import tech.subluminal.shared.stores.records.User;
 
 /**
  * Stores client-side information about the users in memory.
  */
 public class InMemoryUserStore implements UserStore {
 
-  private final Object currentUserLock = new Object();
-  private User currentUser;
+  private final SingleEntity<User> currentUser = new SingleEntity<>();
+  private final UserCollection users = new UserCollection();
 
-  /**
-   * Grabs the current User.
-   *
-   * @return the current user.
-   */
   @Override
-  public User getCurrentUser() {
-    synchronized (currentUserLock) {
-      return new User(currentUser.getUsername(), currentUser.getId());
-    }
-  }
-
-  /**
-   * Sets the current User.
-   *
-   * @param user to be set as current user.
-   */
-  @Override
-  public void setCurrentUser(User user) {
-    synchronized (currentUserLock) {
-      currentUser = user;
-    }
+  public SingleEntity<User> currentUser() {
+    return currentUser;
   }
 
   @Override
-  public User getUserByUsername(String username) {
-    //TODO implement this
-    return null;
+  public UserCollection users() {
+    return users;
   }
 }

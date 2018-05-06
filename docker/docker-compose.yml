@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  subluminal:
+    container_name: subluminal_staging
+    build:
+      context: ../
+      file: ./docker/dockerfile-subluminal.yml
+    ports:
+    - "1790:1790/tcp"
+    restart_policy:
+      condition: always
+    labels:
+    - subluminal

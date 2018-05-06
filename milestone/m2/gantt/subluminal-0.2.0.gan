@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="Subluminal" company="Bordeaux Ink" webLink="http://" view-date="2018-02-19" view-index="0" gantt-divider-location="839" resource-divider-location="300" version="2.8.6" locale="de">
+<?xml version="1.0" encoding="UTF-8"?><project name="Subluminal" company="Bordeaux Ink" webLink="http://" view-date="2018-03-19" view-index="0" gantt-divider-location="647" resource-divider-location="300" version="2.8.6" locale="de">
     <description><![CDATA[
         
         
@@ -8,12 +8,10 @@
     
     
     ]]></description>
-    <view zooming-state="default:4" id="gantt-chart">
-        <field id="tpd3" name="Vorgang" width="394" order="0"/>
-        <field id="tpd4" name="Anfang" width="215" order="1"/>
-        <field id="tpd5" name="Ende" width="197" order="2"/>
-        <timeline><![CDATA[311,284]]></timeline>
-        <option id="color.recent"><![CDATA[#00ff00 #ff00ff #ff0000 #ffff00 #000000 #f0f0f0 #0000ff]]></option>
+    <view zooming-state="default:6" id="gantt-chart">
+        <field id="tpd3" name="Vorgang" width="414" order="0"/>
+        <field id="tpd4" name="Anfang" width="108" order="1"/>
+        <field id="tpd5" name="Ende" width="92" order="2"/>
     </view>
     <view id="resource-table">
         <field id="0" name="Ressource" width="210" order="0"/>
@@ -25,7 +23,7 @@
             <day-type id="0"/>
             <day-type id="1"/>
             <default-week id="1" name="default" sun="1" mon="0" tue="0" wed="0" thu="0" fri="0" sat="1"/>
-            <only-show-weekends value="true"/>
+            <only-show-weekends value="false"/>
             <overriden-day-types/>
             <days/>
         </day-types>
@@ -43,133 +41,146 @@
             <taskproperty id="tpd8" name="coordinator" type="default" valuetype="text"/>
             <taskproperty id="tpd9" name="predecessorsr" type="default" valuetype="text"/>
         </taskproperties>
-        <task id="2" name="game concept" color="#00ff00" meeting="false" start="2018-03-02" duration="1" complete="0" thirdDate="2018-03-02" thirdDate-constraint="0" expand="true">
+        <task id="2" name="game concept" color="#8cb6ce" meeting="false" start="2018-03-02" duration="1" complete="0" thirdDate="2018-03-02" thirdDate-constraint="0" expand="true">
             <depend id="15" type="2" difference="0" hardness="Strong"/>
             <depend id="19" type="2" difference="0" hardness="Strong"/>
             <depend id="21" type="2" difference="0" hardness="Strong"/>
             <depend id="23" type="2" difference="0" hardness="Strong"/>
-            <depend id="82" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="15" name="write network protocol" color="#00ff00" meeting="false" start="2018-03-03" duration="1" complete="0" thirdDate="2018-03-03" thirdDate-constraint="0" expand="true"/>
-        <task id="19" name="create mockups" color="#00ff00" meeting="false" start="2018-03-03" duration="1" complete="0" thirdDate="2018-03-03" thirdDate-constraint="0" expand="true"/>
-        <task id="21" name="finalize game mechanics" color="#00ff00" meeting="false" start="2018-03-03" duration="1" complete="0" thirdDate="2018-03-03" thirdDate-constraint="0" expand="true"/>
-        <task id="23" name="describe client/server tasks" color="#00ff00" meeting="false" start="2018-03-03" duration="1" complete="0" thirdDate="2018-03-03" thirdDate-constraint="0" expand="true"/>
-        <task id="25" name="set up git repository" color="#00ff00" meeting="false" start="2018-03-06" duration="1" complete="0" thirdDate="2018-03-06" thirdDate-constraint="0" expand="true">
+        <task id="15" name="write network protocol" color="#8cb6ce" meeting="false" start="2018-03-05" duration="1" complete="0" thirdDate="2018-03-05" thirdDate-constraint="0" expand="true"/>
+        <task id="19" name="create mockups" color="#8cb6ce" meeting="false" start="2018-03-05" duration="1" complete="0" thirdDate="2018-03-05" thirdDate-constraint="0" expand="true"/>
+        <task id="21" name="finalize game mechanics" color="#8cb6ce" meeting="false" start="2018-03-05" duration="1" complete="0" thirdDate="2018-03-05" thirdDate-constraint="0" expand="true"/>
+        <task id="23" name="describe client/server tasks" color="#8cb6ce" meeting="false" start="2018-03-05" duration="1" complete="0" thirdDate="2018-03-05" thirdDate-constraint="0" expand="true"/>
+        <task id="25" name="set up git repository" color="#8cb6ce" meeting="false" start="2018-03-06" duration="1" complete="0" thirdDate="2018-03-06" thirdDate-constraint="0" expand="true">
             <depend id="39" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="45" name="create project plan" color="#00ff00" meeting="false" start="2018-03-06" duration="1" complete="0" thirdDate="2018-03-06" thirdDate-constraint="0" expand="true">
+        <task id="45" name="create project plan" color="#8cb6ce" meeting="false" start="2018-03-06" duration="1" complete="0" thirdDate="2018-03-06" thirdDate-constraint="0" expand="true">
             <depend id="39" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="39" name="create powerpoint presentation MS 1" color="#00ff00" meeting="false" start="2018-03-07" duration="1" complete="0" thirdDate="2018-03-07" thirdDate-constraint="0" expand="true">
+        <task id="39" name="create powerpoint presentation MS 1" color="#8cb6ce" meeting="false" start="2018-03-07" duration="1" complete="0" thirdDate="2018-03-07" thirdDate-constraint="0" expand="true">
             <depend id="0" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="0" name="Milestone 1" color="#ff00ff" meeting="true" start="2018-03-08" duration="0" complete="0" thirdDate="2018-03-08" thirdDate-constraint="0" priority="4" expand="true">
+        <task id="0" name="Milestone 1" color="#8cb6ce" meeting="true" start="2018-03-08" duration="0" complete="0" thirdDate="2018-03-08" thirdDate-constraint="0" priority="4" expand="true">
             <depend id="65" type="2" difference="0" hardness="Strong"/>
             <depend id="67" type="2" difference="0" hardness="Strong"/>
             <depend id="95" type="2" difference="0" hardness="Strong"/>
-            <depend id="216" type="2" difference="0" hardness="Strong"/>
-            <depend id="311" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="95" name="design project architecture" color="#00ff00" meeting="false" start="2018-03-08" duration="2" complete="0" thirdDate="2018-03-08" thirdDate-constraint="0" expand="true">
+        <task id="95" name="design project architecture" color="#8cb6ce" meeting="false" start="2018-03-08" duration="2" complete="0" thirdDate="2018-03-08" thirdDate-constraint="0" expand="true">
             <depend id="47" type="2" difference="0" hardness="Strong"/>
             <depend id="52" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="65" name="write software quality concept" color="#00ff00" meeting="false" start="2018-03-08" duration="3" complete="0" thirdDate="2018-03-08" thirdDate-constraint="0" expand="true"/>
-        <task id="67" name="formalize network protocol" color="#00ff00" meeting="false" start="2018-03-08" duration="1" complete="0" thirdDate="2018-03-08" thirdDate-constraint="0" expand="true"/>
-        <task id="47" name="server port listening" color="#00ff00" meeting="false" start="2018-03-10" duration="3" complete="0" thirdDate="2018-03-10" thirdDate-constraint="0" expand="true">
+        <task id="47" name="server port listening" color="#8cb6ce" meeting="false" start="2018-03-12" duration="3" complete="0" thirdDate="2018-03-12" thirdDate-constraint="0" expand="true">
             <depend id="53" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="52" name="client port listening" color="#00ff00" meeting="false" start="2018-03-10" duration="3" complete="0" thirdDate="2018-03-10" thirdDate-constraint="0" expand="true">
+        <task id="52" name="client port listening" color="#8cb6ce" meeting="false" start="2018-03-12" duration="3" complete="0" thirdDate="2018-03-12" thirdDate-constraint="0" expand="true">
             <depend id="53" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="53" name="login" color="#00ff00" meeting="false" start="2018-03-13" duration="1" complete="0" thirdDate="2018-03-13" thirdDate-constraint="0" expand="true">
+        <task id="53" name="login" color="#8cb6ce" meeting="false" start="2018-03-15" duration="1" complete="0" thirdDate="2018-03-15" thirdDate-constraint="0" expand="true">
             <depend id="55" type="2" difference="0" hardness="Strong"/>
             <depend id="57" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="55" name="basic chat" color="#00ff00" meeting="false" start="2018-03-14" duration="4" complete="0" thirdDate="2018-03-14" thirdDate-constraint="0" expand="true">
-            <depend id="3" type="2" difference="0" hardness="Strong"/>
+        <task id="55" name="basic chat" color="#8cb6ce" meeting="false" start="2018-03-16" duration="4" complete="0" thirdDate="2018-03-16" thirdDate-constraint="0" expand="true">
             <depend id="74" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="57" name="logout" color="#8cb6ce" meeting="false" start="2018-03-16" duration="1" complete="0" thirdDate="2018-03-16" thirdDate-constraint="0" expand="true"/>
+        <task id="65" name="write software quality concept" color="#8cb6ce" meeting="false" start="2018-03-08" duration="3" complete="0" thirdDate="2018-03-08" thirdDate-constraint="0" expand="true"/>
+        <task id="67" name="formalize network protocol" color="#8cb6ce" meeting="false" start="2018-03-08" duration="1" complete="0" thirdDate="2018-03-08" thirdDate-constraint="0" expand="true"/>
+        <task id="3" name="Milestone 2" color="#8cb6ce" meeting="true" start="2018-03-26" duration="0" complete="0" thirdDate="2018-03-05" thirdDate-constraint="0" expand="true">
+            <depend id="69" type="2" difference="0" hardness="Strong"/>
+            <depend id="71" type="2" difference="0" hardness="Strong"/>
+            <depend id="75" type="2" difference="0" hardness="Strong"/>
+            <depend id="77" type="2" difference="0" hardness="Strong"/>
+            <depend id="82" type="2" difference="0" hardness="Strong"/>
+            <depend id="83" type="2" difference="0" hardness="Strong"/>
+            <depend id="88" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="71" name="game list server side" color="#8cb6ce" meeting="false" start="2018-03-26" duration="2" complete="0" thirdDate="2018-03-26" thirdDate-constraint="0" expand="true">
+            <depend id="73" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="73" name="game list GUI" color="#8cb6ce" meeting="false" start="2018-03-28" duration="1" complete="0" thirdDate="2018-03-28" thirdDate-constraint="0" expand="true">
+            <depend id="85" type="2" difference="0" hardness="Strong"/>
+            <depend id="87" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="74" name="chat GUI" color="#8cb6ce" meeting="false" start="2018-03-22" duration="2" complete="0" thirdDate="2018-03-22" thirdDate-constraint="0" expand="true">
             <depend id="91" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="57" name="logout" color="#00ff00" meeting="false" start="2018-03-14" duration="1" complete="0" thirdDate="2018-03-14" thirdDate-constraint="0" expand="true"/>
-        <task id="74" name="chat GUI" color="#00ff00" meeting="false" start="2018-03-18" duration="5" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true"/>
-        <task id="3" name="Milestone 2" color="#ff00ff" meeting="true" start="2018-03-18" duration="0" complete="0" thirdDate="2018-03-18" thirdDate-constraint="0" expand="true">
-            <depend id="74" type="2" difference="0" hardness="Strong"/>
+        <task id="91" name="private chat" color="#8cb6ce" meeting="false" start="2018-03-26" duration="1" complete="0" thirdDate="2018-03-26" thirdDate-constraint="0" expand="true"/>
+        <task id="75" name="model game state" color="#8cb6ce" meeting="false" start="2018-03-26" duration="2" complete="0" thirdDate="2018-03-26" thirdDate-constraint="0" expand="true">
             <depend id="76" type="2" difference="0" hardness="Strong"/>
-            <depend id="82" type="2" difference="0" hardness="Strong"/>
-            <depend id="87" type="2" difference="0" hardness="Strong"/>
-            <depend id="106" type="2" difference="0" hardness="Strong"/>
-            <depend id="274" type="2" difference="0" hardness="Strong"/>
-            <depend id="277" type="2" difference="0" hardness="Strong"/>
-            <depend id="284" type="2" difference="0" hardness="Strong"/>
-            <depend id="287" type="2" difference="0" hardness="Strong"/>
-            <depend id="290" type="2" difference="0" hardness="Strong"/>
-            <depend id="293" type="2" difference="0" hardness="Strong"/>
-            <depend id="296" type="2" difference="0" hardness="Strong"/>
-            <depend id="299" type="2" difference="0" hardness="Strong"/>
-            <depend id="302" type="2" difference="0" hardness="Strong"/>
-            <depend id="307" type="2" difference="0" hardness="Strong"/>
-            <depend id="311" type="2" difference="0" hardness="Strong"/>
+            <depend id="117" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="91" name="chat whispers" color="#00ff00" meeting="false" start="2018-03-26" duration="2" complete="0" thirdDate="2018-03-26" thirdDate-constraint="1" expand="true"/>
-        <task id="216" name="implement SONList" color="#00ff00" meeting="false" start="2018-03-08" duration="5" complete="0" thirdDate="2018-04-01" thirdDate-constraint="0" expand="true"/>
-        <task id="82" name="write some unit tests" color="#00ff00" meeting="false" start="2018-04-07" duration="7" complete="0" thirdDate="2018-04-07" thirdDate-constraint="1" expand="true"/>
-        <task id="274" name="game list server side" color="#00ff00" meeting="false" start="2018-04-12" duration="2" complete="0" thirdDate="2018-04-12" thirdDate-constraint="1" expand="true"/>
-        <task id="277" name="model game state client side" color="#00ff00" meeting="false" start="2018-04-07" duration="2" complete="0" thirdDate="2018-04-07" thirdDate-constraint="1" expand="true">
-            <depend id="280" type="2" difference="0" hardness="Strong"/>
+        <task id="76" name="server game tick" color="#8cb6ce" meeting="false" start="2018-03-28" duration="2" complete="0" thirdDate="2018-03-28" thirdDate-constraint="0" expand="true">
+            <depend id="78" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="280" name="model game state server side" color="#00ff00" meeting="false" start="2018-04-12" duration="2" complete="0" thirdDate="2018-04-12" thirdDate-constraint="1" expand="true"/>
-        <task id="284" name="generate highscore" color="#ff0000" meeting="false" start="2018-04-15" duration="1" complete="0" thirdDate="2018-04-15" thirdDate-constraint="1" expand="true"/>
-        <task id="287" name="make highscore persistent" color="#ff0000" meeting="false" start="2018-04-15" duration="1" complete="0" thirdDate="2018-04-15" thirdDate-constraint="1" expand="true"/>
-        <task id="290" name="build script / CI" color="#00ff00" meeting="false" start="2018-04-01" duration="7" complete="0" thirdDate="2018-04-01" thirdDate-constraint="1" expand="true"/>
-        <task id="293" name="enable ship movement requests" color="#00ff00" meeting="false" start="2018-04-09" duration="1" complete="0" thirdDate="2018-04-09" thirdDate-constraint="1" expand="true"/>
-        <task id="296" name="implement signal delays" color="#00ff00" meeting="false" start="2018-04-13" duration="1" complete="0" thirdDate="2018-04-13" thirdDate-constraint="1" expand="true"/>
-        <task id="299" name="make game list visible" color="#ff0000" meeting="false" start="2018-04-15" duration="1" complete="0" thirdDate="2018-04-15" thirdDate-constraint="1" expand="true"/>
-        <task id="356" name="implement pathfindig" color="#00ff00" meeting="false" start="2018-04-11" duration="1" complete="0" thirdDate="2018-04-11" thirdDate-constraint="1" expand="true"/>
-        <task id="302" name="make users list visible" color="#ff0000" meeting="false" start="2018-04-15" duration="1" complete="0" thirdDate="2018-04-15" thirdDate-constraint="1" expand="true"/>
-        <task id="307" name="generate game map" color="#00ff00" meeting="false" start="2018-04-13" duration="1" complete="0" thirdDate="2018-04-13" thirdDate-constraint="1" expand="true"/>
-        <task id="76" name="server game loop" color="#00ff00" meeting="false" start="2018-04-12" duration="2" complete="0" thirdDate="2018-04-12" thirdDate-constraint="1" expand="true"/>
-        <task id="311" name="show stars on GUI" color="#00ff00" meeting="false" start="2018-04-10" duration="1" complete="0" thirdDate="2018-04-10" thirdDate-constraint="1" expand="true"/>
-        <task id="117" name="client game loop" color="#ff0000" meeting="false" start="2018-04-20" duration="3" complete="0" thirdDate="2018-04-20" thirdDate-constraint="1" expand="true"/>
-        <task id="87" name="create game req./res." color="#00ff00" meeting="false" start="2018-04-11" duration="2" complete="0" thirdDate="2018-04-11" thirdDate-constraint="1" expand="true">
-            <depend id="85" type="2" difference="0" hardness="Strong"/>
+        <task id="117" name="client game tick" color="#8cb6ce" meeting="false" start="2018-03-28" duration="2" complete="0" thirdDate="2018-03-28" thirdDate-constraint="0" expand="true">
+            <depend id="78" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="85" name="join game req./res." color="#00ff00" meeting="false" start="2018-04-13" duration="1" complete="0" thirdDate="2018-04-13" thirdDate-constraint="0" expand="true">
+        <task id="77" name="generate game map" color="#8cb6ce" meeting="false" start="2018-03-26" duration="3" complete="0" thirdDate="2018-03-26" thirdDate-constraint="0" expand="true"/>
+        <task id="87" name="create game" color="#8cb6ce" meeting="false" start="2018-03-29" duration="1" complete="0" thirdDate="2018-03-29" thirdDate-constraint="0" expand="true"/>
+        <task id="85" name="join game" color="#8cb6ce" meeting="false" start="2018-03-29" duration="1" complete="0" thirdDate="2018-03-29" thirdDate-constraint="0" expand="true">
             <depend id="86" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="86" name="leave game req./res." color="#00ff00" meeting="false" start="2018-04-14" duration="1" complete="0" thirdDate="2018-04-14" thirdDate-constraint="0" expand="true"/>
-        <task id="89" name="lobby GUI" color="#ff0000" meeting="false" start="2018-04-12" duration="3" complete="0" thirdDate="2018-04-12" thirdDate-constraint="1" expand="true"/>
-        <task id="90" name="create powerpoint presentation M3" color="#ff0000" meeting="false" start="2018-04-13" duration="3" complete="0" thirdDate="2018-04-13" thirdDate-constraint="0" expand="true">
-            <depend id="6" type="2" difference="0" hardness="Strong"/>
+        <task id="86" name="leave game" color="#8cb6ce" meeting="false" start="2018-03-30" duration="1" complete="0" thirdDate="2018-03-30" thirdDate-constraint="0" expand="true">
+            <depend id="89" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="6" name="Milestone 3" color="#ff00ff" meeting="true" start="2018-04-16" duration="0" complete="0" thirdDate="2018-04-16" thirdDate-constraint="0" expand="true">
+        <task id="88" name="list users" color="#8cb6ce" meeting="false" start="2018-03-26" duration="1" complete="0" thirdDate="2018-03-26" thirdDate-constraint="0" expand="true"/>
+        <task id="89" name="lobby GUI" color="#8cb6ce" meeting="false" start="2018-04-02" duration="2" complete="0" thirdDate="2018-04-02" thirdDate-constraint="0" expand="true">
+            <depend id="90" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="78" name="planet capturing" color="#8cb6ce" meeting="false" start="2018-03-30" duration="2" complete="0" thirdDate="2018-03-30" thirdDate-constraint="0" expand="true">
+            <depend id="79" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="79" name="ship generation" color="#8cb6ce" meeting="false" start="2018-04-03" duration="2" complete="0" thirdDate="2018-04-03" thirdDate-constraint="0" expand="true">
+            <depend id="80" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="80" name="ship movement" color="#8cb6ce" meeting="false" start="2018-04-05" duration="2" complete="0" thirdDate="2018-04-05" thirdDate-constraint="0" expand="true">
+            <depend id="81" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="81" name="signal delays" color="#8cb6ce" meeting="false" start="2018-04-09" duration="4" complete="0" thirdDate="2018-04-09" thirdDate-constraint="0" expand="true">
+            <depend id="90" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="83" name="generate high scores" color="#8cb6ce" meeting="false" start="2018-03-26" duration="1" complete="0" thirdDate="2018-03-26" thirdDate-constraint="0" expand="true">
+            <depend id="84" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="84" name="persist high scores" color="#8cb6ce" meeting="false" start="2018-03-27" duration="2" complete="0" thirdDate="2018-03-27" thirdDate-constraint="0" expand="true">
+            <depend id="90" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="82" name="write some unit tests" color="#8cb6ce" meeting="false" start="2018-03-26" duration="3" complete="0" thirdDate="2018-03-26" thirdDate-constraint="0" expand="true">
+            <depend id="69" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="69" name="make a build script" color="#8cb6ce" meeting="false" start="2018-03-29" duration="1" complete="0" thirdDate="2018-03-29" thirdDate-constraint="0" expand="true">
+            <depend id="90" type="2" difference="0" hardness="Strong"/>
+        </task>
+        <task id="90" name="create powerpoint presentation MS 3" color="#8cb6ce" meeting="false" start="2018-04-13" duration="1" complete="0" thirdDate="2018-04-13" thirdDate-constraint="0" expand="true"/>
+        <task id="6" name="Milestone 3" color="#8cb6ce" meeting="true" start="2018-04-16" duration="0" complete="0" thirdDate="2018-03-26" thirdDate-constraint="0" expand="true">
             <depend id="92" type="2" difference="0" hardness="Strong"/>
             <depend id="93" type="2" difference="0" hardness="Strong"/>
             <depend id="94" type="2" difference="0" hardness="Strong"/>
+            <depend id="106" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="106" name="write manual" color="#00ff00" meeting="false" start="2018-04-09" duration="4" complete="0" thirdDate="2018-04-09" thirdDate-constraint="1" expand="true"/>
-        <task id="93" name="create game assets" color="#ff0000" meeting="false" start="2018-04-16" duration="3" complete="0" thirdDate="2018-04-16" thirdDate-constraint="0" expand="true"/>
-        <task id="92" name="game GUI" color="#ff0000" meeting="false" start="2018-04-16" duration="5" complete="0" thirdDate="2018-04-16" thirdDate-constraint="0" expand="true">
+        <task id="106" name="write manual" color="#8cb6ce" meeting="false" start="2018-04-16" duration="5" complete="0" thirdDate="2018-04-16" thirdDate-constraint="0" expand="true"/>
+        <task id="93" name="create game assets" color="#8cb6ce" meeting="false" start="2018-04-16" duration="3" complete="0" thirdDate="2018-04-16" thirdDate-constraint="0" expand="true"/>
+        <task id="92" name="game GUI" color="#8cb6ce" meeting="false" start="2018-04-16" duration="5" complete="0" thirdDate="2018-04-16" thirdDate-constraint="0" expand="true">
             <depend id="204" type="2" difference="0" hardness="Strong"/>
             <depend id="209" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="94" name="check for win state" color="#ff0000" meeting="false" start="2018-04-16" duration="1" complete="0" thirdDate="2018-04-16" thirdDate-constraint="0" expand="true">
+        <task id="94" name="check for win state" color="#8cb6ce" meeting="false" start="2018-04-16" duration="1" complete="0" thirdDate="2018-04-16" thirdDate-constraint="0" expand="true">
             <depend id="204" type="2" difference="0" hardness="Strong"/>
             <depend id="209" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="209" name="refactor" color="#ff0000" meeting="false" start="2018-04-21" duration="4" complete="0" thirdDate="2018-04-21" thirdDate-constraint="0" expand="true"/>
-        <task id="204" name="realize QA concept" color="#ff0000" meeting="false" start="2018-04-21" duration="3" complete="0" thirdDate="2018-04-21" thirdDate-constraint="0" expand="true"/>
-        <task id="9" name="Milestone 4" color="#ff00ff" meeting="true" start="2018-05-07" duration="0" complete="0" thirdDate="2018-05-07" thirdDate-constraint="0" expand="true">
+        <task id="209" name="refactor" color="#8cb6ce" meeting="false" start="2018-04-23" duration="4" complete="0" thirdDate="2018-04-23" thirdDate-constraint="0" expand="true"/>
+        <task id="204" name="realize qa concept" color="#8cb6ce" meeting="false" start="2018-04-23" duration="3" complete="0" thirdDate="2018-04-23" thirdDate-constraint="0" expand="true"/>
+        <task id="9" name="Milestone 4" color="#8cb6ce" meeting="true" start="2018-05-07" duration="0" complete="0" thirdDate="2018-04-16" thirdDate-constraint="0" expand="true">
             <depend id="105" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="105" name="describe software architecture" color="#ff0000" meeting="false" start="2018-05-07" duration="2" complete="0" thirdDate="2018-05-07" thirdDate-constraint="0" expand="true">
+        <task id="105" name="describe software architecture" color="#8cb6ce" meeting="false" start="2018-05-07" duration="2" complete="0" thirdDate="2018-05-07" thirdDate-constraint="0" expand="true">
             <depend id="214" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="214" name="polish code" color="#ff0000" meeting="false" start="2018-05-09" duration="3" complete="0" thirdDate="2018-05-09" thirdDate-constraint="0" expand="true">
+        <task id="214" name="polish code" color="#8cb6ce" meeting="false" start="2018-05-09" duration="3" complete="0" thirdDate="2018-05-09" thirdDate-constraint="0" expand="true">
             <depend id="140" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="140" name="create powerpoint presentation MS 5" color="#ff0000" meeting="false" start="2018-05-12" duration="1" complete="0" thirdDate="2018-05-12" thirdDate-constraint="0" expand="true"/>
-        <task id="12" name="Milestone 5" color="#ff00ff" meeting="true" start="2018-05-21" duration="0" complete="0" thirdDate="2018-05-21" thirdDate-constraint="0" expand="true"/>
+        <task id="140" name="create powerpoint presentation MS 5" color="#8cb6ce" meeting="false" start="2018-05-14" duration="1" complete="0" thirdDate="2018-05-14" thirdDate-constraint="0" expand="true"/>
+        <task id="12" name="Milestone 5" color="#8cb6ce" meeting="true" start="2018-05-21" duration="0" complete="0" thirdDate="2018-05-07" thirdDate-constraint="0" expand="true"/>
     </tasks>
     <resources>
         <resource id="0" name="Rik" function="Default:0" contacts="" phone=""/>
@@ -186,10 +197,20 @@
         <allocation task-id="53" resource-id="0" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="55" resource-id="0" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="57" resource-id="0" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="71" resource-id="0" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="75" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="76" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="77" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="87" resource-id="0" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="85" resource-id="0" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="86" resource-id="0" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="88" resource-id="0" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="78" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="79" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="80" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="81" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="83" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="84" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="82" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="94" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="209" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
@@ -198,7 +219,6 @@
         <allocation task-id="214" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="140" resource-id="0" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="90" resource-id="0" function="Default:0" responsible="false" load="100.0"/>
-        <allocation task-id="216" resource-id="0" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="2" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="21" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="25" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
@@ -208,13 +228,23 @@
         <allocation task-id="55" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="57" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="67" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="71" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="91" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="76" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="117" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="77" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="87" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="85" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="86" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="88" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="78" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="79" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="80" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="81" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="83" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="84" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="82" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="69" resource-id="1" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="209" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="214" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="140" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
@@ -227,6 +257,7 @@
         <allocation task-id="52" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="65" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="67" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="74" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="91" resource-id="2" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="82" resource-id="2" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="90" resource-id="2" function="Default:0" responsible="true" load="100.0"/>
@@ -238,8 +269,11 @@
         <allocation task-id="2" resource-id="3" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="19" resource-id="3" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="21" resource-id="3" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="73" resource-id="3" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="75" resource-id="3" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="117" resource-id="3" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="89" resource-id="3" function="Default:0" responsible="true" load="100.0"/>
+        <allocation task-id="79" resource-id="3" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="82" resource-id="3" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="93" resource-id="3" function="Default:0" responsible="true" load="100.0"/>
         <allocation task-id="92" resource-id="3" function="Default:0" responsible="true" load="100.0"/>
@@ -248,7 +282,6 @@
         <allocation task-id="140" resource-id="3" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="90" resource-id="3" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="39" resource-id="3" function="Default:0" responsible="false" load="100.0"/>
-        <allocation task-id="74" resource-id="3" function="Default:0" responsible="true" load="100.0"/>
     </allocations>
     <vacations/>
     <previous/>
