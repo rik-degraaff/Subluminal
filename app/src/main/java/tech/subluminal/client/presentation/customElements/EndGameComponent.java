@@ -2,12 +2,14 @@ package tech.subluminal.client.presentation.customElements;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import tech.subluminal.client.presentation.controller.MainController;
@@ -23,9 +25,21 @@ public class EndGameComponent extends HBox {
     this.setAlignment(Pos.CENTER);
     box = new VBox();
     Label endText = new Label("End of Game" + "\n" + "Winner is: " + winnerName);
+    endText.getStyleClass().add("console-red");
     box.getChildren().add(endText);
 
-    this.getChildren().add(box);
+    Pane hbox = new Pane(box);
+    hbox.setPrefHeight(300);
+    hbox.setPrefWidth(400);
+    hbox.getStyleClass().add("console");
+
+    this.getChildren().add(hbox);
+
+    Platform.runLater(() -> {
+      this.prefWidthProperty().bind(getScene().widthProperty());
+      this.prefHeightProperty().bind(getScene().heightProperty());
+    });
+
 
     addButtons();
   }
@@ -39,8 +53,14 @@ public class EndGameComponent extends HBox {
     dots.set("");
     String failed = "You all failed Bob";
     Label endText = new Label();
-    endText.textProperty().bind(Bindings.createStringBinding(() -> failed + dots, dots));
+    endText.textProperty().bind(Bindings.createStringBinding(() -> failed + dots.get(), dots));
+    endText.getStyleClass().add("console-red");
     box.getChildren().add(endText);
+
+    Pane hbox = new Pane(box);
+    hbox.setPrefHeight(300);
+    hbox.setPrefWidth(400);
+    hbox.getStyleClass().add("console");
 
     Timeline timeTl = new Timeline();
     timeTl.getKeyFrames().add(new KeyFrame(Duration.seconds(1), event -> {
@@ -55,13 +75,19 @@ public class EndGameComponent extends HBox {
     timeTl.setAutoReverse(true);
     timeTl.play();
 
-    this.getChildren().add(box);
+    this.getChildren().add(hbox);
+
+    Platform.runLater(() -> {
+      this.prefWidthProperty().bind(getScene().widthProperty());
+      this.prefHeightProperty().bind(getScene().heightProperty());
+    });
+
     addButtons();
   }
 
   public void addButtons() {
     Label backToLobby = new Label("Back to Lobby");
-    this.getChildren().add(backToLobby);
+    box.getChildren().add(backToLobby);
     backToLobby.setOnMouseClicked(event -> {
       main.onMapCloseHandle();
     });

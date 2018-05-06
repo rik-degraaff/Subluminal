@@ -16,7 +16,11 @@ public interface GamePresenter {
 
   void removeFleets(List<String> fleetIDs);
 
-  void onEndGame(String winnerID);
+  void onEndGame(String gameID, String winnerID);
+
+  void removeMotherShips(List<String> removedMotherShips);
+
+  void setGameID(String gameID);
 
   interface Delegate {
 

@@ -31,6 +31,7 @@ import tech.subluminal.client.presentation.customElements.StarComponent;
 import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.client.stores.records.game.OwnerPair;
+import tech.subluminal.shared.records.Channel;
 import tech.subluminal.shared.stores.records.User;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Fleet;
@@ -56,17 +57,9 @@ public class GameController implements Initializable, GamePresenter {
 
   private String playerID;
 
-  //private List<StarComponent> starList = new LinkedList<StarComponent>();//TODO: remove this
-
-  //private ListProperty<StarComponent> stars = new SimpleListProperty<>();
-
   private Map<String, StarComponent> stars = new HashMap<>();
   private Map<String, MotherShipComponent> ships = new HashMap<>();
   private Map<String, FleetComponent> fleets = new HashMap<>();
-
-  private List<MotherShipComponent> shipList = new LinkedList<MotherShipComponent>();
-
-  private List<FleetComponent> fleetList = new LinkedList<FleetComponent>();
 
   private GamePresenter.Delegate gameDelegate;
 
@@ -82,6 +75,7 @@ public class GameController implements Initializable, GamePresenter {
   private List<String> path;
   private UserStore userStore;
   private Map<String, Color> playerColors;
+  private String gameID;
 
 
   @Override
@@ -100,10 +94,14 @@ public class GameController implements Initializable, GamePresenter {
   private void starClicked(StarComponent star, MouseEvent mouseEvent) {
     if (pressStore[1] == null) {
       if (pressStore[0] == null) {
+        removeJumpPath();
         pressStore[0] = star;
         pressStore[1] = null;
+      } else if (pressStore[0] == star) {
+
       } else {
         Logger.debug("creating JumpPath");
+        removeJumpPath();
         pressStore[1] = star;
         if (path != null) {
           path.clear();
@@ -124,6 +122,7 @@ public class GameController implements Initializable, GamePresenter {
 
       }
     } else {
+      removeJumpPath();
       pressStore[0] = star;
       pressStore[1] = null;
     }
@@ -150,6 +149,7 @@ public class GameController implements Initializable, GamePresenter {
     jump.stream().forEach(j -> {
       map.getChildren().remove(j);
     });
+    jump.clear();
 
     removeJumpBox();
   }
@@ -242,13 +242,48 @@ public class GameController implements Initializable, GamePresenter {
   }
 
   @Override
-  public void onEndGame(String winnerID) {
-    if(winnerID != null){
-      String winnerName = userStore.users().getByID(winnerID).get().use(User::getUsername);
-      map.getChildren().add(new EndGameComponent(main, winnerName));
-    }else{
-      map.getChildren().add(new EndGameComponent(main));
+  public void onEndGame(String gameID, String winnerID) {
+    if (gameID.equals(this.gameID)) {
+      if (winnerID != null) {
+        String winnerName = userStore.users().getByID(winnerID).get().use(User::getUsername);
+        Platform.runLater(() -> {
+          map.getChildren().add(new EndGameComponent(main, winnerName));
+        });
+
+      } else {
+        Platform.runLater(() -> {
+          map.getChildren().add(new EndGameComponent(main));
+        });
+      }
+    } else {
+      if (winnerID != null) {
+        String winnerName = userStore.users().getByID(winnerID).get().use(User::getUsername);
+        main.getChatController()
+            .addMessageChat(winnerName + " won one of the last games you where in.", Channel.INFO);
+      } else {
+        main.getChatController()
+            .addMessageChat("You all failed Bob...", Channel.INFO);
+      }
     }
+
+  }
+
+  @Override
+  public void removeMotherShips(List<String> shipIDs) {
+    shipIDs.forEach(f -> {
+      MotherShipComponent remShip = ships.get(f);
+      if (remShip != null) {
+        ships.remove(f);
+        Platform.runLater(() -> {
+          map.getChildren().remove(remShip);
+        });
+      }
+    });
+  }
+
+  @Override
+  public void setGameID(String gameID) {
+    this.gameID = gameID;
   }
 
   public void setGameStore(GameStore gameStore) {
@@ -321,7 +356,8 @@ public class GameController implements Initializable, GamePresenter {
                 Platform.runLater(() -> {
                   Timeline timeTl = new Timeline();
                   timeTl.getKeyFrames()
-                      .add(new KeyFrame(Duration.seconds(0), event -> map.getChildren().add(arrow)));
+                      .add(
+                          new KeyFrame(Duration.seconds(0), event -> map.getChildren().add(arrow)));
                   timeTl.getKeyFrames().add(
                       new KeyFrame(Duration.seconds(03), event -> map.getChildren().remove(arrow)));
                   timeTl.play();
@@ -404,12 +440,17 @@ public class GameController implements Initializable, GamePresenter {
     this.userStore = userStore;
   }
 
-  public void clearMap(){
+  public void clearMap() {
     map.getChildren().clear();
   }
 
-  public void leaveGame(){
+  public void leaveGame() {
     gameDelegate.leaveGame();
+    fleets.clear();
+    ships.clear();
+    graph = null;
+    gameID = null;
+    Logger.debug("END GAME GOT CALLED!!");
     main.onMapCloseHandle();
   }
 }

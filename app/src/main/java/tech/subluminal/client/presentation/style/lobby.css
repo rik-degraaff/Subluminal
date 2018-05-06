@@ -128,5 +128,8 @@
 
 .console{
   -fx-background-color: black;
-  -fx-padding: 10px;
+}
+
+.console-red{
+  -fx-text-fill: red;
 }
