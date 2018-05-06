@@ -1,0 +1,6 @@
+TRACE: 2018-05-04 11:06:35 [Test worker] tech.subluminal.shared.stores.records.SlimLobby.fromSON(): Before reading slimLobby as SON: {"playerCount":i0,"status":s"FULL","settings":o{"maxPlayers":i8,"minPlayers":i2,"mapSize":d2.0,"gameSpeed":d1.0,"name":s"weoi","adminID":s"3472"},"identifiable":o{"id":s"9439"}}
+TRACE: 2018-05-04 11:06:35 [Test worker] tech.subluminal.shared.stores.records.SlimLobby.fromSON(): After reading slimLobby as SON
+TRACE: 2018-05-04 11:06:35 [Test worker] tech.subluminal.shared.stores.records.SlimLobby.fromSON(): Before reading slimLobby as SON: {"playerCount":i0,"status":s"LOCKED","settings":o{"maxPlayers":i8,"minPlayers":i2,"mapSize":d2.0,"gameSpeed":d1.0,"name":s"eruo","adminID":s"1338"},"identifiable":o{"id":s"1790"}}
+TRACE: 2018-05-04 11:06:35 [Test worker] tech.subluminal.shared.stores.records.SlimLobby.fromSON(): After reading slimLobby as SON
+TRACE: 2018-05-04 11:06:35 [Test worker] tech.subluminal.shared.stores.records.SlimLobby.fromSON(): Before reading slimLobby as SON: {"playerCount":i0,"status":s"OPEN","settings":o{"maxPlayers":i8,"minPlayers":i2,"mapSize":d2.0,"gameSpeed":d1.0,"name":s"sdfu","adminID":s"1237"},"identifiable":o{"id":s"1295"}}
+TRACE: 2018-05-04 11:06:35 [Test worker] tech.subluminal.shared.stores.records.SlimLobby.fromSON(): After reading slimLobby as SON

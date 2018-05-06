@@ -10,6 +10,7 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -282,10 +283,15 @@ public class MainController implements Initializable {
       rightSide.prefHeightProperty().bind(chat.getScene().heightProperty());
       rightSide.setBackground(bg);
       leftSideDock.getChildren().add(leftSide);
+      rightSideDock.getChildren().clear();
       rightSideDock.getChildren().add(rightSide);
 
-      rightSideDock.getChildren().removeAll(playerListButton, nameChangeButton, settingsButton);
-      rightSide.getChildren().addAll(settingsButton, playerListButton, nameChangeButton);
+      Button leave = new Button("X");
+      leave.setOnAction(event -> {
+        gameController.leaveGame();
+        Logger.debug("LEAVE PLZ");
+      });
+      rightSide.getChildren().addAll(leave, settingsButton, playerListButton, nameChangeButton);
       //rightSide.getChildren().add(new Label("this is a test"));
 
       chatController.setInGame(true);
@@ -297,7 +303,11 @@ public class MainController implements Initializable {
     playArea.getChildren().clear();
     rightSideDock.getChildren().clear();
     leftSideDock.getChildren().clear();
+
+    rightSideDock.getChildren().addAll(settingsButton, playerListButton, nameChangeButton);
     playArea.setMouseTransparent(true);
+    gameController.clearMap();
+    chatController.setInGame(false);
 
     menuDock.getChildren().add(menu);
   }

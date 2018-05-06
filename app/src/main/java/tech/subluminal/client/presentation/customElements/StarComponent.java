@@ -43,7 +43,8 @@ public class StarComponent extends Group {
 
   //private final ObjectProperty
 
-  public StarComponent(String ownerID, String name, double possession, Coordinates coordinates, String id,
+  public StarComponent(String ownerID, String name, double possession, Coordinates coordinates,
+      String id,
       double jump) {
 
     setPossession(possession);
@@ -73,7 +74,6 @@ public class StarComponent extends Group {
 
     this.name = name;
 
-
     Circle star = new Circle();
     star.setFill(Color.GRAY);
 
@@ -88,7 +88,7 @@ public class StarComponent extends Group {
         .createDoubleBinding(() -> star.getRadius() * Math.pow(getPossession(), 0.8),
             possessionProperty(), sizeProperty));
 
-    Pane starGroup = new Pane();
+    Group starGroup = new Group();
 
     Pane glowBox = new Pane();
     glowBox.setPrefHeight(sizeAll);
@@ -98,38 +98,43 @@ public class StarComponent extends Group {
 
     border = makeBorder();
     Circle jumpCircle = new Circle();
-    Platform.runLater(() -> {
-      jumpCircle.setRadius(jump * getScene().getHeight());
-    });
-    jumpCircle.setStroke(Color.RED);
+    jumpCircle.radiusProperty().bind(Bindings
+        .createDoubleBinding(() -> jump * parentHeightProperty.getValue(), parentHeightProperty,
+            jumpProperty()));
     jumpCircle.setFill(Color.TRANSPARENT);
-    jumpCircle.setMouseTransparent(true);
+    jumpCircle.setStroke(Color.RED);
 
     border.setVisible(false);
     jumpCircle.setVisible(false);
 
+    //starGroup.setB(new Background(new BackgroundFill(Color.RED,CornerRadii.EMPTY,Insets.EMPTY)));
+
     starGroup.setOnMouseEntered(event -> {
+
       border.setVisible(true);
       jumpCircle.setVisible(true);
+
     });
 
     starGroup.setOnMouseExited(event -> {
+
       border.setVisible(false);
       jumpCircle.setVisible(false);
+
     });
 
     Label starName = new Label(name);
     starName.getStyleClass().add("starname-label");
     starName.setLayoutY(30);
     Platform.runLater(() -> {
-      starName.setLayoutX(-starName.getWidth()/2);
+      starName.setLayoutX(-starName.getWidth() / 2);
     });
 
     starName.setFont(new Font("PxPlus IBM VGA9", 10));
 
     starGroup.getChildren().addAll(glowBox, border, star, starName, possessionCount);
     Effect glow = new Bloom();
-    this.setEffect(glow);
+    starGroup.setEffect(glow);
     this.getChildren().addAll(jumpCircle, starGroup);
 
   }

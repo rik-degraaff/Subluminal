@@ -3,11 +3,12 @@ package tech.subluminal.client.logic;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.GamePresenter;
 import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.client.stores.records.game.OwnerPair;
+import tech.subluminal.shared.messages.EndGameRes;
 import tech.subluminal.shared.messages.FleetMoveReq;
+import tech.subluminal.shared.messages.GameLeaveReq;
 import tech.subluminal.shared.messages.GameStartRes;
 import tech.subluminal.shared.messages.GameStateDelta;
 import tech.subluminal.shared.messages.LoginRes;
@@ -44,6 +45,11 @@ public class GameManager implements GamePresenter.Delegate {
     connection.registerHandler(LoginRes.class, LoginRes::fromSON, this::onLoginRes);
     connection
         .registerHandler(GameStartRes.class, GameStartRes::fromSON, this::onGameStart);
+    connection.registerHandler(EndGameRes.class, EndGameRes::fromSON, this::onEndGameRes);
+  }
+
+  private void onEndGameRes(EndGameRes res) {
+    gamePresenter.onEndGame(res.getWinnerID());
   }
 
   private void onGameStart(GameStartRes res) {
@@ -94,6 +100,10 @@ public class GameManager implements GamePresenter.Delegate {
   @Override
   public void sendMothership(List<String> stars) {
     connection.sendMessage(new MotherShipMoveReq(stars));
-    Logger.debug("YES I GOT CALLED");
+  }
+
+  @Override
+  public void leaveGame() {
+    connection.sendMessage(new GameLeaveReq());
   }
 }
