@@ -246,9 +246,14 @@ public class GameController implements Initializable, GamePresenter {
     if (gameID.equals(this.gameID)) {
       if (winnerID != null) {
         String winnerName = userStore.users().getByID(winnerID).get().use(User::getUsername);
-        map.getChildren().add(new EndGameComponent(main, winnerName));
+        Platform.runLater(() -> {
+          map.getChildren().add(new EndGameComponent(main, winnerName));
+        });
+
       } else {
-        map.getChildren().add(new EndGameComponent(main));
+        Platform.runLater(() -> {
+          map.getChildren().add(new EndGameComponent(main));
+        });
       }
     } else {
       if (winnerID != null) {
