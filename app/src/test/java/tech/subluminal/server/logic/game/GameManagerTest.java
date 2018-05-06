@@ -67,14 +67,14 @@ public class GameManagerTest {
         "0",
         new Player("0", Collections.singleton("1"),
             new Ship(new Coordinates(0, 0), "0", Collections.emptyList(), "0", SHIP_SPEED),
-            LIGHT_SPEED, true)
+            LIGHT_SPEED, true, false)
     );
 
     players.put(
         "1",
         new Player("1", Collections.singleton("0"),
             new Ship(new Coordinates(0, 0), "1", Collections.emptyList(), "0", SHIP_SPEED),
-            LIGHT_SPEED, true)
+            LIGHT_SPEED, true, false)
     );
 
     players.get("0").getFleets().put(
@@ -114,14 +114,14 @@ public class GameManagerTest {
         "0",
         new Player("0", Collections.singleton("1"),
             new Ship(shipCoordinates, "0", Collections.singletonList("0"), "0", SHIP_SPEED),
-            LIGHT_SPEED, true)
+            LIGHT_SPEED, true, false)
     );
 
     players.put(
         "1",
         new Player("1", Collections.singleton("0"),
             new Ship(shipCoordinates, "1", Collections.singletonList("0"), "0", SHIP_SPEED),
-            LIGHT_SPEED, true)
+            LIGHT_SPEED, true, false)
     );
 
     players.get("0").updateFleet(
