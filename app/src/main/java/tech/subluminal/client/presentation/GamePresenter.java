@@ -16,10 +16,14 @@ public interface GamePresenter {
 
   void removeFleets(List<String> fleetIDs);
 
+  void onEndGame(String winnerID);
+
   interface Delegate {
 
     void sendShips(List<String> stars, int amount);
 
     void sendMothership(List<String> star);
+
+    void leaveGame();
   }
 }

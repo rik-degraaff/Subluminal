@@ -12,6 +12,7 @@
 *.aux
 __*.tex
 *.synctex*
+log.txt
 
 #folders
 .app/
@@ -24,5 +25,6 @@ app/out/
 app/build/
 bin/
 build/
+classes/
 docs/javadoc/
-log\.txt
+

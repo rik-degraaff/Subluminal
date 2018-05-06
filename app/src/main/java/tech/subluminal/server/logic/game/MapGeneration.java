@@ -1,7 +1,9 @@
 package tech.subluminal.server.logic.game;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,10 +31,25 @@ public class MapGeneration {
     final Set<Star> stars = new HashSet<>();
     final Set<Player> players = new HashSet<>();
 
+    int additionalStars = (int) Math.pow(10 + 3 * playerIDs.size(), 0.75);
+    List<Coordinates> coordinates = new ArrayList<>(additionalStars + playerIDs.size());
+    Stream
+        .generate(() -> {
+          Coordinates coords = getStarCoordinates(coordinates);
+          coordinates.add(coords);
+          return new Star(null, 0, coords,
+              IdUtils.generateId(8), false, JUMP_DISTANCE, DEMAT_RATE, DEMAT_RATE, GENERATION_RATE,
+              GENERATION_RATE, ng.getName());
+        })
+        .limit(additionalStars)
+        .forEach(stars::add);
+
     playerIDs.forEach(playerID -> {
-      Coordinates homeCoords = new Coordinates(Math.random(), Math.random());
+      Coordinates homeCoords = getStarCoordinates(coordinates);
+      coordinates.add(homeCoords);
       Star homeStar = new Star(playerID, 1, homeCoords, IdUtils.generateId(8),
-          true, JUMP_DISTANCE, DEMAT_RATE, DEMAT_RATE, GENERATION_RATE, GENERATION_RATE, ng.getName());
+          true, JUMP_DISTANCE, DEMAT_RATE, DEMAT_RATE, GENERATION_RATE, GENERATION_RATE,
+          ng.getName());
       stars.add(homeStar);
 
       Set<String> otherPlayers = playerIDs.stream()
@@ -46,13 +63,19 @@ public class MapGeneration {
       players.add(player);
     });
 
-    int additionalStars = (int) Math.pow(10 + 3 * playerIDs.size(), 0.75);
-    Stream.generate(() -> new Star(null, 0, new Coordinates(Math.random(), Math.random()),
-        IdUtils.generateId(8), false, JUMP_DISTANCE, DEMAT_RATE, DEMAT_RATE, GENERATION_RATE,
-        GENERATION_RATE, ng.getName()))
-        .limit(additionalStars)
-        .forEach(stars::add);
-
     return new GameState(gameID, stars, players, LIGHT_SPEED, JUMP_DISTANCE, SHIP_SPEED);
+  }
+
+  private static Coordinates getStarCoordinates(List<Coordinates> existingCoordinates) {
+    Coordinates coordinates = new Coordinates(Math.random(), Math.random());
+    while (!(existingCoordinates.isEmpty()
+        || existingCoordinates.stream()
+            .anyMatch(c -> coordinates.getDistanceFrom(c) <= JUMP_DISTANCE)
+        && existingCoordinates.stream()
+            .allMatch(c -> coordinates.getDistanceFrom(c) > JUMP_DISTANCE / 5))) {
+      coordinates.setX(Math.random());
+      coordinates.setY(Math.random());
+    }
+    return coordinates;
   }
 }

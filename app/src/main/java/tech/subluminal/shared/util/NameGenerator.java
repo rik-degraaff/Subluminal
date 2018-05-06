@@ -11,63 +11,60 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.regex.Pattern;
-import org.pmw.tinylog.Logger;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 
 public class NameGenerator {
 
-  private List<String> starNames = new ArrayList<>();
+  Random rand = new Random(); //TODO: Global Seed
+  private List<List<String>> starNames = new ArrayList<>();
+  private List<Integer> starListWeights = new ArrayList<>();
+  private int sumWeights;
+  private int fileCounter = 0;
   private List<String> planetNames; //for later use
 
   public NameGenerator() {
-
     readStarFiles();
-
   }
 
   public void readStarFiles() {
     Reflections reflections = new Reflections("tech.subluminal", new ResourcesScanner());
-    Set<String> fileNames = reflections.getResources(Pattern.compile(".*\\.txt"));
+    Pattern pat = Pattern.compile(".*\\.*star.*\\.txt");
+    Set<String> fileNames = reflections.getResources(pat);
 
     if (fileNames.isEmpty()) {
       throw new IllegalArgumentException("No list with starnames in resources found!");
     } else {
-      Logger.info(".txt files found:");
       fileNames.forEach(file -> {
-        //Logger.info(file);
+        starNames.add(new ArrayList<>());
         readLines(file);
+        fileCounter++;
       });
     }
-
-
-    /*for (int i = 0; i < listOfFiles.length; i++) {
-      if (listOfFiles[i].isFile()) {
-        String file = listOfFiles[i].getName();
-        System.out.println("File " + file);
-        // get last index for '.' char
-        int lastIndex = file.lastIndexOf('.');
-
-        // get extension
-        String str = file.substring(lastIndex);
-
-        // match path name extension
-        if (str.equals(".txt")) {
-          readLines("/tech/subluminal/resources/namegenerator/stars/" + listOfFiles[i].getName());
-        }
-
-      }
-    }*/
-    //readLines("/tech/subluminal/resources/namegenerator/stars/nearest-stars-single.txt");
   }
 
   private void readLines(String path) {
-    Logger.debug(path);
-    //System.out.println(NameGenerator.class.getResource("/" + path).getPath());
     BufferedReader br = null;
     try {
       br = new BufferedReader(new InputStreamReader(
           NameGenerator.class.getResource("/" + path).openStream(), "UTF-8"));
+
+      int tempWeight = 0;
+      br.mark(1);
+      if (br.read() != 0xFEFF) {
+        br.reset();
+        tempWeight = Integer.parseInt(br.readLine());
+      } else {
+        br.reset();
+        tempWeight = Integer.parseInt(br.readLine().substring(1));
+      }
+
+      starListWeights.add(tempWeight);
+      sumWeights += tempWeight;
+
+      br.lines().forEach(l -> {
+        starNames.get(fileCounter).add(l);
+      });
     } catch (UnsupportedEncodingException e) {
       e.printStackTrace();
     } catch (FileNotFoundException e) {
@@ -75,22 +72,23 @@ public class NameGenerator {
     } catch (IOException e) {
       e.printStackTrace();
     }
-
-    br.lines().forEach(l -> {
-      starNames.add(l);
-      //System.out.println(l);
-    });
-
   }
 
   public String getName() {
-    Random rand = new Random();
-    int rIndex = rand.nextInt(starNames.size() - 1);
-    return starNames.remove(rIndex + 1);
+    Random rand = new Random(); //TODO: Set seed from Global.Setings class
+    int randRange = (int) (rand.nextDouble()*sumWeights);
+    int tempIndex = 0;
+    int tempSum = starListWeights.get(tempIndex);
+
+    while (tempSum < randRange) {
+      tempSum += starListWeights.get(tempIndex+1);
+      tempIndex++;
+    }
+
+    return starNames.get(tempIndex).remove(rand.nextInt(starNames.get(tempIndex).size()));
   }
 
   public List<String> getNames(int count) {
-    Random rand = new Random();
     List<String> names = new LinkedList<>();
     int rIndex;
     for (int i = 0; i < count; i++) {
