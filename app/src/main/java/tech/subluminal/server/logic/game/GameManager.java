@@ -265,7 +265,12 @@ public class GameManager implements GameStarter {
     intermediateGameState.getDestroyedFleets().forEach((playerID, fleets) -> {
       final Map<String, GameHistory<Fleet>> fleetHistories = gameState.getPlayers().get(playerID)
           .getFleets();
-      fleets.forEach(f -> fleetHistories.get(f.getID()).add(GameHistoryEntry.destroyed(f)));
+      fleets.forEach(f -> {
+        final GameHistory<Fleet> history = fleetHistories.get(f.getID());
+        if (history != null) {
+          history.add(GameHistoryEntry.destroyed(f));
+        }
+      });
     });
 
     intermediateGameState.getDestroyedPlayers().forEach(player -> {
