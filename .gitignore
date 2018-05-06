@@ -12,6 +12,7 @@
 *.aux
 __*.tex
 *.synctex*
+log.txt
 
 #folders
 .app/
