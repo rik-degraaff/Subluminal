@@ -11,7 +11,7 @@ import tech.subluminal.shared.son.SONParsingError;
 public class ChatMessageInTest {
 
   @Test
-  public void testStringifyAndParsing() {
+  public void testStringifyAndParsing() throws SONConversionError, SONParsingError {
     String message = "!Hello!";
     String username = "Luke";
     Channel channel = Channel.CRITICAL;
@@ -22,15 +22,11 @@ public class ChatMessageInTest {
     String parsedUsername = null;
     Channel parsedChannel = null;
 
-    try {
-      ChatMessageIn parsedChatMessageIn = ChatMessageIn.fromSON(SON.parse(chatMessageInMsg));
-      Assert.assertNotNull(parsedChatMessageIn);
-      parsedChannel = parsedChatMessageIn.getChannel();
-      parsedUsername = parsedChatMessageIn.getUsername();
-      parsedMessage = parsedChatMessageIn.getMessage();
-    } catch (SONParsingError | SONConversionError e) {
-      e.printStackTrace();
-    }
+    ChatMessageIn parsedChatMessageIn = ChatMessageIn.fromSON(SON.parse(chatMessageInMsg));
+    Assert.assertNotNull(parsedChatMessageIn);
+    parsedChannel = parsedChatMessageIn.getChannel();
+    parsedUsername = parsedChatMessageIn.getUsername();
+    parsedMessage = parsedChatMessageIn.getMessage();
 
     System.out.println(chatMessageInMsg);
     Assert.assertEquals(message, parsedMessage);
