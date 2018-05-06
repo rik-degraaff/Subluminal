@@ -249,6 +249,19 @@ public class GameController implements Initializable, GamePresenter {
     }
   }
 
+  @Override
+  public void removeMotherShips(List<String> shipIDs) {
+    shipIDs.forEach(f -> {
+      MotherShipComponent remShip = ships.get(f);
+      if (remShip != null) {
+        ships.remove(f);
+        Platform.runLater(() -> {
+          map.getChildren().remove(remShip);
+        });
+      }
+    });
+  }
+
   public void setGameStore(GameStore gameStore) {
     this.gameStore = gameStore;
 

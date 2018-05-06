@@ -9,16 +9,23 @@ import tech.subluminal.shared.son.SONRepresentable;
  */
 public class EndGameRes implements SONRepresentable {
 
-  private static final String WINNER_KEY = "id";
+  private static final String WINNER_KEY = "winner";
+  private static final String GAME_KEY = "game";
   private static final String CLASS_NAME = EndGameRes.class.getSimpleName();
   private String winnerID;
+  private String gameID;
 
-  public EndGameRes(String winnerID) {
+  public EndGameRes(String gameID, String winnerID) {
     this.winnerID = winnerID;
+    this.gameID = gameID;
   }
 
   public String getWinnerID() {
     return winnerID;
+  }
+
+  public String getGameID() {
+    return gameID;
   }
 
   /**
@@ -27,12 +34,16 @@ public class EndGameRes implements SONRepresentable {
   public static EndGameRes fromSON(SON son) throws SONConversionError {
     String winnerID = son.getString(WINNER_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, WINNER_KEY));
+    String gameID = son.getString(GAME_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, GAME_KEY));
 
-    return new EndGameRes(winnerID);
+    return new EndGameRes(gameID,winnerID);
   }
 
   @Override
   public SON asSON() {
-    return new SON().put(winnerID, WINNER_KEY);
+    return new SON()
+        .put(winnerID, WINNER_KEY)
+        .put(gameID, GAME_KEY);
   }
 }

@@ -72,7 +72,7 @@ public class Subluminal {
     } catch (IllegalAccessException e) {
       e.printStackTrace();
     }
-
+    
     final Subluminal subl = CommandLine.populateCommand(new Subluminal(), args);
 
     if (subl.help) {

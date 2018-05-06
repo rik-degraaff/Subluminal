@@ -18,14 +18,14 @@ public class GameStateDelta implements SONRepresentable {
 
   private static final String PLAYERS_KEY = "players";
   private static final String STARS_KEY = "stars";
-  private static final String REMOVED_PLAYERS_KEY = "removedPlayers";
+  private static final String REMOVED_MOTHER_SHIPS = "removedMotherShips";
   private static final String REMOVED_FLEETS_KEY = "removedFleets";
   private static final String KEY = "key";
   private static final String VALUE = "value";
   private static final String CLASS_NAME = GameStateDelta.class.getSimpleName();
   private List<Player> players = new LinkedList<>();
   private List<Star> stars = new LinkedList<>();
-  private List<String> removedPlayers = new LinkedList<>();
+  private List<String> removedMotherShips = new LinkedList<>();
   private Map<String, List<String>> removedFleets = new HashMap<>();
 
   /**
@@ -60,15 +60,15 @@ public class GameStateDelta implements SONRepresentable {
       delta.addPlayer(Player.fromSON(player));
     }
 
-    SONList removedPlayersList = son.getList(REMOVED_PLAYERS_KEY)
-        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, REMOVED_PLAYERS_KEY));
+    SONList removedShipsList = son.getList(REMOVED_MOTHER_SHIPS)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, REMOVED_MOTHER_SHIPS));
 
-    for (int i = 0; i < removedPlayersList.size(); i++) {
+    for (int i = 0; i < removedShipsList.size(); i++) {
       int ii = i;
-      String player = removedPlayersList.getString(i)
-          .orElseThrow(() -> SONRepresentable.error(REMOVED_PLAYERS_KEY, Integer.toString(ii)));
+      String ship = removedShipsList.getString(i)
+          .orElseThrow(() -> SONRepresentable.error(REMOVED_MOTHER_SHIPS, Integer.toString(ii)));
 
-      delta.addRemovedPlayer(player);
+      delta.addRemovedMotherShip(ship);
     }
 
     SONList removedFleetsList = son.getList(REMOVED_FLEETS_KEY)
@@ -111,8 +111,8 @@ public class GameStateDelta implements SONRepresentable {
   /**
    * @return Returns a list of the players that have to be removed from the game state.
    */
-  public List<String> getRemovedPlayers() {
-    return removedPlayers;
+  public List<String> getRemovedMotherShips() {
+    return removedMotherShips;
   }
 
   /**
@@ -134,12 +134,12 @@ public class GameStateDelta implements SONRepresentable {
   }
 
   /**
-   * Adds a player to the list of the players to be removed from the game.
+   * Adds a mother ship to the list of the mother ships to be removed from the game.
    *
-   * @param id the ID of the player to be removed.
+   * @param id the ID of the mother ship to be removed.
    */
-  public void addRemovedPlayer(String id) {
-    removedPlayers.add(id);
+  public void addRemovedMotherShip(String id) {
+    removedMotherShips.add(id);
   }
 
   /**
@@ -175,7 +175,7 @@ public class GameStateDelta implements SONRepresentable {
     stars.stream().map(Star::asSON).forEach(starList::add);
 
     SONList removedPlayersList = new SONList();
-    removedPlayers.forEach(removedPlayersList::add);
+    removedMotherShips.forEach(removedPlayersList::add);
 
     SONList removedFleetsList = new SONList();
     removedFleets.keySet().forEach(k -> {
@@ -191,7 +191,7 @@ public class GameStateDelta implements SONRepresentable {
     return new SON()
         .put(playerList, PLAYERS_KEY)
         .put(starList, STARS_KEY)
-        .put(removedPlayersList, REMOVED_PLAYERS_KEY)
+        .put(removedPlayersList, REMOVED_MOTHER_SHIPS)
         .put(removedFleetsList, REMOVED_FLEETS_KEY);
   }
 }

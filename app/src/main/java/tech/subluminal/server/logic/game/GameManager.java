@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.pmw.tinylog.Logger;
@@ -21,13 +23,17 @@ import tech.subluminal.server.stores.records.Player;
 import tech.subluminal.server.stores.records.Signal;
 import tech.subluminal.server.stores.records.Star;
 import tech.subluminal.shared.logic.game.GameLoop;
+import tech.subluminal.shared.logic.game.SleepGameLoop;
+import tech.subluminal.shared.messages.EndGameRes;
 import tech.subluminal.shared.messages.FleetMoveReq;
 import tech.subluminal.shared.messages.GameStateDelta;
 import tech.subluminal.shared.messages.HighScoreReq;
 import tech.subluminal.shared.messages.HighScoreRes;
 import tech.subluminal.shared.messages.MotherShipMoveReq;
 import tech.subluminal.shared.messages.MoveReq;
+import tech.subluminal.shared.messages.YouLose;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.records.LobbyStatus;
 import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Fleet;
@@ -44,13 +50,22 @@ public class GameManager implements GameStarter {
   private final MessageDistributor distributor;
   private final Map<String, Thread> gameThreads = new HashMap<>();
   private final HighScoreStore highScoreStore;
+  private final BiFunction<Set<String>, String, GameState> mapGenerator;
+  private final BiFunction<Integer, SleepGameLoop.Delegate, GameLoop> gameLoopProvider;
 
-  public GameManager(GameStore gameStore, LobbyStore lobbyStore, MessageDistributor distributor,
-      HighScoreStore highScoreStore) {
+  public GameManager(
+      GameStore gameStore, LobbyStore lobbyStore, MessageDistributor distributor,
+      HighScoreStore highScoreStore,
+      BiFunction<Set<String>, String, GameState> mapGenerator,
+      BiFunction<Integer, SleepGameLoop.Delegate, GameLoop> gameLoopProvider
+  ) {
     this.gameStore = gameStore;
     this.lobbyStore = lobbyStore;
     this.highScoreStore = highScoreStore;
     this.distributor = distributor;
+
+    this.mapGenerator = mapGenerator;
+    this.gameLoopProvider = gameLoopProvider;
 
     distributor.addConnectionOpenedListener(this::attachHandlers);
   }
@@ -74,7 +89,7 @@ public class GameManager implements GameStarter {
         .getLobbiesWithUser(id)
         .use(l -> l.stream().map(s -> s.use(Lobby::getID)))
         .findFirst();
-    Logger.debug("MOVE REQUESTS: " + gameStore.moveRequests().getByID(optGameID.get()));
+    Logger.trace("MOVE REQUESTS: " + gameStore.moveRequests().getByID(optGameID.get()));
     optGameID.ifPresent(gameID -> {
       gameStore.moveRequests().getByID(gameID)
           .ifPresent(sync -> sync.consume(list -> list.add(id, req)));
@@ -83,10 +98,10 @@ public class GameManager implements GameStarter {
 
   @Override
   public void startGame(String lobbyID, Set<String> playerIDs) {
-    gameStore.games().add(MapGeneration.getNewGameStateForPlayers(playerIDs, lobbyID));
+    gameStore.games().add(mapGenerator.apply(playerIDs, lobbyID));
     gameStore.moveRequests().add(new MoveRequests(lobbyID));
 
-    GameLoop gameLoop = new GameLoop(TPS, new GameLoop.Delegate() {
+    GameLoop gameLoop = gameLoopProvider.apply(TPS, new SleepGameLoop.Delegate() {
 
       @Override
       public void beforeTick() {
@@ -103,10 +118,23 @@ public class GameManager implements GameStarter {
       }
 
       @Override
-      public void afterTick() {
+      public boolean afterTick() {
+        AtomicBoolean stop = new AtomicBoolean(false);
+
         gameStore.games()
             .getByID(lobbyID)
-            .ifPresent(sync -> sync.consume(gameState -> sendUpdatesToPlayers(gameState)));
+            .ifPresent(sync -> sync.consume(gameState -> {
+              if (sendUpdatesToPlayers(gameState)) {
+                stop.set(true);
+                gameThreads.remove(lobbyID);
+                lobbyStore.lobbies()
+                    .getByID(lobbyID)
+                    .ifPresent(syncLobby -> {
+                      syncLobby.consume(lobby -> lobby.setStatus(LobbyStatus.LOCKED));
+                    });
+              }
+            }));
+        return stop.get();
       }
     });
     Thread gameThread = new Thread(gameLoop::start);
@@ -114,31 +142,43 @@ public class GameManager implements GameStarter {
     gameThreads.put(lobbyID, gameThread);
   }
 
-  private void sendUpdatesToPlayers(GameState gameState) {
+  private boolean sendUpdatesToPlayers(GameState gameState) {
+    AtomicBoolean playersDestroyed = new AtomicBoolean(false);
     gameState.getPlayers().keySet().forEach(playerID -> {
       final GameStateDelta delta = new GameStateDelta();
 
-      final GameHistoryEntry<Ship> motherShipEntry = gameState.getPlayers()
-          .get(playerID)
-          .getMotherShip()
-          .getCurrent();
+      final Player currentPlayer = gameState.getPlayers()
+          .get(playerID);
+
+      final GameHistoryEntry<Ship> motherShipEntry = currentPlayer.getMotherShip().getCurrent();
+
       if (motherShipEntry.isDestroyed()) {
-        delta.addRemovedPlayer(playerID);
-        //TODO: inform the player that they lost?
+        if (currentPlayer.isAlive()) {
+          delta.addRemovedMotherShip(motherShipEntry.getState().getID());
+          distributor.sendMessage(new YouLose(), playerID);
+          currentPlayer.kill();
+          playersDestroyed.set(true);
+        }
       } else {
-        delta.addPlayer(createPlayerDelta(motherShipEntry.getState(), motherShipEntry,
+        final Optional<Ship> ship = motherShipEntry.isDestroyed()
+            ? Optional.empty()
+            : Optional.ofNullable(motherShipEntry.getState());
+        delta.addPlayer(createPlayerDelta(ship, motherShipEntry,
             gameState.getPlayers().get(playerID), delta, playerID));
       }
 
       gameState.getPlayers().forEach((deltaPlayerID, player) -> {
         if (!deltaPlayerID.equals(playerID)) {
-          player.getMotherShip()
+          final Optional<Ship> motherShip = player.getMotherShip()
               .getLatestOrLastForPlayer(playerID, motherShipEntry)
-              .apply(
-                  motherShip -> delta.addPlayer(createPlayerDelta(motherShip, motherShipEntry,
-                      gameState.getPlayers().get(deltaPlayerID), delta, playerID)),
-                  v -> delta.addRemovedPlayer(deltaPlayerID)
-              );
+              .left();
+
+          delta.addPlayer(createPlayerDelta(motherShip, motherShipEntry,
+              gameState.getPlayers().get(deltaPlayerID), delta, playerID));
+
+          if (!motherShip.isPresent()) {
+            delta.addRemovedMotherShip(player.getMotherShip().getCurrent().getState().getID());
+          }
         }
       });
 
@@ -149,10 +189,24 @@ public class GameManager implements GameStarter {
 
       distributor.sendMessage(delta, playerID);
     });
+
+    if (playersDestroyed.get()) {
+      final List<Player> livingPlayers = gameState.getPlayers().values().stream()
+          .filter(Player::isAlive)
+          .collect(Collectors.toList());
+
+      if (livingPlayers.size() <= 1) {
+        String winner = livingPlayers.size() == 1 ? livingPlayers.get(0).getID() : null;
+        distributor.sendMessage(new EndGameRes(gameState.getID(), winner), gameState.getPlayers().keySet());
+        gameThreads.remove(gameState.getID());
+        return true;
+      }
+    }
+    return false;
   }
 
   private tech.subluminal.client.stores.records.game.Player createPlayerDelta(
-      Ship motherShip,
+      Optional<Ship> motherShip,
       GameHistoryEntry<Ship> motherShipEntry, Player player, GameStateDelta delta,
       String forPlayerID
   ) {
@@ -205,7 +259,10 @@ public class GameManager implements GameStarter {
           .map(GameHistoryEntry::getState)
           .forEach(fleet -> intermediateGameState.addFleet(fleet, playerID));
 
-      intermediateGameState.addMotherShip(player.getMotherShip().getCurrent().getState(), playerID);
+      if (!player.getMotherShip().getCurrent().isDestroyed()) {
+        intermediateGameState
+            .addMotherShip(player.getMotherShip().getCurrent().getState(), playerID);
+      }
     });
 
     intermediateGameState.advance();
@@ -244,7 +301,17 @@ public class GameManager implements GameStarter {
     intermediateGameState.getDestroyedFleets().forEach((playerID, fleets) -> {
       final Map<String, GameHistory<Fleet>> fleetHistories = gameState.getPlayers().get(playerID)
           .getFleets();
-      fleets.forEach(f -> fleetHistories.get(f.getID()).add(GameHistoryEntry.destroyed(f)));
+      fleets.forEach(f -> {
+        final GameHistory<Fleet> history = fleetHistories.get(f.getID());
+        if (history != null) {
+          history.add(GameHistoryEntry.destroyed(f));
+        }
+      });
+    });
+
+    intermediateGameState.getDestroyedPlayers().forEach(player -> {
+      final GameHistory<Ship> history = gameState.getPlayers().get(player).getMotherShip();
+      history.add(GameHistoryEntry.destroyed(history.getCurrent().getState()));
     });
 
     gameState.setSignals(intermediateGameState.getSignals());
@@ -261,8 +328,11 @@ public class GameManager implements GameStarter {
 
     // get the game state from the store and loop over the move requests, handling each one.
     gameStore.games().getByID(lobbyID).ifPresent(sync -> sync.consume(gameState -> {
-      requestMap.forEach((playerID, requests) ->
-          requests.forEach(req -> handleRequest(gameState, playerID, req)));
+      requestMap.forEach((playerID, requests) -> {
+        if (!gameState.getPlayers().get(playerID).getMotherShip().getCurrent().isDestroyed()) {
+          requests.forEach(req -> handleRequest(gameState, playerID, req));
+        }
+      });
     }));
   }
 

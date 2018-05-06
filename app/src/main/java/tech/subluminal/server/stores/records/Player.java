@@ -17,11 +17,16 @@ public class Player extends Identifiable {
   private final Set<String> playerIDs = new HashSet<>();
   private final GameHistory<Ship> motherShip;
   private final Map<String, GameHistory<Fleet>> fleets = new HashMap<>();
+  private boolean alive;
 
-  public Player(String id, Set<String> otherPlayerIDs, Ship motherShip, double lightSpeed) {
+  public Player(
+      String id, Set<String> otherPlayerIDs, Ship motherShip, double lightSpeed, boolean alive
+  ) {
     super(id);
 
     this.lightSpeed = lightSpeed;
+    this.alive = alive;
+
     playerIDs.addAll(otherPlayerIDs);
     playerIDs.add(id);
 
@@ -46,5 +51,13 @@ public class Player extends Identifiable {
     } else {
       fleetGameHistory.add(new GameHistoryEntry<>(fleet));
     }
+  }
+
+  public boolean isAlive() {
+    return alive;
+  }
+
+  public void kill() {
+    alive = false;
   }
 }
