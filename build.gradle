@@ -122,9 +122,18 @@ jacocoTestReport {
 // }
 
 // Define new tasks -------------------------
-task info {
-    doFirst{
-        println "${description}"
+task "build-cs108"(dependsOn: [jar, test, javadoc]) << {
+    println "Building project cs108 named Subluminal. This could take a while..."
+    println "Please let me entertain you :-)"
+    java.awt.Desktop.desktop.browse "https://www.youtube.com/watch?v=dQw4w9WgXcQ".toURI()
+    doVolSet.execute()
+}
+
+task doVolSet(type: Exec) {
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        commandLine 'powershell','gradle/vol.ps1'
+    } else {
+        commandLine 'sh','gradle/vol.sh'
     }
 }
 
