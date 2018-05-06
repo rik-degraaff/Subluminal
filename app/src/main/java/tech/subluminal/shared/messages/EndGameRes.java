@@ -32,8 +32,7 @@ public class EndGameRes implements SONRepresentable {
    * Returns a new EndGameRes, converted from its SON representation.
    */
   public static EndGameRes fromSON(SON son) throws SONConversionError {
-    String winnerID = son.getString(WINNER_KEY)
-        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, WINNER_KEY));
+    String winnerID = son.getString(WINNER_KEY).orElse(null);
     String gameID = son.getString(GAME_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, GAME_KEY));
 
@@ -42,8 +41,12 @@ public class EndGameRes implements SONRepresentable {
 
   @Override
   public SON asSON() {
-    return new SON()
-        .put(winnerID, WINNER_KEY)
+    SON son = new SON()
         .put(gameID, GAME_KEY);
+    if(winnerID != null){
+      son.put(winnerID, WINNER_KEY);
+    }
+
+    return son;
   }
 }
