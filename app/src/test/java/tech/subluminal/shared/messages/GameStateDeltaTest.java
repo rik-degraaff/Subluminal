@@ -20,7 +20,7 @@ import tech.subluminal.shared.stores.records.game.Star;
 public class GameStateDeltaTest {
 
   @Test
-  public void stringifyAndParseGameStateDelta() {
+  public void stringifyAndParseGameStateDelta() throws SONParsingError, SONConversionError {
     GameStateDelta delta = new GameStateDelta();
     delta.addPlayer(new Player("1234",
         new Ship(new Coordinates(1.0, 2.3), "4321", Arrays.asList("1", "2", "3"), "3", 0.2),
@@ -48,12 +48,9 @@ public class GameStateDeltaTest {
     delta.addRemovedPlayer("ftdq");
 
     String msg = delta.asSON().asString();
-    try {
-      GameStateDelta parsedDelta = GameStateDelta.fromSON(SON.parse(msg));
-      assertNotNull(parsedDelta);
-    } catch (SONConversionError | SONParsingError sonConversionError) {
-      sonConversionError.printStackTrace();
-    }
+    GameStateDelta parsedDelta = GameStateDelta.fromSON(SON.parse(msg));
+    assertNotNull(parsedDelta);
+
     System.out.println(msg);
   }
 

@@ -9,7 +9,37 @@ import tech.subluminal.shared.son.SONList;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Represents the response of the server to a game start request from the client.
+ * Represents the response of the server to a game start request from the client. A GameStartRes
+ * message might look like this:
+ * <pre>
+ * {
+ *   "playerColors":l[
+ *     o{
+ *       "id":s"1235",
+ *       "color":o{
+ *         "red":d0.46941840648651123,
+ *         "green":d0.3046164810657501,
+ *         "blue":d0.49118220806121826
+ *       }
+ *     },
+ *     o{
+ *       "id":s"1234",
+ *       "color":o{
+ *         "red":d0.4259662926197052,
+ *         "green":d0.24026921391487122,
+ *         "blue":d0.3313233256340027
+ *       }
+ *     },o{
+ *       "id":s"3234",
+ *       "color":o{
+ *         "red":d0.4506761431694031,
+ *         "green":d0.25912126898765564,
+ *         "blue":d0.11660823225975037
+ *       }
+ *     }
+ *   ]
+ * }
+ * </pre>
  */
 public class GameStartRes implements SONRepresentable {
 

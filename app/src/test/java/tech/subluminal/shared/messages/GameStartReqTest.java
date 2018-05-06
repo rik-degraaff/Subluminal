@@ -10,15 +10,12 @@ import static org.junit.Assert.assertNotNull;
 public class GameStartReqTest {
 
   @Test
-  public void testStringifyAndParsing() {
+  public void testStringifyAndParsing() throws SONParsingError, SONConversionError {
     GameStartReq g = new GameStartReq();
     String gMsg = g.asSON().asString();
-    try {
-      GameStartReq parsedG = GameStartReq.fromSON(SON.parse(gMsg));
-      assertNotNull(parsedG);
-    } catch (SONParsingError error) {
-      error.printStackTrace();
-    }
+
+    GameStartReq parsedG = GameStartReq.fromSON(SON.parse(gMsg));
+    assertNotNull(parsedG);
     System.out.println(gMsg);
   }
 

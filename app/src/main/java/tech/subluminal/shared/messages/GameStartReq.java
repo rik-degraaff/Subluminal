@@ -4,7 +4,12 @@ import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Represents a game start request from a client to the server.
+ * Represents a game start request from a client to the server. A GameStartReq message converted to
+ * SON and then to string looks like this:
+ * <pre>
+ * {
+ * }
+ * </pre>
  */
 public class GameStartReq implements SONRepresentable {
 
