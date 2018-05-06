@@ -122,7 +122,7 @@ jacocoTestReport {
 // }
 
 // Define new tasks -------------------------
-task buildcs108(dependsOn: [jar, test, javadoc]) << {
+task "build-cs108"(dependsOn: [jar, test, javadoc]) << {
     println "Building project cs108 named Subluminal. This could take a while..."
     println "Please let me entertain you :-)"
     java.awt.Desktop.desktop.browse "https://www.youtube.com/watch?v=dQw4w9WgXcQ".toURI()
