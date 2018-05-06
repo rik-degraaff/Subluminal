@@ -1,6 +1,6 @@
 [![pipeline status](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/badges/master/pipeline.svg)](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/master)
 [![coverage report](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/badges/master/coverage.svg)](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/master)
-[![current version](https://img.shields.io/badge/version-3.3.0-blue.svg)](https://subluminal.tech/releases)
+[![current version](https://img.shields.io/badge/version-4.0.0-blue.svg)](https://subluminal.tech/releases)
 [![javadoc coverage](https://img.shields.io/badge/JavaDoc-74.40%25-blue.svg)](https://subluminal.tech/docs)
 [![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/subluminalthegame/subluminal/latest.svg)](https://hub.docker.com/r/subluminalthegame/subluminal/tags/)
 [![Twitter Follow](https://img.shields.io/twitter/follow/subluminalgame.svg?style=social&label=Follow)](https://twitter.com/subluminalgame)  
@@ -10,7 +10,7 @@
 [2. Getting Started](#2-getting-started)  
 [3. Game Concept](#3-game-concept)  
 [4. License](#4-license)  
-[5. Webpage](#5-webpage)
+[5. Webpage](#5-web)
 
 # [Subluminal](https://en.wiktionary.org/wiki/subluminal) /ˌsʌbˈl(j)uːmɪnl/ - The Game
 [![Logo](./assets/logo/subluminal_logo.png)](http://subluminal.tech) **by Bordeaux Ink.**
@@ -20,14 +20,48 @@
 
 ## 1. Overview
 ### Basic Usage:
-Download the current jar bundle (Subluminal-0.2.0-m2.jar) or clone the repo and run ``gradle build`` (output in ``./app/build/libs/``).  Start the game with the following command:  
-```sh
+Download the current jar bundle (Subluminal-4.0.0.jar) or clone the repo and run ``gradle build-cs108`` (output in ``./app/build/libs/``).  Start the game with the following command:  
+``` sh
 # First start a server.
-java -jar Subluminal-0.2.0-m2.jar server <port>
+$ java -jar Subluminal-4.0.0.jar server <port>
 # Then start the clients.
-java -jar Subluminal-0.2.0-m2.jar client <hostaddress>:<port> [<username>]
+$ java -jar Subluminal-4.0.0.jar client <hostaddress>:<port> [<username>]
 ```
-On the client you can use ***/changename*** to change your username and ***/logout*** to exit the client.
+
+Our application supports a number of command line arguments. Use ``--help`` or ``-h`` to get the usage information as shown below:
+``` sh
+$ java -jar app/build/libs/Subluminal-4.0.0.jar --help
+
+Welcome to
+  _____       _     _                 _             _
+ / ____|     | |   | |               (_)           | |
+| (___  _   _| |__ | |_   _ _ __ ___  _ _ __   __ _| |
+ \___ \| | | | '_ \| | | | | '_ ` _ \| | '_ \ / _` | |
+ ____) | |_| | |_) | | |_| | | | | | | | | | | (_| | |
+|_____/ \__,_|_.__/|_|\__,_|_| |_| |_|_|_| |_|\__,_|_|
+
+
+Usage: Subluminal [-dh] [-lf=<logfile>] [-ll=<loglevel>] <mode>
+                  [<hostAndOrPort>] [<username>]
+Starts the game in server or client mode.
+      <mode>                  Sets the application mode. Must be one of
+                                "server, client".
+      [<hostAndOrPort>]       Specifies the connection details.In case of
+                                server this needs to be a "port". In case of
+                                client this needs to be a "host:port".
+                                Default: 164.132.199.58:1729
+      [<username>]            Sets the username. If none is specified the
+                                system username will be used instead.
+                                Default: lucku
+  -d, --debug                 Enables the debug mode.
+      -lf, --logfile=<logfile>
+                              Sets the path and filename for the logfile
+                                Default: log.txt
+      -ll, --loglevel=<loglevel>
+                              Sets the loglevel for the application.
+                                Default: off
+  -h, --help                  Display help/usage.
+```
 
 
 ## 2. Getting Started
