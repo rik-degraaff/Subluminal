@@ -73,7 +73,6 @@ public class GameManager implements GamePresenter.Delegate {
   }
 
   private void onGameStateDeltaReceived(GameStateDelta delta) {
-    System.out.println("delta!!!");
     delta.getRemovedMotherShips().forEach(gameStore.motherShips()::removeByID);
     delta.getPlayers().forEach(player -> {
       ifPresent(player.getMotherShip())
@@ -105,8 +104,6 @@ public class GameManager implements GamePresenter.Delegate {
       gamePresenter.removeFleets(delta.getRemovedFleets().values().stream().flatMap(List::stream)
           .collect(Collectors.toList()));
       gamePresenter.update();
-    } else {
-      System.out.println("delta but no game");
     }
   }
 
@@ -126,7 +123,6 @@ public class GameManager implements GamePresenter.Delegate {
   }
 
   private void onGameLeave() {
-    System.out.println("gameleave!!!");
     gameStore.inGame().set(false);
     gameStore.motherShips().clear();
     gameStore.stars().clear();

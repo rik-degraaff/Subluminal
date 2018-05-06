@@ -6,14 +6,11 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
@@ -461,7 +458,6 @@ public class GameController implements Initializable, GamePresenter {
 
   @Override
   public void clearGame() {
-    System.out.println("clearing game");
     dummyFleetList = new ListView<>();
     dummyShipList = new ListView<>();
     dummyShipList = new ListView<>();
