@@ -1,7 +1,9 @@
 package tech.subluminal.main;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +61,18 @@ public class Subluminal {
    * @param args are the command line arguments.
    */
   public static void main(String[] args) {
+    System.setProperty("file.encoding","UTF-8");
+    Field charset = null;
+    try {
+      charset = Charset.class.getDeclaredField("defaultCharset");
+      charset.setAccessible(true);
+      charset.set(null,null);
+    } catch (NoSuchFieldException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    }
+
     final Subluminal subl = CommandLine.populateCommand(new Subluminal(), args);
 
     if (subl.help) {
