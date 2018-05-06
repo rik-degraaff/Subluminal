@@ -286,7 +286,10 @@ public class IntermediateGameState {
   }
 
   private double getDematStrength(int strength) {
-    return 5 + Math.sqrt(Math.max(strength - 5, 0));
+    if (strength <= 6) {
+      return strength;
+    }
+    return 5 + Math.sqrt(strength - 5);
   }
 
   private int getPlayerStrength(int ships, boolean motherShip) {
