@@ -28,7 +28,10 @@ public class EndGameComponent extends HBox {
     box.getStyleClass().add("console");
     box.setPrefHeight(300);
 
-    this.getChildren().add(box);
+    HBox hbox = new HBox(box);
+    hbox.setAlignment(Pos.CENTER);
+
+    this.getChildren().add(hbox);
 
     Platform.runLater(() -> {
       this.prefWidthProperty().bind(getScene().widthProperty());
