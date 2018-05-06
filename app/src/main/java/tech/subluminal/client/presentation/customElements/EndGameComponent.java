@@ -9,6 +9,7 @@ import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import tech.subluminal.client.presentation.controller.MainController;
@@ -26,10 +27,10 @@ public class EndGameComponent extends HBox {
     Label endText = new Label("End of Game" + "\n" + "Winner is: " + winnerName);
     box.getChildren().add(endText);
     box.getStyleClass().add("console");
-    box.setPrefHeight(300);
 
-    HBox hbox = new HBox(box);
-    hbox.setAlignment(Pos.CENTER);
+    Pane hbox = new Pane(box);
+    hbox.setPrefHeight(300);
+    hbox.setPrefWidth(400);
 
     this.getChildren().add(hbox);
 
@@ -73,7 +74,7 @@ public class EndGameComponent extends HBox {
 
   public void addButtons() {
     Label backToLobby = new Label("Back to Lobby");
-    this.getChildren().add(backToLobby);
+    box.getChildren().add(backToLobby);
     backToLobby.setOnMouseClicked(event -> {
       main.onMapCloseHandle();
     });
