@@ -16,15 +16,16 @@ import tech.subluminal.shared.son.SONParsingError;
 public class GameStartResTest {
 
   @Test
-  public void stringifyAndParseGameStartRes(){
+  public void stringifyAndParseGameStartRes() {
     Map<String, Color> playerColors = new HashMap<>();
     playerColors.put("1234", new Color(Math.random(), Math.random(), Math.random(), 1));
     playerColors.put("1235", new Color(Math.random(), Math.random(), Math.random(), 1));
     playerColors.put("3234", new Color(Math.random(), Math.random(), Math.random(), 1));
-    GameStartRes res = new GameStartRes(playerColors);
+    GameStartRes res = new GameStartRes("112314", playerColors);
 
     try {
-      Map<String, Color> parsed = GameStartRes.fromSON(SON.parse(res.asSON().asString())).getPlayerColor();
+      Map<String, Color> parsed = GameStartRes.fromSON(SON.parse(res.asSON().asString()))
+          .getPlayerColor();
       playerColors.forEach((id, color) -> {
         assertNotNull(parsed.get(id));
         assertEquals(color.getRed(), parsed.get(id).getRed(), 0.00000001);
