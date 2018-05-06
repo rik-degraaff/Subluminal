@@ -25,12 +25,13 @@ public class EndGameComponent extends HBox {
     this.setAlignment(Pos.CENTER);
     box = new VBox();
     Label endText = new Label("End of Game" + "\n" + "Winner is: " + winnerName);
+    endText.getStyleClass().add("console-red");
     box.getChildren().add(endText);
-    box.getStyleClass().add("console");
 
     Pane hbox = new Pane(box);
     hbox.setPrefHeight(300);
     hbox.setPrefWidth(400);
+    hbox.getStyleClass().add("console");
 
     this.getChildren().add(hbox);
 
@@ -53,12 +54,13 @@ public class EndGameComponent extends HBox {
     String failed = "You all failed Bob";
     Label endText = new Label();
     endText.textProperty().bind(Bindings.createStringBinding(() -> failed + dots.get(), dots));
+    endText.getStyleClass().add("console-red");
     box.getChildren().add(endText);
-    box.getStyleClass().add("console");
 
     Pane hbox = new Pane(box);
     hbox.setPrefHeight(300);
     hbox.setPrefWidth(400);
+    hbox.getStyleClass().add("console");
 
     Timeline timeTl = new Timeline();
     timeTl.getKeyFrames().add(new KeyFrame(Duration.seconds(1), event -> {
@@ -74,6 +76,12 @@ public class EndGameComponent extends HBox {
     timeTl.play();
 
     this.getChildren().add(hbox);
+
+    Platform.runLater(() -> {
+      this.prefWidthProperty().bind(getScene().widthProperty());
+      this.prefHeightProperty().bind(getScene().heightProperty());
+    });
+
     addButtons();
   }
 

@@ -129,3 +129,7 @@
 .console{
   -fx-background-color: black;
 }
+
+.console-red{
+  -fx-text-fill: red;
+}
