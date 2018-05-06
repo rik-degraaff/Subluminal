@@ -52,8 +52,13 @@ public class EndGameComponent extends HBox {
     dots.set("");
     String failed = "You all failed Bob";
     Label endText = new Label();
-    endText.textProperty().bind(Bindings.createStringBinding(() -> failed + dots, dots));
+    endText.textProperty().bind(Bindings.createStringBinding(() -> failed + dots.get(), dots));
     box.getChildren().add(endText);
+    box.getStyleClass().add("console");
+
+    Pane hbox = new Pane(box);
+    hbox.setPrefHeight(300);
+    hbox.setPrefWidth(400);
 
     Timeline timeTl = new Timeline();
     timeTl.getKeyFrames().add(new KeyFrame(Duration.seconds(1), event -> {
@@ -68,7 +73,7 @@ public class EndGameComponent extends HBox {
     timeTl.setAutoReverse(true);
     timeTl.play();
 
-    this.getChildren().add(box);
+    this.getChildren().add(hbox);
     addButtons();
   }
 
