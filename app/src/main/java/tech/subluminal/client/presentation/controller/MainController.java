@@ -1,6 +1,7 @@
 package tech.subluminal.client.presentation.controller;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
@@ -10,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -18,7 +21,6 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
@@ -26,15 +28,21 @@ import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.customElements.BackgroundComponent;
 import tech.subluminal.client.presentation.customElements.ChatComponent;
+import tech.subluminal.client.presentation.customElements.ControlButton;
+import tech.subluminal.client.presentation.customElements.DebugComponent;
+import tech.subluminal.client.presentation.customElements.FpsUpdater;
 import tech.subluminal.client.presentation.customElements.GameComponent;
+import tech.subluminal.client.presentation.customElements.HighscoreComponent;
 import tech.subluminal.client.presentation.customElements.LobbyComponent;
 import tech.subluminal.client.presentation.customElements.MenuComponent;
+import tech.subluminal.client.presentation.customElements.MonitorComponent;
 import tech.subluminal.client.presentation.customElements.NameChangeComponent;
 import tech.subluminal.client.presentation.customElements.SettingsComponent;
 import tech.subluminal.client.presentation.customElements.UserListComponent;
 import tech.subluminal.client.presentation.customElements.WindowContainerComponent;
 import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.client.stores.UserStore;
+import tech.subluminal.server.stores.records.HighScore;
 
 public class MainController implements Initializable {
 
@@ -80,6 +88,9 @@ public class MainController implements Initializable {
   @FXML
   private AnchorPane playerBoardDock;
 
+  @FXML
+  private VBox statusBoxDock;
+
   private GameComponent game;
 
   private UserStore userStore;
@@ -97,6 +108,13 @@ public class MainController implements Initializable {
   private UserListController userListController;
 
   private boolean chatOut = false;
+  private NameChangeComponent nameChange;
+  private ControlButton playerListButton;
+  private ControlButton nameChangeButton;
+  private ControlButton settingsButton;
+  private DebugComponent debug;
+  private MonitorComponent monitor;
+  private HighscoreComponent highscore;
 
   public LobbyComponent getLobby() {
     return lobby;
@@ -127,14 +145,23 @@ public class MainController implements Initializable {
     chatDock.getChildren().add(chat);
 
     userList = new UserListComponent(this);
-    rightSideDock.getChildren().add(userList);
+    playerListButton = new ControlButton(this, "P", userList, statusBoxDock);
+    rightSideDock.getChildren().add(playerListButton);
+
     userListController = userList.getController();
 
-    NameChangeComponent nameChange = new NameChangeComponent(this);
-    rightSideDock.getChildren().add(nameChange);
+    nameChange = new NameChangeComponent(this);
+    nameChangeButton = new ControlButton(this, "C", nameChange, statusBoxDock);
+    rightSideDock.getChildren().add(nameChangeButton);
+    //rightSideDock.getChildren().add(nameChange);
 
     menu = new MenuComponent(this);
     settings = new SettingsComponent(this);
+    settingsButton = new ControlButton(this, "S", settings, statusBoxDock);
+    rightSideDock.getChildren().add(settingsButton);
+
+    highscore = new HighscoreComponent();
+
     lobby = new LobbyComponent();
 
     game = new GameComponent(this);
@@ -144,8 +171,31 @@ public class MainController implements Initializable {
 
     menuDock.getChildren().add(menu);
 
-    Platform.runLater(() -> {
+    FpsUpdater updater = new FpsUpdater();
 
+    debug = new DebugComponent(updater.averageFpsProperty());
+    monitor = new MonitorComponent(updater.averageFpsProperty());
+
+    VBox debugDock = new VBox();
+    window.getChildren().add(debugDock);
+
+    window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
+      if (keyEvent.getCode() == KeyCode.F4) {
+        if (debugDock.getChildren().contains(debug)) {
+          debugDock.getChildren().remove(debug);
+        } else {
+          debugDock.getChildren().add(debug);
+        }
+      } else if (keyEvent.getCode() == KeyCode.F5) {
+        if (debugDock.getChildren().contains(monitor)) {
+          debugDock.getChildren().remove(monitor);
+        } else {
+          debugDock.getChildren().add(monitor);
+        }
+      }
+    });
+
+    Platform.runLater(() -> {
       chatWindow.translateXProperty().bind(Bindings
           .createDoubleBinding(() -> chatDock.getWidth(), chatWindow.widthProperty(),
               chatDock.widthProperty()));
@@ -162,7 +212,7 @@ public class MainController implements Initializable {
         transTl.play();
         chatOut = false;
       } else {
-        transTl.setToX(0);
+        transTl.setToX(-30);
         transTl.play();
         chatOut = true;
       }
@@ -217,7 +267,7 @@ public class MainController implements Initializable {
 
       playArea.setMouseTransparent(false);
 
-      HBox box = new HBox();
+      rightSideDock.getChildren().clear();
       Pane leftSide = new Pane();
       leftSide.setPrefWidth(rightSideDock.getWidth());
       leftSide.prefHeightProperty().bind(chat.getScene().heightProperty());
@@ -227,17 +277,18 @@ public class MainController implements Initializable {
               BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
               BackgroundSize.DEFAULT));
       leftSide.setBackground(bg);
-      Pane rightSide = new Pane();
+      VBox rightSide = new VBox();
       rightSide.setPrefWidth(leftSideDock.getWidth());
       rightSide.prefHeightProperty().bind(chat.getScene().heightProperty());
       rightSide.setBackground(bg);
       leftSideDock.getChildren().add(leftSide);
       rightSideDock.getChildren().add(rightSide);
 
-      playerBoardDock.getChildren().remove(userList);
-      leftSide.getChildren().add(userList);
+      rightSideDock.getChildren().removeAll(playerListButton, nameChangeButton, settingsButton);
+      rightSide.getChildren().addAll(settingsButton, playerListButton, nameChangeButton);
       //rightSide.getChildren().add(new Label("this is a test"));
 
+      chatController.setInGame(true);
       playArea.getChildren().add(game);
     });
   }
@@ -268,12 +319,12 @@ public class MainController implements Initializable {
     }
   }
 
-  public void openChat(){
+  public void openChat() {
     fireMouseClick(chatHandle);
   }
 
   private void fireMouseClick(Node node) {
-    if(!chatOut){
+    if (!chatOut) {
       MouseEvent event = new MouseEvent(MouseEvent.MOUSE_CLICKED,
           node.getLayoutX(), node.getLayoutY(), node.getLayoutX(), node.getLayoutY(),
           MouseButton.PRIMARY, 1,
@@ -284,5 +335,19 @@ public class MainController implements Initializable {
 
   public GameController getGameController() {
     return gameController;
+  }
+
+  public void onHighscoreHandle() {
+    chatController.requestHighscores();
+    menuDock.getChildren().remove(menu);
+
+    windowContainer = new WindowContainerComponent(this, highscore, "Highscore");
+
+    menuDock.getChildren().add(windowContainer);
+    windowContainer.onWindowOpen();
+  }
+
+  public void onUpdateHighscoreHandle(List<HighScore> highScores) {
+    highscore.update(highScores);
   }
 }

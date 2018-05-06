@@ -50,6 +50,7 @@ public class ChatManager implements ChatPresenter.Delegate {
     chatPresenter.displaySystemMessage(
         req.getHighScores().stream().map(hs -> hs.getUsername() + ": " + hs.getScore())
             .reduce("", (acc, s) -> acc + System.lineSeparator() + s));
+    chatPresenter.updateHighscore(req.getHighScores());
   }
 
   private void onMessageReceived(ChatMessageIn message) {

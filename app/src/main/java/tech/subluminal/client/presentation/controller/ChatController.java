@@ -1,9 +1,12 @@
 package tech.subluminal.client.presentation.controller;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -11,14 +14,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import tech.subluminal.client.presentation.ChatPresenter;
 import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.stores.ReadOnlyUserStore;
 import tech.subluminal.client.stores.UserStore;
+import tech.subluminal.server.stores.records.HighScore;
 import tech.subluminal.shared.records.Channel;
 import tech.subluminal.shared.stores.records.User;
 
@@ -32,6 +38,13 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   @FXML
   private CheckBox isGlobalShown;
 
+  @FXML
+  private Button sendButton;
+  @FXML
+  private Button sendAllButton;
+  @FXML
+  private GridPane chatOptions;
+
   private ReadOnlyUserStore userStore;
   private ChatPresenter.Delegate chatDelegate;
   private UserPresenter.Delegate userDelegate;
@@ -40,12 +53,27 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   private FilteredList<Label> filteredList = new FilteredList<>(chatList);
   private MainController main;
 
+  private BooleanProperty inGame = new SimpleBooleanProperty();
+
   public ChatController getController() {
     return this;
   }
 
-  public void setMainController(MainController main){
+  public void setMainController(MainController main) {
     this.main = main;
+  }
+
+
+  public boolean isInGame() {
+    return inGame.get();
+  }
+
+  public BooleanProperty inGameProperty() {
+    return inGame;
+  }
+
+  public void setInGame(boolean inGame) {
+    this.inGame.set(inGame);
   }
 
   public void setUserStore(UserStore store) {
@@ -104,6 +132,24 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
         handleCommand(line);
       } else {
         //send @all
+        chatDelegate.sendGameMessage(line);
+        addMessageChat("you@game: " + line, Channel.GAME);
+        clearInput();
+      }
+    }
+  }
+
+  public void sendMessageAll(ActionEvent actionEvent) {
+    String line = messageText.getText();
+    if (!line.equals("")) {
+      char command = line.charAt(0);
+
+      if (command == '@') {
+        handleDirectedChatMessage(line);
+      } else if (command == '/') {
+        handleCommand(line);
+      } else {
+        //send @all
         chatDelegate.sendGlobalMessage(line);
         addMessageChat("you: " + line, Channel.GLOBAL);
         clearInput();
@@ -130,19 +176,19 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     }
   }
 
-  public void writeAt(String recipiant){
+  public void writeAt(String recipiant) {
     String temp = messageText.getText();
     clearInput();
-    if(temp == null){
+    if (temp == null) {
       messageText.setText("@" + recipiant + " ");
-    }else if(temp.contains("@")){
+    } else if (temp.contains("@")) {
       String parts[] = temp.split(" ", 2);
-      if(parts.length >= 2){
+      if (parts.length >= 2) {
         messageText.setText("@" + recipiant + " " + parts[1]);
-      }else{
+      } else {
         messageText.setText("@" + recipiant + " ");
       }
-    }else{
+    } else {
       messageText.setText("@" + recipiant + " " + temp);
     }
     messageText.requestFocus();
@@ -162,7 +208,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     userDelegate.changeUsername(username);
   }
 
-  public void changeName(String username){
+  public void changeName(String username) {
     userDelegate.changeUsername(username);
   }
 
@@ -201,6 +247,9 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     return line.substring(channel.length() + 1);
   }
 
+  public void requestHighscores(){
+    chatDelegate.requestHighScores();
+  }
 
   public void clearInput() {
     messageText.setText("");
@@ -209,6 +258,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   @Override
   public void displaySystemMessage(String message) {
     addMessageChat(message, Channel.CRITICAL);
+    main.openChat();
 
   }
 
@@ -254,6 +304,11 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   @Override
   public void setChatDelegate(ChatPresenter.Delegate delegate) {
     this.chatDelegate = delegate;
+  }
+
+  @Override
+  public void updateHighscore(List<HighScore> highScores) {
+    main.onUpdateHighscoreHandle(highScores);
   }
 
   /**
@@ -311,5 +366,18 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   public void initialize(URL location, ResourceBundle resources) {
     chatHistory.setItems(filteredList);
     chatHistory.setPadding(new Insets(0, 0, 0, 0));
+    chatOptions.getChildren().remove(sendButton);
+
+    inGameProperty().addListener((observable, oldValue, newValue) -> {
+      if(newValue != oldValue){
+        if(chatOptions.getChildren().contains(sendButton)){
+          chatOptions.getChildren().remove(sendButton);
+        }else {
+          chatOptions.getChildren().add(sendButton);
+        }
+
+      }
+    });
+
   }
 }

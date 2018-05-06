@@ -13,7 +13,6 @@
     <HBox>
       <children>
         <ListView fx:id="playerBoard" style="-fx-background-color: black;" />
-        <Button fx:id="handlePlayerBoard" mnemonicParsing="false" onAction="#switchPlayerBoard" text="P" textAlignment="CENTER" />
       </children>
     </HBox>
   </children>
