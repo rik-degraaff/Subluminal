@@ -6,6 +6,28 @@
 **LUC** = Luc Kury  
 **RIK** = Rik de Graaff
 
+### Monday-Sunday, April 30th-May 6th, 2018
+We generated a property file, for the following reasons:
+- Global adjustable settings prevent "magic numbers" in our source code.
+- We wanted to be able to change the game settings in one place.
+- Global settings in one file enable fast and easy balancing, because no build task is required to run the new settings.
+In addition, now when someone starts a server or a client, our game name _SUBLUMINAL_ appears in the command line in ASCII art.
+We also created a name generator for the stars in our procedurely generated maps. At the moment there are three text files from which the name generator randomly (but with weights) pulls names to assign to stars when a map is generated. The themes of these three files are: 
+- stars from _Star Wars_
+- real star names from a list in wikipedia
+- a collection of a few star names that we wanted to include because they have a special meaning/history to us.
+We are planning on making the list of files containing the star names changeable/extendable to enable modding support.
+
+
+### Monday-Sunday, April 23rd-29th, 2018
+Up to now, we had the problem that our artifacts archive was too big for our pipeline. Fixes for that were:
+- We excluded the media files from the CI build.
+- We shortened the expiry periods of the artifacts archive from 30 days to 2 hours so they would not grow so large.
+Furthermore, Silvan provided us a new CI runner for docker in docker capability, to enable auto-deployment.
+
+### Monday-Sunday, April 16th-22nd, 2018
+
+
 ### Friday-Sunday, April 13th-15th, 2018
 - Implementation of lobby-functionality in GUI was done.
 - Embedding of pathfinding algorithm in GUI was done.
