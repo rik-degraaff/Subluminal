@@ -18,6 +18,8 @@ public interface GamePresenter {
 
   void onEndGame(String winnerID);
 
+  void removeMotherShips(List<String> removedMotherShips);
+
   interface Delegate {
 
     void sendShips(List<String> stars, int amount);

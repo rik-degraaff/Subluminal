@@ -15,9 +15,7 @@ import tech.subluminal.shared.messages.GameStartRes;
 import tech.subluminal.shared.messages.GameStateDelta;
 import tech.subluminal.shared.messages.LoginRes;
 import tech.subluminal.shared.messages.MotherShipMoveReq;
-import tech.subluminal.shared.messages.YouLose;
 import tech.subluminal.shared.net.Connection;
-import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.game.Star;
 import tech.subluminal.shared.util.Synchronized;
 
@@ -68,6 +66,9 @@ public class GameManager implements GamePresenter.Delegate {
 
   private void onGameStateDeltaReceived(GameStateDelta delta) {
     delta.getRemovedMotherShips().forEach(gameStore.motherShips()::removeByID);
+
+    gamePresenter.removeMotherShips(delta.getRemovedMotherShips());
+
     delta.getPlayers().forEach(player -> {
       ifPresent(player.getMotherShip())
           .then(motherShip -> {
@@ -83,7 +84,6 @@ public class GameManager implements GamePresenter.Delegate {
 
     delta.getRemovedFleets().forEach((playerID, removedFleets) -> {
       removedFleets.forEach(gameStore.fleets()::removeByID);
-      ;
     });
     gamePresenter.removeFleets(delta.getRemovedFleets().values().stream().flatMap(List::stream)
         .collect(Collectors.toList()));
