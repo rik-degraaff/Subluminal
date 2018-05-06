@@ -6,22 +6,22 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/8"
-  fx:controller="tech.subluminal.client.presentation.controller.MainController"
-  fx:id="window">
+<AnchorPane fx:id="window" prefHeight="600" prefWidth="800" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1"
+  fx:controller="tech.subluminal.client.presentation.controller.MainController">
   <children>
-    <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-      AnchorPane.topAnchor="0.0" prefHeight="600.0" prefWidth="800.0"
-      fx:id="spaceBackgroundDock"/>
-    <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-      AnchorPane.topAnchor="0.0" prefHeight="600.0" prefWidth="800.0">
+    <AnchorPane fx:id="spaceBackgroundDock" prefHeight="600.0" prefWidth="800.0"
+      AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+      AnchorPane.topAnchor="0.0"/>
+    <AnchorPane prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0"
+      AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
-        <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
-          alignment="CENTER" prefHeight="600.0" prefWidth="800.0">
+        <HBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
           <children>
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
               <children>
-                <AnchorPane prefHeight="4.0" prefWidth="4.0" fx:id="menuDock">
+                <AnchorPane fx:id="menuDock" prefHeight="4.0" prefWidth="4.0">
 
                 </AnchorPane>
               </children>
@@ -30,26 +30,39 @@
         </HBox>
       </children>
     </AnchorPane>
-    <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
-      prefHeight="600.0" prefWidth="800.0" fx:id="playArea"/>
-    <AnchorPane AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" prefHeight="200.0"
-      prefWidth="400.0" fx:id="playerBoardDock">
+    <AnchorPane fx:id="playArea" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0"
+      AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="0.0"/>
+    <AnchorPane fx:id="leftSideDockWrapper" layoutX="780.0" layoutY="10.0" prefHeight="200.0"
+      prefWidth="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+      AnchorPane.topAnchor="0.0">
       <children>
-        <fx:include source="UserListView.fxml" fx:id="userListView"/>
+        <VBox fx:id="leftSideDock" prefHeight="600.0" prefWidth="30.0" AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
       </children>
     </AnchorPane>
-    <AnchorPane AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" prefHeight="323.0"
-      prefWidth="49.0" fx:id="chatWindow">
+    <AnchorPane fx:id="rightSideDockWrapper" prefWidth="30.0" AnchorPane.bottomAnchor="0.0"
+      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
-        <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-          AnchorPane.topAnchor="0.0" prefHeight="323.0" prefWidth="447.0">
+        <VBox fx:id="rightSideDock"/>
+      </children>
+    </AnchorPane>
+    <AnchorPane fx:id="chatWindow" styleClass="console" prefHeight="323.0" prefWidth="49.0"
+      AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <children>
+        <HBox prefHeight="323.0" prefWidth="447.0" AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
           <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="339.0"
-              stroke="BLACK" strokeType="INSIDE" width="30.0" fx:id="chatHandle"/>
-            <AnchorPane prefHeight="300.0" fx:id="chatDock">
+            <Rectangle fx:id="chatHandle" arcHeight="5.0" arcWidth="5.0" height="339.0"
+              stroke="BLACK" strokeType="INSIDE" width="45.0"/>
+            <AnchorPane fx:id="chatDock" prefHeight="300.0">
             </AnchorPane>
           </children>
         </HBox>
+      </children>
+    </AnchorPane>
+    <AnchorPane AnchorPane.rightAnchor="45.0">
+      <children>
+        <VBox fx:id="statusBoxDock" alignment="TOP_RIGHT"/>
       </children>
     </AnchorPane>
 

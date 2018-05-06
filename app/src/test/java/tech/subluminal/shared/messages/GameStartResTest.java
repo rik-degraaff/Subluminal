@@ -20,7 +20,7 @@ public class GameStartResTest {
     playerColors.put("1234", new Color(Math.random(), Math.random(), Math.random(), 1));
     playerColors.put("1235", new Color(Math.random(), Math.random(), Math.random(), 1));
     playerColors.put("3234", new Color(Math.random(), Math.random(), Math.random(), 1));
-    GameStartRes res = new GameStartRes(playerColors);
+    GameStartRes res = new GameStartRes("112314", playerColors);
 
     Map<String, Color> parsed = GameStartRes.fromSON(SON.parse(res.asSON().asString()))
         .getPlayerColor();

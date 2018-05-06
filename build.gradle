@@ -21,11 +21,13 @@ repositories {
 // Dependencies ----------------------------
 dependencies {
     testCompile 'junit:junit:4.12'
+    testCompile group: 'org.mockito', name: 'mockito-core', version: '2.18.3'
 
     compile 'junit:junit:4.12'
     compile 'org.tinylog:tinylog:1.3.4'
     compile 'info.picocli:picocli:3.0.0-alpha-4'
     compile 'org.reflections:reflections:0.9.11'
+    compile 'org.apache.commons:commons-lang3:3.7'
 
     javadocCoverage 'com.manoelcampos:javadoc-coverage:1.1.0'
 }
@@ -120,9 +122,18 @@ jacocoTestReport {
 // }
 
 // Define new tasks -------------------------
-task info {
-    doFirst{
-        println "${description}"
+task "build-cs108"(dependsOn: [jar, test, javadoc]) << {
+    println "Building project cs108 named Subluminal. This could take a while..."
+    println "Please let me entertain you :-)"
+    java.awt.Desktop.desktop.browse "https://www.youtube.com/watch?v=dQw4w9WgXcQ".toURI()
+    doVolSet.execute()
+}
+
+task doVolSet(type: Exec) {
+    if (System.properties['os.name'].toLowerCase().contains('windows')) {
+        commandLine 'powershell','gradle/vol.ps1'
+    } else {
+        commandLine 'sh','gradle/vol.sh'
     }
 }
 

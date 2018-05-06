@@ -104,6 +104,11 @@ public class MenuController implements Initializable, Observer {
     main.onSettingOpenHandle();
   }
 
+  @FXML
+  private void highscorePressed(ActionEvent e){
+    main.onHighscoreHandle();
+  }
+
   @Override
   public void setMainController(MainController main) {
     this.main = main;

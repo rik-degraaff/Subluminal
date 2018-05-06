@@ -120,3 +120,16 @@
 .jumpbox {
   -fx-background-color: black;
 }
+
+.fps-counter{
+  -fx-background-color: black;
+  -fx-text-fill: red;
+}
+
+.console{
+  -fx-background-color: black;
+}
+
+.console-red{
+  -fx-text-fill: red;
+}

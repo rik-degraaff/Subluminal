@@ -1,19 +1,21 @@
 package tech.subluminal.client.logic;
 
+import static tech.subluminal.shared.util.function.IfPresent.ifPresent;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.GamePresenter;
 import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.client.stores.records.game.OwnerPair;
+import tech.subluminal.shared.messages.EndGameRes;
 import tech.subluminal.shared.messages.FleetMoveReq;
+import tech.subluminal.shared.messages.GameLeaveReq;
 import tech.subluminal.shared.messages.GameStartRes;
 import tech.subluminal.shared.messages.GameStateDelta;
 import tech.subluminal.shared.messages.LoginRes;
 import tech.subluminal.shared.messages.MotherShipMoveReq;
 import tech.subluminal.shared.net.Connection;
-import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.stores.records.game.Star;
 import tech.subluminal.shared.util.Synchronized;
 
@@ -39,15 +41,23 @@ public class GameManager implements GamePresenter.Delegate {
 
     gamePresenter.setGameDelegate(this);
 
-    connection.registerHandler(GameStateDelta.class, GameStateDelta::fromSON,
-        this::onGameStateDeltaReceived);
-    connection.registerHandler(LoginRes.class, LoginRes::fromSON, this::onLoginRes);
-    connection
-        .registerHandler(GameStartRes.class, GameStartRes::fromSON, this::onGameStart);
+    connection.registerHandler(
+        GameStateDelta.class, GameStateDelta::fromSON, this::onGameStateDeltaReceived);
+    connection.registerHandler(
+        LoginRes.class, LoginRes::fromSON, this::onLoginRes);
+    connection.registerHandler(
+        GameStartRes.class, GameStartRes::fromSON, this::onGameStart);
+    connection.registerHandler(
+        EndGameRes.class, EndGameRes::fromSON, this::onEndGameRes);
+  }
+
+  private void onEndGameRes(EndGameRes res) {
+    gamePresenter.onEndGame(res.getGameID(), res.getWinnerID());
   }
 
   private void onGameStart(GameStartRes res) {
     gamePresenter.setPlayerColors(res.getPlayerColor());
+    gamePresenter.setGameID(res.getGameID());
 
   }
 
@@ -56,11 +66,18 @@ public class GameManager implements GamePresenter.Delegate {
   }
 
   private void onGameStateDeltaReceived(GameStateDelta delta) {
-    //delta.getRemovedPlayers().forEach(gameStore.players()::removeByID);
+    delta.getRemovedMotherShips().forEach(gameStore.motherShips()::removeByID);
+
+    gamePresenter.removeMotherShips(delta.getRemovedMotherShips());
+
     delta.getPlayers().forEach(player -> {
-      Ship motherShip = player.getMotherShip();
-      //Logger.debug("Mothership targets" + motherShip.getTargetIDs());
-      gameStore.motherShips().add(new OwnerPair<>(player.getID(), motherShip));
+      ifPresent(player.getMotherShip())
+          .then(motherShip -> {
+            gameStore.motherShips().add(new OwnerPair<>(player.getID(), motherShip));
+          })
+          .els(() -> {
+            gameStore.motherShips().removeByID(player.getID());
+          });
       player.getFleets().forEach(fleet -> {
         gameStore.fleets().add(new OwnerPair<>(player.getID(), fleet));
       });
@@ -68,7 +85,6 @@ public class GameManager implements GamePresenter.Delegate {
 
     delta.getRemovedFleets().forEach((playerID, removedFleets) -> {
       removedFleets.forEach(gameStore.fleets()::removeByID);
-      ;
     });
     gamePresenter.removeFleets(delta.getRemovedFleets().values().stream().flatMap(List::stream)
         .collect(Collectors.toList()));
@@ -94,6 +110,10 @@ public class GameManager implements GamePresenter.Delegate {
   @Override
   public void sendMothership(List<String> stars) {
     connection.sendMessage(new MotherShipMoveReq(stars));
-    Logger.debug("YES I GOT CALLED");
+  }
+
+  @Override
+  public void leaveGame() {
+    connection.sendMessage(new GameLeaveReq());
   }
 }

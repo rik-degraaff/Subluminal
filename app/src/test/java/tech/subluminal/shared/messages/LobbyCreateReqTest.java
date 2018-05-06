@@ -1,5 +1,6 @@
 package tech.subluminal.shared.messages;
 
+<<<<<<< HEAD
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -47,4 +48,8 @@ public class LobbyCreateReqTest {
     assertEquals(parsedLobbyName, "conversion failed");
     assertEquals(parsedLobbyCreateMsg.getName(), parsedLobbyName);
   }
+=======
+public class LobbyCreateReqTest {
+
+>>>>>>> f29ddca64cb0f21ecdf2bc95d3743b74e7361011
 }

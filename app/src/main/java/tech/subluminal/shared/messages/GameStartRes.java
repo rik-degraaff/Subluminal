@@ -50,15 +50,15 @@ public class GameStartRes implements SONRepresentable {
   private static final String RED_KEY = "red";
   private static final String BLUE_KEY = "blue";
   private static final String GREEN_KEY = "green";
+  private static final String GAME_ID_KEY = "gameID";
 
-  Map<String, Color> playerColor;
+  private Map<String, Color> playerColor;
+  private String gameID;
 
-  public GameStartRes(Map<String, Color> playerColor) {
+
+  public GameStartRes(String gameID, Map<String, Color> playerColor) {
     this.playerColor = playerColor;
-  }
-
-  public Map<String, Color> getPlayerColor() {
-    return playerColor;
+    this.gameID = gameID;
   }
 
   /**
@@ -68,6 +68,8 @@ public class GameStartRes implements SONRepresentable {
    * @return a game start response object, converted from its SON representation.
    */
   public static GameStartRes fromSON(SON son) throws SONConversionError {
+    String gameID = son.getString(GAME_ID_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, GAME_ID_KEY));
     Map<String, Color> playerColor = new HashMap<>();
     SONList entries = son.getList(PLAYER_COLORS_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, PLAYER_COLORS_KEY));
@@ -82,7 +84,15 @@ public class GameStartRes implements SONRepresentable {
           .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, BLUE_KEY));
       playerColor.put(id, new Color(red, green, blue, 1));
     }
-    return new GameStartRes(playerColor);
+    return new GameStartRes(gameID, playerColor);
+  }
+
+  public Map<String, Color> getPlayerColor() {
+    return playerColor;
+  }
+
+  public String getGameID() {
+    return gameID;
   }
 
   /**
@@ -100,6 +110,8 @@ public class GameStartRes implements SONRepresentable {
           .put(color.getGreen(), COLOR_KEY, GREEN_KEY)
           .put(color.getBlue(), COLOR_KEY, BLUE_KEY));
     });
-    return new SON().put(list, PLAYER_COLORS_KEY);
+    return new SON()
+        .put(gameID, GAME_ID_KEY)
+        .put(list, PLAYER_COLORS_KEY);
   }
 }

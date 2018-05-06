@@ -1,5 +1,9 @@
 package tech.subluminal.main;
 
+import java.io.File;
+import java.lang.reflect.Field;
+import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +18,8 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import tech.subluminal.client.init.ClientInitializer;
 import tech.subluminal.server.init.ServerInitializer;
+import tech.subluminal.shared.records.GlobalSettings;
+import tech.subluminal.shared.util.SettingsReaderWriter;
 
 /**
  * The main class of the Subluminal project containing the main function which starts the program.
@@ -25,6 +31,7 @@ import tech.subluminal.server.init.ServerInitializer;
 )
 public class Subluminal {
 
+  // ======= COMMAND LINE ARGUMENTS =======
   @Option(names = {"-h", "--help"}, description = "Display help/usage.", help = true)
   boolean help;
   @Option(names = {"-ll", "--loglevel"}, description = "Sets the loglevel for the application. ")
@@ -43,7 +50,10 @@ public class Subluminal {
   @Parameters(index = "2", arity = "0..1", description =
       "Sets the username. If none is specified the "
           + "system username will be used instead.")
+
+  // ======= OTHER VARIABLES =======
   private String username = System.getProperty("user.name");
+  private static final SettingsReaderWriter srw = new SettingsReaderWriter();
 
   /**
    * Parses the command line arguments and calls the relevant packages.
@@ -51,10 +61,19 @@ public class Subluminal {
    * @param args are the command line arguments.
    */
   public static void main(String[] args) {
+    System.setProperty("file.encoding","UTF-8");
+    Field charset = null;
+    try {
+      charset = Charset.class.getDeclaredField("defaultCharset");
+      charset.setAccessible(true);
+      charset.set(null,null);
+    } catch (NoSuchFieldException e) {
+      e.printStackTrace();
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    }
+    
     final Subluminal subl = CommandLine.populateCommand(new Subluminal(), args);
-
-    final String preLevelTag = "[[preLevelTag]]";
-    final String postLevelTag = "[[postLevelTag]]";
 
     if (subl.help) {
       System.out.println(printASCII());
@@ -76,6 +95,21 @@ public class Subluminal {
         Configurator.currentConfig().level(Level.OFF);
       }
 
+      final SecurityManager sm = System.getSecurityManager();
+      if (sm != null) {
+        Logger.info("Security Manager found. Trying to suppress access checks.");
+        System.out.println("Security Manager found. Trying to suppress access checks.");
+        //sm.checkPermission(new java.lang.reflect.ReflectPermission("suppressAccessChecks"));
+      } else {
+        Logger.info("No security manager detected");
+        System.out.println("No security manager detected");
+      }
+
+      GlobalSettings.PATH_JAR = getJarPath().toString();
+      if (subl.debug) {
+        srw.run(GlobalSettings.class, GlobalSettings.class, GlobalSettings.PATH_JAR);
+      }
+
       String host = "localhost";
       int port = 1729;
       Logger.debug("mode:" + subl.mode + " hostAndOrPort:" + subl.hostAndOrPort + " debug:" + String
@@ -95,50 +129,82 @@ public class Subluminal {
         } catch (NumberFormatException e) {
           System.out.println(port);
         }
+
         initClient(host, port, subl.username, subl.debug);
+
       } else if ("server".equals(subl.mode)) {
         try {
           port = Integer.parseInt(parts[0]);
         } catch (NumberFormatException e) {
           System.out.println(port);
         }
+
         initServer(port, subl.debug);
+
       } else {
         System.out.println("Invalid mode argument. Must be one of " + modes);
         System.exit(1);
       }
-
-      //NameGenerator ng = new NameGenerator();
-      //ng.readStarFiles();
-      //System.out.println(ng.toString());
     }
   }
 
   private static void initClient(String host, int port, String username, boolean debug) {
     if (port >= 1024 && port < 65535) {
-      //TODO: change that
+      System.out.println(printASCII("Client"));
       Application.launch(ClientInitializer.class, host, Integer.toString(port), username,
           String.valueOf(debug));
-      System.exit(0);
-      //String username = args.length > 2 ? args[2] : System.getProperty("user.name");
-      //ClientInitializer.init(host, port, username);
+    } else {
+      Logger.error("Port must be between 1024 and 65535.");
+      System.out.printf("Port must be between 1024 and 65535.");
+      System.exit(1);
     }
   }
 
   private static void initServer(int port, boolean debug) {
-    ServerInitializer.init(port, debug);
+    if (port >= 1024 && port < 65535) {
+      System.out.println(printASCII("Server"));
+      ServerInitializer.init(port, debug);
+    } else {
+      Logger.error("Port must be between 1024 and 65535.");
+      System.out.printf("Port must be between 1024 and 65535.");
+      System.exit(1);
+    }
   }
 
   private static String printASCII() {
-    String logo = ""+"\n"+
-    "  _____       _     _                 _             _ "+"\n"+
-    " / ____|     | |   | |               (_)           | |"+"\n"+
-    "| (___  _   _| |__ | |_   _ _ __ ___  _ _ __   __ _| |"+"\n"+
-    " \\___ \\| | | | '_ \\| | | | | '_ ` _ \\| | '_ \\ / _` | |"+"\n"+
-    " ____) | |_| | |_) | | |_| | | | | | | | | | | (_| | |"+"\n"+
-    "|_____/ \\__,_|_.__/|_|\\__,_|_| |_| |_|_|_| |_|\\__,_|_|"+"\n"+
-    "";
+    return printASCII("", "");
+  }
+
+  private static String printASCII(String msg) {
+    return printASCII(msg, "");
+  }
+
+  private static String printASCII(String msg, String motd) {
+    String logo = "" + "\n" +
+        "Welcome to" + "\n" +
+        "  _____       _     _                 _             _ " + "\n" +
+        " / ____|     | |   | |               (_)           | |" + "\n" +
+        "| (___  _   _| |__ | |_   _ _ __ ___  _ _ __   __ _| |" + "\n" +
+        " \\___ \\| | | | '_ \\| | | | | '_ ` _ \\| | '_ \\ / _` | |" + "\n" +
+        " ____) | |_| | |_) | | |_| | | | | | | | | | | (_| | |" + "\n" +
+        "|_____/ \\__,_|_.__/|_|\\__,_|_| |_| |_|_|_| |_|\\__,_|_| " + msg + "\n" +
+        "" + "\n" +
+        motd;
+    ;
     return logo;
+  }
+
+  private static File getJarPath() {
+    File jar = null;
+    try {
+      jar = new File(
+          GlobalSettings.class.getProtectionDomain().getCodeSource().getLocation().toURI()
+              .getPath()).getParentFile();
+    } catch (URISyntaxException e) {
+      e.printStackTrace();
+    }
+
+    return jar;
   }
 }
 
