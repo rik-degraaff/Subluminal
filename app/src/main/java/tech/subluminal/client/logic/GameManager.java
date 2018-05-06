@@ -56,9 +56,12 @@ public class GameManager implements GamePresenter.Delegate {
   }
 
   private void onGameStart(GameStartRes res) {
+    gameStore.motherShips().clear();
+    gameStore.stars().clear();
+    gameStore.fleets().clear();
+
     gamePresenter.setPlayerColors(res.getPlayerColor());
     gamePresenter.setGameID(res.getGameID());
-
   }
 
   private void onLoginRes(LoginRes res) {
@@ -114,6 +117,10 @@ public class GameManager implements GamePresenter.Delegate {
 
   @Override
   public void leaveGame() {
+    gameStore.motherShips().clear();
+    gameStore.stars().clear();
+    gameStore.fleets().clear();
+
     connection.sendMessage(new GameLeaveReq());
   }
 }

@@ -6,11 +6,14 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
@@ -332,6 +335,9 @@ public class GameController implements Initializable, GamePresenter {
 
           gameStore.motherShips().observableList(),
           pair -> {
+            if (pair == null) {
+              return null;
+            }
             if (ships.get(pair.getID()) == null) {
               MotherShipComponent shipComponent = new MotherShipComponent(
                   pair.getValue().getCoordinates(),
@@ -367,6 +373,7 @@ public class GameController implements Initializable, GamePresenter {
               return shipComponent;
 
             }
+
             MotherShipComponent shipComponent = ships.get(pair.getID());
 
             if (Math.abs(pair.getValue().getCoordinates().getX() - shipComponent.getX())
@@ -392,6 +399,9 @@ public class GameController implements Initializable, GamePresenter {
 
           gameStore.fleets().observableList(),
           pair -> {
+            if (pair == null) {
+              return null;
+            }
             if (fleets.get(pair.getID()) == null) {
               FleetComponent fleetComponent = new FleetComponent(
                   pair.getValue().getCoordinates(),
