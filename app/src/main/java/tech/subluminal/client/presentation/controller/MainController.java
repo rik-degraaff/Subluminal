@@ -161,7 +161,6 @@ public class MainController implements Initializable {
     settingsButton = new ControlButton(this, "S", settings, statusBoxDock);
     rightSideDock.getChildren().add(settingsButton);
 
-
     highscore = new HighscoreComponent();
 
     lobby = new LobbyComponent();
@@ -305,9 +304,10 @@ public class MainController implements Initializable {
     rightSideDock.getChildren().clear();
     leftSideDock.getChildren().clear();
 
-    rightSideDock.getChildren().addAll(settingsButton,playerListButton, nameChangeButton);
+    rightSideDock.getChildren().addAll(settingsButton, playerListButton, nameChangeButton);
     playArea.setMouseTransparent(true);
     gameController.clearMap();
+    chatController.setInGame(false);
 
     menuDock.getChildren().add(menu);
   }
