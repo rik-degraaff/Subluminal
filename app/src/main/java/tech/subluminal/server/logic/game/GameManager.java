@@ -26,9 +26,11 @@ import tech.subluminal.shared.logic.game.GameLoop;
 import tech.subluminal.shared.logic.game.SleepGameLoop;
 import tech.subluminal.shared.messages.EndGameRes;
 import tech.subluminal.shared.messages.FleetMoveReq;
+import tech.subluminal.shared.messages.GameLeaveReq;
 import tech.subluminal.shared.messages.GameStateDelta;
 import tech.subluminal.shared.messages.HighScoreReq;
 import tech.subluminal.shared.messages.HighScoreRes;
+import tech.subluminal.shared.messages.LobbyUpdateRes;
 import tech.subluminal.shared.messages.MotherShipMoveReq;
 import tech.subluminal.shared.messages.MoveReq;
 import tech.subluminal.shared.messages.YouLose;
@@ -77,6 +79,32 @@ public class GameManager implements GameStarter {
         req -> onMoveRequest(req, id));
     connection.registerHandler(HighScoreReq.class, HighScoreReq::fromSON,
         req -> onHighScoreReq(id));
+    connection.registerHandler(GameLeaveReq.class, GameLeaveReq::fromSON,
+        req -> onLeaveGame(req, id));
+  }
+
+  private void onLeaveGame(GameLeaveReq req, String id) {
+    lobbyStore.lobbies()
+        .getLobbiesWithUser(id)
+        .use(l -> l.stream().map(s -> s.use(Lobby::getID)))
+        .findFirst()
+        .flatMap(gameID -> gameStore.games().getByID(gameID))
+        .ifPresent(sync -> {
+          sync.consume(state -> {
+            final Player player = state.getPlayers().get(id);
+            final GameHistory<Ship> motherShip = player.getMotherShip();
+            motherShip.add(GameHistoryEntry.destroyed(motherShip.getCurrent().getState()));
+            player.leave();
+            lobbyStore.lobbies()
+                .getByID(state.getID())
+                .ifPresent(syncLobby -> {
+                  syncLobby.consume(lobby -> {
+                    lobby.removePlayer(id);
+                    distributor.sendMessage(new LobbyUpdateRes(lobby), lobby.getPlayers());
+                  });
+                });
+          });
+        });
   }
 
   private void onHighScoreReq(String id) {
@@ -187,7 +215,9 @@ public class GameManager implements GameStarter {
               .flatMap(Either::left)
               .ifPresent(delta::addStar));
 
-      distributor.sendMessage(delta, playerID);
+      if (!gameState.getPlayers().get(playerID).hasLeft()) {
+        distributor.sendMessage(delta, playerID);
+      }
     });
 
     if (playersDestroyed.get()) {

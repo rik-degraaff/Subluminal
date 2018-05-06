@@ -148,7 +148,7 @@ public class LobbyManager {
         .getLobbiesWithUser(userID)
         .consume(lobbies ->
             lobbies.forEach(syncLobby -> syncLobby.consume(lobby -> {
-              if (lobby.getPlayers().size() == 1) {
+              if (lobby.getPlayers().size() == 1 && lobby.getStatus() == LobbyStatus.OPEN) {
                 lobbyStore.lobbies().removeByID(lobby.getID());
                 Logger.trace("Deleting lobby");
               } else {

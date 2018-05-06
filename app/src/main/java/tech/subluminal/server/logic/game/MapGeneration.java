@@ -58,7 +58,8 @@ public class MapGeneration {
 
       Player player = new Player(playerID, otherPlayers,
           new Ship(homeCoords, IdUtils.generateId(8),
-              Collections.emptyList(), homeStar.getID(), MOTHER_SHIP_SPEED), LIGHT_SPEED, true);
+              Collections.emptyList(), homeStar.getID(), MOTHER_SHIP_SPEED), LIGHT_SPEED, true,
+          false);
 
       players.add(player);
     });
@@ -70,9 +71,9 @@ public class MapGeneration {
     Coordinates coordinates = new Coordinates(Math.random(), Math.random());
     while (!(existingCoordinates.isEmpty()
         || existingCoordinates.stream()
-            .anyMatch(c -> coordinates.getDistanceFrom(c) <= JUMP_DISTANCE)
+        .anyMatch(c -> coordinates.getDistanceFrom(c) <= JUMP_DISTANCE)
         && existingCoordinates.stream()
-            .allMatch(c -> coordinates.getDistanceFrom(c) > JUMP_DISTANCE / 5))) {
+        .allMatch(c -> coordinates.getDistanceFrom(c) > JUMP_DISTANCE / 5))) {
       coordinates.setX(Math.random());
       coordinates.setY(Math.random());
     }
