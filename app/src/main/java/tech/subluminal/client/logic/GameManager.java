@@ -105,6 +105,8 @@ public class GameManager implements GamePresenter.Delegate {
       gamePresenter.removeFleets(delta.getRemovedFleets().values().stream().flatMap(List::stream)
           .collect(Collectors.toList()));
       gamePresenter.update();
+    } else {
+      gamePresenter.clearGame();
     }
   }
 
@@ -124,10 +126,17 @@ public class GameManager implements GamePresenter.Delegate {
   }
 
   private void onGameLeave() {
-    gameStore.inGame().set(false);
-    gameStore.motherShips().clear();
-    gameStore.stars().clear();
-    gameStore.fleets().clear();
-    gamePresenter.clearGame();
+    new Thread(() -> {
+      try {
+        Thread.sleep(1000);
+      } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      }
+      gameStore.inGame().set(false);
+      gameStore.motherShips().clear();
+      gameStore.stars().clear();
+      gameStore.fleets().clear();
+      gamePresenter.clearGame();
+    }).start();
   }
 }
