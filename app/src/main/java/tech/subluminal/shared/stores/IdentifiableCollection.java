@@ -13,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.shared.stores.records.Identifiable;
 import tech.subluminal.shared.util.StoredSynchronized;
 import tech.subluminal.shared.util.Synchronized;

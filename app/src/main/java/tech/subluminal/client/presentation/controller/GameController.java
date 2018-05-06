@@ -289,6 +289,7 @@ public class GameController implements Initializable, GamePresenter {
     this.gameID = gameID;
   }
 
+  @Override
   public void setGameStore(GameStore gameStore) {
     this.gameStore = gameStore;
 
@@ -299,6 +300,9 @@ public class GameController implements Initializable, GamePresenter {
       MapperList<StarComponent, Star> starComponents = new MapperList<>(
           gameStore.stars().observableList(),
           star -> {
+            if (star == null) {
+              return null;
+            }
             if (stars.get(star.getID()) == null) {
               StarComponent starComponent = new StarComponent(star.getOwnerID(),
                   star.getName(),
@@ -339,6 +343,7 @@ public class GameController implements Initializable, GamePresenter {
               return null;
             }
             if (ships.get(pair.getID()) == null) {
+              System.out.println("new mothership!! " + pair.getID());
               MotherShipComponent shipComponent = new MotherShipComponent(
                   pair.getValue().getCoordinates(),
                   pair.getKey(),
@@ -450,14 +455,21 @@ public class GameController implements Initializable, GamePresenter {
     this.userStore = userStore;
   }
 
+  @Override
   public void clearMap() {
     map.getChildren().clear();
   }
 
   public void leaveGame() {
     gameDelegate.leaveGame();
+    dummyFleetList = new ListView<>();
+    dummyShipList = new ListView<>();
+    dummyShipList = new ListView<>();
+    System.gc();
+    clearMap();
     fleets.clear();
     ships.clear();
+    stars.clear();
     graph = null;
     gameID = null;
     Logger.debug("END GAME GOT CALLED!!");

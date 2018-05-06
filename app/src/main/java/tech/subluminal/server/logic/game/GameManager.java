@@ -27,6 +27,7 @@ import tech.subluminal.shared.logic.game.SleepGameLoop;
 import tech.subluminal.shared.messages.EndGameRes;
 import tech.subluminal.shared.messages.FleetMoveReq;
 import tech.subluminal.shared.messages.GameLeaveReq;
+import tech.subluminal.shared.messages.GameLeaveRes;
 import tech.subluminal.shared.messages.GameStateDelta;
 import tech.subluminal.shared.messages.HighScoreReq;
 import tech.subluminal.shared.messages.HighScoreRes;
@@ -105,6 +106,7 @@ public class GameManager implements GameStarter {
                 });
           });
         });
+    distributor.sendMessage(new GameLeaveRes(), id);
   }
 
   private void onHighScoreReq(String id) {
