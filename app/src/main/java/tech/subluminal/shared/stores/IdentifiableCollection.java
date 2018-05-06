@@ -3,6 +3,7 @@ package tech.subluminal.shared.stores;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -13,8 +14,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.collections.transformation.FilteredList;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.shared.stores.records.Identifiable;
+import tech.subluminal.shared.util.MapperList;
 import tech.subluminal.shared.util.StoredSynchronized;
 import tech.subluminal.shared.util.Synchronized;
 import tech.subluminal.shared.util.ThreadUtils;
@@ -56,18 +59,15 @@ public class IdentifiableCollection<E extends Identifiable> implements
    */
   @Override
   public ObservableList<E> observableList() {
-    return observableList;
-    /*
-    final MapperList<E, String> mapperList = new MapperList<>(observableList, key -> {
+    final MapperList<E, E> mapperList = new MapperList<>(observableList, entry -> {
       synchronized (observableList) {
-        return getByID(key).map(s -> s.use(e -> e)).orElse(null);
+        return getByID(entry.getID()).map(s -> s.use(e -> e)).orElse(entry);
       }
     });
 
     FilteredList<E> filteredList = new FilteredList<>(mapperList);
     filteredList.setPredicate(Objects::nonNull);
     return filteredList;
-    */
   }
 
   /**
