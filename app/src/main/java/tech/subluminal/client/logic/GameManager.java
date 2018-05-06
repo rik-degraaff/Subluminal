@@ -99,6 +99,7 @@ public class GameManager implements GamePresenter.Delegate {
         optStar.get().update(s -> star);
       }
     });
+
     if (gameStore.inGame().get().use(Function.identity()).orElse(false)) {
       gamePresenter.removeMotherShips(delta.getRemovedMotherShips());
       gamePresenter.removeFleets(delta.getRemovedFleets().values().stream().flatMap(List::stream)

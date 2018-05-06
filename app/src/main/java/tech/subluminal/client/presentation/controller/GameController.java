@@ -211,6 +211,8 @@ public class GameController implements Initializable, GamePresenter {
       dummyStarList.getItems().forEach(starComponent -> Logger.trace("star: " + starComponent));
       dummyShipList.refresh();
       dummyShipList.getItems().forEach(shipComponent -> Logger.trace("ship: " + shipComponent));
+      dummyFleetList.refresh();
+      dummyFleetList.getItems().forEach(fleetComponent -> Logger.trace("ship: " + fleetComponent));
 
       if (graph != null) {
         return;
@@ -233,9 +235,9 @@ public class GameController implements Initializable, GamePresenter {
     fleetIDs.forEach(f -> {
       FleetComponent remFleet = fleets.get(f);
       if (remFleet != null) {
-        fleets.remove(f);
         Platform.runLater(() -> {
           map.getChildren().remove(remFleet);
+          fleets.remove(f);
         });
       }
     });
@@ -265,7 +267,6 @@ public class GameController implements Initializable, GamePresenter {
             .addMessageChat("You all failed Bob...", Channel.INFO);
       }
     }
-
   }
 
   @Override
@@ -273,8 +274,8 @@ public class GameController implements Initializable, GamePresenter {
     shipIDs.forEach(f -> {
       MotherShipComponent remShip = ships.get(f);
       if (remShip != null) {
-        ships.remove(f);
         Platform.runLater(() -> {
+          ships.remove(f);
           map.getChildren().remove(remShip);
         });
       }
