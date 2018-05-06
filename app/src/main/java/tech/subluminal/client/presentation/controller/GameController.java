@@ -447,6 +447,8 @@ public class GameController implements Initializable, GamePresenter {
   public void leaveGame() {
     gameDelegate.leaveGame();
     main.onMapCloseHandle();
+    fleets.clear();
+    ships.clear();
     gameID = null;
   }
 }
