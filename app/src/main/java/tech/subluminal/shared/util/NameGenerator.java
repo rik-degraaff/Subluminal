@@ -16,7 +16,11 @@ import org.reflections.scanners.ResourcesScanner;
 
 public class NameGenerator {
 
-  private List<String> starNames = new ArrayList<>();
+  Random rand = new Random(); //TODO: Global Seed
+  private List<List<String>> starNames = new ArrayList<>();
+  private List<Integer> starListWeights = new ArrayList<>();
+  private int sumWeights;
+  private int fileCounter = 0;
   private List<String> planetNames; //for later use
 
   public NameGenerator() {
@@ -25,15 +29,16 @@ public class NameGenerator {
 
   public void readStarFiles() {
     Reflections reflections = new Reflections("tech.subluminal", new ResourcesScanner());
-    Set<String> fileNames = reflections.getResources(Pattern.compile("stars.*txt"));
-
-    System.out.println(fileNames);
+    Pattern pat = Pattern.compile(".*\\.*star.*\\.txt");
+    Set<String> fileNames = reflections.getResources(pat);
 
     if (fileNames.isEmpty()) {
       throw new IllegalArgumentException("No list with starnames in resources found!");
     } else {
       fileNames.forEach(file -> {
+        starNames.add(new ArrayList<>());
         readLines(file);
+        fileCounter++;
       });
     }
   }
@@ -43,6 +48,23 @@ public class NameGenerator {
     try {
       br = new BufferedReader(new InputStreamReader(
           NameGenerator.class.getResource("/" + path).openStream(), "UTF-8"));
+
+      int tempWeight = 0;
+      br.mark(1);
+      if (br.read() != 0xFEFF) {
+        br.reset();
+        tempWeight = Integer.parseInt(br.readLine());
+      } else {
+        br.reset();
+        tempWeight = Integer.parseInt(br.readLine().substring(1));
+      }
+
+      starListWeights.add(tempWeight);
+      sumWeights += tempWeight;
+
+      br.lines().forEach(l -> {
+        starNames.get(fileCounter).add(l);
+      });
     } catch (UnsupportedEncodingException e) {
       e.printStackTrace();
     } catch (FileNotFoundException e) {
@@ -50,21 +72,23 @@ public class NameGenerator {
     } catch (IOException e) {
       e.printStackTrace();
     }
-
-    br.lines().forEach(l -> {
-      starNames.add(l);
-    });
-
   }
 
   public String getName() {
-    Random rand = new Random();
-    int rIndex = rand.nextInt(starNames.size() - 1);
-    return starNames.remove(rIndex + 1);
+    Random rand = new Random(); //TODO: Set seed from Global.Setings class
+    int randRange = (int) (rand.nextDouble()*sumWeights);
+    int tempIndex = 0;
+    int tempSum = starListWeights.get(tempIndex);
+
+    while (tempSum < randRange) {
+      tempSum += starListWeights.get(tempIndex+1);
+      tempIndex++;
+    }
+
+    return starNames.get(tempIndex).remove(rand.nextInt(starNames.get(tempIndex).size()));
   }
 
   public List<String> getNames(int count) {
-    Random rand = new Random();
     List<String> names = new LinkedList<>();
     int rIndex;
     for (int i = 0; i < count; i++) {

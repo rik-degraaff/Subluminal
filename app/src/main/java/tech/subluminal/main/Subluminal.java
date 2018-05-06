@@ -16,7 +16,6 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 import tech.subluminal.client.init.ClientInitializer;
 import tech.subluminal.server.init.ServerInitializer;
-import tech.subluminal.shared.util.NameGenerator;
 
 /**
  * The main class of the Subluminal project containing the main function which starts the program.
@@ -54,10 +53,6 @@ public class Subluminal {
    * @param args are the command line arguments.
    */
   public static void main(String[] args) {
-    //DEBUGGING
-    NameGenerator ng = new NameGenerator();
-    ng.readStarFiles();
-
     System.setProperty("file.encoding","UTF-8");
     Field charset = null;
     try {

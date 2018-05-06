@@ -24,5 +24,6 @@ app/out/
 app/build/
 bin/
 build/
+classes/
 docs/javadoc/
-log\.txt
+

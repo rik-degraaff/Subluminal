@@ -10,32 +10,31 @@
 70 Ophiuchi
 70 Ophiuchi
 82 G. Eridani
-Altair (α Aquilae)
-Fomalhaut (α Piscis Austrini/α PsA)
-Fomalhaut (α Piscis Austrini/α PsA)
-Gliese 105 (in Cetus)
-Gliese 570 (in Libra)
-Gliese 638 (in Hercules)
-Gliese 667 (in Scorpius)
-Gliese 667 (in Scorpius)
-Gliese 673 (in Ophiuchus)
-Gliese 884 (see List of stars in Aquarius)
-Groombridge 1618 (in Ursa Major)
-Groombridge 1830 (in Ursa Major)
-HD 102365 (in Centaurus)
-HD 192310/Gliese 785 (5 G. Capricorni)
-HD 4628 (in Pisces)
-HD 50281 (in Monoceros)
-HR 1614 (284 G. Eridani)
-HR 4458 (in Hydra)
-HR 7703 (in Sagittarius)
-HR 8832 / Gliese 892 (in Cassiopeia)
+Altair
+Fomalhaut
+Fomalhaut
+Gliese 105
+Gliese 570
+Gliese 638
+Gliese 667
+Gliese 667
+Gliese 673
+Gliese 884
+Groombridge 1618
+Groombridge 1830
+HD 102365
+HD 192310/Gliese 785
+HD 4628
+HD 50281
+HR 1614
+HR 4458
+HR 7703
+HR 8832 / Gliese 892
 p Eridani
 p Eridani
-Procyon (α Canis Minoris)
-Sirius (α Canis Majoris)
-Sun
-Vega (α Lyrae)
+Procyon
+Sirius
+Vega
 α Centauri
 α Centauri
 β Canum Venaticorum
@@ -77,18 +76,18 @@ Vega (α Lyrae)
 85 Pegasi
 85 Pegasi
 86 G. Sagittarii
-Arcturus (α Boötis)
+Arcturus
 Capella
 Capella
 Denebola
 Gliese 169
 Gliese 2046
 Gliese 320
-Gliese 349 (es)
+Gliese 349
 Gliese 370
-Gliese 428 (it)
-Gliese 428 (it)
-Gliese 435 (es)
+Gliese 428
+Gliese 428
+Gliese 435
 Gliese 453
 Gliese 505
 Gliese 542
@@ -127,7 +126,6 @@ Wolf 635
 λ Aurigae
 λ Serpentis
 ρ1 Cancri
-
 10 Tauri
 111 Tauri
 111 Tauri
@@ -142,27 +140,27 @@ Wolf 635
 AB Doradus
 Alderamin
 Gliese 1021
-Gliese 1279 (nl)
+Gliese 1279
 Gliese 146
 Gliese 167
-Gliese 204 (it)
-Gliese 259 (nl)
+Gliese 204
+Gliese 259
 Gliese 282
 Gliese 282
 Gliese 42
-Gliese 420 (nl)
+Gliese 420
 Gliese 481
-Gliese 481 (it)
+Gliese 481
 Gliese 5
-Gliese 528 (it)
-Gliese 528 (it)
+Gliese 528
+Gliese 528
 Gliese 529
-Gliese 52 (nl)
-Gliese 532 (it)
-Gliese 546 (nl)
-Gliese 556 (it)
-Gliese 604 (nl)
-Gliese 611 (it)
+Gliese 52
+Gliese 532
+Gliese 546
+Gliese 556
+Gliese 604
+Gliese 611
 Gliese 613
 Gliese 615
 Gliese 656
@@ -172,21 +170,21 @@ Gliese 726
 Gliese 738
 Gliese 738
 Gliese 796
-Gliese 833 (it)
+Gliese 833
 Gliese 853
 Gliese 868
 Gliese 898
-HD 150689 (nl)
-HD 166348 (it)
-HD 23356 (nl)
+HD 150689
+HD 166348
+HD 23356
 HD 36003
 HD 97584
 HR 7578
 it:Gliese 269
-LHS 3508 (it)
+LHS 3508
 OU Geminorum
 Ras Alhague
-SZ Crateris (it)
+SZ Crateris
 V1654 Aquilae
 V834 Tau
 α Corvi
