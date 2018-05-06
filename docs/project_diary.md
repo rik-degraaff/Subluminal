@@ -9,24 +9,59 @@
 ### Monday-Sunday, April 30th-May 6th, 2018
 We generated a property file, for the following reasons:
 - Global adjustable settings prevent "magic numbers" in our source code.
-- We wanted to be able to change the game settings in one place.
+- We wanted to be able to change the game properties in one place.
 - Global settings in one file enable fast and easy balancing, because no build task is required to run the new settings.
 In addition, now when someone starts a server or a client, our game name _SUBLUMINAL_ appears in the command line in ASCII art.
+
 We also created a name generator for the stars in our procedurely generated maps. At the moment there are three text files from which the name generator randomly (but with weights) pulls names to assign to stars when a map is generated. The themes of these three files are: 
 - stars from _Star Wars_
 - real star names from a list in wikipedia
 - a collection of a few star names that we wanted to include because they have a special meaning/history to us.
+
 We are planning on making the list of files containing the star names changeable/extendable to enable modding support.
+
+Some more changes:
+- The fleets and the mothership are now represented by self-drawn png files. This enables us to make these png files changeable to offer modding support.
+- The png images of the fleets and the motherships were enabled to adapt their background color according to the players' colors.
+- Star names are now displayed correctly, including the greek symbols.
+- The F4 key now pops up the current frames per second and the F5 key shows a plot of the fps count over time for the last few seconds.
+- The buttons _send all_ and _send game_ were added to the chat for better usability.
+- A new button was added to the main menu to directly open the highscore.
+- When a player wins or when there is a tie between two players, now there is a game-end-screen with a meaningful message and the player has the option to get back to the main menu.
+- There is now a game-leave-button to offer players the option to leave the game without forcefully closing the window.
+- We found that orbiting motherships cluttered the view too much, so now motherships hover on a single spot beside their home stars.
+- We continued writing unit tests until our code coverage was over 50 %.
+- Our unit tests for the game logic on the server (using mockito) actually helped us find some critical bugs.
+- The dematerialization feature was implemented and works (play tested).
+- Players are now notified when they lose the game.
+- We improved the map generation, from now on every star on a map is somehow reachable from another star and stars are not too close to each other.
 
 
 ### Monday-Sunday, April 23rd-29th, 2018
 Up to now, we had the problem that our artifacts archive was too big for our pipeline. Fixes for that were:
 - We excluded the media files from the CI build.
 - We shortened the expiry periods of the artifacts archive from 30 days to 2 hours so they would not grow so large.
-Furthermore, Silvan provided us a new CI runner for docker in docker capability, to enable auto-deployment.
+
+Furthermore, Silvan Heller provided us a new CI runner for docker in docker capability, to enable auto-deployment.
+
+Other changes:
+- To be compatible with Linux, the mp3 files were substituted by wav files.
+- We made the player colors dependant on the number of players. Colors assigned to the players are the furthest possible apart on the color circle.
+- We enabled the star jumping circles to appear when hovering over the stars.
+- The size of the fleets are now displayed on top of the fleets.
+- Some problems and bugs we found when implementing the fleet-sending-functionality lead us to the conclusion that we could have used smarter data structures and that our engineering was less than optimal.
+- The fleet generation functionality was implemented. Now when a player owns a star, it automatically starts producing ships for the player.
+- When a player sends fleets to another star of his own, the fleets are now merged together correctly into a single fleet.
 
 ### Monday-Sunday, April 16th-22nd, 2018
-
+- The following fixes in the rotation animation of fleets/ships were made:
+  - the idle animation of the mothership
+  - the direction the fleets and the mothership were heading when jumping between stars.
+- The sound volume was made adjustable in game settings.
+- The player chat was made hideable.
+- The position of the jump box in the game was fixed. Before, the box disappeared when stars close to the edge of the map were selected.
+- For some diversion, the selection of the sound file to play during the game was randomized.
+- We continued implementing unit tests for the message classes to get our code coverage up.
 
 ### Friday-Sunday, April 13th-15th, 2018
 - Implementation of lobby-functionality in GUI was done.
