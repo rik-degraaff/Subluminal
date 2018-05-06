@@ -449,6 +449,7 @@ public class GameController implements Initializable, GamePresenter {
     main.onMapCloseHandle();
     fleets.clear();
     ships.clear();
+    graph = null;
     gameID = null;
   }
 }
