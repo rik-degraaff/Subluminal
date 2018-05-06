@@ -10,19 +10,19 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<fx:root prefHeight="300.0" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8"
+<fx:root type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8"
   xmlns:fx="http://javafx.com/fxml/1"
   fx:controller="tech.subluminal.client.presentation.controller.ChatController"
   styleClass="console">
   <GridPane>
     <columnConstraints>
       <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="434.0" minWidth="10.0"
-        percentWidth="100.0" prefWidth="400.0"/>
+        percentWidth="100.0"/>
     </columnConstraints>
     <rowConstraints>
       <RowConstraints maxHeight="212.0" minHeight="10.0" prefHeight="211.0" vgrow="SOMETIMES"/>
-      <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="46.0" vgrow="NEVER"/>
-      <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="33.0" vgrow="NEVER"/>
+      <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="70.0" vgrow="NEVER"/>
+      <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="70.0" vgrow="NEVER"/>
     </rowConstraints>
     <children>
       <GridPane GridPane.rowIndex="2">

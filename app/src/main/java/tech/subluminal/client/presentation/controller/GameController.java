@@ -56,17 +56,9 @@ public class GameController implements Initializable, GamePresenter {
 
   private String playerID;
 
-  //private List<StarComponent> starList = new LinkedList<StarComponent>();//TODO: remove this
-
-  //private ListProperty<StarComponent> stars = new SimpleListProperty<>();
-
   private Map<String, StarComponent> stars = new HashMap<>();
   private Map<String, MotherShipComponent> ships = new HashMap<>();
   private Map<String, FleetComponent> fleets = new HashMap<>();
-
-  private List<MotherShipComponent> shipList = new LinkedList<MotherShipComponent>();
-
-  private List<FleetComponent> fleetList = new LinkedList<FleetComponent>();
 
   private GamePresenter.Delegate gameDelegate;
 
@@ -103,9 +95,9 @@ public class GameController implements Initializable, GamePresenter {
         removeJumpPath();
         pressStore[0] = star;
         pressStore[1] = null;
-      } else if(pressStore[0] == star){
+      } else if (pressStore[0] == star) {
 
-      }else{
+      } else {
         Logger.debug("creating JumpPath");
         removeJumpPath();
         pressStore[1] = star;
@@ -249,10 +241,10 @@ public class GameController implements Initializable, GamePresenter {
 
   @Override
   public void onEndGame(String winnerID) {
-    if(winnerID != null){
+    if (winnerID != null) {
       String winnerName = userStore.users().getByID(winnerID).get().use(User::getUsername);
       map.getChildren().add(new EndGameComponent(main, winnerName));
-    }else{
+    } else {
       map.getChildren().add(new EndGameComponent(main));
     }
   }
@@ -327,7 +319,8 @@ public class GameController implements Initializable, GamePresenter {
                 Platform.runLater(() -> {
                   Timeline timeTl = new Timeline();
                   timeTl.getKeyFrames()
-                      .add(new KeyFrame(Duration.seconds(0), event -> map.getChildren().add(arrow)));
+                      .add(
+                          new KeyFrame(Duration.seconds(0), event -> map.getChildren().add(arrow)));
                   timeTl.getKeyFrames().add(
                       new KeyFrame(Duration.seconds(03), event -> map.getChildren().remove(arrow)));
                   timeTl.play();
@@ -410,11 +403,11 @@ public class GameController implements Initializable, GamePresenter {
     this.userStore = userStore;
   }
 
-  public void clearMap(){
+  public void clearMap() {
     map.getChildren().clear();
   }
 
-  public void leaveGame(){
+  public void leaveGame() {
     gameDelegate.leaveGame();
     main.onMapCloseHandle();
   }
