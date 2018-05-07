@@ -1,6 +1,5 @@
 package tech.subluminal.server.stores;
 
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import tech.subluminal.shared.stores.IdentifiableCollection;
@@ -19,9 +18,5 @@ public class PingCollection extends IdentifiableCollection<SentPing> {
             .map(syncPing -> syncPing.use(SentPing::getUserID))
             .collect(Collectors.toSet())
     );
-  }
-
-  public void removeAll() {
-    syncMap.consume(Map::clear);
   }
 }
