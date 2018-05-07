@@ -1,6 +1,7 @@
 package tech.subluminal.server.logic.game;
 
-import static tech.subluminal.shared.util.function.FunctionalUtils.ifPresent;
+import static tech.subluminal.shared.util.IdUtils.generateId;
+import static tech.subluminal.shared.util.function.IfPresent.ifPresent;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,9 +13,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import org.pmw.tinylog.Logger;
+import tech.subluminal.server.stores.records.Signal;
 import tech.subluminal.server.stores.records.Star;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Fleet;
@@ -34,13 +37,18 @@ public class IntermediateGameState {
   private final Map<String, Optional<Ship>> motherShipsUnderway;
   private final Map<String, Star> stars;
   private final Set<String> players;
+  private Set<Signal> signals;
   private final PriorityQueue<PriorityRunnable> tasks = new PriorityQueue<>(
       Comparator.reverseOrder());
+  private final double shipSpeed;
 
-  public IntermediateGameState(double deltaTime, Map<String, Star> stars, Set<String> players) {
+  public IntermediateGameState(double deltaTime, Map<String, Star> stars, Set<String> players,
+      double shipSpeed, Set<Signal> signals) {
     this.deltaTime = deltaTime;
     this.stars = stars;
     this.players = players;
+    this.shipSpeed = shipSpeed;
+    this.signals = signals;
 
     fleetsOnStars = createMapWithKeys(stars.keySet(),
         () -> createMapWithKeys(players, Optional::empty));
@@ -53,6 +61,10 @@ public class IntermediateGameState {
     motherShipsUnderway = createMapWithKeys(players, Optional::empty);
   }
 
+  private static <E> Map<String, E> createMapWithKeys(Set<String> keys, Supplier<E> supplier) {
+    return keys.stream().collect(Collectors.toMap(id -> id, id -> supplier.get()));
+  }
+
   public void advance() {
     stars.keySet().forEach(starID -> colonisationTick(starID, deltaTime));
 
@@ -61,6 +73,19 @@ public class IntermediateGameState {
             time -> tasks.add(new PriorityRunnable(time, () -> generateShips(starID))),
             time -> tasks.add(new PriorityRunnable(time, () -> dematerializeTick(starID))))
     );
+
+    signals = signals.stream()
+        .map(signal -> signal.advanced(deltaTime,
+            time -> tasks.add(new PriorityRunnable(time, () ->
+                splitFleetOnStar(signal.getStarID(), signal.getPlayerID(), signal.getAmount(),
+                    signal.getTargets())
+                    .ifPresent(fleet -> {
+                      setFleetUnderway(fleet, signal.getPlayerID());
+                      moveFleet(time, signal.getPlayerID(), fleet.getID(), deltaTime - time);
+                    })))))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .collect(Collectors.toSet());
 
     fleetsUnderway.forEach((playerID, fleetMap) -> {
       fleetMap.keySet().forEach(fleetID -> moveFleet(0.0, playerID, fleetID, deltaTime));
@@ -73,6 +98,25 @@ public class IntermediateGameState {
     while (!tasks.isEmpty()) {
       tasks.poll().run();
     }
+  }
+
+  private Optional<Fleet> splitFleetOnStar(String starID, String playerID, int amount,
+      List<String> targets) {
+    return fleetsOnStars.get(starID)
+        .get(playerID)
+        .map(fleet -> {
+          if (amount >= fleet.getNumberOfShips()) {
+            fleetsOnStars.get(starID).put(playerID, Optional.empty());
+            return new Fleet(fleet.getCoordinates(), fleet.getNumberOfShips(), fleet.getID(),
+                targets, targets.get(targets.size() - 1), fleet.getSpeed());
+          }
+          fleetsOnStars.get(starID).put(playerID, Optional.of(
+              new Fleet(fleet.getCoordinates(), fleet.getNumberOfShips() - amount, fleet.getID(),
+                  fleet.getTargetIDs(), fleet.getEndTarget(), fleet.getSpeed())
+          ));
+          return new Fleet(fleet.getCoordinates(), amount, generateId(8),
+              targets, targets.get(targets.size() - 1), fleet.getSpeed());
+        });
   }
 
   private void moveFleet(double start, String playerID, String fleetID, double deltaTimeLeft) {
@@ -96,7 +140,7 @@ public class IntermediateGameState {
           addFleetToStar(fleet, playerID, star.getID());
         }));
       } else {
-        fleet.getTargetIDs().remove(0);
+        fleet.setTargetIDs(fleet.getTargetIDs().subList(1, fleet.getTargetIDs().size()));
         tasks.add(new PriorityRunnable(newStart,
             () -> {
               passFleetByStar(playerID, fleetID, star.getID());
@@ -134,7 +178,7 @@ public class IntermediateGameState {
           addMotherShipToStar(ship, playerID, star.getID());
         }));
       } else {
-        ship.getTargetIDs().remove(0);
+        ship.setTargetIDs(ship.getTargetIDs().subList(1, ship.getTargetIDs().size()));
         tasks.add(new PriorityRunnable(newStart,
             () -> {
               passMotherShipByStar(playerID, shipID, star.getID());
@@ -163,9 +207,6 @@ public class IntermediateGameState {
         highestID = playerID;
       }
     }
-    fleetsOnStars.get(starID).forEach((fleetID, fleet) -> {
-
-    });
 
     if (highestID != null) {
       Star star = stars.get(starID);
@@ -173,23 +214,104 @@ public class IntermediateGameState {
           ? highest * deltaTime * 0.1
           : -highest * deltaTime * 0.1;
 
-      stars.put(starID, new Star(highestID, Math.max(Math.min(star.getPossession() + diff, 1.0), 0.0),
-          star.getCoordinates(), starID, star.isGenerating(), star.getJump(), star.getDematRate(),
-          star.getNextDemat(), star.getGenerationRate(), star.getNextShipgen()));
+      double possession = star.getPossession() + diff;
+      String ownerID = star.getOwnerID();
+      boolean isGenerating = star.isGenerating();
+
+      if (possession < 0) {
+        possession = -possession;
+        ownerID = highestID;
+        isGenerating = false;
+      }
+
+      isGenerating |= possession > 0.999;
+
+      stars.put(starID,
+          new Star(ownerID, Math.min(possession, 1.0), star.getCoordinates(), starID, isGenerating,
+              star.getJump(), star.getDematRate(), star.getNextDemat(), star.getGenerationRate(),
+              star.getNextShipgen(), star.getName()));
     }
   }
 
   private void dematerializeTick(String starID) {
-    // TODO: implement this
+    final Map<String, Optional<Fleet>> fleets = fleetsOnStars.get(starID);
+    final Map<String, Optional<Ship>> motherShips = motherShipsOnStars.get(starID);
+
+    final Map<String, Integer> playerStrengths = players.stream()
+        .filter(player -> fleets.get(player).isPresent()
+            || motherShips.get(player).isPresent()
+        )
+        .collect(Collectors.toMap(Function.identity(), player -> getPlayerStrength(
+            fleets.get(player).map(Fleet::getNumberOfShips).orElse(0),
+            motherShips.get(player).isPresent()
+        )));
+
+    final Map<String, Integer> newPlayerStrengths = new HashMap<>(playerStrengths);
+
+    playerStrengths.forEach((playerID, strength) -> {
+      final int totalOpponentDefense = playerStrengths.keySet().stream()
+          .filter(p -> !p.equals(playerID))
+          .mapToInt(playerStrengths::get)
+          .sum();
+
+      final double dematPercentage = getDematStrength(strength) / totalOpponentDefense;
+
+      playerStrengths.keySet().stream()
+          .filter(p -> !p.equals(playerID))
+          .forEach(opponent -> {
+            newPlayerStrengths.compute(opponent,
+                (o, str) -> str - (int) (playerStrengths.get(opponent)*dematPercentage));
+          });
+    });
+
+    newPlayerStrengths.forEach((player, newStrength) -> {
+      if (newStrength <= 0) {
+        motherShips.get(player).ifPresent(ship -> {
+          destroyedPlayers.add(player);
+          motherShips.put(player, Optional.empty());
+        });
+      }
+
+      final int shipsLeft = newStrength - motherShips.get(player).map(s -> 5).orElse(0);
+
+      if (shipsLeft <= 0) {
+        fleets.get(player).ifPresent(fleet -> {
+          destroyedFleets.get(player).add(fleet);
+          fleets.put(player, Optional.empty());
+        });
+      } else {
+        fleets.put(player, fleets.get(player).map(fleet -> fleet.expanded(shipsLeft - fleet.getNumberOfShips())));
+      }
+    });
+  }
+
+  private double getDematStrength(int strength) {
+    if (strength <= 6) {
+      return strength;
+    }
+    return 5 + Math.sqrt(strength - 5);
+  }
+
+  private int getPlayerStrength(int ships, boolean motherShip) {
+    return ships + (motherShip ? 5 : 0);
   }
 
   private void generateShips(String starID) {
-    // TODO: implement this
+    Star star = stars.get(starID);
+    if (star.isGenerating()) {
+      final Optional<Fleet> optionalFleet = fleetsOnStars.get(starID).get(star.getOwnerID());
+      final Fleet fleet = optionalFleet
+          .map(f -> f.expanded(1))
+          .orElseGet(() ->
+              new Fleet(star.getCoordinates(), 1, generateId(8), Collections.emptyList(), starID,
+                  shipSpeed));
+      addFleetToStar(fleet, star.getOwnerID(), starID);
+    }
   }
 
   public void addFleet(Fleet fleet, String playerID) {
     if (isOnStar(fleet)) {
-      addFleetToStar(fleet, playerID, fleet.getTargetIDs().get(0));
+      addFleetToStar(fleet, playerID, fleet.getEndTarget());
     } else {
       setFleetUnderway(fleet, playerID);
     }
@@ -226,27 +348,23 @@ public class IntermediateGameState {
   }
 
   private void addFleetToStar(Fleet fleet, String playerID, String starID) {
+    fleetsUnderway.remove(fleet.getID());
     Optional<Fleet> optionalFleet = fleetsOnStars.get(starID).get(playerID);
-    ifPresent(optionalFleet,
-        oldFleet -> {
+    ifPresent(optionalFleet.filter(f -> !f.getID().equals(fleet.getID())))
+        .then(oldFleet -> {
           fleetsOnStars.get(starID)
               .put(playerID, Optional.of(oldFleet.expanded(fleet.getNumberOfShips())));
           destroyedFleets.get(playerID).add(fleet);
-        },
-        () -> {
-          Fleet newFleet = fleet.getTargetIDs().size() == 0
+        })
+        .els(() -> {
+          Fleet newFleet = fleet.getTargetIDs().size() == 0 && fleet.getEndTarget().equals(starID)
               ? fleet
               : new Fleet(fleet.getCoordinates(), fleet.getNumberOfShips(), fleet.getID(),
                   Collections.emptyList(), starID, fleet.getSpeed());
 
           fleetsOnStars.get(starID)
               .put(playerID, Optional.of(newFleet));
-        }
-    );
-  }
-
-  private static <E> Map<String, E> createMapWithKeys(Set<String> keys, Supplier<E> supplier) {
-    return keys.stream().collect(Collectors.toMap(id -> id, id -> supplier.get()));
+        });
   }
 
   public Map<String, List<Fleet>> getDestroyedFleets() {
@@ -275,5 +393,9 @@ public class IntermediateGameState {
 
   public Map<String, Star> getStars() {
     return stars;
+  }
+
+  public Set<Signal> getSignals() {
+    return signals;
   }
 }

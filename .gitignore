@@ -12,6 +12,7 @@
 *.aux
 __*.tex
 *.synctex*
+log.txt
 
 #folders
 .app/
@@ -24,4 +25,11 @@ app/out/
 app/build/
 bin/
 build/
+classes/
 docs/javadoc/
+<<<<<<< HEAD
+log\.txt
+classes/
+=======
+
+>>>>>>> f29ddca64cb0f21ecdf2bc95d3743b74e7361011

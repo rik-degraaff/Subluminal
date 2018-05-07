@@ -20,13 +20,13 @@ public class FunctionalUtils {
    * @param action the action to be performed, if a value is present.
    * @param emptyAction the empty-based action to be performed, if no value is present.
    */
-  public static <T> void ifPresent(Optional<T> optional, Consumer<T> action, Runnable emptyAction) {
+  /*public static <T> void ifPresent(Optional<T> optional, Consumer<T> action, Runnable emptyAction) {
     if (optional.isPresent()) {
       action.accept(optional.get());
     } else {
       emptyAction.run();
     }
-  }
+  }*/
 
   /**
    * This takeWhile function was copied from the java 9 source code and takes a Stream and returns
@@ -39,9 +39,9 @@ public class FunctionalUtils {
 
       private static final int CANCEL_CHECK_COUNT = 63;
       private final Spliterator<T> s;
+      private final AtomicBoolean cancel = new AtomicBoolean();
       private int count;
       private T t;
-      private final AtomicBoolean cancel = new AtomicBoolean();
       private boolean takeOrDrop = true;
 
       Taking(Spliterator<T> s) {

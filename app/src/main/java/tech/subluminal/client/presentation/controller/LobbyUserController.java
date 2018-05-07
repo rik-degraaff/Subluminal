@@ -40,6 +40,7 @@ public class LobbyUserController implements Initializable {
   private LobbyPresenter.Delegate lobbyDelegate;
 
   private FilteredList<User> filterdUsers;
+  private MainController main;
 
   public void setLobbyDelegate(Delegate lobbyDelegate) {
     this.lobbyDelegate = lobbyDelegate;
@@ -57,19 +58,18 @@ public class LobbyUserController implements Initializable {
   public void setUserStore(UserStore userStore) {
     this.userStore = userStore;
 
-
     Logger.trace("WOENFOWBEFOWEOFNWOENFWONEOIFWBNOEIFWEIONFWEIO");
     this.filterdUsers = new FilteredList<>(userStore.users().observableList());
     filterdUsers.setPredicate(u -> {
       Logger.trace("LOBBYUSERVIEW GOT UPDATED");
       return lobbyStore.currentLobby().get()
-        .use(opt -> opt.map(l -> l.getPlayers().contains(u.getID())).orElse(false));
+          .use(opt -> opt.map(l -> l.getPlayers().contains(u.getID())).orElse(false));
 
     });
 
     Platform.runLater(() -> {
       userList.setItems(new MapperList<>(filterdUsers,
-          u -> new PlayerStatusComponent(u.getUsername(), PlayerStatus.INLOBBY)));
+          u -> new PlayerStatusComponent(u.getUsername(), PlayerStatus.INLOBBY, main)));
     });
 
 
@@ -78,6 +78,10 @@ public class LobbyUserController implements Initializable {
   @FXML
   private void onLobbyLeave() {
     lobbyDelegate.leaveLobby();
+  }
+
+  public void setMainController (MainController main ){
+    this.main = main;
   }
 
   public void lobbyUpdateReceived() {
@@ -93,7 +97,8 @@ public class LobbyUserController implements Initializable {
   }
 
   @FXML
-  private void onGameStart(){
+  private void onGameStart() {
     lobbyDelegate.startGame();
   }
+
 }

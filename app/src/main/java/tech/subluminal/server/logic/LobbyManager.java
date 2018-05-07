@@ -1,13 +1,17 @@
 package tech.subluminal.server.logic;
 
+import static tech.subluminal.shared.util.ColorUtils.getNiceColors;
 import static tech.subluminal.shared.util.IdUtils.generateId;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import javafx.scene.paint.Color;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.server.logic.game.GameStarter;
 import tech.subluminal.server.stores.LobbyStore;
@@ -82,7 +86,16 @@ public class LobbyManager {
                     .equals(userID)))
                 .forEach(s -> s.consume(lobby -> {
                   lobby.setStatus(LobbyStatus.FULL);
-                  distributor.sendMessage(new GameStartRes(), lobby.getPlayers());
+                  //TODO: add colors
+                  List<Color> colors = getNiceColors(lobby.getPlayerCount());
+                  int i = 0;
+                  Map<String, Color> playerColors = new HashMap<>();
+                  for (String player : lobby.getPlayers()) {
+                    playerColors.put(player, colors.get(i));
+                    i++;
+                  }
+                  distributor.sendMessage(new GameStartRes(lobby.getID(), playerColors),
+                      lobby.getPlayers());
                   gameStarter.startGame(lobby.getID(), new HashSet<>(lobby.getPlayers()));
                 })));
   }
@@ -135,12 +148,12 @@ public class LobbyManager {
         .getLobbiesWithUser(userID)
         .consume(lobbies ->
             lobbies.forEach(syncLobby -> syncLobby.consume(lobby -> {
-              if (lobby.getPlayers().size() == 1) {
+              if (lobby.getPlayers().size() == 1 && lobby.getStatus() == LobbyStatus.OPEN) {
                 lobbyStore.lobbies().removeByID(lobby.getID());
                 Logger.trace("Deleting lobby");
               } else {
                 lobby.removePlayer(userID);
-                distributor.sendMessage(new LobbyUpdateRes(lobby),lobby.getPlayers());
+                distributor.sendMessage(new LobbyUpdateRes(lobby), lobby.getPlayers());
               }
             }))
         );
