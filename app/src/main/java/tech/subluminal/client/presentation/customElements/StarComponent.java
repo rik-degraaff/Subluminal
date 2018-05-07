@@ -68,6 +68,10 @@ public class StarComponent extends Group {
                 .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue()),
             yProperty, parentWidthProperty, parentHeightProperty));
     Platform.runLater(() -> {
+      if (getScene() == null) {
+        return;
+      }
+
       this.parentWidthProperty.bind(getScene().widthProperty());
       this.parentHeightProperty.bind(getScene().heightProperty());
     });

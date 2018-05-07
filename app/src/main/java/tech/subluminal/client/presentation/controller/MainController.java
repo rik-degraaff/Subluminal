@@ -138,7 +138,7 @@ public class MainController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    background = new BackgroundComponent(100);
+    background = new BackgroundComponent(1000);
     spaceBackgroundDock.getChildren().add(background);
 
     chat = new ChatComponent(this);

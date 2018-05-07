@@ -9,7 +9,7 @@ import tech.subluminal.shared.son.SONParsingError;
 public class ChatMessageOutTest {
 
   @Test
-  public void testWhisperMessage() {
+  public void testWhisperMessage() throws SONParsingError, SONConversionError{
     String message = "Who let the dogs out?";
     String receiverID = "1234";
     boolean global = true;
@@ -22,15 +22,11 @@ public class ChatMessageOutTest {
     String parsedReceiverID = null;
     boolean parsedGlobal = true; // should change to false after conversion from SON
 
-    try {
-      ChatMessageOut parsedChatMessageOut = ChatMessageOut.fromSON(SON.parse(chatMessageOutMsg));
-      Assert.assertNotNull(parsedChatMessageOut);
-      parsedMessage = parsedChatMessageOut.getMessage();
-      parsedReceiverID = parsedChatMessageOut.getReceiverID();
-      parsedGlobal = parsedChatMessageOut.isGlobal();
-    } catch (SONConversionError | SONParsingError error) {
-      error.printStackTrace();
-    }
+    ChatMessageOut parsedChatMessageOut = ChatMessageOut.fromSON(SON.parse(chatMessageOutMsg));
+    Assert.assertNotNull(parsedChatMessageOut);
+    parsedMessage = parsedChatMessageOut.getMessage();
+    parsedReceiverID = parsedChatMessageOut.getReceiverID();
+    parsedGlobal = parsedChatMessageOut.isGlobal();
 
     System.out.println(chatMessageOutMsg);
     Assert.assertEquals(message, parsedMessage);
