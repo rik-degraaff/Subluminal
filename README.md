@@ -8,10 +8,10 @@
 **Table of Contents**  
 [1. Overview](#1-overview)  
 [2. Getting Started](#2-getting-started)  
-[3. Trailer & Screenshots](#3-trailer---screenshots)
-[4. How to play](#4-hot-to-play)  
+[3. Trailer & Screenshots](#3-trailer-screenshots)  
+[4. How to play](#4-how-to-play)  
 [5. Modding](#5-modding)  
-[6. License](#6-license)
+[6. License](#6-license)  
 [7. Web](#7-web)
 
 # [Subluminal](https://en.wiktionary.org/wiki/subluminal) /ˌsʌbˈl(j)uːmɪnl/ - The Game
@@ -107,7 +107,7 @@ You can find a more images in [./assets/screenshots/](assets/screenshots/) folde
 
 
 ## 5. Modding
-There is support for mods. Read the docs for more info ... [./docs/modding.md](./docs/modding.md).
+There is basic support for mods. Read the docs for more info ... [./docs/modding.md](./docs/modding.md). Additionally you can start the server in debug mode with the ``--debug`` flag. This will export the internal constants to a property file called ``settings.properties``. Now you can change and tweak the game settings to your liking. On the next launch of the server, the properties file is read back into the server. See [assets/settings/settings.properties](assets/settings/settings.properties) for example.
 
 
 ## 6. License
