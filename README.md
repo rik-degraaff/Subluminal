@@ -8,9 +8,11 @@
 **Table of Contents**  
 [1. Overview](#1-overview)  
 [2. Getting Started](#2-getting-started)  
-[3. Screenshots](#3-screenshots)  
-[4. License](#4-license)  
-[5. Webpage](#5-web)
+[3. Trailer & Screenshots](#3-trailer---screenshots)
+[4. How to play](#4-hot-to-play)  
+[5. Modding](#5-modding)  
+[6. License](#6-license)
+[7. Web](#7-web)
 
 # [Subluminal](https://en.wiktionary.org/wiki/subluminal) /ˌsʌbˈl(j)uːmɪnl/ - The Game
 [![Logo](./assets/logo/subluminal_logo.png)](http://subluminal.tech) **by Bordeaux Ink.**
@@ -29,7 +31,7 @@ $ java -jar Subluminal-4.0.0.jar client <hostaddress>:<port> [<username>]
 ```
 
 Our application supports a number of command line arguments. Use ``--help`` or ``-h`` to get the usage information as shown below:
-``` sh
+```
 $ java -jar app/build/libs/Subluminal-4.0.0.jar --help
 
 Welcome to
@@ -88,18 +90,29 @@ These documents will only appear once the project has been built with gradle.
 ## 2. Getting Started
 1. Clone the repo to your hard drive ``git clone https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11.git``  
 2. cd into the project directory and try to build the project with ``./gradlew build`` (on Unix) or ``gradlew.bat build`` (on Windows).
-3. A more specific document on code quality assurance is located in [docs/quality_assurance.md](docs/quality_assurance.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
+3. Start writing code ...
+3.1 A more specific document on how to contribute is located in [docs/quality_assurance.md](docs/quality_assurance.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
 
+## 3. Trailer & Screenshots
+> Insert youtube trailer here  
 
-## 3. Screenshots
 You can find a more images in [./assets/screenshots/](assets/screenshots/) folder.  
 ![Menu](./assets/screenshots/menu.png)
 ![Ingame](./assets/screenshots/game3.png)
 
 
-## 4. License
+## 4. How to play
+
+> Insert youtube video here ...
+
+
+## 5. Modding
+There is support for mods. Read the docs for more info ... [./docs/modding.md](./docs/modding.md).
+
+
+## 6. License
 **GNU AGPLv3**. [https://choosealicense.com/licenses/agpl-3.0/]()
 
 
-## 5. Web
+## 7. Web
 [subluminal.tech](http://subluminal.tech)  /   [merch.subluminal.tech](http://merch.subluminal.tech)  /   [buy.subluminal.tech](http://buy.subluminal.tech)
