@@ -94,16 +94,16 @@ These documents will only appear once the project has been built with gradle.
 3.1 A more specific document on how to contribute is located in [docs/quality_assurance.md](docs/quality_assurance.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## 3. Trailer & Screenshots
-> Insert youtube trailer here  
+> Insert Youtube trailer here  
 
 You can find a more images in [./assets/screenshots/](assets/screenshots/) folder.  
-![Menu](./assets/screenshots/menu.png)
-![Ingame](./assets/screenshots/game3.png)
+![Menu](./assets/screenshots/menu-1.png)
+![Ingame](./assets/screenshots/game-3.png)
 
 
 ## 4. How to play
 
-> Insert youtube video here ...
+> Insert Youtube video here ...
 
 
 ## 5. Modding
