@@ -120,6 +120,10 @@ public class IntermediateGameState {
   }
 
   private void moveFleet(double start, String playerID, String fleetID, double deltaTimeLeft) {
+    if (fleetsUnderway.get(playerID).get(fleetID) == null) {
+      return;
+    }
+
     Fleet fleet = fleetsUnderway.get(playerID).get(fleetID);
     Star star = stars.get(fleet.getTargetIDs().get(0));
 
@@ -151,6 +155,10 @@ public class IntermediateGameState {
   }
 
   private void moveMotherShip(double start, String playerID, String shipID, double deltaTimeLeft) {
+    if (!motherShipsUnderway.get(playerID).isPresent()) {
+      return;
+    }
+
     Ship ship = motherShipsUnderway.get(playerID).get();
     Star star = stars.get(ship.getTargetIDs().get(0));
 
@@ -188,21 +196,54 @@ public class IntermediateGameState {
     }
   }
 
-  private void passMotherShipByStar(String playerID, String shipID, String id) {
-    // TODO: implement this
+  private void passMotherShipByStar(String playerID, String shipID, String starID) {
+    final double dematStrength = getPassingDematStrength(playerID, starID);
+
+    if (dematStrength >= 5) {
+      getMotherShipsUnderway().remove(playerID);
+      getDestroyedPlayers().add(playerID);
+    }
   }
 
-  private void passFleetByStar(String playerID, String fleetID, String id) {
-    // TODO: implement this
+  private void passFleetByStar(String playerID, String fleetID, String starID) {
+    final double dematStrength = getPassingDematStrength(playerID, starID);
+
+    if (dematStrength >= 1) {
+      final Fleet fleet = fleetsUnderway.get(playerID).get(fleetID);
+      final int oldCount = fleet.getNumberOfShips();
+      final int maxLoss = Math.max(1, oldCount - (int) (0.85*oldCount));
+      final int loss = Math.min(maxLoss, (int) dematStrength);
+      if (loss >= oldCount) {
+        fleetsUnderway.get(playerID).remove(fleetID);
+        destroyedFleets.get(playerID).add(fleet);
+      } else {
+        fleetsUnderway.get(playerID).remove(fleetID);
+        fleetsUnderway.get(playerID).put(fleetID, fleet.expanded(-loss));
+      }
+    }
+  }
+
+  private double getPassingDematStrength(String playerID, String starID) {
+    final Map<String, Integer> playerStrengths = getPlayerStrengths(starID);
+    final int opponentsStrength = playerStrengths.keySet()
+        .stream()
+        .filter(opponentID -> !opponentID.equals(playerID))
+        .mapToInt(playerStrengths::get)
+        .sum();
+    final int strengthDiff = opponentsStrength - playerStrengths.getOrDefault(playerID, 0);
+
+    return getDematStrength(strengthDiff)/2;
   }
 
   private void colonisationTick(String starID, double deltaTime) {
     String highestID = null;
     int highest = 0;
+    int secondHighest = 0;
     for (String playerID : players) {
       int score = fleetsOnStars.get(starID).get(playerID).map(Fleet::getNumberOfShips).orElse(0)
           + motherShipsOnStars.get(starID).get(playerID).map(s -> 2).orElse(0);
-      if (score > highest) {
+      if (score >= highest) {
+        secondHighest = highest;
         highest = score;
         highestID = playerID;
       }
@@ -210,9 +251,10 @@ public class IntermediateGameState {
 
     if (highestID != null) {
       Star star = stars.get(starID);
+      double colStrength = getColonizationStrength(highest - secondHighest);
       double diff = highestID.equals(star.getOwnerID())
-          ? highest * deltaTime * 0.1
-          : -highest * deltaTime * 0.1;
+          ? colStrength * deltaTime * 0.1
+          : -colStrength * deltaTime * 0.1;
 
       double possession = star.getPossession() + diff;
       String ownerID = star.getOwnerID();
@@ -233,11 +275,16 @@ public class IntermediateGameState {
     }
   }
 
-  private void dematerializeTick(String starID) {
+  private Map<String, Integer> getPlayerStrengths(String starID) {
     final Map<String, Optional<Fleet>> fleets = fleetsOnStars.get(starID);
     final Map<String, Optional<Ship>> motherShips = motherShipsOnStars.get(starID);
 
-    final Map<String, Integer> playerStrengths = players.stream()
+    return getStrengths(fleets, motherShips);
+  }
+
+  private Map<String, Integer> getStrengths(Map<String, Optional<Fleet>> fleets,
+      Map<String, Optional<Ship>> motherShips) {
+    return players.stream()
         .filter(player -> fleets.get(player).isPresent()
             || motherShips.get(player).isPresent()
         )
@@ -245,6 +292,13 @@ public class IntermediateGameState {
             fleets.get(player).map(Fleet::getNumberOfShips).orElse(0),
             motherShips.get(player).isPresent()
         )));
+  }
+
+  private void dematerializeTick(String starID) {
+    final Map<String, Optional<Fleet>> fleets = fleetsOnStars.get(starID);
+    final Map<String, Optional<Ship>> motherShips = motherShipsOnStars.get(starID);
+
+    final Map<String, Integer> playerStrengths = getStrengths(fleets, motherShips);
 
     final Map<String, Integer> newPlayerStrengths = new HashMap<>(playerStrengths);
 
@@ -290,6 +344,10 @@ public class IntermediateGameState {
       return strength;
     }
     return 5 + Math.sqrt(strength - 5);
+  }
+
+  private double getColonizationStrength(int strength) {
+    return Math.sqrt(strength);
   }
 
   private int getPlayerStrength(int ships, boolean motherShip) {
