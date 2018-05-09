@@ -10,17 +10,18 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Bloom;
+import javafx.scene.effect.Effect;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.TextAlignment;
+import javafx.scene.text.Font;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 
-public class StarComponent extends Pane {
+public class StarComponent extends Group {
 
   public static final int BORDER_WIDTH = 3;
   private final int sizeAll = 60;
@@ -31,6 +32,7 @@ public class StarComponent extends Pane {
   private final StringProperty ownerID = new SimpleStringProperty();
   private final DoubleProperty possession = new SimpleDoubleProperty();
   private final ObjectProperty color = new SimpleObjectProperty();
+  private final DoubleProperty jump = new SimpleDoubleProperty();
 
 
   private final IntegerProperty parentWidthProperty = new SimpleIntegerProperty();
@@ -41,15 +43,17 @@ public class StarComponent extends Pane {
 
   //private final ObjectProperty
 
-  public StarComponent(String ownerID, double possession, Coordinates coordinates, String id) {
+  public StarComponent(String ownerID, String name, double possession, Coordinates coordinates,
+      String id,
+      double jump) {
 
     setPossession(possession);
     setXProperty(coordinates.getX());
     setYProperty(coordinates.getY());
     setSizeProperty(0.2);
-    setColor(color);
     setStarID(id);
     setOwnerID(ownerID);
+    setJump(jump);
 
     setColor(Color.GRAY);
 
@@ -64,16 +68,19 @@ public class StarComponent extends Pane {
                 .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue()),
             yProperty, parentWidthProperty, parentHeightProperty));
     Platform.runLater(() -> {
+      if (getScene() == null) {
+        return;
+      }
+
       this.parentWidthProperty.bind(getScene().widthProperty());
       this.parentHeightProperty.bind(getScene().heightProperty());
     });
 
-    this.name = "SUBBY";
+    this.name = name;
 
     Circle star = new Circle();
     star.setFill(Color.GRAY);
-    //star.setCenterY(sizeAll / 2);
-    //star.setCenterX(sizeAll / 2);
+
     star.radiusProperty().bind(Bindings.createDoubleBinding(
         () -> sizeProperty.doubleValue() * sizeAll, sizeProperty));
 
@@ -81,37 +88,71 @@ public class StarComponent extends Pane {
     possessionCount.setOpacity(0.7);
     possessionCount.setFill(Color.GRAY);
     possessionCount.fillProperty().bind(colorProperty());
-    //possessionCount.setCenterX(sizeAll / 2);
-    //possessionCount.setCenterY(sizeAll / 2);
     possessionCount.radiusProperty().bind(Bindings
         .createDoubleBinding(() -> star.getRadius() * Math.pow(getPossession(), 0.8),
             possessionProperty(), sizeProperty));
 
-    Pane starGroup = new Pane();
-    starGroup.setPrefWidth(sizeAll);
-    starGroup.setPrefHeight(sizeAll);
-    //starGroup.setTranslateX(-sizeAll / 2);
-    //starGroup.setTranslateY(-sizeAll / 2);
+    Group starGroup = new Group();
+
+    Pane glowBox = new Pane();
+    glowBox.setPrefHeight(sizeAll);
+    glowBox.setPrefWidth(sizeAll);
+    glowBox.setTranslateX(-sizeAll / 2);
+    glowBox.setTranslateY(-sizeAll / 2);
 
     border = makeBorder();
-    border.setVisible(false);
-    starGroup.setOnMouseEntered(event -> border.setVisible(true));
+    Circle jumpCircle = new Circle();
+    jumpCircle.radiusProperty().bind(Bindings
+        .createDoubleBinding(() -> jump * parentHeightProperty.getValue(), parentHeightProperty,
+            jumpProperty()));
+    jumpCircle.setFill(Color.TRANSPARENT);
+    jumpCircle.setStroke(Color.RED);
 
-    starGroup.setOnMouseExited(event -> border.setVisible(false));
+    border.setVisible(false);
+    jumpCircle.setVisible(false);
+
+    //starGroup.setB(new Background(new BackgroundFill(Color.RED,CornerRadii.EMPTY,Insets.EMPTY)));
+
+    starGroup.setOnMouseEntered(event -> {
+
+      border.setVisible(true);
+      jumpCircle.setVisible(true);
+
+    });
+
+    starGroup.setOnMouseExited(event -> {
+
+      border.setVisible(false);
+      jumpCircle.setVisible(false);
+
+    });
 
     Label starName = new Label(name);
     starName.getStyleClass().add("starname-label");
-    starName.setAlignment(Pos.BOTTOM_CENTER);
-    starName.setPrefWidth(sizeAll);
-    starName.setTextAlignment(TextAlignment.CENTER);
+    starName.setLayoutY(30);
+    Platform.runLater(() -> {
+      starName.setLayoutX(-starName.getWidth() / 2);
+    });
 
-    starGroup.getChildren().addAll(star, starName, border, possessionCount);
-    this.getChildren().addAll(starGroup);
+    starName.setFont(new Font("PxPlus IBM VGA9", 10));
 
-    //this.getChildren().addAll(star, starName);
+    starGroup.getChildren().addAll(glowBox, border, star, starName, possessionCount);
+    Effect glow = new Bloom();
+    starGroup.setEffect(glow);
+    this.getChildren().addAll(jumpCircle, starGroup);
 
-    //star.fillProperty().bind(colorProperty);
+  }
 
+  public double getJump() {
+    return jump.get();
+  }
+
+  public void setJump(double jump) {
+    this.jump.set(jump);
+  }
+
+  public DoubleProperty jumpProperty() {
+    return jump;
   }
 
   public Object getColor() {

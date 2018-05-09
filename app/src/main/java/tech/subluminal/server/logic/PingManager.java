@@ -61,20 +61,21 @@ public class PingManager {
         e.printStackTrace(); // TODO: do something sensible
       }
 
-      Set<SentPing> pings = userStore.connectedUsers().getAll().use(us ->
-          us.stream()
-              .map(syncUser -> syncUser.use(User::getID))
-              .map(id -> new SentPing(System.currentTimeMillis(), id, generateId(8)))
-              .collect(Collectors.toSet())
-      );
-
-      pings.forEach(p -> distributor.sendMessage(new Ping(p.getID()), p.getUserID()));
-
       pingStore.sentPings().sync(() -> {
+        Set<SentPing> pings = userStore.connectedUsers().getAll().use(us ->
+            us.stream()
+                .map(syncUser -> syncUser.use(User::getID))
+                .map(id -> new SentPing(System.currentTimeMillis(), id, generateId(8)))
+                .collect(Collectors.toSet())
+        );
+
+        pings.forEach(p -> {
+          distributor.sendMessage(new Ping(p.getID()), p.getUserID());
+        });
+
         Set<String> usersWithPings = pingStore.sentPings().getUsersWithPings();
-        usersWithPings.forEach(System.out::println);
         usersWithPings.forEach(distributor::closeConnection);
-        pingStore.sentPings().removeAll();
+        pingStore.sentPings().clear();
         pings.forEach(pingStore.sentPings()::add);
       });
     }

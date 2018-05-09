@@ -15,8 +15,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 public class MenuController implements Initializable, Observer {
@@ -94,20 +92,6 @@ public class MenuController implements Initializable, Observer {
     menuButtonsDock.setOpacity(0.0);
     generateLogo();
 
-    //TODO: Iterate over all the files and play random track
-    Media media = null;
-
-    //TODO: Import track with getResources
-    media = new Media(
-        getClass().getResource("/tech/subluminal/resources/music/theyre-here_looping.mp3")
-            .toString());
-
-    MediaPlayer player = new MediaPlayer(media);
-    player.setVolume(0.75);
-    player.play();
-
-    player.setOnEndOfMedia(() -> player.seek(Duration.ZERO)
-    );
   }
 
   @FXML
@@ -118,6 +102,11 @@ public class MenuController implements Initializable, Observer {
   @FXML
   private void settingPressed(ActionEvent e) {
     main.onSettingOpenHandle();
+  }
+
+  @FXML
+  private void highscorePressed(ActionEvent e){
+    main.onHighscoreHandle();
   }
 
   @Override

@@ -26,7 +26,7 @@ public class GameHistoryEntry<E extends GameObject> {
   }
 
   private GameHistoryEntry(E state, boolean destroyed) {
-    this(state, System.currentTimeMillis(), false);
+    this(state, System.currentTimeMillis(), destroyed);
   }
 
   /**

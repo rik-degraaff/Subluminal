@@ -62,6 +62,7 @@ public class ClientInitializer extends Application {
     LobbyStore lobbyStore = new InMemoryLobbyStore();
 
     ChatController chatPresenter = controller.getChatController();
+
     chatPresenter.setUserStore(userStore);
     controller.setUserStore(userStore);
 
@@ -112,11 +113,12 @@ public class ClientInitializer extends Application {
   public void start(Stage primaryStage) throws Exception {
     loader = new FXMLLoader();
     loader.setLocation(
-        getClass().getResource("/tech/subluminal/client/presentation/view/MainView.fxml"));
+        getClass()
+            .getResource("/tech/subluminal/client/presentation/customElements/MainView.fxml"));
     //loader.setController(new MainController());
     Parent root = loader.load();
     root.getStylesheets().add(
-        getClass().getResource("/tech/subluminal/client/presentation/view/lobby.css")
+        getClass().getResource("/tech/subluminal/client/presentation/style/lobby.css")
             .toExternalForm());
 
     controller = (MainController) loader.getController();

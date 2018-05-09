@@ -1,6 +1,8 @@
 package tech.subluminal.client.presentation.customElements;
 
 import java.util.function.Consumer;
+import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -13,25 +15,26 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.pmw.tinylog.Logger;
 
 public class JumpBox extends Group {
 
   IntegerProperty shipToSend = new SimpleIntegerProperty();
-  //IntegerProperty maxShips = new SimpleIntegerProperty();
 
   public JumpBox(Property x, Property y, Consumer<Integer> onSendFleet, Runnable onSendMotherShip) {
     this.layoutXProperty().bind(x);
     this.layoutYProperty().bind(y);
-    //this.maxShips.bind(maxAmount);
 
     VBox box = new VBox();
 
     HBox shipsAmount = new HBox();
     Label max = new Label();
-    //max.textProperty().bind(Bindings
-    //    .createStringBinding(() -> maxShipsProperty().getValue().toString(), maxShipsProperty()));
 
     TextField actual = new TextField();
+    Platform.runLater(() -> {
+      actual.requestFocus();
+    });
+
 
     actual.addEventFilter(KeyEvent.KEY_TYPED, keyEvent -> {
       if (!"0123456789".contains(keyEvent.getCharacter()) && keyEvent.getCode() != KeyCode.ENTER) {
@@ -44,7 +47,8 @@ public class JumpBox extends Group {
     Button send = new Button("Send Ships");
     send.setAlignment(Pos.CENTER);
 
-    send.setOnMouseClicked(event -> {
+
+    send.setOnAction(event -> {
       int amount = Integer.parseInt(actual.getText());
       onSendFleet.accept(amount);
     });
@@ -52,14 +56,60 @@ public class JumpBox extends Group {
     Button sendMother = new Button("Send Mothership");
     sendMother.setAlignment(Pos.CENTER);
 
-    sendMother.setOnMouseClicked(event -> {
+    sendMother.setOnAction(event -> {
       onSendMotherShip.run();
+    });
+
+    actual.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
+      if(keyEvent.getCode() == KeyCode.ENTER){
+        keyEvent.consume();
+        if(!actual.getText().equals("")){
+          send.fire();
+        }else{
+          sendMother.fire();
+        }
+      }
     });
 
     box.getChildren().addAll(shipsAmount, send, sendMother);
 
     this.getChildren().add(box);
     box.getStyleClass().add("jumpbox");
+
+    Platform.runLater(() -> {
+      if ((double) x.getValue() >= getScene().getWidth() / 2) {
+        //right side
+        if ((double) y.getValue() >= getScene().getHeight() / 2) {
+          //up
+          Logger.debug("right down");
+          box.layoutXProperty().unbind();
+          box.layoutXProperty()
+              .bind(Bindings.createDoubleBinding(() -> -box.getWidth(), box.widthProperty()));
+          box.layoutYProperty()
+              .bind(Bindings.createDoubleBinding(() -> -box.getHeight(), box.heightProperty()));
+        } else {
+          Logger.debug("right up");
+          box.layoutXProperty().unbind();
+          box.layoutXProperty()
+              .bind(Bindings.createDoubleBinding(() -> -box.getWidth(), box.widthProperty()));
+        }
+      } else {
+        //left side
+        if ((double) y.getValue() >= getScene().getHeight() / 2) {
+          //up
+          Logger.debug("left down");
+          box.layoutYProperty().unbind();
+          box.layoutYProperty()
+              .bind(Bindings.createDoubleBinding(() -> -box.getHeight(), box.heightProperty()));
+        } else {
+          Logger.debug("left up");
+          box.layoutYProperty().unbind();
+          box.layoutYProperty().setValue(0);
+        }
+      }
+    });
+
+
   }
 
   public int getShipToSend() {
@@ -73,19 +123,6 @@ public class JumpBox extends Group {
   public IntegerProperty shipToSendProperty() {
     return shipToSend;
   }
-
-  /*public int getMaxShips() {
-    return maxShips.get();
-  }
-
-  public void setMaxShips(int maxShips) {
-    this.maxShips.set(maxShips);
-  }
-
-  public IntegerProperty maxShipsProperty() {
-    return maxShips;
-  }
-  */
 
   private void tryToSend(int actual) {
     if (actual >= 0) {

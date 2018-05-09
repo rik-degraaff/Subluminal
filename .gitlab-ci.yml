@@ -2,6 +2,7 @@ image: subluminalthegame/gradle:4.6.0-jdk8-openjfx-alpine
 
 before_script:
   - export GRADLE_USER_HOME=`pwd`/.gradle
+  - export GRADLE_OPTS="-Dfile.encoding=utf-8"
 
 cache:
   paths:
@@ -42,7 +43,7 @@ build:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     expire_in: 2 hours
     paths:
-      - app/out/*.class
+      - app/out/**/*.class
 
 test:
   stage: test

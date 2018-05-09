@@ -553,7 +553,7 @@ html.responsive body {
 	background: #3a6d8b;
 }
 
-/* If the user has opted to "view desktop site", we add a button to the bottom of the footer
+/* If the user has opted to "style desktop site", we add a button to the bottom of the footer
 	to opt back in to the mobile site.  This is button repsonds to device width
 	so that it's bigger on smaller screens and easier to tap when zoomed out */
 
