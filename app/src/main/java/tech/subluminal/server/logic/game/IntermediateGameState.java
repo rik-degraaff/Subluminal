@@ -199,10 +199,12 @@ public class IntermediateGameState {
   private void colonisationTick(String starID, double deltaTime) {
     String highestID = null;
     int highest = 0;
+    int secondHighest = 0;
     for (String playerID : players) {
       int score = fleetsOnStars.get(starID).get(playerID).map(Fleet::getNumberOfShips).orElse(0)
           + motherShipsOnStars.get(starID).get(playerID).map(s -> 2).orElse(0);
-      if (score > highest) {
+      if (score >= highest) {
+        secondHighest = highest;
         highest = score;
         highestID = playerID;
       }
@@ -210,9 +212,10 @@ public class IntermediateGameState {
 
     if (highestID != null) {
       Star star = stars.get(starID);
+      double colStrength = getColonizationStrength(highest - secondHighest);
       double diff = highestID.equals(star.getOwnerID())
-          ? highest * deltaTime * 0.1
-          : -highest * deltaTime * 0.1;
+          ? colStrength * deltaTime * 0.1
+          : -colStrength * deltaTime * 0.1;
 
       double possession = star.getPossession() + diff;
       String ownerID = star.getOwnerID();
@@ -290,6 +293,10 @@ public class IntermediateGameState {
       return strength;
     }
     return 5 + Math.sqrt(strength - 5);
+  }
+
+  private double getColonizationStrength(int strength) {
+    return Math.sqrt(strength);
   }
 
   private int getPlayerStrength(int ships, boolean motherShip) {
