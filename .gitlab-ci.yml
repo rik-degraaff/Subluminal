@@ -63,7 +63,8 @@ coverage:
   stage: coverage
   script:
     - gradle jacocoTestReport
-    - "echo -n \"Coverage: \" && grep -Eo \"Total.*?([0–9]{1,3})%\" app/build/reports/coverage/index.html | sed \"s/%./%/;s/.*>//g;\""
+    - cat app/build/reports/coverage/index.html
+    - "echo -n \"Coverage: \" && grep -Eo \"Total.*?([0–9]{1,3})%\" app/build/reports/coverage/index.html | sed \"s/%.*/%/;s/.*>//g;\""
   coverage: '/Coverage: \d+\%/'
   tags:
     - cs108-dind
