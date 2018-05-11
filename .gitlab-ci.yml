@@ -55,7 +55,7 @@ test:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     expire_in: 2 hours
     paths:
-      - app/build/reports/test/
+      - app/build/reports/
       - app/build/test-results/
       - app/build/jacoco/
 
