@@ -87,8 +87,7 @@ public class ClientInitializer extends Application {
 
     final Thread mainThread = Thread.currentThread();
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-      connection.sendMessage(new LogoutReq());
-      //presenter.logoutSucceeded(); //TODO: handle in userManager
+      userManager.logout();
       try {
         mainThread.join();
       } catch (InterruptedException e) {

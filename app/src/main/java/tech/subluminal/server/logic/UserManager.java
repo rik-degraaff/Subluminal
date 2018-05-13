@@ -12,6 +12,7 @@ import tech.subluminal.shared.messages.LogoutReq;
 import tech.subluminal.shared.messages.PlayerJoin;
 import tech.subluminal.shared.messages.PlayerLeave;
 import tech.subluminal.shared.messages.PlayerUpdate;
+import tech.subluminal.shared.messages.ReconnectReq;
 import tech.subluminal.shared.messages.UsernameReq;
 import tech.subluminal.shared.messages.UsernameRes;
 import tech.subluminal.shared.net.Connection;
@@ -38,8 +39,22 @@ public class UserManager {
     this.distributor = distributor;
     distributor.addConnectionOpenedListener(this::attachHandlers);
     distributor.addConnectionClosedListener(this::onConnectionClosed);
+
     distributor.addLoginHandler(LoginReq.class, LoginReq::fromSON,
         (req, c) -> onLogin(c, req));
+    distributor.addLoginHandler(ReconnectReq.class, ReconnectReq::fromSON,
+        (req, c) -> onReconnect(c, req));
+  }
+
+  private Optional<String> onReconnect(Connection connection, ReconnectReq req) {
+    return userStore.disconnectedUsers().getByID(req.getID())
+        .map(s -> s.use(oldUser -> {
+          userStore.disconnectedUsers().removeByID(oldUser.getID());
+          final User user = new User(getUnusedUsername(req.getUsername()), oldUser.getID());
+          successfulLogin(connection, user);
+          return Optional.of(oldUser.getID());
+        }))
+        .orElseGet(() -> onLogin(connection, new LoginReq(req.getUsername())));
   }
 
   private void onConnectionClosed(String id) {
@@ -98,17 +113,22 @@ public class UserManager {
 
     username = getUnusedUsername(username);
     User user = new User(username, id);
+
+    successfulLogin(connection, user);
+
+    return Optional.of(id);
+  }
+
+  private void successfulLogin(Connection connection, User user) {
     userStore.connectedUsers().add(user);
 
-    connection.sendMessage(new LoginRes(username, id));
+    connection.sendMessage(new LoginRes(user.getUsername(), user.getID()));
     InitialUsers initialUsers = new InitialUsers();
     userStore.connectedUsers().getAll().consume(
         users -> users.stream().map(synUser -> synUser.use(u -> u)).forEach(initialUsers::addUser));
     connection.sendMessage(initialUsers);
 
-    distributor.sendMessageToAllExcept(new PlayerJoin(user), id);
-
-    return Optional.of(id);
+    distributor.sendMessageToAllExcept(new PlayerJoin(user), user.getID());
   }
 
   private String getUnusedUsername(String requestedUsername) {
