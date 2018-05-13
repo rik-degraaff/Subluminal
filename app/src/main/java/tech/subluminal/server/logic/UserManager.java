@@ -43,7 +43,10 @@ public class UserManager {
   }
 
   private void onConnectionClosed(String id) {
-    userStore.connectedUsers().removeByID(id);
+    userStore.connectedUsers().getByID(id).ifPresent(s -> s.consume(user -> {
+      userStore.disconnectedUsers().add(user);
+      userStore.connectedUsers().removeByID(id);
+    }));
 
     distributor.broadcast(new PlayerLeave(id));
   }
@@ -52,11 +55,12 @@ public class UserManager {
     connection.registerHandler(UsernameReq.class, UsernameReq::fromSON,
         req -> onUsernameChange(id, connection, req));
     connection.registerHandler(LogoutReq.class, LogoutReq::fromSON,
-        req -> onLogout(connection));
+        req -> onLogout(id, connection));
   }
 
-  private void onLogout(Connection connection) {
+  private void onLogout(String id, Connection connection) {
     try {
+      userStore.connectedUsers().removeByID(id);
       connection.close();
     } catch (IOException e) {
       //TODO: handle this accordingly
