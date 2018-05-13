@@ -262,7 +262,6 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   @Override
   public void displaySystemMessage(String message) {
     addMessageChat(message, Channel.CRITICAL);
-    main.openChat();
 
   }
 
@@ -286,7 +285,6 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   @Override
   public void whisperMessageReceived(String message, String username) {
     addMessageChat(message, username, Channel.WHISPER);
-    main.openChat();
   }
 
   /**
@@ -342,7 +340,6 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   @Override
   public void nameChangeSucceeded() {
     addMessageChat("Your username got changed to: " + getCurrentUsername(), Channel.INFO);
-    main.openChat();
   }
 
   @Override

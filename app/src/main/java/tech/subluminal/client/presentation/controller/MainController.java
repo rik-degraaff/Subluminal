@@ -3,19 +3,15 @@ package tech.subluminal.client.presentation.controller;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.effect.PerspectiveTransform;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -24,8 +20,6 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.customElements.BackgroundComponent;
 import tech.subluminal.client.presentation.customElements.ChatComponent;
@@ -62,9 +56,6 @@ public class MainController implements Initializable {
   @FXML
   private AnchorPane playArea;
 
-  @FXML
-  private Rectangle chatHandle;
-
   private BackgroundComponent background;
 
   private MenuComponent menu;
@@ -91,6 +82,12 @@ public class MainController implements Initializable {
 
   @FXML
   private VBox statusBoxDock;
+
+  @FXML
+  private AnchorPane boardComputer;
+
+  @FXML
+  private AnchorPane boardComputerWrapper;
 
   private GameComponent game;
 
@@ -180,6 +177,22 @@ public class MainController implements Initializable {
     VBox debugDock = new VBox();
     window.getChildren().add(debugDock);
 
+    PerspectiveTransform perspect = new PerspectiveTransform();
+    perspect.setUlx(50);
+    perspect.setUly(0);
+    perspect.urxProperty().bind(Bindings
+        .createDoubleBinding(() -> boardComputerWrapper.getWidth() - 50, boardComputer.widthProperty()));
+    perspect.setUry(0);
+
+    perspect.setLlx(0);
+    perspect.llyProperty().bind(boardComputer.heightProperty());
+    perspect.lrxProperty().bind(boardComputerWrapper.widthProperty());
+    perspect.lryProperty().bind(boardComputer.heightProperty());
+
+
+    boardComputer.setEffect(perspect);
+    boardComputer.setOnMouseClicked((e) -> System.out.println("pressed"));
+
     window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
       if (keyEvent.getCode() == KeyCode.F4) {
         if (debugDock.getChildren().contains(debug)) {
@@ -193,29 +206,6 @@ public class MainController implements Initializable {
         } else {
           debugDock.getChildren().add(monitor);
         }
-      }
-    });
-
-    Platform.runLater(() -> {
-      chatWindow.translateXProperty().bind(Bindings
-          .createDoubleBinding(() -> chatDock.getWidth(), chatWindow.widthProperty(),
-              chatDock.widthProperty()));
-
-    });
-
-    chatHandle.setOnMouseClicked(e -> {
-      Logger.debug("pressed");
-      chatWindow.translateXProperty().unbind();
-      TranslateTransition transTl = new TranslateTransition(Duration.seconds(0.2), chatWindow);
-      double width = chatDock.widthProperty().getValue();
-      if (chatOut) {
-        transTl.setToX(width);
-        transTl.play();
-        chatOut = false;
-      } else {
-        transTl.setToX(-30);
-        transTl.play();
-        chatOut = true;
       }
     });
 
@@ -324,24 +314,8 @@ public class MainController implements Initializable {
 
   public void sendRecipiantToChat(String recipiant) {
     chatController.writeAt(recipiant);
-    if (!chatOut) {
-      openChat();
-    }
   }
 
-  public void openChat() {
-    fireMouseClick(chatHandle);
-  }
-
-  private void fireMouseClick(Node node) {
-    if (!chatOut) {
-      MouseEvent event = new MouseEvent(MouseEvent.MOUSE_CLICKED,
-          node.getLayoutX(), node.getLayoutY(), node.getLayoutX(), node.getLayoutY(),
-          MouseButton.PRIMARY, 1,
-          true, true, true, true, true, true, true, true, true, true, null);
-      Event.fireEvent(chatHandle, event);
-    }
-  }
 
   public GameController getGameController() {
     return gameController;
