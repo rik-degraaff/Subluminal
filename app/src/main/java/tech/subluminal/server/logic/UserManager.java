@@ -1,6 +1,7 @@
 package tech.subluminal.server.logic;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import tech.subluminal.server.stores.UserStore;
@@ -15,6 +16,7 @@ import tech.subluminal.shared.messages.UsernameReq;
 import tech.subluminal.shared.messages.UsernameRes;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.stores.records.User;
+import tech.subluminal.shared.util.IdUtils;
 
 /**
  * Manages the information of connected users.
@@ -36,6 +38,8 @@ public class UserManager {
     this.distributor = distributor;
     distributor.addConnectionOpenedListener(this::attachHandlers);
     distributor.addConnectionClosedListener(this::onConnectionClosed);
+    distributor.addLoginHandler(LoginReq.class, LoginReq::fromSON,
+        (req, c) -> onLogin(c, req));
   }
 
   private void onConnectionClosed(String id) {
@@ -45,8 +49,6 @@ public class UserManager {
   }
 
   private void attachHandlers(String id, Connection connection) {
-    connection.registerHandler(LoginReq.class, LoginReq::fromSON,
-        req -> onLogin(id, connection, req));
     connection.registerHandler(UsernameReq.class, UsernameReq::fromSON,
         req -> onUsernameChange(id, connection, req));
     connection.registerHandler(LogoutReq.class, LogoutReq::fromSON,
@@ -82,11 +84,12 @@ public class UserManager {
   /**
    * This function handles a user trying to log in to the server.
    *
-   * @param id the id of the user/connection as determined by the message distributor.
    * @param connection the connection belonging to the user.
    * @param loginReq the login request sent by the user.
+   * @return the id of the user.
    */
-  private void onLogin(String id, Connection connection, LoginReq loginReq) {
+  private Optional<String> onLogin(Connection connection, LoginReq loginReq) {
+    String id = IdUtils.generateId(8);
     String username = loginReq.getUsername();
 
     username = getUnusedUsername(username);
@@ -100,6 +103,8 @@ public class UserManager {
     connection.sendMessage(initialUsers);
 
     distributor.sendMessageToAllExcept(new PlayerJoin(user), id);
+
+    return Optional.of(id);
   }
 
   private String getUnusedUsername(String requestedUsername) {
