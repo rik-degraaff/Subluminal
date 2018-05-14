@@ -19,7 +19,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
 import tech.subluminal.client.presentation.ChatPresenter;
 import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.stores.ReadOnlyUserStore;
@@ -42,8 +41,6 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   private Button sendButton;
   @FXML
   private Button sendAllButton;
-  @FXML
-  private GridPane chatOptions;
 
   private ReadOnlyUserStore userStore;
   private ChatPresenter.Delegate chatDelegate;
@@ -367,18 +364,18 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   public void initialize(URL location, ResourceBundle resources) {
     chatHistory.setItems(filteredList);
     chatHistory.setPadding(new Insets(0, 0, 0, 0));
-    chatOptions.getChildren().remove(sendButton);
+    //  chatOptions.getChildren().remove(sendButton);
 
-    inGameProperty().addListener((observable, oldValue, newValue) -> {
+    /*inGameProperty().addListener((observable, oldValue, newValue) -> {
       if(newValue != oldValue){
         if(chatOptions.getChildren().contains(sendButton)){
           chatOptions.getChildren().remove(sendButton);
         }else {
           chatOptions.getChildren().add(sendButton);
         }
-
+        TODO: HANDLE DIFFERENTLY
       }
-    });
+    });*/
 
   }
 }

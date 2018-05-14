@@ -48,7 +48,7 @@
         </columnConstraints>
         <rowConstraints>
             <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="426.0" vgrow="ALWAYS" />
-          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="80.0" valignment="BOTTOM" vgrow="ALWAYS" />
+          <RowConstraints minHeight="10.0" prefHeight="150.0" valignment="BOTTOM" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
           <AnchorPane fx:id="playArea" prefHeight="406.0" prefWidth="617.0" />
@@ -65,7 +65,7 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
+                              <HBox alignment="CENTER" prefWidth="200.0" GridPane.columnIndex="1">
                                  <children>
                                     <VBox alignment="CENTER">
                                        <children>
