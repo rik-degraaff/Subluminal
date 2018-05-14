@@ -4,6 +4,7 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
@@ -14,10 +15,13 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Box?>
+<?import javafx.scene.shape.Cylinder?>
 
-<fx:root maxWidth="1.7976931348623157E308" style="-fx-background-color: grey;" styleClass="" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.subluminal.client.presentation.controller.ChatController">
+<fx:root fx:id="chatBox" maxWidth="1.7976931348623157E308" style="-fx-background-color: grey;" styleClass="" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.subluminal.client.presentation.controller.ChatController">
   <children>
-    <GridPane hgap="10.0" prefHeight="140.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <Box fx:id="chat3DBox" depth="8.0" height="150.0" width="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+    <GridPane hgap="10.0" prefHeight="140.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
       <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="370.0" minWidth="10.0" prefWidth="340.0" />
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="224.0" minWidth="10.0" prefWidth="119.0" />
@@ -50,7 +54,7 @@
             </Label>
           </children>
         </GridPane>
-        <GridPane GridPane.columnIndex="1">
+        <GridPane fx:id="sendOptions" GridPane.columnIndex="1">
           <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           </columnConstraints>
@@ -59,16 +63,15 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           </rowConstraints>
           <children>
-            <Button fx:id="sendButton" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#sendMessage" prefHeight="25.0" text="SEND">
+                  <Box fx:id="sendBox" depth="5.0" height="30.0" width="100.0" />
+                  <Box fx:id="sendAllBox" depth="5.0" height="30.0" width="100.0" GridPane.rowIndex="1" />
+            <Button fx:id="sendButton" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#sendMessage" prefHeight="25.0" styleClass="button3D" text="SEND">
             </Button>
-            <Button fx:id="sendAllButton" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#sendMessageAll" prefHeight="6.0" prefWidth="111.0" text="SEND ALL" GridPane.rowIndex="1">
+            <Button fx:id="sendAllButton" contentDisplay="CENTER" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#sendMessageAll" prefHeight="6.0" prefWidth="111.0" styleClass="button3D" text="SEND ALL" GridPane.rowIndex="1">
             </Button>
           </children>
         </GridPane>
       </children>
     </GridPane>
   </children>
-   <padding>
-      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-   </padding>
 </fx:root>

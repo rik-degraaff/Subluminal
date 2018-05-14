@@ -132,4 +132,11 @@
 
 .console-red{
   -fx-text-fill: red;
+
+}
+
+.button3D{
+  -fx-border-color: transparent;
+  -fx-border-width: 0px;
+  -fx-border-radius: 0px;
 }

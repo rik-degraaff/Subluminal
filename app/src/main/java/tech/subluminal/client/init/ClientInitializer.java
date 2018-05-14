@@ -5,6 +5,7 @@ import java.net.Socket;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -128,6 +129,10 @@ public class ClientInitializer extends Application {
     primaryStage.getIcons().add(new Image("/tech/subluminal/resources/Game_Logo_1.png"));
     primaryStage.setMaximized(true);
     primaryStage.show();
+
+    PerspectiveCamera camera = new PerspectiveCamera();
+    primaryStage.getScene().setCamera(camera);
+
 
     String[] cmd = getParameters().getRaw().toArray(new String[4]);
 

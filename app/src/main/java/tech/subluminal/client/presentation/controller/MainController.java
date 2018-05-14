@@ -15,7 +15,9 @@ import javafx.scene.effect.PerspectiveTransform;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Cylinder;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
@@ -77,6 +79,12 @@ public class MainController implements Initializable {
 
   @FXML
   private AnchorPane boardComputerWrapper;
+
+  @FXML
+  private Cylinder boardCylinder;
+
+  @FXML
+  private GridPane buttonsDock;
 
   private GameComponent game;
 
@@ -179,9 +187,8 @@ public class MainController implements Initializable {
     perspect.lrxProperty().bind(boardComputerWrapper.widthProperty());
     perspect.lryProperty().bind(boardComputer.heightProperty());
 
-    Rotate rotate = new Rotate(60, 0, 0, 0, Rotate.X_AXIS);
+    Rotate rotate = new Rotate(-60, 0, 0, 0, Rotate.X_AXIS);
     rotate.pivotYProperty().bind(boardComputerWrapper.heightProperty());
-
     boardComputer.getTransforms().add(rotate);
 
     Rotate rotateTl = new Rotate();
@@ -192,13 +199,13 @@ public class MainController implements Initializable {
     chat.getTransforms().add(rotateTl);
 
     Timeline timeTlUp = new Timeline(
-        new KeyFrame(Duration.ZERO, new KeyValue(rotateTl.angleProperty(), chat.getRotate())),
-        new KeyFrame(Duration.seconds(3), new KeyValue(rotateTl.angleProperty(), -60))
+        //new KeyFrame(Duration.ZERO, new KeyValue(rotateTl.angleProperty(), chat.getRotate())),
+        new KeyFrame(Duration.seconds(0.7), new KeyValue(rotateTl.angleProperty(), 60))
     );
 
     Timeline timeTlDown = new Timeline(
-        new KeyFrame(Duration.ZERO, new KeyValue(rotateTl.angleProperty(), chat.getRotate())),
-        new KeyFrame(Duration.seconds(3), new KeyValue(rotateTl.angleProperty(), 0))
+        //new KeyFrame(Duration.ZERO, new KeyValue(rotateTl.angleProperty(), chat.getRotate())),
+        new KeyFrame(Duration.seconds(0.7), new KeyValue(rotateTl.angleProperty(), 0))
     );
 
     boardComputer.setOnMouseClicked((e) -> {
@@ -213,7 +220,10 @@ public class MainController implements Initializable {
       }
     });
 
-    //boardComputer.setEffect(perspect);
+
+    buttonsDock.add(settingsButton, 0,0);
+    buttonsDock.add(playerListButton,0,1);
+    buttonsDock.add(nameChangeButton, 0, 2);
 
     window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
       if (keyEvent.getCode() == KeyCode.F4) {
