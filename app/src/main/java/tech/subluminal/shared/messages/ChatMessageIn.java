@@ -10,9 +10,9 @@ import tech.subluminal.shared.son.SONRepresentable;
  * SON and then to string might look like this:
  * <pre>
  * {
- *    "channel":s"CRITICAL",
- *    "message":s"!Hello!",
- *    "username":s"Luke"
+ *   "channel":s"CRITICAL",
+ *   "message":s"!Hello!",
+ *   "username":s"Luke"
  * }
  * </pre>
  */

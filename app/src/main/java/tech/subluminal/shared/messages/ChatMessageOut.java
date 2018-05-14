@@ -9,15 +9,15 @@ import tech.subluminal.shared.son.SONRepresentable;
  * string might look like this:
  * <pre>
  *  {
- *     "global":bfalse,
- *     "message":s"Who let the dogs out?"
+ *    "global":bfalse,
+ *    "message":s"Who let the dogs out?"
  *  }
  * </pre>
  * or like this:
  * <pre>
  * {
- *    "receiverID":s"1234",
- *    "message":s"Who let the dogs out?"
+ *   "receiverID":s"1234",
+ *   "message":s"Who let the dogs out?"
  * }
  * </pre>
  */
