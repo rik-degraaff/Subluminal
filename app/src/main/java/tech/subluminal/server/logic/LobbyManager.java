@@ -52,11 +52,15 @@ public class LobbyManager {
     this.distributor = distributor;
 
     distributor.addConnectionOpenedListener(this::attachHandlers);
-    distributor.addConnectionClosedListener(this::onConnectionClosed);
+    distributor.addConnectionOpenedListener(this::userConnected);
   }
 
-  private void onConnectionClosed(String id) {
-
+  private void userConnected(String id, Connection connection) {
+    lobbyStore.lobbies()
+        .getLobbiesWithUser(id)
+        .consume(coll -> coll.forEach(sync -> sync.consume(lobby -> {
+          connection.sendMessage(new LobbyJoinRes(lobby));
+        })));
   }
 
   private void attachHandlers(String id, Connection connection) {

@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.util.Optional;
 import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.stores.UserStore;
+import tech.subluminal.shared.messages.GameLeaveReq;
 import tech.subluminal.shared.messages.InitialUsers;
+import tech.subluminal.shared.messages.LobbyLeaveReq;
 import tech.subluminal.shared.messages.LoginReq;
 import tech.subluminal.shared.messages.LoginRes;
 import tech.subluminal.shared.messages.LogoutReq;
@@ -86,7 +88,6 @@ public class UserManager implements UserPresenter.Delegate {
         .els(() -> System.out.println("User ain't here bro."));
 
     userPresenter.onPlayerUpdate(oldUsername, newUsername);
-
   }
 
   private void onPlayerLeave(PlayerLeave res) {
@@ -118,6 +119,7 @@ public class UserManager implements UserPresenter.Delegate {
 
   private void onLogin(LoginRes res) {
     userStore.currentUser().set(new User(res.getUsername(), res.getUserID()));
+    System.out.println("saving reconnect id");
     userStore.reconnectID().update(old -> Optional.of(res.getUserID()));
 
     userPresenter.loginSucceeded();
@@ -139,11 +141,18 @@ public class UserManager implements UserPresenter.Delegate {
   @Override
   public void logout() {
     userStore.reconnectID().update(old -> Optional.empty());
+    connection.sendMessage(new GameLeaveReq());
+    connection.sendMessage(new LobbyLeaveReq());
     connection.sendMessage(new LogoutReq());
     try {
       connection.close();
     } catch (IOException e) {
       e.printStackTrace(); //TODO: sensible stuff
+    }
+    try {
+      Thread.sleep(2);
+    } catch (InterruptedException e) {
+      // No problem, since we're shutting down anyway
     }
     System.exit(0);
   }

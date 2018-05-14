@@ -59,6 +59,7 @@ public class UserManager {
 
   private void onConnectionClosed(String id) {
     userStore.connectedUsers().getByID(id).ifPresent(s -> s.consume(user -> {
+      System.out.println("adding user to disconnected users");
       userStore.disconnectedUsers().add(user);
       userStore.connectedUsers().removeByID(id);
     }));
