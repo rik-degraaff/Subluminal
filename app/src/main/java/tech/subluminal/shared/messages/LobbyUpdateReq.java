@@ -6,7 +6,20 @@ import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.LobbySettings;
 
 /**
- * Represents a lobby update result message.
+ * Represents a lobby update request message. This message, when converted to SON and then to
+ * string, might look like this:
+ * <pre>
+ * {
+ *   "settings":o{
+ *     "maxPlayers":i5,
+ *     "minPlayers":i3,
+ *     "mapSize":d3.14,
+ *     "gameSpeed":d9.81,
+ *     "name":s"Rolf",
+ *     "adminID":s"8000"
+ *   }
+ * }
+ * </pre>
  */
 public class LobbyUpdateReq implements SONRepresentable {
 
