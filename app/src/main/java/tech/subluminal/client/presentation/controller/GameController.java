@@ -307,7 +307,8 @@ public class GameController implements Initializable, GamePresenter {
                   star.getPossession(),
                   star.getCoordinates(),
                   star.getID(),
-                  star.getJump());
+                  star.getJump(),
+                  main);
               stars.put(star.getID(), starComponent);
               stars.put(star.getID(), starComponent);
               if (star.getOwnerID() != null) {
@@ -346,7 +347,8 @@ public class GameController implements Initializable, GamePresenter {
                   pair.getValue().getCoordinates(),
                   pair.getKey(),
                   pair.getValue().getTargetIDs(),
-                  gameStore);
+                  gameStore,
+                  main);
               ships.put(pair.getID(), shipComponent);
 
               if (pair.getKey() != null) {
@@ -412,7 +414,8 @@ public class GameController implements Initializable, GamePresenter {
                   pair.getID(),
                   pair.getKey(),
                   pair.getValue().getTargetIDs(),
-                  gameStore);
+                  gameStore,
+                  main);
               fleets.put(pair.getID(), fleetComponent);
 
               if (pair.getKey() != null) {

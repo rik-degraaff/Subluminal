@@ -19,6 +19,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import tech.subluminal.client.presentation.controller.MainController;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 
 public class StarComponent extends Group {
@@ -44,8 +45,7 @@ public class StarComponent extends Group {
   //private final ObjectProperty
 
   public StarComponent(String ownerID, String name, double possession, Coordinates coordinates,
-      String id,
-      double jump) {
+      String id, double jump, MainController main) {
 
     setPossession(possession);
     setXProperty(coordinates.getX());
@@ -72,8 +72,8 @@ public class StarComponent extends Group {
         return;
       }
 
-      this.parentWidthProperty.bind(getScene().widthProperty());
-      this.parentHeightProperty.bind(getScene().heightProperty());
+      this.parentWidthProperty.bind(main.getPlayArea().widthProperty());
+      this.parentHeightProperty.bind(main.getPlayArea().heightProperty());
     });
 
     this.name = name;

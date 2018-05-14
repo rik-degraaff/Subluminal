@@ -6,6 +6,8 @@ import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -26,8 +28,8 @@ public class ControlButton extends Group {
     this.main = main;
     this.node = node;
     this.parent = parent;
-    this.prefWidth(20);
-    this.prefHeight(20);
+    this.prefWidth(40);
+    this.prefHeight(40);
 
     Button button = new Button();
     button.setText(label);
@@ -58,6 +60,18 @@ public class ControlButton extends Group {
           isOpen = true;
         } else {
           ((VBox) parent).getChildren().remove(node);
+          isOpen = false;
+          button.setText(label);
+        }
+      });
+    }else {
+      button.setOnAction(e -> {
+        if (!isOpen) {
+          ((DisplayComponent)parent).setDisplay((AnchorPane)node);
+          button.setText("X");
+          isOpen = true;
+        } else {
+          ((DisplayComponent)parent).clearDisplay();
           isOpen = false;
           button.setText(label);
         }

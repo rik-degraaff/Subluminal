@@ -10,7 +10,9 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.PerspectiveTransform;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -18,6 +20,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Cylinder;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
@@ -25,6 +28,7 @@ import tech.subluminal.client.presentation.customElements.BackgroundComponent;
 import tech.subluminal.client.presentation.customElements.ChatComponent;
 import tech.subluminal.client.presentation.customElements.ControlButton;
 import tech.subluminal.client.presentation.customElements.DebugComponent;
+import tech.subluminal.client.presentation.customElements.DisplayComponent;
 import tech.subluminal.client.presentation.customElements.FpsUpdater;
 import tech.subluminal.client.presentation.customElements.GameComponent;
 import tech.subluminal.client.presentation.customElements.HighscoreComponent;
@@ -86,6 +90,12 @@ public class MainController implements Initializable {
   @FXML
   private GridPane buttonsDock;
 
+  @FXML
+  private GridPane monitorDock;
+
+  @FXML
+  private AnchorPane glassPane;
+
   private GameComponent game;
 
   private UserStore userStore;
@@ -110,6 +120,7 @@ public class MainController implements Initializable {
   private DebugComponent debug;
   private MonitorComponent monitor;
   private HighscoreComponent highscore;
+  private DisplayComponent display;
 
   public LobbyComponent getLobby() {
     return lobby;
@@ -134,25 +145,33 @@ public class MainController implements Initializable {
   public void initialize(URL location, ResourceBundle resources) {
     background = new BackgroundComponent(1000);
     spaceBackgroundDock.getChildren().add(background);
+    //glassPane.setEffect(new GaussianBlur(55));
+
+    Rectangle clipNode = new Rectangle();
+    clipNode.widthProperty().bind(playArea.widthProperty());
+    clipNode.heightProperty().bind(playArea.heightProperty());
+    playArea.setClip(clipNode);
 
     chat = new ChatComponent(this);
     chatController = chat.getChatcontroller();
     chatDock.getChildren().add(chat);
+    display = new DisplayComponent();
 
     userList = new UserListComponent(this);
-    playerListButton = new ControlButton(this, "P", userList, statusBoxDock);
-    //rightSideDock.getChildren().add(playerListButton);
+    playerListButton = new ControlButton(this, "P", userList, display);
+    userList.prefWidthProperty().bind(display.widthProperty());
+    userList.prefHeightProperty().bind(display.heightProperty());
 
     userListController = userList.getController();
 
     nameChange = new NameChangeComponent(this);
-    nameChangeButton = new ControlButton(this, "C", nameChange, statusBoxDock);
+    nameChangeButton = new ControlButton(this, "C", nameChange, display);
     //rightSideDock.getChildren().add(nameChangeButton);
     //rightSideDock.getChildren().add(nameChange);
 
     menu = new MenuComponent(this);
     settings = new SettingsComponent(this);
-    settingsButton = new ControlButton(this, "S", settings, statusBoxDock);
+    settingsButton = new ControlButton(this, "S", settings, display);
     //rightSideDock.getChildren().add(settingsButton);
 
     highscore = new HighscoreComponent();
@@ -162,7 +181,7 @@ public class MainController implements Initializable {
     game = new GameComponent(this);
     gameController = game.getController();
 
-    playArea.setMouseTransparent(true);
+    //playArea.setMouseTransparent(true);
 
     menuDock.getChildren().add(menu);
 
@@ -225,17 +244,19 @@ public class MainController implements Initializable {
     buttonsDock.add(playerListButton,0,1);
     buttonsDock.add(nameChangeButton, 0, 2);
 
+    monitorDock.add(display, 1,0);
+
     window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
       if (keyEvent.getCode() == KeyCode.F4) {
         if (debugDock.getChildren().contains(debug)) {
           debugDock.getChildren().remove(debug);
-        } else {
+        }else {
           debugDock.getChildren().add(debug);
         }
-      } else if (keyEvent.getCode() == KeyCode.F5) {
+      }else if (keyEvent.getCode() == KeyCode.F5) {
         if (debugDock.getChildren().contains(monitor)) {
           debugDock.getChildren().remove(monitor);
-        } else {
+        }else {
           debugDock.getChildren().add(monitor);
         }
       }
@@ -284,11 +305,15 @@ public class MainController implements Initializable {
     menuDock.getChildren().add(menu);
   }
 
+  public AnchorPane getPlayArea() {
+    return playArea;
+  }
+
   public void onMapOpenHandle() {
     Platform.runLater(() -> {
       menuDock.getChildren().clear();
 
-      playArea.setMouseTransparent(false);
+      //playArea.setMouseTransparent(false);
 
       //rightSideDock.getChildren().clear();
 
@@ -307,7 +332,7 @@ public class MainController implements Initializable {
   public void onMapCloseHandle() {
     playArea.getChildren().clear();
 
-    playArea.setMouseTransparent(true);
+    //playArea.setMouseTransparent(true);
     gameController.clearMap();
     chatController.setInGame(false);
 

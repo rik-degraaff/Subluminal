@@ -140,3 +140,8 @@
   -fx-border-width: 0px;
   -fx-border-radius: 0px;
 }
+
+.ship-amount{
+  -fx-stroke: black;
+  -fx-stroke-width: 1;
+}

@@ -26,6 +26,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -34,6 +35,8 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
+import sun.applet.Main;
+import tech.subluminal.client.presentation.controller.MainController;
 import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Star;
@@ -63,7 +66,7 @@ public abstract class ShipComponent extends Pane {
   private GameStore gamestore;
 
   public ShipComponent(Coordinates coordinates, String playerId, List<String> targetIDs,
-      GameStore gamestore) {
+      GameStore gamestore, MainController main) {
     this.gamestore = gamestore;
     Pane group = new Pane();
 
@@ -75,8 +78,8 @@ public abstract class ShipComponent extends Pane {
         return;
       }
 
-      this.parentWidthProperty.bind(getScene().widthProperty());
-      this.parentHeightProperty.bind(getScene().heightProperty());
+      this.parentWidthProperty.bind(main.getPlayArea().widthProperty());
+      this.parentHeightProperty.bind(main.getPlayArea().heightProperty());
 
       this.layoutXProperty().bind(Bindings
           .createDoubleBinding(() -> parentWidthProperty.doubleValue() / 2 + (getX() - 0.5) * Math
@@ -184,7 +187,7 @@ public abstract class ShipComponent extends Pane {
   }
 
   public ShipComponent(Coordinates coordinates, int numberOfShips, String ID, String ownerID,
-      List<String> targetIDs, GameStore gamestore) {
+      List<String> targetIDs, GameStore gamestore, MainController main) {
 
     this.gamestore = gamestore;
     Pane group = new Pane();
@@ -195,8 +198,8 @@ public abstract class ShipComponent extends Pane {
     setY(coordinates.getY());
 
     Platform.runLater(() -> {
-      this.parentWidthProperty.bind(getScene().widthProperty());
-      this.parentHeightProperty.bind(getScene().heightProperty());
+      this.parentWidthProperty.bind(main.getPlayArea().widthProperty());
+      this.parentHeightProperty.bind(main.getPlayArea().heightProperty());
 
       this.layoutXProperty().bind(Bindings
           .createDoubleBinding(() -> parentWidthProperty.doubleValue() / 2 + (getX() - 0.5) * Math
@@ -301,6 +304,13 @@ public abstract class ShipComponent extends Pane {
     Logger.debug("CREATING SHIP LABEL");
     amount = new Label();
     amount.setTextFill(Color.WHITE);
+    amount.getStyleClass().add("ship-amount");
+
+    DropShadow ds = new DropShadow();
+    ds.setOffsetY(3.0f);
+    ds.setColor(Color.color(0, 0, 0));
+
+    amount.setEffect(ds);
 
     amount.textProperty().bind(Bindings.createStringBinding(() ->
         this.numberOfShipsProperty().getValue().toString(), numberOfShipsProperty()));
