@@ -11,7 +11,7 @@ Below you can find the basic game rules which are implemented in the game logic.
 	\item Every player is able to see the whole map.
 	\item The map consists of stars. At the beginning of a game every player's mother ship is randomly assigned to a star.
 	\item Each star has its own attributes, which influence:  
-		\begin{enumerate}[label=\alph*)]
+		\begin{enumerate}[label=\alph*]
 		\item The frequency of production of new regular ships.
 		\item The basic defence of a star against intruders.
 		\item How much effort it takes to colonize the star.
@@ -26,13 +26,13 @@ Below you can find the basic game rules which are implemented in the game logic.
 	\item If a player targets a certain star he or she can influence the hopping path his or her ships or use the one that is automatically calculated by the system, which is the shortest.
 	\item Hopping and colonizing stars are two separate processes. Accidental colonization while hopping a star can not occur.
 	\item When ships reach the target they hopped to, two scenarios can happen:
-		\begin{enumerate}[label=\alph*)]
+		\begin{enumerate}[label=\alph*]
 			\item Nobody is there yet and the star is considered neutral. The player's ships start colonizing the star. The speed of the colonization progress depends on the number of ships the player sent, the basic defence of the star and how much effort the star takes to be colonized.
 			\item The star is already under possession of an opponent. In this case the fleets of the opponents start tearing down each other, until only regular ships of one of the fleets remain. If the remaining regular ships belong to the intruder, they immediately start neutralizing the star to then colonize it. If the remaining regular ships belong to the previous owner of the star, nothing else happens.
 		\end{enumerate}
 		\item Every move one's regular ships make originates from the mother ship. Thus, the order takes longer to get to the concerning regular ships, the further their base star is away from the mother ship.
 	\item When a player orders a fleet to go colonize another star, the information about the number of available regular ships is always outdated (because of the distance). So the player has to options:
-		\begin{enumerate}[label=\alph*)]
+		\begin{enumerate}[label=\alph*]
 			\item He/She sends out the order that a certain percentage of the regular ships should leave their base star.
 			\item He/She sends out the order that a certain number or regular ships should be the maximum number of sent out ships. If there are not that many regular ships left the moment the order arrives at the base, all regular ships are sent out.
 		\end{enumerate}

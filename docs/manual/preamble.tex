@@ -12,9 +12,14 @@
 \titlespacing*{\chapter}{0pt}{\baselineskip}{\baselineskip}
 
 \newcommand{\colorchapter}[1]{%
-  \colorbox{almostblack}{\parbox[][0.6cm][c]{\dimexpr\textwidth-2\fboxsep}{\color{limegreen}\ibm \MakeLowercase{#1}}}}
+  \noindent\makebox[\textwidth][l]{%
+  \hspace{-\dimexpr\oddsidemargin+1in}
+  \colorbox{almostblack}{
+    \parbox[][0.6cm][c]{\dimexpr\paperwidth-2\fboxsep}{\color{limegreen}\ibm\MakeUppercase{#1}}}
+  }
+}
 
-\title{Subluminal \- Game Manual}   
+\title{Subluminal --- Game Manual}   
 \author{Bordeaux Ink.} 
 \date{\today} 
 
