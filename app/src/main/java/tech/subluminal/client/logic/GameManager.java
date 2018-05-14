@@ -56,7 +56,6 @@ public class GameManager implements GamePresenter.Delegate {
         GameLeaveRes.class, GameLeaveRes::fromSON, req -> onGameLeave());
   }
 
-
   private void onEndGameRes(EndGameRes res) {
     gamePresenter.onEndGame(res.getGameID(), res.getWinnerID());
   }

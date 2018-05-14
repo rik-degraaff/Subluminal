@@ -77,13 +77,13 @@ public class ClientInitializer extends Application {
     lobbyPresenter.setLobbyStore(lobbyStore);
     lobbyPresenter.setUserStore(userStore);
 
-    userManager.start(username);
-
     GameStore gameStore = new InMemoryGameStore();
     GameController gamePresenter = controller.getGameController();
     GameManager gameManager = new GameManager(gameStore, connection, gamePresenter);
     gamePresenter.setUserStore(userStore);
     gamePresenter.setGameStore(gameStore);
+
+    userManager.start(username);
 
     final Thread mainThread = Thread.currentThread();
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {

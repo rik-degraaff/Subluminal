@@ -59,7 +59,6 @@ public class UserManager {
 
   private void onConnectionClosed(String id) {
     userStore.connectedUsers().getByID(id).ifPresent(s -> s.consume(user -> {
-      System.out.println("adding user to disconnected users");
       userStore.disconnectedUsers().add(user);
       userStore.connectedUsers().removeByID(id);
     }));
@@ -121,6 +120,8 @@ public class UserManager {
   }
 
   private void successfulLogin(Connection connection, User user) {
+    System.out.println("new user connected: " + user.getUsername() + ": " + user.getID());
+
     userStore.connectedUsers().add(user);
 
     connection.sendMessage(new LoginRes(user.getUsername(), user.getID()));

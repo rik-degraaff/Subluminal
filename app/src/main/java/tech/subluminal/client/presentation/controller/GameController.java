@@ -139,14 +139,14 @@ public class GameController implements Initializable, GamePresenter {
               starComponents.get(i + 1).layoutXProperty(),
               starComponents.get(i + 1).layoutYProperty()));
     }
-    jump.stream().forEach(j -> map.getChildren().add(j));
+    jump.forEach(j -> map.getChildren().add(j));
 
     createJumpBox(starComponents.get(0));
 
   }
 
   public void removeJumpPath() {
-    jump.stream().forEach(j -> {
+    jump.forEach(j -> {
       map.getChildren().remove(j);
     });
     jump.clear();
@@ -181,15 +181,6 @@ public class GameController implements Initializable, GamePresenter {
   public void setMainController(MainController main) {
     this.main = main;
   }
-
-  public String getPlayerID() {
-    return playerID;
-  }
-
-  public void setPlayerID(String playerID) {
-    this.playerID = playerID;
-  }
-
 
   @Override
   public void setGameDelegate(Delegate delegate) {
@@ -292,9 +283,6 @@ public class GameController implements Initializable, GamePresenter {
     this.gameStore = gameStore;
 
     Platform.runLater(() -> {
-
-      //this.playerID = userStore.currentUser().get().use(opt -> opt.get().getID());
-
       MapperList<StarComponent, Star> starComponents = new MapperList<>(
           gameStore.stars().observableList(),
           star -> {
@@ -341,7 +329,6 @@ public class GameController implements Initializable, GamePresenter {
               return null;
             }
             if (ships.get(pair.getID()) == null) {
-              System.out.println("new mothership!! " + pair.getID());
               MotherShipComponent shipComponent = new MotherShipComponent(
                   pair.getValue().getCoordinates(),
                   pair.getKey(),
@@ -356,7 +343,6 @@ public class GameController implements Initializable, GamePresenter {
               map.getChildren().add(shipComponent);
 
               if (pair.getKey().equals(playerID)) {
-                Coordinates coordinates = pair.getValue().getCoordinates();
                 ArrowComponent arrow = new ArrowComponent(shipComponent.layoutYProperty());
                 arrow.layoutXProperty().bind(shipComponent.layoutXProperty());
                 arrow.layoutYProperty().bind(shipComponent.layoutYProperty());
@@ -368,7 +354,7 @@ public class GameController implements Initializable, GamePresenter {
                       .add(
                           new KeyFrame(Duration.seconds(0), event -> map.getChildren().add(arrow)));
                   timeTl.getKeyFrames().add(
-                      new KeyFrame(Duration.seconds(03), event -> map.getChildren().remove(arrow)));
+                      new KeyFrame(Duration.seconds(4), event -> map.getChildren().remove(arrow)));
                   timeTl.play();
                 });
 

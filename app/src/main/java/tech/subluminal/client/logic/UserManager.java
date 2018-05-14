@@ -118,6 +118,7 @@ public class UserManager implements UserPresenter.Delegate {
   }
 
   private void onLogin(LoginRes res) {
+    System.out.println("logged in");
     userStore.currentUser().set(new User(res.getUsername(), res.getUserID()));
     userStore.reconnectID().update(old -> Optional.of(res.getUserID()));
 
