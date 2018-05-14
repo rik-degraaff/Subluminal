@@ -5,7 +5,14 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Message for all Client which is send if a game ends.
+ * Message for all Client which is send if a game ends. An EndGameRes message converted to SON and
+ * then to string might look like this:
+ * <pre>
+ * {
+ *   "game":s"4054",
+ *   "winner":s"4053"
+ * }
+ * </pre>
  */
 public class EndGameRes implements SONRepresentable {
 
@@ -36,14 +43,14 @@ public class EndGameRes implements SONRepresentable {
     String gameID = son.getString(GAME_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, GAME_KEY));
 
-    return new EndGameRes(gameID,winnerID);
+    return new EndGameRes(gameID, winnerID);
   }
 
   @Override
   public SON asSON() {
     SON son = new SON()
         .put(gameID, GAME_KEY);
-    if(winnerID != null){
+    if (winnerID != null) {
       son.put(winnerID, WINNER_KEY);
     }
 
