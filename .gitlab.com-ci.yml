@@ -20,8 +20,6 @@ checkstyle:
   stage: check
   script:
     - gradle check -x test
-  tags:
-    - cs108-dind
   allow_failure: true
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
@@ -37,8 +35,6 @@ build:
   script:
     - gradle clean
     - gradle build -x check -x test -x javadoc -x sourcesjar -x javadocjar -x distZip -x distTar
-  tags:
-    - cs108-dind
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     expire_in: 2 hours
@@ -49,8 +45,6 @@ test:
   stage: test
   script:
     - gradle test
-  tags:
-    - cs108-dind
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     expire_in: 2 hours
@@ -66,8 +60,6 @@ coverage:
     - cat app/build/reports/coverage/index.html
     - "echo -n \"Coverage: \" && grep -Eo \"Total.*?([0–9]{1,3})%\" app/build/reports/coverage/index.html | sed \"s/%.*/%/;s/.*>//g;\""
   coverage: '/Coverage: \d+\%/'
-  tags:
-    - cs108-dind
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     expire_in: 2 hours
@@ -79,8 +71,6 @@ javadoc:
   script:
     - gradle javadoc
     - gradle javadoccoverage
-  tags:
-    - cs108-dind
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     expire_in: 2 hours
@@ -111,8 +101,6 @@ testing:
   - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no gitlab@$DEPLOYHOST docker stop subluminal_staging || true
   - sshpass -p $DEPLOY_PASSWORD ssh gitlab@$DEPLOYHOST docker pull subluminalthegame/subluminal:$VERSION
   - sshpass -p $DEPLOY_PASSWORD ssh gitlab@$DEPLOYHOST docker run --rm -d -p 1727:1729/tcp --label subluminal --name subluminal_$CI_JOB_NAME subluminalthegame/subluminal:$VERSION
-  tags:
-    - cs108-dind
   #when: on_success
   when: manual
   environment:
@@ -129,8 +117,6 @@ staging:
     - apk add --no-cache openssh-client sshpass
     - ping -c 5 vps406724.ovh.net
     - sshpass -p $DEPLOY_PASSWORD ssh gitlab@vps406724.ovh.net exit
-  tags:
-    - cs108
   #when: on_success
   when: manual
   environment:
@@ -145,8 +131,6 @@ production:
   image: bash:latest
   script:
     - echo "Missing sh script to setup production environment."
-  tags:
-    - cs108-dind
   when: manual
   environment:
     name: production
@@ -165,8 +149,6 @@ pages:
     - cp -r app/build/reports/test/* public/test
     - mkdir public/coverage
     - cp -r app/build/reports/coverage/* public/coverage
-  tags:
-    - cs108-dind
   artifacts:
     paths:
     - public
