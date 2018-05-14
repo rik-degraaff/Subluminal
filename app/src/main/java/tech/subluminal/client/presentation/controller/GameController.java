@@ -468,9 +468,9 @@ public class GameController implements Initializable, GamePresenter {
       fleets.clear();
       ships.clear();
       stars.clear();
-      graph = null;
-      gameID = null;
     });
+    graph = null;
+    gameID = null;
   }
 
   public void leaveGame() {
