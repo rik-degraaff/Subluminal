@@ -3,6 +3,9 @@ package tech.subluminal.client.presentation.controller;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
@@ -13,6 +16,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.transform.Rotate;
+import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.customElements.BackgroundComponent;
 import tech.subluminal.client.presentation.customElements.ChatComponent;
@@ -174,30 +179,41 @@ public class MainController implements Initializable {
     perspect.lrxProperty().bind(boardComputerWrapper.widthProperty());
     perspect.lryProperty().bind(boardComputer.heightProperty());
 
+    Rotate rotate = new Rotate(60, 0, 0, 0, Rotate.X_AXIS);
+    rotate.pivotYProperty().bind(boardComputerWrapper.heightProperty());
+
+    boardComputer.getTransforms().add(rotate);
+
+    Rotate rotateTl = new Rotate();
+    rotateTl.pivotYProperty().bind(chat.heightProperty());
+    rotateTl.setPivotX(0);
+    rotateTl.setPivotZ(0);
+    rotateTl.setAxis(Rotate.X_AXIS);
+    chat.getTransforms().add(rotateTl);
+
+    Timeline timeTlUp = new Timeline(
+        new KeyFrame(Duration.ZERO, new KeyValue(rotateTl.angleProperty(), chat.getRotate())),
+        new KeyFrame(Duration.seconds(3), new KeyValue(rotateTl.angleProperty(), -60))
+    );
+
+    Timeline timeTlDown = new Timeline(
+        new KeyFrame(Duration.ZERO, new KeyValue(rotateTl.angleProperty(), chat.getRotate())),
+        new KeyFrame(Duration.seconds(3), new KeyValue(rotateTl.angleProperty(), 0))
+    );
+
     boardComputer.setOnMouseClicked((e) -> {
       if (chatDown){
-        perspect.setUlx(10);
-        perspect.setUly(0);
-        perspect.urxProperty().unbind();
-        perspect.urxProperty().bind(Bindings
-            .createDoubleBinding(() -> boardComputer.getWidth() - 10,
-                boardComputer.widthProperty()));
-        perspect.setUry(0);
+        timeTlDown.stop();
+        timeTlUp.play();
         chatDown = false;
       }else{
-        perspect.setUlx(50);
-        perspect.setUly(10);
-        perspect.urxProperty().unbind();
-        perspect.urxProperty().bind(Bindings
-            .createDoubleBinding(() -> boardComputer.getWidth() - 50,
-                boardComputer.widthProperty()));
-        perspect.setUry(10);
+        timeTlUp.stop();
+        timeTlDown.play();
         chatDown = true;
       }
-
     });
 
-    boardComputer.setEffect(perspect);
+    //boardComputer.setEffect(perspect);
 
     window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
       if (keyEvent.getCode() == KeyCode.F4) {
