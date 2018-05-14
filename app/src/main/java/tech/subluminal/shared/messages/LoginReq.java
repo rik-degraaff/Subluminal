@@ -5,7 +5,13 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Represents a login request from client to server.
+ * Represents a login request from client to server. This message, when converted to SON and then to
+ * string, might look like this:
+ * <pre>
+ * {
+ *   "username":s"Bob"
+ * }
+ * </pre>
  */
 public class LoginReq implements SONRepresentable {
 
