@@ -89,7 +89,7 @@ public class MainController implements Initializable {
 
   private UserListController userListController;
 
-  private boolean chatOut = false;
+  private boolean chatDown = true;
   private NameChangeComponent nameChange;
   private ControlButton playerListButton;
   private ControlButton nameChangeButton;
@@ -163,11 +163,11 @@ public class MainController implements Initializable {
 
     PerspectiveTransform perspect = new PerspectiveTransform();
     perspect.setUlx(50);
-    perspect.setUly(0);
+    perspect.setUly(10);
     perspect.urxProperty().bind(Bindings
         .createDoubleBinding(() -> boardComputerWrapper.getWidth() - 50,
             boardComputer.widthProperty()));
-    perspect.setUry(0);
+    perspect.setUry(10);
 
     perspect.setLlx(0);
     perspect.llyProperty().bind(boardComputer.heightProperty());
@@ -175,13 +175,26 @@ public class MainController implements Initializable {
     perspect.lryProperty().bind(boardComputer.heightProperty());
 
     boardComputer.setOnMouseClicked((e) -> {
-      perspect.setUlx(10);
-      perspect.setUly(0);
-      perspect.urxProperty().unbind();
-      perspect.urxProperty().bind(Bindings
-          .createDoubleBinding(() -> boardComputer.getWidth() - 10,
-              boardComputer.widthProperty()));
-      perspect.setUry(0);
+      if (chatDown){
+        perspect.setUlx(10);
+        perspect.setUly(0);
+        perspect.urxProperty().unbind();
+        perspect.urxProperty().bind(Bindings
+            .createDoubleBinding(() -> boardComputer.getWidth() - 10,
+                boardComputer.widthProperty()));
+        perspect.setUry(0);
+        chatDown = false;
+      }else{
+        perspect.setUlx(50);
+        perspect.setUly(10);
+        perspect.urxProperty().unbind();
+        perspect.urxProperty().bind(Bindings
+            .createDoubleBinding(() -> boardComputer.getWidth() - 50,
+                boardComputer.widthProperty()));
+        perspect.setUry(10);
+        chatDown = true;
+      }
+
     });
 
     boardComputer.setEffect(perspect);
