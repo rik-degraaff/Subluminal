@@ -366,6 +366,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     chatHistory.setPadding(new Insets(0, 0, 0, 0));
     //  chatOptions.getChildren().remove(sendButton);
 
+
     /*inGameProperty().addListener((observable, oldValue, newValue) -> {
       if(newValue != oldValue){
         if(chatOptions.getChildren().contains(sendButton)){

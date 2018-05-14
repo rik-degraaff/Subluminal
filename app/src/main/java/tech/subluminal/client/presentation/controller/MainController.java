@@ -9,16 +9,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.effect.PerspectiveTransform;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.customElements.BackgroundComponent;
@@ -45,12 +38,6 @@ public class MainController implements Initializable {
   private AnchorPane spaceBackgroundDock;
 
   @FXML
-  private VBox leftSideDock;
-
-  @FXML
-  private VBox rightSideDock;
-
-  @FXML
   private AnchorPane menuDock;
 
   @FXML
@@ -73,9 +60,6 @@ public class MainController implements Initializable {
 
   @FXML
   private AnchorPane chatDock;
-
-  @FXML
-  private AnchorPane chatWindow;
 
   @FXML
   private AnchorPane playerBoardDock;
@@ -144,19 +128,19 @@ public class MainController implements Initializable {
 
     userList = new UserListComponent(this);
     playerListButton = new ControlButton(this, "P", userList, statusBoxDock);
-    rightSideDock.getChildren().add(playerListButton);
+    //rightSideDock.getChildren().add(playerListButton);
 
     userListController = userList.getController();
 
     nameChange = new NameChangeComponent(this);
     nameChangeButton = new ControlButton(this, "C", nameChange, statusBoxDock);
-    rightSideDock.getChildren().add(nameChangeButton);
+    //rightSideDock.getChildren().add(nameChangeButton);
     //rightSideDock.getChildren().add(nameChange);
 
     menu = new MenuComponent(this);
     settings = new SettingsComponent(this);
     settingsButton = new ControlButton(this, "S", settings, statusBoxDock);
-    rightSideDock.getChildren().add(settingsButton);
+    //rightSideDock.getChildren().add(settingsButton);
 
     highscore = new HighscoreComponent();
 
@@ -181,7 +165,8 @@ public class MainController implements Initializable {
     perspect.setUlx(50);
     perspect.setUly(0);
     perspect.urxProperty().bind(Bindings
-        .createDoubleBinding(() -> boardComputerWrapper.getWidth() - 50, boardComputer.widthProperty()));
+        .createDoubleBinding(() -> boardComputerWrapper.getWidth() - 50,
+            boardComputer.widthProperty()));
     perspect.setUry(0);
 
     perspect.setLlx(0);
@@ -189,9 +174,17 @@ public class MainController implements Initializable {
     perspect.lrxProperty().bind(boardComputerWrapper.widthProperty());
     perspect.lryProperty().bind(boardComputer.heightProperty());
 
+    boardComputer.setOnMouseClicked((e) -> {
+      perspect.setUlx(10);
+      perspect.setUly(0);
+      perspect.urxProperty().unbind();
+      perspect.urxProperty().bind(Bindings
+          .createDoubleBinding(() -> boardComputer.getWidth() - 10,
+              boardComputer.widthProperty()));
+      perspect.setUry(0);
+    });
 
     boardComputer.setEffect(perspect);
-    boardComputer.setOnMouseClicked((e) -> System.out.println("pressed"));
 
     window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
       if (keyEvent.getCode() == KeyCode.F4) {
@@ -258,30 +251,13 @@ public class MainController implements Initializable {
 
       playArea.setMouseTransparent(false);
 
-      rightSideDock.getChildren().clear();
-      Pane leftSide = new Pane();
-      leftSide.setPrefWidth(rightSideDock.getWidth());
-      leftSide.prefHeightProperty().bind(chat.getScene().heightProperty());
-      Background bg = new Background(
-          new BackgroundImage(
-              new Image("/tech/subluminal/resources/tile_texture.jpg", 50, 50, true, false),
-              BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
-              BackgroundSize.DEFAULT));
-      leftSide.setBackground(bg);
-      VBox rightSide = new VBox();
-      rightSide.setPrefWidth(leftSideDock.getWidth());
-      rightSide.prefHeightProperty().bind(chat.getScene().heightProperty());
-      rightSide.setBackground(bg);
-      leftSideDock.getChildren().add(leftSide);
-      rightSideDock.getChildren().clear();
-      rightSideDock.getChildren().add(rightSide);
+      //rightSideDock.getChildren().clear();
 
       Button leave = new Button("X");
       leave.setOnAction(event -> {
         gameController.leaveGame();
         Logger.debug("LEAVE PLZ");
       });
-      rightSide.getChildren().addAll(leave, settingsButton, playerListButton, nameChangeButton);
       //rightSide.getChildren().add(new Label("this is a test"));
 
       chatController.setInGame(true);
@@ -291,10 +267,7 @@ public class MainController implements Initializable {
 
   public void onMapCloseHandle() {
     playArea.getChildren().clear();
-    rightSideDock.getChildren().clear();
-    leftSideDock.getChildren().clear();
 
-    rightSideDock.getChildren().addAll(settingsButton, playerListButton, nameChangeButton);
     playArea.setMouseTransparent(true);
     gameController.clearMap();
     chatController.setInGame(false);
