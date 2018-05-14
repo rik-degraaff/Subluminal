@@ -43,7 +43,7 @@ build:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     expire_in: 2 hours
     paths:
-      - app/out/**/*.class
+      - app/build/libs/
 
 test:
   stage: test
@@ -55,18 +55,20 @@ test:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     expire_in: 2 hours
     paths:
-      - app/build/reports/test/
+      - app/build/reports/
       - app/build/test-results/
       - app/build/jacoco/
 
 coverage:
   stage: coverage
   script:
-    - gradle jacocoTestReport
+    - gradle test jacocoTestReport
     - cat app/build/reports/coverage/index.html
+    - "echo -n \"Coverage: \" && grep -Eo \"Total.*?([0–9]{1,3})%\" app/build/reports/coverage/index.html | sed \"s/%.*/%/;s/.*>//g;\""
+  coverage: '/Coverage: \d+\%/'
   tags:
     - cs108-dind
-  coverage: '/Total.*?([0-9]{1,3}) %/'
+  coverage: '/Coverage: \d+\%/'
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     expire_in: 2 hours
@@ -87,6 +89,7 @@ javadoc:
       - docs/javadoc/
   only:
     - /^rl-.*$/
+    - ft-buildtools-luc
 
 testing:
   stage: deploy
