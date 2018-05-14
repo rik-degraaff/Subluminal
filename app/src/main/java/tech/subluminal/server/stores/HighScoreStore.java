@@ -14,7 +14,7 @@ import tech.subluminal.shared.util.Synchronized;
 
 public class HighScoreStore {
 
-  Synchronized<List<HighScore>> highScores = new RemoteSynchronized<>(
+  private final Synchronized<List<HighScore>> highScores = new RemoteSynchronized<>(
       HighScoreStore::getHighScoresFromFile,
       HighScoreStore::writeHighscoresToFile);
 

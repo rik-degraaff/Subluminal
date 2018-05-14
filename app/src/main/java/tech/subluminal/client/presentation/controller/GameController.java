@@ -459,14 +459,16 @@ public class GameController implements Initializable, GamePresenter {
 
   @Override
   public void clearGame() {
-    dummyFleetList = new ListView<>();
-    dummyShipList = new ListView<>();
-    dummyShipList = new ListView<>();
-    System.gc();
-    clearMap();
-    fleets.clear();
-    ships.clear();
-    stars.clear();
+    Platform.runLater(() -> {
+      dummyFleetList = new ListView<>();
+      dummyShipList = new ListView<>();
+      dummyShipList = new ListView<>();
+      System.gc();
+      clearMap();
+      fleets.clear();
+      ships.clear();
+      stars.clear();
+    });
     graph = null;
     gameID = null;
   }
