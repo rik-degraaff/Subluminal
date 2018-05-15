@@ -13,6 +13,8 @@
 __*.tex
 *.synctex*
 log.txt
+docker/_secrets.sh
+
 
 #folders
 .app/
@@ -27,9 +29,5 @@ bin/
 build/
 classes/
 docs/javadoc/
-<<<<<<< HEAD
 log\.txt
 classes/
-=======
-
->>>>>>> f29ddca64cb0f21ecdf2bc95d3743b74e7361011
