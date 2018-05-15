@@ -22,15 +22,11 @@ public class MotherShipMoveReqTest {
   }
 
   @Test
-  public void testParsing() {
+  public void testParsing() throws SONParsingError, SONConversionError {
     String mMoveReqMsg = this.moveReq.asSON().asString();
     List<String> parsedStars = null;
-    try {
-      MotherShipMoveReq parsedMoveReq = MotherShipMoveReq.fromSON(SON.parse(mMoveReqMsg));
-      parsedStars = parsedMoveReq.getTargets();
-    } catch (SONParsingError | SONConversionError e) {
-      e.printStackTrace();
-    }
+    MotherShipMoveReq parsedMoveReq = MotherShipMoveReq.fromSON(SON.parse(mMoveReqMsg));
+    parsedStars = parsedMoveReq.getTargets();
     Assert.assertTrue(this.stars.containsAll(parsedStars));
     System.out.println(mMoveReqMsg);
   }
@@ -43,7 +39,6 @@ public class MotherShipMoveReqTest {
     try {
       MotherShipMoveReq faultyStarListMoveReq = MotherShipMoveReq.fromSON(SON.parse(faultyStarListKey));
     } catch (SONConversionError | SONParsingError e) {
-      e.printStackTrace();
       starListSuccessfullyParsed = false;
     }
     Assert.assertFalse(starListSuccessfullyParsed);

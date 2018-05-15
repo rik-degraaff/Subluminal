@@ -6,7 +6,12 @@ import tech.subluminal.shared.son.SONRepresentable;
 
 /**
  * Represents a ping from client to server or vice versa. A Ping message parsed to SON and then to
- * String might look like this: {"id":s"1234"}.
+ * String might look like this:
+ * <pre>
+ * {
+ *   "id":s"1234"
+ * }
+ * </pre>
  */
 public class Ping implements SONRepresentable {
 
