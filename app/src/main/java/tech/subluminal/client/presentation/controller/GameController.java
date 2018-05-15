@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import javafx.animation.KeyFrame;
@@ -190,9 +191,13 @@ public class GameController implements Initializable, GamePresenter {
 
   @Override
   public void setUserID() {
-    Platform.runLater(() -> {
-      playerID = userStore.currentUser().get().use(opt -> opt.get().getID());
-    });
+    new Thread(() -> {
+      Optional<String> optID;
+      while (!(optID = userStore.currentUser().get().use(opt -> opt.map(User::getID))).isPresent()) {
+        Thread.yield();
+      }
+      playerID = optID.get();
+    }).start();
   }
 
   @Override
