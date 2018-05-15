@@ -17,7 +17,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Box;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
@@ -38,6 +37,7 @@ import tech.subluminal.client.presentation.customElements.NameChangeComponent;
 import tech.subluminal.client.presentation.customElements.SettingsComponent;
 import tech.subluminal.client.presentation.customElements.UserListComponent;
 import tech.subluminal.client.presentation.customElements.WindowContainerComponent;
+import tech.subluminal.client.presentation.customElements.custom3DComponents.TestComponent;
 import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.server.stores.records.HighScore;
@@ -152,19 +152,23 @@ public class MainController implements Initializable {
     spaceBackgroundDock.getChildren().add(background);
     //ArcComponent leftArc = new ArcComponent();
     //leftArc.heightProperty().bind(window.heightProperty());
-    Box leftArc = new Box(50, 100, 10);
+    /*Box leftArc = new Box(50, 100, 10);
     leftArc.heightProperty().bind(window.heightProperty());
     arcLeftDock.getChildren().addAll(leftArc);
     leftArc.translateYProperty()
-        .bind(Bindings.createDoubleBinding(() -> window.getHeight() / 2, window.heightProperty()));
+        .bind(Bindings.createDoubleBinding(() -> window.getHeight() / 2, window.heightProperty()));*/
 
-    //ArcComponent rightArc = new ArcComponent();
-    //rightArc.heightProperty().bind(window.heightProperty());
-    Box rightArc = new Box(50, 100, 10);
-    rightArc.heightProperty().bind(window.heightProperty());
+    TestComponent leftArc = new TestComponent();
+    leftArc.translateYProperty().bind(Bindings.createDoubleBinding(() -> window.getHeight()/2, window.heightProperty()));
+    leftArc.getTransforms().addAll(new Rotate(30));
+    arcLeftDock.getChildren().addAll(leftArc);
+
+
+    TestComponent rightArc = new TestComponent();
+    rightArc.translateYProperty().bind(Bindings.createDoubleBinding(() -> window.getHeight()/2, window.heightProperty()));
+    rightArc.getTransforms().addAll(new Rotate(-30));
     arcRightDock.getChildren().addAll(rightArc);
-    rightArc.translateYProperty()
-        .bind(Bindings.createDoubleBinding(() -> window.getHeight() / 2, window.heightProperty()));
+
 
     Rectangle clipNode = new Rectangle();
     clipNode.widthProperty().bind(playArea.widthProperty());
