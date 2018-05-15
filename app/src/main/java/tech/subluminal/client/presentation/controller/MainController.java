@@ -10,9 +10,7 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.PerspectiveTransform;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -39,6 +37,7 @@ import tech.subluminal.client.presentation.customElements.NameChangeComponent;
 import tech.subluminal.client.presentation.customElements.SettingsComponent;
 import tech.subluminal.client.presentation.customElements.UserListComponent;
 import tech.subluminal.client.presentation.customElements.WindowContainerComponent;
+import tech.subluminal.client.presentation.customElements.custom3DComponents.ArcComponent;
 import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.server.stores.records.HighScore;
@@ -96,6 +95,12 @@ public class MainController implements Initializable {
   @FXML
   private AnchorPane glassPane;
 
+  @FXML
+  private AnchorPane arcLeftDock;
+
+  @FXML
+  private AnchorPane arcRightDock;
+
   private GameComponent game;
 
   private UserStore userStore;
@@ -145,7 +150,12 @@ public class MainController implements Initializable {
   public void initialize(URL location, ResourceBundle resources) {
     background = new BackgroundComponent(1000);
     spaceBackgroundDock.getChildren().add(background);
-    //glassPane.setEffect(new GaussianBlur(55));
+    ArcComponent leftArc = new ArcComponent();
+    arcLeftDock.getChildren().addAll(leftArc);
+    leftArc.setTranslateY(200);
+    ArcComponent rightArc = new ArcComponent();
+    arcRightDock.getChildren().addAll(rightArc);
+    rightArc.setTranslateY(200);
 
     Rectangle clipNode = new Rectangle();
     clipNode.widthProperty().bind(playArea.widthProperty());
