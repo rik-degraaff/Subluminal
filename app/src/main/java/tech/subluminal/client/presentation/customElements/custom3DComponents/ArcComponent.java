@@ -8,26 +8,40 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 
+/**
+ * 3D Model of the arc which holds the glass of the spaceship
+ */
 public class ArcComponent extends Group {
 
-  private DoubleProperty height = new SimpleDoubleProperty();
-  private DoubleProperty depth = new SimpleDoubleProperty();
-  private static final double DEFAULT_HEIGHT = 100;
-  private static final double DEFAULT_DEPTH = 20;
+  private final DoubleProperty height = new SimpleDoubleProperty();
+  private final DoubleProperty width = new SimpleDoubleProperty();
+  private final DoubleProperty depth = new SimpleDoubleProperty();
+  private static final double DEFAULT_HEIGHT = 500;
+  private static final double DEFAULT_WIDTH = 100;
+  private static final double DEFAULT_DEPTH = 200;
 
 
   public ArcComponent(){
-    super();
+    setHeight(DEFAULT_HEIGHT);
+    setWidth(DEFAULT_WIDTH);
+    setDepth(DEFAULT_DEPTH);
+
 
 
     Box downBox = new Box();
+    //downBox.setRotate(90);
+
     Box upBox = new Box();
+    //upBox.setRotate(90);
 
     downBox.heightProperty().bind(Bindings.createDoubleBinding(() -> 1/3 * getHeight(), heightProperty()));
+    downBox.widthProperty().bind(widthProperty());
+
     upBox.heightProperty().bind(Bindings.createDoubleBinding(() -> 2/3 * getHeight(), heightProperty()));
+    upBox.widthProperty().bind(widthProperty());
 
 
-    downBox.depthProperty().bind(depthProperty());
+    //downBox.depthProperty().bind(depthProperty());
     upBox.depthProperty().bind(depthProperty());
 
 
@@ -35,10 +49,21 @@ public class ArcComponent extends Group {
     //downBox.setMaterial(material);
     //upBox.setMaterial(material);
 
-    upBox.setRotate(20);
 
     this.getChildren().addAll(downBox,upBox);
 
+  }
+
+  public double getWidth() {
+    return width.get();
+  }
+
+  public DoubleProperty widthProperty() {
+    return width;
+  }
+
+  public void setWidth(double width) {
+    this.width.set(width);
   }
 
   public double getHeight() {

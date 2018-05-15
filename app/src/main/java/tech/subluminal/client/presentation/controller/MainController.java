@@ -17,6 +17,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Box;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
@@ -37,7 +38,6 @@ import tech.subluminal.client.presentation.customElements.NameChangeComponent;
 import tech.subluminal.client.presentation.customElements.SettingsComponent;
 import tech.subluminal.client.presentation.customElements.UserListComponent;
 import tech.subluminal.client.presentation.customElements.WindowContainerComponent;
-import tech.subluminal.client.presentation.customElements.custom3DComponents.ArcComponent;
 import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.server.stores.records.HighScore;
@@ -150,12 +150,21 @@ public class MainController implements Initializable {
   public void initialize(URL location, ResourceBundle resources) {
     background = new BackgroundComponent(1000);
     spaceBackgroundDock.getChildren().add(background);
-    ArcComponent leftArc = new ArcComponent();
+    //ArcComponent leftArc = new ArcComponent();
+    //leftArc.heightProperty().bind(window.heightProperty());
+    Box leftArc = new Box(50, 100, 10);
+    leftArc.heightProperty().bind(window.heightProperty());
     arcLeftDock.getChildren().addAll(leftArc);
-    leftArc.setTranslateY(200);
-    ArcComponent rightArc = new ArcComponent();
+    leftArc.translateYProperty()
+        .bind(Bindings.createDoubleBinding(() -> window.getHeight() / 2, window.heightProperty()));
+
+    //ArcComponent rightArc = new ArcComponent();
+    //rightArc.heightProperty().bind(window.heightProperty());
+    Box rightArc = new Box(50, 100, 10);
+    rightArc.heightProperty().bind(window.heightProperty());
     arcRightDock.getChildren().addAll(rightArc);
-    rightArc.setTranslateY(200);
+    rightArc.translateYProperty()
+        .bind(Bindings.createDoubleBinding(() -> window.getHeight() / 2, window.heightProperty()));
 
     Rectangle clipNode = new Rectangle();
     clipNode.widthProperty().bind(playArea.widthProperty());
@@ -238,35 +247,34 @@ public class MainController implements Initializable {
     );
 
     boardComputer.setOnMouseClicked((e) -> {
-      if (chatDown){
+      if (chatDown) {
         timeTlDown.stop();
         timeTlUp.play();
         chatDown = false;
-      }else{
+      } else {
         timeTlUp.stop();
         timeTlDown.play();
         chatDown = true;
       }
     });
 
-
-    buttonsDock.add(settingsButton, 0,0);
-    buttonsDock.add(playerListButton,0,1);
+    buttonsDock.add(settingsButton, 0, 0);
+    buttonsDock.add(playerListButton, 0, 1);
     buttonsDock.add(nameChangeButton, 0, 2);
 
-    monitorDock.add(display, 1,0);
+    monitorDock.add(display, 1, 0);
 
     window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
       if (keyEvent.getCode() == KeyCode.F4) {
         if (debugDock.getChildren().contains(debug)) {
           debugDock.getChildren().remove(debug);
-        }else {
+        } else {
           debugDock.getChildren().add(debug);
         }
-      }else if (keyEvent.getCode() == KeyCode.F5) {
+      } else if (keyEvent.getCode() == KeyCode.F5) {
         if (debugDock.getChildren().contains(monitor)) {
           debugDock.getChildren().remove(monitor);
-        }else {
+        } else {
           debugDock.getChildren().add(monitor);
         }
       }
