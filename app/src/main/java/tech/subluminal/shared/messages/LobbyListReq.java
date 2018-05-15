@@ -4,11 +4,10 @@ import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Represents a lobby list request. This message, when converted to SON and then to string, might
- * look like this:
+ * Represents a lobby list request from a client to the server. This message, when converted to SON
+ * and then to string, might look like this:
  * <pre>
- * {
- * }
+ * {}
  * </pre>
  */
 public class LobbyListReq implements SONRepresentable {

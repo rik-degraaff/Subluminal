@@ -9,8 +9,8 @@ import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.SlimLobby;
 
 /**
- * Represents a lobby list response after a lobby list request. This message, when converted to SON
- * and then to string, might look like this:
+ * Represents a lobby list response form server to client after a lobby list request. This message,
+ * when converted to SON and then to string, might look like this:
  * <pre>
  * {
  *   "lobbies":l[

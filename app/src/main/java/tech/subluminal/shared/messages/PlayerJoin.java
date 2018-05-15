@@ -6,7 +6,7 @@ import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.User;
 
 /**
- * Represents the message that a player left. This message, when converted to SON and then to
+ * Represents the message that a player joined. This message, when converted to SON and then to
  * string, might look like this:
  * <pre>
  * {

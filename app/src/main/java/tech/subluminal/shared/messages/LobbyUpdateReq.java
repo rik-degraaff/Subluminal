@@ -6,8 +6,8 @@ import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.LobbySettings;
 
 /**
- * Represents a lobby update request message. This message, when converted to SON and then to
- * string, might look like this:
+ * Represents a lobby update request message from client to server. This message, when converted to
+ * SON and then to string, might look like this:
  * <pre>
  * {
  *   "settings":o{

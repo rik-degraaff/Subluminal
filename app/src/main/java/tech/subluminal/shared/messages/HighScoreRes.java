@@ -11,7 +11,7 @@ import tech.subluminal.shared.son.SONRepresentable;
 
 /**
  * Represents an answer to a highscore request and contains the highscore in form of a list. A
- * HighScoreRes message converted to SON and then to string might look like this:
+ * HighScoreRes message, converted to SON and then to string, might look like this:
  * <pre>
  * {
  *   "highScores":l[

@@ -5,8 +5,8 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * ChatMessage object which was build by the client for the server. A ChatMessageOut message converted to SON and then to
- * string might look like this:
+ * The ChatMessage object which was built by the client for the server. A ChatMessageOut message, converted to SON and then to
+ * string, might look like this:
  * <pre>
  *  {
  *    "global":bfalse,

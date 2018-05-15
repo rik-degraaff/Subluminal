@@ -7,8 +7,7 @@ import tech.subluminal.shared.son.SONRepresentable;
  * Represents the lobby leave response from the server to the client. This messages, when converted
  * to SON and then to string, might look like this:
  * <pre>
- * {
- * }
+ * {}
  * </pre>
  */
 

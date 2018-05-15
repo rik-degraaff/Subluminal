@@ -5,8 +5,8 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Message for all Client which is send if a game ends. An EndGameRes message converted to SON and
- * then to string might look like this:
+ * The message which is sent to all clients when a game ends. An EndGameRes message, converted to SON and
+ * then to string, might look like this:
  * <pre>
  * {
  *   "game":s"4054",
