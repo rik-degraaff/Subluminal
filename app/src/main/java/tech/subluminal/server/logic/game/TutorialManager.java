@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Consumer;
-import java.util.function.Function;
 import javafx.scene.paint.Color;
 import tech.subluminal.server.logic.MessageDistributor;
 import tech.subluminal.server.stores.records.GameState;
@@ -16,10 +14,10 @@ import tech.subluminal.shared.messages.ClearGame;
 import tech.subluminal.shared.messages.EndGameRes;
 import tech.subluminal.shared.messages.GameStartRes;
 import tech.subluminal.shared.messages.StartTutorialReq;
+import tech.subluminal.shared.messages.Toast;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Ship;
-import tech.subluminal.shared.util.IdUtils;
 
 public class TutorialManager {
 
@@ -64,6 +62,11 @@ public class TutorialManager {
   }
 
   private void startFirstStage(String id) {
+    distributor.sendMessage(new Toast(
+            "Welcome to the tutorial my dear AI.\n"
+                + "Try sending your mothership from Alderaan to Tatooine by first clicking Alderaan, then Tatooin and then hitting enter."),
+        id);
+
     Map<String, String> players = new HashMap<>();
     players.put(id, "");
 
@@ -82,7 +85,8 @@ public class TutorialManager {
         JUMP_DISTANCE, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY,
         Double.POSITIVE_INFINITY, "Tatooine"));
 
-    GameState state = new GameState(id, stars, Collections.singleton(player), LIGHT_SPEED, JUMP_DISTANCE, SHIP_SPEED);
+    GameState state = new GameState(id, stars, Collections.singleton(player), LIGHT_SPEED,
+        JUMP_DISTANCE, SHIP_SPEED);
     Map<String, Color> colors = new HashMap<>();
     colors.put(id, Color.RED);
     distributor.sendMessage(new GameStartRes(id, colors), id);
@@ -94,7 +98,8 @@ public class TutorialManager {
           }
           return false;
         },
-        lp -> {});
+        lp -> {
+        });
   }
 
   private void startSecondStage(String id) {

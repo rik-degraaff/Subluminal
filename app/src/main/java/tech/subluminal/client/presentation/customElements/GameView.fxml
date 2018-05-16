@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
-<fx:root xmlns:fx="http://javafx.com/fxml/1" AnchorPane.bottomAnchor="0.0"
-  AnchorPane.leftAnchor="0.0"
-  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" type="javafx.scene.layout.AnchorPane"
-  xmlns="http://javafx.com/javafx/8"
-  fx:controller="tech.subluminal.client.presentation.controller.GameController"
-  fx:id="playArea">
+
+<fx:root fx:id="playArea" type="javafx.scene.layout.AnchorPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.subluminal.client.presentation.controller.GameController">
   <children>
-    <Pane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-      AnchorPane.topAnchor="0.0" fx:id="map"/>
+      <HBox fx:id="toastDock" alignment="CENTER" />
+    <Pane fx:id="map" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
   </children>
 </fx:root>

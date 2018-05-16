@@ -19,6 +19,7 @@ import tech.subluminal.shared.messages.GameStateDelta;
 import tech.subluminal.shared.messages.LobbyLeaveReq;
 import tech.subluminal.shared.messages.LoginRes;
 import tech.subluminal.shared.messages.MotherShipMoveReq;
+import tech.subluminal.shared.messages.Toast;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.stores.records.game.Star;
 import tech.subluminal.shared.util.Synchronized;
@@ -57,6 +58,12 @@ public class GameManager implements GamePresenter.Delegate {
         GameLeaveRes.class, GameLeaveRes::fromSON, req -> onGameLeave());
     connection.registerHandler(
         ClearGame.class, ClearGame::fromSON, req -> clearGame());
+    connection.registerHandler(
+        Toast.class, Toast::fromSON, this::onToast);
+  }
+
+  private void onToast(Toast toast) {
+    gamePresenter.addToast(toast.getMessage());
   }
 
   private void onEndGameRes(EndGameRes res) {
@@ -138,6 +145,7 @@ public class GameManager implements GamePresenter.Delegate {
       }
       gameStore.inGame().set(false);
       clearGame();
+      gamePresenter.clearGame();
     }).start();
   }
 
@@ -145,6 +153,5 @@ public class GameManager implements GamePresenter.Delegate {
     gameStore.motherShips().clear();
     gameStore.stars().clear();
     gameStore.fleets().clear();
-    gamePresenter.clearGame();
   }
 }
