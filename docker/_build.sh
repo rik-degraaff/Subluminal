@@ -4,6 +4,7 @@
 
 if [[ $(cat /proc/version) != *"Alpine"* ]];then
   # Get secret variables for deployment into local shell
+  echo "Not in gitlab ci. Sourcing secret variables."
   source ./docker/_secrets.sh
 fi
 

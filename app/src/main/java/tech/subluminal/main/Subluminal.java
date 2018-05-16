@@ -38,7 +38,7 @@ public class Subluminal {
   @Option(names = {"-ll", "--loglevel"}, description = "Sets the loglevel for the application. ")
   private String loglevel = "off";
   @Option(names = {"-lf", "--logfile"}, description = "Sets the path and filename for the logfile")
-  private String logfile = "log.txt";
+  private String logfile = "";
   @Option(names = {"-d", "--debug"}, description = "Enables the debug mode.")
   private boolean debug;
   @Parameters(index = "0", arity = "1", description = "Sets the application mode. Must be one of "
@@ -51,9 +51,9 @@ public class Subluminal {
   @Parameters(index = "2", arity = "0..1", description =
       "Sets the username. If none is specified the "
           + "system username will be used instead.")
+  private String username = System.getProperty("user.name");
 
   // ======= OTHER VARIABLES =======
-  private String username = System.getProperty("user.name");
   private static final SettingsReaderWriter srw = new SettingsReaderWriter();
 
   /**
@@ -113,6 +113,7 @@ public class Subluminal {
 
       String host = "localhost";
       int port = 1729;
+      
       Logger.debug("mode:" + subl.mode + " hostAndOrPort:" + subl.hostAndOrPort + " debug:" + String
           .valueOf(subl.debug) + " logfile:" + subl.logfile + " loglevel:" + subl.loglevel
           + " username:" + subl.username);

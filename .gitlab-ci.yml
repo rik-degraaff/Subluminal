@@ -9,16 +9,13 @@ cache:
     - .gradle/
 
 stages:
-  - check
   - build
   - test
-  - coverage
-  - javadoc
   - docker
   - deploy
 
 checkstyle:
-  stage: check
+  stage: test
   script:
     - gradle check -x test
   tags:
@@ -29,7 +26,6 @@ checkstyle:
     expire_in: 2 hours
     paths:
      - app/build/reports/checkstyle/
-
   only:
     - /^rl-.*$/
 
@@ -61,7 +57,7 @@ test:
       - app/build/jacoco/
 
 coverage:
-  stage: coverage
+  stage: test
   script:
     - gradle test jacocoTestReport
     - cat app/build/reports/coverage/index.html
@@ -76,7 +72,7 @@ coverage:
       - app/build/reports/coverage/
 
 javadoc:
-  stage: javadoc
+  stage: test
   script:
     - gradle javadoc
     - gradle javadoccoverage
@@ -104,7 +100,7 @@ build-image:
   - TAG=$(cat ./VERSION)
   - DEPLOYHOST=164.132.199.58
   - echo "Building and pushing server version $TAG to https://hub.docker.com."
-  - docker build -t subluminalthegame/subluminal:latest -t subluminalthegame/subluminal:$(echo $TAG) --file ./docker/dockerfile-subluminal.yml --build-arg VERSION=$(echo $TAG) --build-arg PORT=1729 .
+  - docker build -t subluminalthegame/subluminal:latest -t subluminalthegame/subluminal-server:$(echo $TAG) --file ./docker/dockerfile-subluminal.yml --build-arg VERSION=$(echo $TAG) --build-arg PORT=1729 .
   - docker login -u subluminalthegame -p $DOCKERHUB_PASSWORD
   - docker push subluminalthegame/subluminal-server
   tags:
@@ -122,7 +118,8 @@ staging:
   script:
     - apk update
     - apk add --no-cache openssh-client sshpass bash
-    - bash
+#    - bash
+    - chmod +x ./docker/_build.sh ./docker/_deploy.sh
     - ./docker/_build.sh
     - ./docker/_deploy.sh
   tags:
