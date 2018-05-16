@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,9 +28,10 @@ public class MapGeneration {
   private static final double GENERATION_RATE = 5.0;
   private static NameGenerator ng = new NameGenerator();
 
-  public static GameState getNewGameStateForPlayers(Set<String> playerIDs, String gameID) {
+  public static GameState getNewGameStateForPlayers(Map<String, String> playerNames, String gameID) {
     final Set<Star> stars = new HashSet<>();
     final Set<Player> players = new HashSet<>();
+    final Set<String> playerIDs = playerNames.keySet();
 
     int additionalStars = (int) Math.pow(10 + 3 * playerIDs.size(), 0.75);
     List<Coordinates> coordinates = new ArrayList<>(additionalStars + playerIDs.size());
@@ -44,7 +46,7 @@ public class MapGeneration {
         .limit(additionalStars)
         .forEach(stars::add);
 
-    playerIDs.forEach(playerID -> {
+    playerNames.forEach((playerID, name) -> {
       Coordinates homeCoords = getStarCoordinates(coordinates);
       coordinates.add(homeCoords);
       Star homeStar = new Star(playerID, 1, homeCoords, IdUtils.generateId(8),
@@ -56,10 +58,11 @@ public class MapGeneration {
           .filter(id -> !id.equals(playerID))
           .collect(Collectors.toSet());
 
-      Player player = new Player(playerID, otherPlayers,
-          new Ship(homeCoords, IdUtils.generateId(8),
-              Collections.emptyList(), homeStar.getID(), MOTHER_SHIP_SPEED), LIGHT_SPEED, true,
-          false);
+      Player player = new Player(playerID, name, otherPlayers,
+          new Ship(homeCoords, IdUtils.generateId(8), Collections.emptyList(),
+              homeStar.getID(), MOTHER_SHIP_SPEED),
+          LIGHT_SPEED
+      );
 
       players.add(player);
     });
