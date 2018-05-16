@@ -51,8 +51,13 @@ public class HighScoreStore {
         file.createNewFile();
       }
 
-      new PrintWriter(file).print(highScores.stream().map(hs -> hs.asSON().asString())
-          .reduce("", (acc, s) -> acc + System.lineSeparator() + s));
+      final String scores = highScores.stream()
+          .map(hs -> hs.asSON().asString())
+          .reduce("", (acc, s) -> acc + System.lineSeparator() + s);
+
+      final PrintWriter pw = new PrintWriter(file);
+      pw.print(scores);
+      pw.close();
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

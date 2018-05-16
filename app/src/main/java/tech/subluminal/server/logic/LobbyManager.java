@@ -32,6 +32,7 @@ import tech.subluminal.shared.records.LobbyStatus;
 import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.stores.records.LobbySettings;
 import tech.subluminal.shared.stores.records.SlimLobby;
+import tech.subluminal.shared.stores.records.User;
 import tech.subluminal.shared.util.Synchronized;
 
 /**
@@ -90,7 +91,6 @@ public class LobbyManager {
                     .equals(userID)))
                 .forEach(s -> s.consume(lobby -> {
                   lobby.setStatus(LobbyStatus.FULL);
-                  //TODO: add colors
                   List<Color> colors = getNiceColors(lobby.getPlayerCount());
                   int i = 0;
                   Map<String, Color> playerColors = new HashMap<>();
@@ -100,7 +100,15 @@ public class LobbyManager {
                   }
                   distributor.sendMessage(new GameStartRes(lobby.getID(), playerColors),
                       lobby.getPlayers());
-                  gameStarter.startGame(lobby.getID(), new HashSet<>(lobby.getPlayers()));
+
+                  final Map<String, String> players = lobby.getPlayers()
+                      .stream()
+                      .map(userStore.connectedUsers()::getByID)
+                      .filter(Optional::isPresent)
+                      .map(Optional::get)
+                      .map(sync -> sync.use(Function.identity()))
+                      .collect(Collectors.toMap(User::getID, User::getUsername));
+                  gameStarter.startGame(lobby.getID(), players);
                 })));
   }
 

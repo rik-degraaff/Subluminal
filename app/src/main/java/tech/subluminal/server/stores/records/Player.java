@@ -20,18 +20,22 @@ public class Player extends Identifiable {
   private final Set<String> playerIDs = new HashSet<>();
   private final GameHistory<Ship> motherShip;
   private final Map<String, GameHistory<Fleet>> fleets = new HashMap<>();
-  private boolean alive;
-  private boolean hasLeft;
+
+  private final String name;
+
+  private boolean alive = true;
+  private boolean hasLeft = false;
+  private double enemyShipsDematerialized;
+  private double dematerializedShips;
 
   public Player(
-      String id, Set<String> otherPlayerIDs, Ship motherShip, double lightSpeed, boolean alive,
-      boolean hasLeft
+      String id, String name, Set<String> otherPlayerIDs, Ship motherShip, double lightSpeed
   ) {
     super(id);
 
+    this.name = name;
+
     this.lightSpeed = lightSpeed;
-    this.alive = alive;
-    this.hasLeft = hasLeft;
 
     playerIDs.addAll(otherPlayerIDs);
     playerIDs.add(id);
@@ -103,5 +107,44 @@ public class Player extends Identifiable {
    */
   public void join() {
     hasLeft = false;
+  }
+
+  /**
+   * @return the amount of ships this player has dematerialized.
+   */
+  public double getEnemyShipsDematerialized() {
+    return enemyShipsDematerialized;
+  }
+
+  /**
+   * Adds an amount of ships to the ships this player has dematerialized.
+   *
+   * @param amount the amount to add.
+   */
+  public void addEnemyShipsDematerialized(double amount) {
+    enemyShipsDematerialized += amount;
+  }
+
+  /**
+   * @return the amount of ships belonging to this player that were dematerialized.
+   */
+  public double getDematerializedShips() {
+    return dematerializedShips;
+  }
+
+  /**
+   * Adds an amount of ships to the ships belonging to this player that were dematerialized.
+   *
+   * @param amount the amount to add.
+   */
+  public void addDematerializedShips(double amount) {
+    dematerializedShips += amount;
+  }
+
+  /**
+   * @return the name of this player.
+   */
+  public String getName() {
+    return name;
   }
 }

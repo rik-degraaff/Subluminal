@@ -2,7 +2,7 @@ package tech.subluminal.server.logic.game;
 
 import static tech.subluminal.shared.util.ColorUtils.getNiceColors;
 
-import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -51,6 +51,9 @@ import tech.subluminal.shared.util.IdUtils;
 import tech.subluminal.shared.util.Synchronized;
 import tech.subluminal.shared.util.function.Either;
 
+/**
+ * contains the server side logic pertaining to games, including the actual game logic.
+ */
 public class GameManager implements GameStarter {
 
   private static final int TPS = 10;
@@ -59,13 +62,13 @@ public class GameManager implements GameStarter {
   private final MessageDistributor distributor;
   private final Map<String, Thread> gameThreads = new HashMap<>();
   private final HighScoreStore highScoreStore;
-  private final BiFunction<Set<String>, String, GameState> mapGenerator;
+  private final BiFunction<Map<String, String>, String, GameState> mapGenerator;
   private final BiFunction<Integer, SleepGameLoop.Delegate, GameLoop> gameLoopProvider;
 
   public GameManager(
       GameStore gameStore, LobbyStore lobbyStore, MessageDistributor distributor,
       HighScoreStore highScoreStore,
-      BiFunction<Set<String>, String, GameState> mapGenerator,
+      BiFunction<Map<String, String>, String, GameState> mapGenerator,
       BiFunction<Integer, SleepGameLoop.Delegate, GameLoop> gameLoopProvider
   ) {
     this.gameStore = gameStore;
@@ -125,7 +128,8 @@ public class GameManager implements GameStarter {
         distributor.sendMessage(new GameStartRes(state.getID(), playerColors), id);
         player.join();
         GameStateDelta delta = new GameStateDelta();
-        delta.addPlayer(createInitialPlayerDelta(Optional.of(motherShipEntry.getState()), player, id));
+        delta.addPlayer(
+            createInitialPlayerDelta(Optional.of(motherShipEntry.getState()), player, id));
         players.keySet()
             .stream()
             .filter(playerID -> !playerID.equals(id))
@@ -173,9 +177,15 @@ public class GameManager implements GameStarter {
     });
   }
 
+  /**
+   * Starts a new game.
+   *
+   * @param lobbyID the id of the lobby this game belongs to.
+   * @param players the players participating in this game.
+   */
   @Override
-  public void startGame(String lobbyID, Set<String> playerIDs) {
-    gameStore.games().add(mapGenerator.apply(playerIDs, lobbyID));
+  public void startGame(String lobbyID, Map<String, String> players) {
+    gameStore.games().add(mapGenerator.apply(players, lobbyID));
     gameStore.moveRequests().add(new MoveRequests(lobbyID));
 
     GameLoop gameLoop = gameLoopProvider.apply(TPS, new SleepGameLoop.Delegate() {
@@ -184,7 +194,7 @@ public class GameManager implements GameStarter {
       public void beforeTick() {
         gameStore.moveRequests()
             .getByID(lobbyID)
-            .ifPresent(syncReqs -> processMoveRequests(syncReqs, lobbyID, playerIDs));
+            .ifPresent(syncReqs -> processMoveRequests(syncReqs, lobbyID, players.keySet()));
       }
 
       @Override
@@ -279,6 +289,25 @@ public class GameManager implements GameStarter {
         distributor.sendMessage(new EndGameRes(gameState.getID(), winner),
             gameState.getPlayers().keySet());
         gameThreads.remove(gameState.getID());
+        if (winner != null) {
+          final Player winnerPlayer = gameState.getPlayers().get(winner);
+          System.out.println("enemyShips: " + winnerPlayer.getEnemyShipsDematerialized());
+          System.out.println("ownShips: " + winnerPlayer.getDematerializedShips());
+          final double diff =
+              winnerPlayer.getEnemyShipsDematerialized() - winnerPlayer.getDematerializedShips();
+          final double total = gameState.getPlayers()
+              .values()
+              .stream()
+              .mapToDouble(Player::getDematerializedShips)
+              .sum();
+          final double score = (1000.0 * diff) / total;
+          highScoreStore.highScores()
+              .update(old -> {
+                old.add(new HighScore(winnerPlayer.getName(), score));
+                old.sort(Comparator.comparingDouble(HighScore::getScore));
+                return old.subList(0, Math.min(9, old.size()));
+              });
+        }
         return true;
       }
     }
@@ -364,6 +393,14 @@ public class GameManager implements GameStarter {
     });
 
     intermediateGameState.advance();
+
+    intermediateGameState.getDematerializedEnemyShips().forEach((playerID, amount) -> {
+      gameState.getPlayers().get(playerID).addEnemyShipsDematerialized(amount);
+    });
+
+    intermediateGameState.getDematerializedShips().forEach((playerID, amount) -> {
+      gameState.getPlayers().get(playerID).addDematerializedShips(amount);
+    });
 
     intermediateGameState.getStars().forEach((starID, star) -> {
       gameState.getStars().get(starID).add(new GameHistoryEntry<>(star));
