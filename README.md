@@ -8,7 +8,7 @@
 **Table of Contents**  
 [1. Overview](#1-overview)  
 [2. Getting Started](#2-getting-started)  
-[3. Game Concept](#3-game-concept)  
+[3. Screenshots](#3-screenshots)  
 [4. License](#4-license)  
 [5. Webpage](#5-web)
 
@@ -63,24 +63,41 @@ Starts the game in server or client mode.
   -h, --help                  Display help/usage.
 ```
 
+### Quicklinks for professors / assistants / tutors:
+
+| Document         | Filename             | md                                    | pdf                                     | Description                                        |
+| ---------------- | -------------------- | ------------------------------------- | --------------------------------------- | -------------------------------------------------- |
+| Readme           | README.md            | [``<md>``](README.md)                 | [``<pdf>``](README.pdf)                 | Quickstart with lots of useful information         |
+| Changelog        | CHANGELOG.md         | [``<md>``](CHANGELOG.md)              | [``<pdf>``](CHANGELOG.pdf)              | Automaticly generated changelog (based on commits) |
+| Diary            | project_diary.md     | [``<md>``](docs/project_diary.md)     | [``<pdf>``](docs/project_diary.pdf)     | Project diary daily/weekly basis                   |
+| QA concept       | quality_assurance.md | [``<md>``](docs/quality_assurance.md) | [``<pdf>``](docs/quality_assurance.pdf) | Quality assurance concept for the project          |
+| Network protocol | network_protocol.md  | [``<md>``](docs/network_protocol.md)  | [``<pdf>``](docs/network_protocol.pdf)  | Network protocol specification                     |
+| Game rules       | game_rules.md        | [``<md>``](docs/game_rules.md)        | [``<pdf>``](docs/game_rules.pdf)        | Short list with all game rules                     |
+| Manual           | manual.pdf           | -                                     | [``<pdf>``](docs/manual/manual.pdf)     | Game manual                                        |
+
+### Generated docs / reports:
+These documents will only appear once the project has been built with gradle.
+
+| Document         | Path                                                                 | Description                     |
+| ---------------- | -------------------------------------------------------------------- | ------------------------------- |
+| JavaDoc          | [docs/javadoc/](docs/javadoc/index.html)                             | Javadoc Webpage                 |
+| JavaDocCoverage  | [docs/javadoc](docs/javadoc/javadoc-coverage.html)                   | Javadoc Coverage Report Webpage |
+| Test Report      | [app/build/reports/test/](app/build/reports/test/index.html)         | JUnit Test Report               |
+| Test Coverage    | [app/build/reports/coverage/](app/build/reports/coverage/index.html) | Test Coverage Report            |
 
 ## 2. Getting Started
-1. Generate a pair of ssh keys and add them to your gitlab account (follow [these instructions](https://git.scicore.unibas.ch/help/ssh/README#generating-a-new-ssh-key-pair) or run  
-``ssh-keygen -t rsa -C "your.email@stud.unibas.ch" -b 4096``)
-3. Clone the repo to your hard drive ``git clone https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11.git``  
-4. cd into the project directory and try to build the project with ``./gradlew build`` (on Unix) or ``gradlew.bat build`` (on Windows).
-5. A more specific document on code quality assurance is located in [docs/quality_assurance.md](docs/quality_assurance.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
+1. Clone the repo to your hard drive ``git clone https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11.git``  
+2. cd into the project directory and try to build the project with ``./gradlew build`` (on Unix) or ``gradlew.bat build`` (on Windows).
+3. A more specific document on code quality assurance is located in [docs/quality_assurance.md](docs/quality_assurance.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
 
 
-## 3. Game Concept
-You can find a detailed description on how the game is played, in [docs/game_rules.md](docs/game_rules.md) folder.  
-
-![Mockup of user interface](./assets/mockup/ui_4.png)
-![Mockup of detail view](./assets/mockup/ui_1.jpg)  
+## 3. Screenshots
+You can find a more images in [./assets/screenshots/](assets/screenshots/) folder.  
+![Menu](./assets/screenshots/menu.png)
+![Ingame](./assets/screenshots/game3.png)
 
 
 ## 4. License
-![GNU AGPL Logo](assets/other/AGPLv3_Logo.png)  
 **GNU AGPLv3**. [https://choosealicense.com/licenses/agpl-3.0/]()
 
 

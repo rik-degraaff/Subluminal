@@ -18,6 +18,8 @@ public interface Connection extends Closeable {
    * </pre>
    *
    * @param type the class of the type of SONRepresentable this handler responds to.
+   * @param converter a function that can convert a SON object to an object of the specified message type.
+   * @param handler the handler which should be called if a message of this type is received.
    */
   <T extends SONRepresentable> void registerHandler(Class<T> type, SONConverter<T> converter,
       Consumer<T> handler);

@@ -211,6 +211,8 @@ public class GameController implements Initializable, GamePresenter {
       dummyStarList.getItems().forEach(starComponent -> Logger.trace("star: " + starComponent));
       dummyShipList.refresh();
       dummyShipList.getItems().forEach(shipComponent -> Logger.trace("ship: " + shipComponent));
+      dummyFleetList.refresh();
+      dummyFleetList.getItems().forEach(fleetComponent -> Logger.trace("ship: " + fleetComponent));
 
       if (graph != null) {
         return;
@@ -233,9 +235,9 @@ public class GameController implements Initializable, GamePresenter {
     fleetIDs.forEach(f -> {
       FleetComponent remFleet = fleets.get(f);
       if (remFleet != null) {
-        fleets.remove(f);
         Platform.runLater(() -> {
           map.getChildren().remove(remFleet);
+          fleets.remove(f);
         });
       }
     });
@@ -265,7 +267,6 @@ public class GameController implements Initializable, GamePresenter {
             .addMessageChat("You all failed Bob...", Channel.INFO);
       }
     }
-
   }
 
   @Override
@@ -273,8 +274,8 @@ public class GameController implements Initializable, GamePresenter {
     shipIDs.forEach(f -> {
       MotherShipComponent remShip = ships.get(f);
       if (remShip != null) {
-        ships.remove(f);
         Platform.runLater(() -> {
+          ships.remove(f);
           map.getChildren().remove(remShip);
         });
       }
@@ -286,6 +287,7 @@ public class GameController implements Initializable, GamePresenter {
     this.gameID = gameID;
   }
 
+  @Override
   public void setGameStore(GameStore gameStore) {
     this.gameStore = gameStore;
 
@@ -296,6 +298,9 @@ public class GameController implements Initializable, GamePresenter {
       MapperList<StarComponent, Star> starComponents = new MapperList<>(
           gameStore.stars().observableList(),
           star -> {
+            if (star == null) {
+              return null;
+            }
             if (stars.get(star.getID()) == null) {
               StarComponent starComponent = new StarComponent(star.getOwnerID(),
                   star.getName(),
@@ -332,7 +337,11 @@ public class GameController implements Initializable, GamePresenter {
 
           gameStore.motherShips().observableList(),
           pair -> {
+            if (pair == null) {
+              return null;
+            }
             if (ships.get(pair.getID()) == null) {
+              System.out.println("new mothership!! " + pair.getID());
               MotherShipComponent shipComponent = new MotherShipComponent(
                   pair.getValue().getCoordinates(),
                   pair.getKey(),
@@ -367,6 +376,7 @@ public class GameController implements Initializable, GamePresenter {
               return shipComponent;
 
             }
+
             MotherShipComponent shipComponent = ships.get(pair.getID());
 
             if (Math.abs(pair.getValue().getCoordinates().getX() - shipComponent.getX())
@@ -392,6 +402,9 @@ public class GameController implements Initializable, GamePresenter {
 
           gameStore.fleets().observableList(),
           pair -> {
+            if (pair == null) {
+              return null;
+            }
             if (fleets.get(pair.getID()) == null) {
               FleetComponent fleetComponent = new FleetComponent(
                   pair.getValue().getCoordinates(),
@@ -444,12 +457,25 @@ public class GameController implements Initializable, GamePresenter {
     map.getChildren().clear();
   }
 
-  public void leaveGame() {
-    gameDelegate.leaveGame();
-    fleets.clear();
-    ships.clear();
+  @Override
+  public void clearGame() {
+    Platform.runLater(() -> {
+      dummyFleetList = new ListView<>();
+      dummyShipList = new ListView<>();
+      dummyShipList = new ListView<>();
+      System.gc();
+      clearMap();
+      fleets.clear();
+      ships.clear();
+      stars.clear();
+    });
     graph = null;
     gameID = null;
+  }
+
+  public void leaveGame() {
+    gameDelegate.leaveGame();
+    clearGame();
     Logger.debug("END GAME GOT CALLED!!");
     main.onMapCloseHandle();
   }

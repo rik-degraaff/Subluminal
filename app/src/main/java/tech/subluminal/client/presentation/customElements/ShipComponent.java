@@ -71,6 +71,10 @@ public abstract class ShipComponent extends Pane {
     setY(coordinates.getY());
 
     Platform.runLater(() -> {
+      if (getScene() == null) {
+        return;
+      }
+
       this.parentWidthProperty.bind(getScene().widthProperty());
       this.parentHeightProperty.bind(getScene().heightProperty());
 
@@ -79,7 +83,8 @@ public abstract class ShipComponent extends Pane {
                   .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue()),
               xProperty(), parentWidthProperty, parentHeightProperty));
       this.layoutYProperty().bind(Bindings
-          .createDoubleBinding(() -> parentHeightProperty.doubleValue() / 2 + (getY() - 0.5) * Math
+          .createDoubleBinding(
+              () -> parentHeightProperty.doubleValue() / 2 + (getY() - 0.5) * Math
                   .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue()),
               yProperty(), parentWidthProperty, parentHeightProperty));
     });

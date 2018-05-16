@@ -3,13 +3,19 @@ package tech.subluminal.shared.stores;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.collections.transformation.FilteredList;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.shared.stores.records.Identifiable;
 import tech.subluminal.shared.util.MapperList;
 import tech.subluminal.shared.util.StoredSynchronized;
@@ -21,19 +27,26 @@ public class IdentifiableCollection<E extends Identifiable> implements
 
   protected final Synchronized<ObservableMap<String, Synchronized<E>>> syncMap;
 
-  private final ObservableList<String> observableList = FXCollections.observableArrayList();
+  private final ObservableList<E> observableList = FXCollections.observableArrayList();
+  private final ConcurrentMap<String, E> indexMap = new ConcurrentHashMap<>();
 
   public IdentifiableCollection() {
     ObservableMap<String, Synchronized<E>> obsMap = FXCollections.observableHashMap();
     obsMap.addListener((MapChangeListener<String, Synchronized<E>>) change -> {
       String key = change.getKey();
+      Optional<E> value = Optional.ofNullable(change.getValueAdded())
+          .map(added -> added.use(Function.identity()));
       ThreadUtils.runSafly(() -> {
         synchronized (observableList) {
           if (change.wasRemoved()) {
-            observableList.remove(key);
+            observableList.remove(indexMap.get(key));
+            indexMap.remove(key);
           }
           if (change.wasAdded()) {
-            observableList.add(key);
+            value.ifPresent(v -> {
+              indexMap.put(key, v);
+              observableList.add(v);
+            });
           }
         }
       });
@@ -46,11 +59,15 @@ public class IdentifiableCollection<E extends Identifiable> implements
    */
   @Override
   public ObservableList<E> observableList() {
-    return new MapperList<>(observableList, key -> {
+    final MapperList<E, E> mapperList = new MapperList<>(observableList, entry -> {
       synchronized (observableList) {
-        return getByID(key).get().use(e -> e);
+        return getByID(entry.getID()).map(s -> s.use(e -> e)).orElse(entry);
       }
     });
+
+    FilteredList<E> filteredList = new FilteredList<>(mapperList);
+    filteredList.setPredicate(Objects::nonNull);
+    return filteredList;
   }
 
   /**
@@ -109,8 +126,15 @@ public class IdentifiableCollection<E extends Identifiable> implements
   protected Synchronized<Collection<Synchronized<E>>> getWithPredicate(Predicate<E> predicate) {
     return syncMap.map(map ->
         map.values().stream()
-            .filter(syncUser -> syncUser.use(u -> predicate.test(u)))
+            .filter(syncUser -> syncUser.use(predicate::test))
             .collect(Collectors.toCollection(ArrayList::new))
     );
+  }
+
+  /**
+   * Clears the contents of the IdentifiableCollection.
+   */
+  public void clear() {
+    syncMap.consume(Map::clear);
   }
 }

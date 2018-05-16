@@ -89,7 +89,7 @@ public class EndGameComponent extends HBox {
     Label backToLobby = new Label("Back to Lobby");
     box.getChildren().add(backToLobby);
     backToLobby.setOnMouseClicked(event -> {
-      main.onMapCloseHandle();
+      main.getGameController().leaveGame();
     });
   }
 

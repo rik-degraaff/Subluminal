@@ -1,9 +1,12 @@
 package tech.subluminal.server.logic;
 
 import java.util.Collection;
+import java.util.Optional;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.son.SONConverter;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
@@ -57,10 +60,20 @@ public interface MessageDistributor {
   void addConnectionClosedListener(Consumer<String> listener);
 
   /**
-   * Allows user of this class to react to a new connection being created.
+   * Allows users of this class to react to a new connection being created.
    *
    * @param listener a function which takes a connectionID and a connection and does something with
    * it.
    */
   void addConnectionOpenedListener(BiConsumer<String, Connection> listener);
+
+  /**
+   * Allows users of this class to react to a connection trying to log in various ways.
+   *
+   * @param type The message type which is to be regarded as a login message.
+   * @param converter a function that can convert a SON object to an object of the specified message type.
+   * @param handler the handler which should be called if a message of this type is received.
+   */
+  <T extends SONRepresentable> void addLoginHandler(Class<T> type, SONConverter<T> converter,
+      BiFunction<T, Connection, Optional<String>> handler);
 }
