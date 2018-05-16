@@ -478,12 +478,12 @@ public class GameController implements Initializable, GamePresenter {
   @Override
   public void addToast(String message) {
     ToastComponent toast = new ToastComponent(message);
-    toastDock.getChildren().clear();
     Platform.runLater(() -> {
+      toastDock.getChildren().clear();
       toastDock.getChildren().add(toast);
 
       PauseTransition pause = new PauseTransition();
-      pause.setDuration(Duration.seconds(7));
+      pause.setDuration(Duration.seconds(1 + message.length() / 10.0));
       pause.setOnFinished(e -> {
         FadeTransition fade = new FadeTransition();
         fade.setFromValue(1);

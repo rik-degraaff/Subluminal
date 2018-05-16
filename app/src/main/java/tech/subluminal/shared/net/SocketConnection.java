@@ -65,7 +65,6 @@ public class SocketConnection implements Connection {
           //wrong format
           System.out.println("Parsing of " + e.getMessage() + "failed"); //TODO: log better
         } catch (NoSuchElementException e) {
-          e.printStackTrace();
           System.out.println("Socket was forcefully closed.");
           stop = true;
           //System.exit(0); //FIXME: cleaner way
