@@ -5,41 +5,44 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Represents a login request from client to server. This message, when converted to SON and then to
- * string, might look like this:
- * <pre>
- * {
- *   "username":s"Bob"
- * }
- * </pre>
+ * Represents a reconnect request from client to server.
  */
-public class LoginReq implements SONRepresentable {
+public class ReconnectReq implements SONRepresentable {
 
   public static final String USERNAME_KEY = "username";
+  public static final String ID_KEY = "id";
+
   private String username;
+  private String id;
 
   /**
-   * Creates a login request for the specified user.
+   * Creates a reconnect request for the specified user.
    *
-   * @param username for the login request.
+   * @param username for the reconnect request.
+   * @param id for the reconnect request.
    */
-  public LoginReq(String username) {
+  public ReconnectReq(String username, String id) {
     this.username = username;
+    this.id = id;
   }
 
   /**
-   * Creates a login request from a SON object.
+   * Creates a reconnect request from a SON object.
    *
    * @param son the SON object to be converted to a login request.
-   * @return the created login request.
+   * @return the created reconnect request.
    * @throws SONConversionError when the conversion fails.
    */
-  public static LoginReq fromSON(SON son) throws SONConversionError {
+  public static ReconnectReq fromSON(SON son) throws SONConversionError {
     String username = son.getString(USERNAME_KEY)
         .orElseThrow(() -> new SONConversionError(
-            "Login Request did not contain valid " + USERNAME_KEY + "."));
+            "Reconnect Request did not contain valid " + USERNAME_KEY + "."));
 
-    return new LoginReq(username);
+    String id = son.getString(ID_KEY)
+        .orElseThrow(() -> new SONConversionError(
+            "Reconnect Request did not contain valid " + ID_KEY + "."));
+
+    return new ReconnectReq(username, id);
   }
 
   /**
@@ -61,6 +64,15 @@ public class LoginReq implements SONRepresentable {
   }
 
   /**
+   * Gets the id from the request.
+   *
+   * @return the requested client id.
+   */
+  public String getID() {
+    return id;
+  }
+
+  /**
    * Creates a SON object representing this login request.
    *
    * @return the SON representation.
@@ -68,6 +80,7 @@ public class LoginReq implements SONRepresentable {
   @Override
   public SON asSON() {
     return new SON()
-        .put(username, USERNAME_KEY);
+        .put(username, USERNAME_KEY)
+        .put(id, ID_KEY);
   }
 }

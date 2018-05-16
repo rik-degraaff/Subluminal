@@ -9,6 +9,24 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONList;
 import tech.subluminal.shared.son.SONRepresentable;
 
+/**
+ * Represents an answer to a highscore request and contains the highscore in form of a list. A
+ * HighScoreRes message, converted to SON and then to string, might look like this:
+ * <pre>
+ * {
+ *   "highScores":l[
+ *     o{
+ *       "score":d19.0,
+ *       "username":s"Ana"
+ *     },
+ *     o{
+ *        "score":d13.0,
+ *        "username":s"Sofia"
+ *     }
+ *   ]
+ * }
+ * </pre>
+ */
 public class HighScoreRes implements SONRepresentable {
 
   private List<HighScore> highScores;

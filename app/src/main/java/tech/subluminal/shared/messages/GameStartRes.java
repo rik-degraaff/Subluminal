@@ -10,7 +10,7 @@ import tech.subluminal.shared.son.SONRepresentable;
 
 /**
  * Represents the response of the server to a game start request from the client. A GameStartRes
- * message might look like this:
+ * message, converted to SON and then to string, might look like this:
  * <pre>
  * {
  *   "playerColors":l[

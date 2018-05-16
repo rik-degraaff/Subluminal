@@ -11,6 +11,9 @@ import tech.subluminal.shared.stores.records.Identifiable;
 import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.Ship;
 
+/**
+ * Represents a player in a game with all fleets and a mother ship.
+ */
 public class Player extends Identifiable {
 
   private final double lightSpeed;
@@ -38,14 +41,25 @@ public class Player extends Identifiable {
     this.motherShip.add(new GameHistoryEntry<>(motherShip));
   }
 
+  /**
+   * @return the game history with all past mother ship states.
+   */
   public GameHistory<Ship> getMotherShip() {
     return motherShip;
   }
 
+  /**
+   * @return a collection of game histories with all past fleet states.
+   */
   public Map<String, GameHistory<Fleet>> getFleets() {
     return fleets;
   }
 
+  /**
+   * Adds or updates a fleet for this player, creates a new game history if necessary.
+   *
+   * @param fleet the fleet to add or update.
+   */
   public void updateFleet(Fleet fleet) {
     GameHistory<Fleet> fleetGameHistory = getFleets().get(fleet.getID());
     if (fleetGameHistory == null) {
@@ -56,19 +70,38 @@ public class Player extends Identifiable {
     }
   }
 
+  /**
+   * @return true is the player is still contending in the game.
+   */
   public boolean isAlive() {
     return alive;
   }
 
+  /**
+   * Sets the alive status of the player to false.
+   */
   public void kill() {
     alive = false;
   }
 
+  /**
+   * @return true if the player has left the game.
+   */
   public boolean hasLeft() {
     return hasLeft;
   }
 
+  /**
+   * Sets the hasLeft state of the player to true.
+   */
   public void leave() {
     hasLeft = true;
+  }
+
+  /**
+   * Sets the hasLeft state of the player to false.
+   */
+  public void join() {
+    hasLeft = false;
   }
 }

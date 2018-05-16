@@ -1,5 +1,7 @@
 package tech.subluminal.server.logic.game;
 
+import static tech.subluminal.shared.util.ColorUtils.getNiceColors;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -12,6 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import javafx.scene.paint.Color;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.server.logic.MessageDistributor;
 import tech.subluminal.server.stores.GameStore;
@@ -28,6 +31,7 @@ import tech.subluminal.shared.messages.EndGameRes;
 import tech.subluminal.shared.messages.FleetMoveReq;
 import tech.subluminal.shared.messages.GameLeaveReq;
 import tech.subluminal.shared.messages.GameLeaveRes;
+import tech.subluminal.shared.messages.GameStartRes;
 import tech.subluminal.shared.messages.GameStateDelta;
 import tech.subluminal.shared.messages.HighScoreReq;
 import tech.subluminal.shared.messages.HighScoreRes;
@@ -71,6 +75,7 @@ public class GameManager implements GameStarter {
     this.gameLoopProvider = gameLoopProvider;
 
     distributor.addConnectionOpenedListener(this::attachHandlers);
+    distributor.addConnectionOpenedListener((id, c) -> userConnected(id));
   }
 
   private void attachHandlers(String id, Connection connection) {
@@ -85,29 +90,68 @@ public class GameManager implements GameStarter {
   }
 
   private void onLeaveGame(GameLeaveReq req, String id) {
-    lobbyStore.lobbies()
+    getGameWithUser(id).ifPresent(sync -> sync.consume(state -> {
+      final Player player = state.getPlayers().get(id);
+      final GameHistory<Ship> motherShip = player.getMotherShip();
+      motherShip.add(GameHistoryEntry.destroyed(motherShip.getCurrent().getState()));
+      player.leave();
+      lobbyStore.lobbies()
+          .getByID(state.getID())
+          .ifPresent(syncLobby -> {
+            syncLobby.consume(lobby -> {
+              lobby.removePlayer(id);
+              distributor.sendMessage(new LobbyUpdateRes(lobby), lobby.getPlayers());
+            });
+          });
+    }));
+    distributor.sendMessage(new GameLeaveRes(), id);
+  }
+
+  private void userConnected(String id) {
+    getGameWithUser(id).ifPresent(sync -> sync.consume(state -> {
+      final Map<String, Player> players = state.getPlayers();
+      final Player player = players.get(id);
+      final GameHistoryEntry<Ship> motherShipEntry = player.getMotherShip().getCurrent();
+      if (player.isAlive() && !motherShipEntry.isDestroyed()) {
+        List<Color> colors = getNiceColors(players.size());
+        int i = 0;
+        Map<String, Color> playerColors = new HashMap<>();
+        for (String p : players.values().stream().map(Player::getID).collect(Collectors.toList())) {
+          playerColors.put(p, colors.get(i));
+          i++;
+        }
+        distributor.sendMessage(new GameStartRes(state.getID(), playerColors), id);
+        player.join();
+        GameStateDelta delta = new GameStateDelta();
+        delta.addPlayer(createInitialPlayerDelta(Optional.of(motherShipEntry.getState()), player, id));
+        players.keySet()
+            .stream()
+            .filter(playerID -> !playerID.equals(id))
+            .map(players::get)
+            .map(otherPlayer -> createInitialPlayerDelta(
+                otherPlayer.getMotherShip().getLastForPlayer(id).left(), otherPlayer, id
+            ))
+            .forEach(delta::addPlayer);
+
+        state.getStars()
+            .values()
+            .stream()
+            .map(history -> history.getLastForPlayer(id).left())
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .forEach(delta::addStar);
+
+        distributor.sendMessage(delta, id);
+      }
+    }));
+  }
+
+  private Optional<Synchronized<GameState>> getGameWithUser(String id) {
+    return lobbyStore.lobbies()
         .getLobbiesWithUser(id)
         .use(l -> l.stream().map(s -> s.use(Lobby::getID)))
         .findFirst()
-        .flatMap(gameID -> gameStore.games().getByID(gameID))
-        .ifPresent(sync -> {
-          sync.consume(state -> {
-            final Player player = state.getPlayers().get(id);
-            final GameHistory<Ship> motherShip = player.getMotherShip();
-            motherShip.add(GameHistoryEntry.destroyed(motherShip.getCurrent().getState()));
-            player.leave();
-            lobbyStore.lobbies()
-                .getByID(state.getID())
-                .ifPresent(syncLobby -> {
-                  syncLobby.consume(lobby -> {
-                    lobby.removePlayer(id);
-                    distributor.sendMessage(new LobbyUpdateRes(lobby), lobby.getPlayers());
-                  });
-                });
-          });
-        });
-    distributor.sendMessage(new GameLeaveRes(), id);
-    System.out.println("Distributed " + id);
+        .flatMap(gameID -> gameStore.games().getByID(gameID));
   }
 
   private void onHighScoreReq(String id) {
@@ -230,12 +274,31 @@ public class GameManager implements GameStarter {
 
       if (livingPlayers.size() <= 1) {
         String winner = livingPlayers.size() == 1 ? livingPlayers.get(0).getID() : null;
-        distributor.sendMessage(new EndGameRes(gameState.getID(), winner), gameState.getPlayers().keySet());
+        distributor.sendMessage(new EndGameRes(gameState.getID(), winner),
+            gameState.getPlayers().keySet());
         gameThreads.remove(gameState.getID());
         return true;
       }
     }
     return false;
+  }
+
+  private tech.subluminal.client.stores.records.game.Player createInitialPlayerDelta(
+      Optional<Ship> motherShip, Player player, String forPlayerID
+  ) {
+    tech.subluminal.client.stores.records.game.Player playerDelta =
+        new tech.subluminal.client.stores.records.game.Player(player.getID(), motherShip,
+            new LinkedList<>());
+
+    player.getFleets()
+        .values()
+        .stream()
+        .map(history -> history.getLastForPlayer(forPlayerID).left())
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .forEach(playerDelta.getFleets()::add);
+
+    return playerDelta;
   }
 
   private tech.subluminal.client.stores.records.game.Player createPlayerDelta(

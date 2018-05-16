@@ -7,16 +7,13 @@ import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONParsingError;
 
-public class LobbyListReqTest {
+public class YouLoseTest {
 
   @Test
   public void testStringifyAndParsing() throws SONParsingError, SONConversionError {
-    LobbyListReq lobbyListReq = new LobbyListReq();
-    LobbyListReq parsedLobbyListReq = null;
-
-    parsedLobbyListReq = LobbyListReq.fromSON(SON.parse(lobbyListReq.asSON().asString()));
-
-    assertNotNull(parsedLobbyListReq);
-    System.out.println(lobbyListReq.asSON().asString());
+    YouLose youLose = new YouLose();
+    YouLose parsedYouLose = YouLose.fromSON(SON.parse(youLose.asSON().asString()));
+    assertNotNull(parsedYouLose);
+    System.out.println(youLose.asSON().asString());
   }
 }
