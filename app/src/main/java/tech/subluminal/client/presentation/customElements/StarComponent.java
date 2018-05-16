@@ -21,6 +21,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import tech.subluminal.client.presentation.controller.MainController;
 import tech.subluminal.shared.stores.records.game.Coordinates;
+import tech.subluminal.shared.util.DrawingUtils;
 
 public class StarComponent extends Group {
 
@@ -57,23 +58,12 @@ public class StarComponent extends Group {
 
     setColor(Color.GRAY);
 
-    this.layoutXProperty().bind(Bindings
-        .createDoubleBinding(
-            () -> parentWidthProperty.doubleValue() / 2 + (xProperty.doubleValue() - 0.5) * Math
-                .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue()),
-            xProperty, parentWidthProperty, parentHeightProperty));
-    this.layoutYProperty().bind(Bindings
-        .createDoubleBinding(
-            () -> parentHeightProperty.doubleValue() / 2 + (yProperty.doubleValue() - 0.5) * Math
-                .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue()),
-            yProperty, parentWidthProperty, parentHeightProperty));
     Platform.runLater(() -> {
-      if (getScene() == null) {
-        return;
-      }
+      parentHeightProperty.bind(getScene().heightProperty());
+      parentWidthProperty.bind(getScene().widthProperty());
 
-      this.parentWidthProperty.bind(main.getPlayArea().widthProperty());
-      this.parentHeightProperty.bind(main.getPlayArea().heightProperty());
+      this.layoutXProperty().bind(DrawingUtils.getXPosition(main.getPlayArea(),xProperty));
+      this.layoutYProperty().bind(DrawingUtils.getYPosition(main.getPlayArea(),yProperty));
     });
 
     this.name = name;

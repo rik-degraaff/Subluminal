@@ -11,12 +11,20 @@ import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.PerspectiveTransform;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
@@ -164,6 +172,17 @@ public class MainController implements Initializable {
     clipNode.widthProperty().bind(playArea.widthProperty());
     clipNode.heightProperty().bind(playArea.heightProperty());
     playArea.setClip(clipNode);
+
+    playArea.setBackground(new Background(
+        new BackgroundImage(new Image("/tech/subluminal/resources/Pixel_Overlay.png"),
+            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+            BackgroundSize.DEFAULT)));
+
+    DropShadow ds = new DropShadow();
+    ds.setOffsetY(5.0);
+    ds.setOffsetX(5.0);
+    ds.setColor(Color.WHITE);
+    //glassPane.setEffect(ds);
 
     chat = new ChatComponent(this);
     chatController = chat.getChatcontroller();
