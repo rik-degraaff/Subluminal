@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.application.Application;
+import javax.sound.midi.Soundbank;
 import org.pmw.tinylog.Configurator;
 import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
@@ -149,24 +150,31 @@ public class Subluminal {
   }
 
   private static void initClient(String host, int port, String username, boolean debug) {
-    if (port >= 1024 && port < 65535) {
+    if (port >= 1 && port <= 1024) {
+      System.out.println(printASCII("Client (root)"));
+      Application.launch(ClientInitializer.class, host, Integer.toString(port), username,
+          String.valueOf(debug));
+    } else if (port > 1024 && port < 65535) {
       System.out.println(printASCII("Client"));
       Application.launch(ClientInitializer.class, host, Integer.toString(port), username,
           String.valueOf(debug));
     } else {
-      Logger.error("Port must be between 1024 and 65535.");
-      System.out.printf("Port must be between 1024 and 65535.");
+      Logger.error("Port must be between 0 and 65535.");
+      System.out.printf("Port must be between 0 and 65535.");
       System.exit(1);
     }
   }
 
   private static void initServer(int port, boolean debug) {
-    if (port >= 1024 && port < 65535) {
+    if (port >= 1 && port <= 1024) {
+      System.out.println(printASCII("Server (root)"));
+      ServerInitializer.init(port, debug);
+    } else if (port > 1024 && port < 65535) {
       System.out.println(printASCII("Server"));
       ServerInitializer.init(port, debug);
     } else {
-      Logger.error("Port must be between 1024 and 65535.");
-      System.out.printf("Port must be between 1024 and 65535.");
+      Logger.error("Port must be between 0 and 65535.");
+      System.out.printf("Port must be between 0 and 65535.");
       System.exit(1);
     }
   }

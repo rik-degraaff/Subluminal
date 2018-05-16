@@ -15,3 +15,4 @@ ADD ./app/build/libs/Subluminal-$VERSION.jar /opt/lib/subluminal
 EXPOSE $PORT
 
 ENTRYPOINT java -jar Subluminal-$VERSION.jar server $PORT
+CMD [--loglevel=info --logfile=log/log.txt]
