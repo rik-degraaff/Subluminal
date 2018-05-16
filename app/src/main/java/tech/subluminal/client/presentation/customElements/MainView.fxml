@@ -46,7 +46,7 @@
                   <children>
                     <VBox alignment="CENTER" GridPane.columnIndex="1">
                       <children>
-                        <HBox>
+                        <HBox alignment="CENTER_RIGHT">
                           <children>
                             <AnchorPane fx:id="chatDock">
                               <VBox.margin>
@@ -58,7 +58,7 @@
                         </HBox>
                       </children>
                     </VBox>
-                    <HBox alignment="CENTER">
+                    <HBox alignment="CENTER_LEFT">
                       <children>
                         <VBox alignment="CENTER">
                           <children>
@@ -71,7 +71,7 @@
                                 <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
                               </rowConstraints>
                               <children>
-                                <GridPane fx:id="buttonsDock">
+                                <GridPane fx:id="buttonsDock" style="-fx-background-color: red;">
                                   <columnConstraints>
                                     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                   </columnConstraints>
