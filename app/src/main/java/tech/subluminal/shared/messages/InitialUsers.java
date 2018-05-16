@@ -9,7 +9,26 @@ import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.User;
 
 /**
- * Represents the initial users connected to the server.
+ * Represents the initial users connected to the server. This message, when converted to SON and
+ * then to string, might look like this:
+ * <pre>
+ * {
+ *   "users":l[
+ *     o{
+ *       "username":s"sölkdfa",
+ *       "identifiable":o{
+ *         "id":s"2917"
+ *       }
+ *     },
+ *     o{
+ *       "username":s"asdöflkj",
+ *       "identifiable":o{
+ *         "id":s"049851"
+ *       }
+ *     }
+ *   ]
+ * }
+ * </pre>
  */
 public class InitialUsers implements SONRepresentable {
 

@@ -4,7 +4,11 @@ import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * A message that is sent from the server to the client when the client loses in a game.
+ * A message that is sent from the server to the client when the particular player loses in a game.
+ * This message, when converted to SON and then to string, looks like this:
+ * <pre>
+ * {}
+ * </pre>
  */
 public class YouLose implements SONRepresentable {
 

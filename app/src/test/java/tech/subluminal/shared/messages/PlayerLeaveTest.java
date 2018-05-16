@@ -20,15 +20,11 @@ public class PlayerLeaveTest {
   }
 
   @Test
-  public void testParsing() {
+  public void testParsing() throws SONParsingError, SONConversionError {
     String playerLeaveMsg = this.playerLeave.asSON().asString();
     String parsedID = "";
-    try {
-      PlayerLeave parsedPlayerLeave = PlayerLeave.fromSON(SON.parse(playerLeaveMsg));
-      parsedID = parsedPlayerLeave.getId();
-    } catch (SONConversionError | SONParsingError e) {
-      e.printStackTrace();
-    }
+    PlayerLeave parsedPlayerLeave = PlayerLeave.fromSON(SON.parse(playerLeaveMsg));
+    parsedID = parsedPlayerLeave.getId();
 
     Assert.assertEquals(this.ID, parsedID);
     System.out.println(playerLeaveMsg);
@@ -42,7 +38,6 @@ public class PlayerLeaveTest {
     try {
       PlayerLeave parsedPlayerLeave = PlayerLeave.fromSON(SON.parse(faultyPlayerLeaveMsg));
     } catch (SONConversionError | SONParsingError e) {
-      e.printStackTrace();
       IDSuccessfullyParsed = false;
     }
 

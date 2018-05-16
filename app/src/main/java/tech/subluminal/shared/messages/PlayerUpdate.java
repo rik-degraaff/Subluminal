@@ -5,7 +5,14 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Updates player usernames.
+ * Updates player usernames. This message, when converted to SON and then to string, might look like
+ * this:
+ * <pre>
+ * {
+ *   "id":s"007",
+ *   "username":s"Rik"
+ * }
+ * </pre>
  */
 public class PlayerUpdate implements SONRepresentable {
 

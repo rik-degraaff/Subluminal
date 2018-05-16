@@ -6,7 +6,17 @@ import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONConversionError;
 
 /**
- * Represents the move request of a mothership.
+ * Represents the request from a client to the server to move the mothership. This message, when
+ * converted to SON and then to string, might look like this:
+ * <pre>
+ * {
+ *   "starList":l[
+ *     s"9876",
+ *     s"8765",
+ *     s"7654"
+ *   ]
+ * }
+ * </pre>
  */
 public class MotherShipMoveReq extends MoveReq {
 
