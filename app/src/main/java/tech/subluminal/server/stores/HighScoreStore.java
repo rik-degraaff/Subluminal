@@ -2,6 +2,7 @@ package tech.subluminal.server.stores;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,38 +13,53 @@ import tech.subluminal.shared.son.SONParsingError;
 import tech.subluminal.shared.util.RemoteSynchronized;
 import tech.subluminal.shared.util.Synchronized;
 
+/**
+ * A Store which contains the high scores stored in a file.
+ */
 public class HighScoreStore {
+
+  private static final String HIGHSCORES_PATH = "./files/highscores.son";
 
   private final Synchronized<List<HighScore>> highScores = new RemoteSynchronized<>(
       HighScoreStore::getHighScoresFromFile,
       HighScoreStore::writeHighscoresToFile);
 
   private static List<HighScore> getHighScoresFromFile() {
-    Scanner sc = new Scanner(
-        HighScoreStore.class.getResourceAsStream("/tech/subluminal/resources/highscores.son"));
-
     List<HighScore> list = new LinkedList<>();
 
-    while (sc.hasNext()) {
-      try {
-        HighScore.fromSON(SON.parse(sc.next())).ifPresent(list::add);
-      } catch (SONParsingError sonParsingError) {
-        sonParsingError.printStackTrace(); // TODO: handle this
+    try {
+      Scanner sc = new Scanner(new File(HIGHSCORES_PATH));
+      while (sc.hasNext()) {
+        try {
+          HighScore.fromSON(SON.parse(sc.next())).ifPresent(list::add);
+        } catch (SONParsingError sonParsingError) {
+          // ignore improperly formatted lines
+        }
       }
+    } catch (FileNotFoundException e) {
+      // if the file doesn't exist, we just return nothing
     }
 
     return list;
   }
 
   private static void writeHighscoresToFile(List<HighScore> highScores) {
-    File file = new File(
-        HighScoreStore.class.getResource("/tech/subluminal/resources/highscores.son").getPath());
-
+    File file = new File(HIGHSCORES_PATH);
     try {
-      new PrintWriter(file).print(highScores.stream().map(hs -> hs.asSON().asString())
-          .reduce("", (acc, s) -> acc + System.lineSeparator() + s));
-    } catch (FileNotFoundException e) {
-      e.printStackTrace(); // TODO: handle this more graciously
+      if (!file.exists()) {
+        file.getParentFile().mkdirs();
+        file.createNewFile();
+      }
+
+      final String scores = highScores.stream()
+          .map(hs -> hs.asSON().asString())
+          .reduce("", (acc, s) -> acc + System.lineSeparator() + s);
+
+      final PrintWriter pw = new PrintWriter(file);
+      pw.print(scores);
+      pw.close();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
   }
 
