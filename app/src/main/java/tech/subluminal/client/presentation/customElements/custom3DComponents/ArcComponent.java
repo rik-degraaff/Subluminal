@@ -1,92 +1,40 @@
 package tech.subluminal.client.presentation.customElements.custom3DComponents;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Box;
+import javafx.scene.shape.MeshView;
+import javafx.scene.transform.Rotate;
+import tech.subluminal.shared.util.MeshImporter;
 
-/**
- * 3D Model of the arc which holds the glass of the spaceship
- */
 public class ArcComponent extends Group {
 
-  private final DoubleProperty height = new SimpleDoubleProperty();
-  private final DoubleProperty width = new SimpleDoubleProperty();
-  private final DoubleProperty depth = new SimpleDoubleProperty();
-  private static final double DEFAULT_HEIGHT = 500;
-  private static final double DEFAULT_WIDTH = 100;
-  private static final double DEFAULT_DEPTH = 200;
+  private static final double MODEL_SCALE_FACTOR = 60;
+  private static final double MODEL_X_OFFSET = 0; // standard
+  private static final double MODEL_Y_OFFSET = 0; // standard
+  private static final int VIEWPORT_SIZE = 200;
 
+  private static final String MESH_FILENAME =
+      "/tech/subluminal/resources/3D/test.stl";
 
-  public ArcComponent(){
-    setHeight(DEFAULT_HEIGHT);
-    setWidth(DEFAULT_WIDTH);
-    setDepth(DEFAULT_DEPTH);
+  public ArcComponent() {
+    //System.out.println(getClass().getResource(MESH_FILENAME).toURI());
 
+    MeshView meshView = MeshImporter.importMesh(MESH_FILENAME);
 
+    meshView.setTranslateX(VIEWPORT_SIZE / 2 + MODEL_X_OFFSET + 50);
+    meshView.setTranslateY(VIEWPORT_SIZE / 2 + MODEL_Y_OFFSET - 300);
+    //meshView.setTranslateZ(-50);
 
-    Box downBox = new Box();
-    //downBox.setRotate(90);
+    meshView.setScaleX(MODEL_SCALE_FACTOR);
+    meshView.setScaleY(MODEL_SCALE_FACTOR);
+    meshView.setScaleZ(MODEL_SCALE_FACTOR * 1.25);
 
-    Box upBox = new Box();
-    //upBox.setRotate(90);
+    PhongMaterial material = new PhongMaterial(Color.DARKSLATEBLUE);
+    //meshView.setRotate(90);
+    this.getTransforms().addAll(new Rotate(90, Rotate.Z_AXIS), new Rotate(90, Rotate.Y_AXIS));
 
-    downBox.heightProperty().bind(Bindings.createDoubleBinding(() -> 1/3 * getHeight(), heightProperty()));
-    downBox.widthProperty().bind(widthProperty());
-
-    upBox.heightProperty().bind(Bindings.createDoubleBinding(() -> 2/3 * getHeight(), heightProperty()));
-    upBox.widthProperty().bind(widthProperty());
-
-
-    //downBox.depthProperty().bind(depthProperty());
-    upBox.depthProperty().bind(depthProperty());
-
-
-    PhongMaterial material = new PhongMaterial(Color.GREY);
-    //downBox.setMaterial(material);
-    //upBox.setMaterial(material);
-
-
-    this.getChildren().addAll(downBox,upBox);
-
-  }
-
-  public double getWidth() {
-    return width.get();
-  }
-
-  public DoubleProperty widthProperty() {
-    return width;
-  }
-
-  public void setWidth(double width) {
-    this.width.set(width);
-  }
-
-  public double getHeight() {
-    return height.get();
-  }
-
-  public DoubleProperty heightProperty() {
-    return height;
-  }
-
-  public void setHeight(double height) {
-    this.height.set(height);
-  }
-
-  public double getDepth() {
-    return depth.get();
-  }
-
-  public DoubleProperty depthProperty() {
-    return depth;
-  }
-
-  public void setDepth(double depth) {
-    this.depth.set(depth);
+    this.getChildren().addAll(meshView);
+    meshView.setMaterial(material);
   }
 }

@@ -144,6 +144,7 @@ public class ClientInitializer extends Application {
 
     PerspectiveCamera camera = new PerspectiveCamera();
     primaryStage.getScene().setCamera(camera);
+    //camera.setTranslateZ(-1000);
 
 
     String[] cmd = getParameters().getRaw().toArray(new String[4]);

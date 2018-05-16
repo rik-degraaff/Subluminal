@@ -37,7 +37,7 @@ import tech.subluminal.client.presentation.customElements.NameChangeComponent;
 import tech.subluminal.client.presentation.customElements.SettingsComponent;
 import tech.subluminal.client.presentation.customElements.UserListComponent;
 import tech.subluminal.client.presentation.customElements.WindowContainerComponent;
-import tech.subluminal.client.presentation.customElements.custom3DComponents.TestComponent;
+import tech.subluminal.client.presentation.customElements.custom3DComponents.CockpitComponent;
 import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.server.stores.records.HighScore;
@@ -101,6 +101,12 @@ public class MainController implements Initializable {
   @FXML
   private AnchorPane arcRightDock;
 
+  @FXML
+  private AnchorPane leverDock;
+
+  @FXML
+  private AnchorPane cockpitDock;
+
   private GameComponent game;
 
   private UserStore userStore;
@@ -150,25 +156,9 @@ public class MainController implements Initializable {
   public void initialize(URL location, ResourceBundle resources) {
     background = new BackgroundComponent(1000);
     spaceBackgroundDock.getChildren().add(background);
-    //ArcComponent leftArc = new ArcComponent();
-    //leftArc.heightProperty().bind(window.heightProperty());
-    /*Box leftArc = new Box(50, 100, 10);
-    leftArc.heightProperty().bind(window.heightProperty());
-    arcLeftDock.getChildren().addAll(leftArc);
-    leftArc.translateYProperty()
-        .bind(Bindings.createDoubleBinding(() -> window.getHeight() / 2, window.heightProperty()));*/
 
-    TestComponent leftArc = new TestComponent();
-    leftArc.translateYProperty().bind(Bindings.createDoubleBinding(() -> window.getHeight()/2, window.heightProperty()));
-    leftArc.getTransforms().addAll(new Rotate(30));
-    arcLeftDock.getChildren().addAll(leftArc);
-
-
-    TestComponent rightArc = new TestComponent();
-    rightArc.translateYProperty().bind(Bindings.createDoubleBinding(() -> window.getHeight()/2, window.heightProperty()));
-    rightArc.getTransforms().addAll(new Rotate(-30));
-    arcRightDock.getChildren().addAll(rightArc);
-
+    CockpitComponent cockpit = new CockpitComponent();
+    cockpitDock.getChildren().addAll(cockpit);
 
     Rectangle clipNode = new Rectangle();
     clipNode.widthProperty().bind(playArea.widthProperty());
@@ -178,6 +168,11 @@ public class MainController implements Initializable {
     chat = new ChatComponent(this);
     chatController = chat.getChatcontroller();
     chatDock.getChildren().add(chat);
+
+    //LeverComponent lever = new LeverComponent();
+    //leverDock.getChildren().addAll(lever);
+    //leverDock.setBackground(new Background(new BackgroundFill(Color.RED,CornerRadii.EMPTY,Insets.EMPTY)));
+
     display = new DisplayComponent();
 
     userList = new UserListComponent(this);
