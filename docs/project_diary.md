@@ -6,6 +6,14 @@
 **LUC** = Luc Kury  
 **RIK** = Rik de Graaff
 
+### Wednesday-Tuesday, May 09th-May 15th
+- The reconnection feature was implemented. For that, a reconnect-ID is stored in Preferences.userRoot, which in Windows is the registry and in Linux the hidden files.
+- A new feature in the game logic now is: While hopping from star to star to get to a target, a player might lose a small portion of his ships due to a hopping dematerialization tick. Only the hopping player can lose ships, though. The owner of a star can never lose ships to a hopping player.
+- The colonization time now linearly decreases with the fleet size up to size 5 and decreases sublinearly (by f(size) = sqrt(size)) above the size of 5.
+- Now every player has an arrow pointing to his mothership at the beginning of a game (this feature was buggy, previsously).
+- Now, finally, the unit test code coverage is shown during the GitLab CI.
+- The GUI is starting to have 3-D effects.
+
 ### Monday-Sunday, April 30th-May 6th, 2018
 We generated a property file, for the following reasons:
 - Global adjustable settings prevent "magic numbers" in our source code.
