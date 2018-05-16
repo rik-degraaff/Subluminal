@@ -2,6 +2,7 @@ package tech.subluminal.server.logic.game;
 
 import static tech.subluminal.shared.util.ColorUtils.getNiceColors;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -21,6 +22,7 @@ import tech.subluminal.server.stores.GameStore;
 import tech.subluminal.server.stores.HighScoreStore;
 import tech.subluminal.server.stores.LobbyStore;
 import tech.subluminal.server.stores.records.GameState;
+import tech.subluminal.server.stores.records.HighScore;
 import tech.subluminal.server.stores.records.MoveRequests;
 import tech.subluminal.server.stores.records.Player;
 import tech.subluminal.server.stores.records.Signal;
