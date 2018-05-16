@@ -65,5 +65,8 @@ public class LobbyListController implements Initializable {
     lobbyDelegate.getLobbyList();
   }
 
-
+  @FXML
+  private void onTutorialStart() {
+    lobbyDelegate.startTutorial();
+  }
 }

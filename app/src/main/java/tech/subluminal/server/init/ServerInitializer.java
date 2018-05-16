@@ -9,6 +9,7 @@ import tech.subluminal.server.logic.PingManager;
 import tech.subluminal.server.logic.UserManager;
 import tech.subluminal.server.logic.game.GameManager;
 import tech.subluminal.server.logic.game.MapGeneration;
+import tech.subluminal.server.logic.game.TutorialManager;
 import tech.subluminal.server.net.SocketConnectionManager;
 import tech.subluminal.server.stores.GameStore;
 import tech.subluminal.server.stores.HighScoreStore;
@@ -51,5 +52,6 @@ public class ServerInitializer {
     GameManager gameManager = new GameManager(gameStore, lobbyStore, messageDistributor,
         highScoreStore, MapGeneration::getNewGameStateForPlayers, SleepGameLoop::new);
     new LobbyManager(lobbyStore, userStore, messageDistributor, gameManager);
+    new TutorialManager(gameManager, messageDistributor);
   }
 }

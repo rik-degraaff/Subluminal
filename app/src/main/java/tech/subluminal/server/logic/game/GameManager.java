@@ -167,15 +167,14 @@ public class GameManager implements GameStarter {
   }
 
   private void onMoveRequest(MoveReq req, String id) {
-    Optional<String> optGameID = lobbyStore.lobbies()
+    String gameID = lobbyStore.lobbies()
         .getLobbiesWithUser(id)
         .use(l -> l.stream().map(s -> s.use(Lobby::getID)))
-        .findFirst();
-    Logger.trace("MOVE REQUESTS: " + gameStore.moveRequests().getByID(optGameID.get()));
-    optGameID.ifPresent(gameID -> {
-      gameStore.moveRequests().getByID(gameID)
-          .ifPresent(sync -> sync.consume(list -> list.add(id, req)));
-    });
+        .findFirst()
+        .orElse(id);
+    Logger.trace("MOVE REQUESTS: " + gameStore.moveRequests().getByID(gameID));
+    gameStore.moveRequests().getByID(gameID)
+        .ifPresent(sync -> sync.consume(list -> list.add(id, req)));
   }
 
   /**
