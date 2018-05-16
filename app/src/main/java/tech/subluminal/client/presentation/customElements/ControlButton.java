@@ -43,7 +43,7 @@ public class ControlButton extends Group {
       box.heightProperty().bind(Bindings.createDoubleBinding(() -> {
         return parent.getHeight() / parent
             .getChildren().size() - 5;
-      }, parent.heightProperty()));
+      }, parent.heightProperty(), parent.getChildren()));
 
       button.prefWidthProperty().bind(box.widthProperty());
       button.prefHeightProperty().bind(box.heightProperty());

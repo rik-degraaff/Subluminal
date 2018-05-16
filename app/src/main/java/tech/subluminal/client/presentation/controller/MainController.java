@@ -8,10 +8,10 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -237,8 +237,25 @@ public class MainController implements Initializable {
       }
     });
 
-    Button settingB = new Button("S");
-    settingB.setOnAction((e) -> onSettingOpenHandle());
+    Button3dComponent settingB = new Button3dComponent("S");
+    settingB.setOnMouseClicked((e) -> {
+      Button3dComponent settingClose = new Button3dComponent("X");
+      settingClose.setOnMouseClicked(event -> {
+        onWindowClose();
+        event.consume();
+        buttonsDock.getChildren().remove(settingB);
+        buttonsDock.add(settingB,0,0);
+      });
+      buttonsDock.getChildren().remove(settingB);
+      buttonsDock.add(settingClose,0,0);
+      onSettingOpenHandle();
+      e.consume();
+    });
+
+    settingB.prefWidthProperty().bind(buttonsDock.widthProperty());
+    settingB.prefHeightProperty().bind(Bindings
+        .createDoubleBinding(() -> buttonsDock.getHeight() / buttonsDock.getChildren().size(),
+            buttonsDock.heightProperty(), buttonsDock.getChildren()));
     buttonsDock.add(settingB, 0, 0);
     buttonsDock.add(playerListButton, 0, 1);
     buttonsDock.add(nameChangeButton, 0, 2);
@@ -311,9 +328,9 @@ public class MainController implements Initializable {
 
     if (tempMenu != null && tempMenu.size() != 0) {
       tempMenu.forEach(menuDock.getChildren()::add);
-
+      tempMenu.clear();
       menuHolder.setMouseTransparent(false);
-    }else{
+    } else {
       menuHolder.setMouseTransparent(true);
     }
 
