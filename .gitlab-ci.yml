@@ -119,8 +119,7 @@ staging:
     - apk update
     - apk add --no-cache openssh-client sshpass bash
 #    - bash
-    - chmod +x ./docker/_build.sh ./docker/_deploy.sh
-    - ./docker/_build.sh
+    - chmod +x ./docker/_deploy.sh
     - ./docker/_deploy.sh
   tags:
     - cs108
