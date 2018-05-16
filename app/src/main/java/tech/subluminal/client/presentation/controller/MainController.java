@@ -1,17 +1,17 @@
 package tech.subluminal.client.presentation.controller;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.effect.PerspectiveTransform;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -43,6 +43,7 @@ import tech.subluminal.client.presentation.customElements.NameChangeComponent;
 import tech.subluminal.client.presentation.customElements.SettingsComponent;
 import tech.subluminal.client.presentation.customElements.UserListComponent;
 import tech.subluminal.client.presentation.customElements.WindowContainerComponent;
+import tech.subluminal.client.presentation.customElements.custom3DComponents.Button3dComponent;
 import tech.subluminal.client.presentation.customElements.custom3DComponents.CockpitComponent;
 import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.client.stores.UserStore;
@@ -50,68 +51,49 @@ import tech.subluminal.server.stores.records.HighScore;
 
 public class MainController implements Initializable {
 
+  List<Node> tempMenu = new ArrayList<>();
   @FXML
   private AnchorPane spaceBackgroundDock;
-
   @FXML
   private AnchorPane menuDock;
-
   @FXML
   private AnchorPane playArea;
-
   private BackgroundComponent background;
-
   private MenuComponent menu;
-
   private SettingsComponent settings;
-
-
   private LobbyComponent lobby;
-
   @FXML
   private WindowContainerComponent windowContainer;
-
   @FXML
   private AnchorPane window;
-
   @FXML
   private AnchorPane chatDock;
-
   @FXML
   private AnchorPane playerBoardDock;
-
   @FXML
   private VBox statusBoxDock;
-
   @FXML
   private AnchorPane boardComputer;
-
   @FXML
   private AnchorPane boardComputerWrapper;
-
   @FXML
   private Cylinder boardCylinder;
-
   @FXML
   private GridPane buttonsDock;
-
   @FXML
   private GridPane monitorDock;
-
   @FXML
   private AnchorPane glassPane;
-
   @FXML
   private AnchorPane arcLeftDock;
-
   @FXML
   private AnchorPane arcRightDock;
-
   @FXML
   private AnchorPane leverDock;
-
   @FXML
   private AnchorPane cockpitDock;
+  @FXML
+  private AnchorPane menuHolder;
 
   private GameComponent game;
 
@@ -176,7 +158,6 @@ public class MainController implements Initializable {
             BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
             BackgroundSize.DEFAULT)));
 
-
     chat = new ChatComponent(this);
     chatController = chat.getChatcontroller();
     chatDock.getChildren().add(chat);
@@ -187,21 +168,21 @@ public class MainController implements Initializable {
 
     display = new DisplayComponent();
 
-    userList = new UserListComponent(this);
-    playerListButton = new ControlButton(this, "P", userList, display);
+    userList = new UserListComponent(this, display);
+    playerListButton = new ControlButton(this, "P", userList, display, buttonsDock);
     userList.prefWidthProperty().bind(display.widthProperty());
     userList.prefHeightProperty().bind(display.heightProperty());
 
     userListController = userList.getController();
 
     nameChange = new NameChangeComponent(this);
-    nameChangeButton = new ControlButton(this, "C", nameChange, display);
+    nameChangeButton = new ControlButton(this, "C", nameChange, display, buttonsDock);
     //rightSideDock.getChildren().add(nameChangeButton);
     //rightSideDock.getChildren().add(nameChange);
 
     menu = new MenuComponent(this);
     settings = new SettingsComponent(this);
-    settingsButton = new ControlButton(this, "S", settings, display);
+    settingsButton = new ControlButton(this, "S", settings, display, buttonsDock);
     //rightSideDock.getChildren().add(settingsButton);
 
     highscore = new HighscoreComponent();
@@ -222,19 +203,6 @@ public class MainController implements Initializable {
 
     VBox debugDock = new VBox();
     window.getChildren().add(debugDock);
-
-    PerspectiveTransform perspect = new PerspectiveTransform();
-    perspect.setUlx(50);
-    perspect.setUly(10);
-    perspect.urxProperty().bind(Bindings
-        .createDoubleBinding(() -> boardComputerWrapper.getWidth() - 50,
-            boardComputer.widthProperty()));
-    perspect.setUry(10);
-
-    perspect.setLlx(0);
-    perspect.llyProperty().bind(boardComputer.heightProperty());
-    perspect.lrxProperty().bind(boardComputerWrapper.widthProperty());
-    perspect.lryProperty().bind(boardComputer.heightProperty());
 
     Rotate rotate = new Rotate(-60, 0, 0, 0, Rotate.X_AXIS);
     rotate.pivotYProperty().bind(boardComputerWrapper.heightProperty());
@@ -269,7 +237,9 @@ public class MainController implements Initializable {
       }
     });
 
-    buttonsDock.add(settingsButton, 0, 0);
+    Button settingB = new Button("S");
+    settingB.setOnAction((e) -> onSettingOpenHandle());
+    buttonsDock.add(settingB, 0, 0);
     buttonsDock.add(playerListButton, 0, 1);
     buttonsDock.add(nameChangeButton, 0, 2);
 
@@ -320,7 +290,15 @@ public class MainController implements Initializable {
   }
 
   public void onSettingOpenHandle() {
+    if (menuDock.getChildren().size() != 0) {
+      menuDock.getChildren().forEach(tempMenu::add);
+      menuDock.getChildren().clear();
+    }
     menuDock.getChildren().remove(menu);
+
+    if (menuHolder.isMouseTransparent()) {
+      menuHolder.setMouseTransparent(false);
+    }
 
     windowContainer = new WindowContainerComponent(this, settings, "Settings");
 
@@ -331,7 +309,15 @@ public class MainController implements Initializable {
   public void onWindowClose() {
     menuDock.getChildren().clear();
 
-    menuDock.getChildren().add(menu);
+    if (tempMenu != null && tempMenu.size() != 0) {
+      tempMenu.forEach(menuDock.getChildren()::add);
+
+      menuHolder.setMouseTransparent(false);
+    }else{
+      menuHolder.setMouseTransparent(true);
+    }
+
+
   }
 
   public AnchorPane getPlayArea() {
@@ -340,17 +326,21 @@ public class MainController implements Initializable {
 
   public void onMapOpenHandle() {
     Platform.runLater(() -> {
+
       menuDock.getChildren().clear();
 
-      //playArea.setMouseTransparent(false);
+      menuHolder.setMouseTransparent(true);
 
       //rightSideDock.getChildren().clear();
 
-      Button leave = new Button("X");
-      leave.setOnAction(event -> {
+      Button3dComponent leave = new Button3dComponent("LEAVE");
+      leave.setOnMouseClicked(event -> {
         gameController.leaveGame();
         Logger.debug("LEAVE PLZ");
       });
+
+      buttonsDock.addRow(3);
+      buttonsDock.add(leave, 0, 3);
       //rightSide.getChildren().add(new Label("this is a test"));
 
       chatController.setInGame(true);
@@ -361,7 +351,7 @@ public class MainController implements Initializable {
   public void onMapCloseHandle() {
     playArea.getChildren().clear();
 
-    //playArea.setMouseTransparent(true);
+    playArea.setMouseTransparent(true);
     gameController.clearMap();
     chatController.setInGame(false);
 
@@ -372,6 +362,10 @@ public class MainController implements Initializable {
     menuDock.getChildren().clear();
 
     menuDock.getChildren().add(menu);
+
+    if (menuHolder.isMouseTransparent()) {
+      menuHolder.setMouseTransparent(false);
+    }
   }
 
   public void onLobbyCreateHandle() {

@@ -5,14 +5,10 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -30,26 +26,24 @@ public class ControlButton extends Group {
   MainController main;
   private boolean isOpen;
 
-  public ControlButton(MainController main, String label, Node node, Node parent) {
+  public ControlButton(MainController main, String label, Node node, Node goal, GridPane parent) {
     this.main = main;
     this.node = node;
-    this.parent = parent;
+    this.parent = goal;
 
     Label button = new Label(label);
 
-    button.getStyleClass().addAll("button3D");
+    button.getStyleClass().addAll("button3D", "font-dos");
     button.setTranslateZ(-3);
-    button.setBackground(
-        new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
     Box box = new Box();
 
     Platform.runLater(() -> {
-      box.widthProperty().bind(((GridPane) this.getParent()).widthProperty());
+      box.widthProperty().bind(parent.widthProperty());
       box.heightProperty().bind(Bindings.createDoubleBinding(() -> {
-        return ((GridPane) this.getParent()).getHeight() / ((GridPane) this.getParent())
-            .getChildren().size();
-      }, ((GridPane) this.getParent()).widthProperty()));
+        return parent.getHeight() / parent
+            .getChildren().size() - 5;
+      }, parent.heightProperty()));
 
       button.prefWidthProperty().bind(box.widthProperty());
       button.prefHeightProperty().bind(box.heightProperty());
@@ -69,16 +63,16 @@ public class ControlButton extends Group {
 
     this.getChildren().addAll(box, button);
 
-    if (parent instanceof VBox) {
+    if (goal instanceof VBox) {
 
       button.setOnMouseClicked(e -> {
 
         if (!isOpen) {
-          ((VBox) parent).getChildren().add(node);
+          ((VBox) goal).getChildren().add(node);
           button.setText("X");
           isOpen = true;
         } else {
-          ((VBox) parent).getChildren().remove(node);
+          ((VBox) goal).getChildren().remove(node);
           isOpen = false;
           button.setText(label);
         }
@@ -87,11 +81,11 @@ public class ControlButton extends Group {
     } else {
       button.setOnMouseClicked(e -> {
         if (!isOpen) {
-          ((DisplayComponent) parent).setDisplay((AnchorPane) node);
+          ((DisplayComponent) goal).setDisplay((AnchorPane) node);
           button.setText("X");
           isOpen = true;
         } else {
-          ((DisplayComponent) parent).clearDisplay();
+          ((DisplayComponent) goal).clearDisplay();
           isOpen = false;
           button.setText(label);
         }
@@ -108,8 +102,8 @@ public class ControlButton extends Group {
     button.setOnMouseEntered((e) -> {
       Timeline timeTl = new Timeline();
       timeTl.getKeyFrames().addAll(
-          new KeyFrame(Duration.seconds(0.1), new KeyValue(trans.zProperty(), 1.5)),
-          new KeyFrame(Duration.seconds(0.1), new KeyValue(scale.zProperty(), 0.5)));
+          new KeyFrame(Duration.seconds(0.1), new KeyValue(trans.zProperty(), 2)),
+          new KeyFrame(Duration.seconds(0.1), new KeyValue(scale.zProperty(), 0.2)));
       timeTl.play();
     });
     button.setOnMouseExited((e) -> {

@@ -28,7 +28,11 @@
           </Button>
           <Button mnemonicParsing="false" onAction="#highscorePressed" prefWidth="150.0"
             prefHeight="100.0"
-            text="Highscore"/>
+            text="Highscore"  textAlignment="CENTER" contentDisplay="CENTER">
+            <font>
+              <Font size="12.0"/>
+            </font>
+          </Button>
           <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false"
             onAction="#settingPressed" prefHeight="101.0" prefWidth="150.0" text="Settings"
             textAlignment="CENTER">

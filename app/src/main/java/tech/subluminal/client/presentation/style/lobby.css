@@ -139,6 +139,8 @@
   -fx-border-color: transparent;
   -fx-border-width: 0px;
   -fx-border-radius: 0px;
+  -fx-background-color: transparent;
+  -fx-alignment: center;
 }
 
 .ship-amount{
