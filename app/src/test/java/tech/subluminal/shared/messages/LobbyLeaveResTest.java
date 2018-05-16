@@ -10,15 +10,11 @@ import tech.subluminal.shared.son.SONParsingError;
 public class LobbyLeaveResTest {
 
   @Test
-  public void testStringifyAndParsing() {
+  public void testStringifyAndParsing() throws SONConversionError, SONParsingError {
     LobbyLeaveRes lobbyLeaveRes = new LobbyLeaveRes();
     LobbyLeaveRes parsedLobbyLeaveRes = null;
 
-    try {
-      parsedLobbyLeaveRes = LobbyLeaveRes.fromSON(SON.parse(lobbyLeaveRes.asSON().asString()));
-    } catch (SONParsingError e) {
-      System.out.println("There should be no error here");
-    }
+    parsedLobbyLeaveRes = LobbyLeaveRes.fromSON(SON.parse(lobbyLeaveRes.asSON().asString()));
 
     assertNotNull(parsedLobbyLeaveRes);
     System.out.println(lobbyLeaveRes.asSON().asString());

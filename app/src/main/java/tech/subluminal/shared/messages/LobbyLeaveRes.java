@@ -4,7 +4,11 @@ import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Represents the lobby leave request from the client to the server.
+ * Represents the lobby leave response from the server to the client. This messages, when converted
+ * to SON and then to string, might look like this:
+ * <pre>
+ * {}
+ * </pre>
  */
 
 public class LobbyLeaveRes implements SONRepresentable {

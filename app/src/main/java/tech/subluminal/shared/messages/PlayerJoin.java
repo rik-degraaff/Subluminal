@@ -6,7 +6,18 @@ import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.User;
 
 /**
- * Represents the message that a player left.
+ * Represents the message that a player joined. This message, when converted to SON and then to
+ * string, might look like this:
+ * <pre>
+ * {
+ *   "user":o{
+ *     "username":s"Luc",
+ *     "identifiable":o{
+ *       "id":s"4107"
+ *     }
+ *   }
+ * }
+ * </pre>
  */
 public class PlayerJoin implements SONRepresentable {
 
