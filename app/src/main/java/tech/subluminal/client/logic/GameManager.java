@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import tech.subluminal.client.presentation.GamePresenter;
 import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.client.stores.records.game.OwnerPair;
+import tech.subluminal.shared.messages.ClearGame;
 import tech.subluminal.shared.messages.EndGameRes;
 import tech.subluminal.shared.messages.FleetMoveReq;
 import tech.subluminal.shared.messages.GameLeaveReq;
@@ -54,6 +55,8 @@ public class GameManager implements GamePresenter.Delegate {
         EndGameRes.class, EndGameRes::fromSON, this::onEndGameRes);
     connection.registerHandler(
         GameLeaveRes.class, GameLeaveRes::fromSON, req -> onGameLeave());
+    connection.registerHandler(
+        ClearGame.class, ClearGame::fromSON, req -> clearGame());
   }
 
   private void onEndGameRes(EndGameRes res) {
@@ -134,10 +137,14 @@ public class GameManager implements GamePresenter.Delegate {
         throw new RuntimeException(e);
       }
       gameStore.inGame().set(false);
-      gameStore.motherShips().clear();
-      gameStore.stars().clear();
-      gameStore.fleets().clear();
-      gamePresenter.clearGame();
+      clearGame();
     }).start();
+  }
+
+  private void clearGame() {
+    gameStore.motherShips().clear();
+    gameStore.stars().clear();
+    gameStore.fleets().clear();
+    gamePresenter.clearGame();
   }
 }
