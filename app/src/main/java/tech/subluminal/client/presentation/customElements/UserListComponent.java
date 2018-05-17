@@ -20,6 +20,7 @@ public class UserListComponent extends AnchorPane {
   }
 
   public UserListComponent(MainController mainController) {
+    super();
     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("UserListView.fxml"));
     fxmlLoader.setRoot(this);
     //fxmlLoader.setController(this);

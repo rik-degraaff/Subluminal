@@ -6,8 +6,29 @@ import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.Lobby;
 
 /**
- * Represents a response from server to client with the joined lobby and sends the users already in
- * the lobby.
+ * Represents a response from server to client with the joined lobby and sends the users that are
+ * already in the lobby. This message, converted to SON and then to string, might look like this:
+ * <pre>
+ * {
+ *   "lobby":o{
+ *     "playerCount":i0,
+ *     "status":s"FULL",
+ *     "settings":o{
+ *       "maxPlayers":i8,
+ *       "minPlayers":i2,
+ *       "mapSize":d2.0,
+ *       "gameSpeed":d1.0,
+ *       "name":s"Batman",
+ *       "adminID":s"9000"
+ *     },
+ *     "identifiable":o{
+ *       "id":s"1729"
+ *     },
+ *     "users":l[
+ *     ]
+ *   }
+ * }
+ * </pre>
  */
 public class LobbyJoinRes implements SONRepresentable {
 

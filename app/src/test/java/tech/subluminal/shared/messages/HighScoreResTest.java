@@ -16,7 +16,7 @@ import tech.subluminal.shared.son.SONParsingError;
 public class HighScoreResTest {
 
   @Test
-  public void testStringifyAndParsing() {
+  public void testStringifyAndParsing() throws SONParsingError, SONConversionError {
     List<HighScore> scores = new ArrayList<>();
     scores.add(new HighScore("Ana", 19));
     scores.add(new HighScore("Sofia", 13));
@@ -25,14 +25,9 @@ public class HighScoreResTest {
     HighScoreRes parsedH = null;
     List<HighScore> parsedScores = new ArrayList<>();
 
-    try {
-      parsedH = HighScoreRes.fromSON(SON.parse(hMsg));
-      parsedScores = parsedH.getHighScores();
-    } catch (SONParsingError | SONConversionError e) {
-      e.printStackTrace();
-    }
+    parsedH = HighScoreRes.fromSON(SON.parse(hMsg));
+    parsedScores = parsedH.getHighScores();
     System.out.println(hMsg);
-    System.out.println(parsedH.asSON().asString());
     boolean containsName = false;
     boolean scoreIsRight = false;
 
