@@ -218,8 +218,7 @@ public class GameManager implements GameStarter {
         gameStore.games()
             .getByID(gameID)
             .ifPresent(sync -> sync.consume(gameState -> {
-              if (sendUpdatesToPlayers(gameState,
-                  livingPlayers -> onGameOver(gameState, livingPlayers))) {
+              if (sendUpdatesToPlayers(gameState, onEnd)) {
                 stop.set(true);
                 gameThreads.remove(gameID);
                 lobbyStore.lobbies()

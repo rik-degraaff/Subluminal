@@ -59,8 +59,8 @@ public class StarComponent extends Group {
     setColor(Color.GRAY);
 
     Platform.runLater(() -> {
-      parentHeightProperty.bind(getScene().heightProperty());
-      parentWidthProperty.bind(getScene().widthProperty());
+      parentHeightProperty.bind(main.getPlayArea().heightProperty());
+      parentWidthProperty.bind(main.getPlayArea().widthProperty());
 
       this.layoutXProperty().bind(DrawingUtils.getXPosition(main.getPlayArea(),xProperty));
       this.layoutYProperty().bind(DrawingUtils.getYPosition(main.getPlayArea(),yProperty));
