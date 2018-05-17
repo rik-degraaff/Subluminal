@@ -1,6 +1,5 @@
 package tech.subluminal.server.logic;
 
-import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 import static org.mockito.AdditionalMatchers.not;
@@ -11,9 +10,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.function.Function;
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,19 +44,25 @@ public class UserManagerTest {
   public void testLogin() {
     Connection connection = mock(Connection.class);
 
-    new DistributorTester(distributor, connection);
-    new MessageHandlerTester<>(connection, LoginReq.class, new LoginReq("test"));
+    final DistributorTester distributorTester = new DistributorTester(distributor);
+    final Optional<String> optID = distributorTester
+        .verifyLoginHandler(connection, LoginReq.class, new LoginReq("test"));
+    assertTrue(optID.isPresent());
+    distributorTester.openConnection(optID.get(), connection);
 
-    verify(connection).sendMessage(refEq(new LoginRes("test", "0")));
+    verify(connection).sendMessage(isA(LoginRes.class));
   }
 
   @Test
   public void testNameChange() {
     Connection connection = mock(Connection.class);
 
-    new DistributorTester(distributor, connection);
+    final DistributorTester distributorTester = new DistributorTester(distributor);
+    final Optional<String> optID = distributorTester
+        .verifyLoginHandler(connection, LoginReq.class, new LoginReq("test"));
+    assertTrue(optID.isPresent());
+    distributorTester.openConnection(optID.get(), connection);
 
-    new MessageHandlerTester<>(connection, LoginReq.class, new LoginReq("test"));
     MessageHandlerTester<UsernameReq> messageHandlerTester = new MessageHandlerTester<>(connection,
         UsernameReq.class, new UsernameReq("Bob"));
 
@@ -76,8 +79,12 @@ public class UserManagerTest {
   public void testLogout() {
     Connection connection = mock(Connection.class);
 
-    new DistributorTester(distributor, connection);
-    new MessageHandlerTester<>(connection, LoginReq.class, new LoginReq("test"));
+    final DistributorTester distributorTester = new DistributorTester(distributor);
+    final Optional<String> optID = distributorTester
+        .verifyLoginHandler(connection, LoginReq.class, new LoginReq("test"));
+    assertTrue(optID.isPresent());
+    distributorTester.openConnection(optID.get(), connection);
+
     new MessageHandlerTester<>(connection, LogoutReq.class, new LogoutReq());
     try {
       verify(connection).close();

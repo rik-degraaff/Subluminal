@@ -3,34 +3,38 @@ package tech.subluminal.client.presentation.controller;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.animation.TranslateTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.PerspectiveTransform;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.customElements.BackgroundComponent;
 import tech.subluminal.client.presentation.customElements.ChatComponent;
 import tech.subluminal.client.presentation.customElements.ControlButton;
 import tech.subluminal.client.presentation.customElements.DebugComponent;
+import tech.subluminal.client.presentation.customElements.DisplayComponent;
 import tech.subluminal.client.presentation.customElements.FpsUpdater;
 import tech.subluminal.client.presentation.customElements.GameComponent;
 import tech.subluminal.client.presentation.customElements.HighscoreComponent;
@@ -41,6 +45,7 @@ import tech.subluminal.client.presentation.customElements.NameChangeComponent;
 import tech.subluminal.client.presentation.customElements.SettingsComponent;
 import tech.subluminal.client.presentation.customElements.UserListComponent;
 import tech.subluminal.client.presentation.customElements.WindowContainerComponent;
+import tech.subluminal.client.presentation.customElements.custom3DComponents.CockpitComponent;
 import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.server.stores.records.HighScore;
@@ -51,19 +56,10 @@ public class MainController implements Initializable {
   private AnchorPane spaceBackgroundDock;
 
   @FXML
-  private VBox leftSideDock;
-
-  @FXML
-  private VBox rightSideDock;
-
-  @FXML
   private AnchorPane menuDock;
 
   @FXML
   private AnchorPane playArea;
-
-  @FXML
-  private Rectangle chatHandle;
 
   private BackgroundComponent background;
 
@@ -84,13 +80,40 @@ public class MainController implements Initializable {
   private AnchorPane chatDock;
 
   @FXML
-  private AnchorPane chatWindow;
-
-  @FXML
   private AnchorPane playerBoardDock;
 
   @FXML
   private VBox statusBoxDock;
+
+  @FXML
+  private AnchorPane boardComputer;
+
+  @FXML
+  private AnchorPane boardComputerWrapper;
+
+  @FXML
+  private Cylinder boardCylinder;
+
+  @FXML
+  private GridPane buttonsDock;
+
+  @FXML
+  private GridPane monitorDock;
+
+  @FXML
+  private AnchorPane glassPane;
+
+  @FXML
+  private AnchorPane arcLeftDock;
+
+  @FXML
+  private AnchorPane arcRightDock;
+
+  @FXML
+  private AnchorPane leverDock;
+
+  @FXML
+  private AnchorPane cockpitDock;
 
   private GameComponent game;
 
@@ -108,7 +131,7 @@ public class MainController implements Initializable {
 
   private UserListController userListController;
 
-  private boolean chatOut = false;
+  private boolean chatDown = true;
   private NameChangeComponent nameChange;
   private ControlButton playerListButton;
   private ControlButton nameChangeButton;
@@ -116,6 +139,7 @@ public class MainController implements Initializable {
   private DebugComponent debug;
   private MonitorComponent monitor;
   private HighscoreComponent highscore;
+  private DisplayComponent display;
 
   public LobbyComponent getLobby() {
     return lobby;
@@ -141,25 +165,51 @@ public class MainController implements Initializable {
     background = new BackgroundComponent(1000);
     spaceBackgroundDock.getChildren().add(background);
 
+    CockpitComponent cockpit = new CockpitComponent();
+    cockpitDock.getChildren().addAll(cockpit);
+
+    Rectangle clipNode = new Rectangle();
+    clipNode.widthProperty().bind(playArea.widthProperty());
+    clipNode.heightProperty().bind(playArea.heightProperty());
+    playArea.setClip(clipNode);
+
+    playArea.setBackground(new Background(
+        new BackgroundImage(new Image("/tech/subluminal/resources/Pixel_Overlay.png"),
+            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+            BackgroundSize.DEFAULT)));
+
+    DropShadow ds = new DropShadow();
+    ds.setOffsetY(5.0);
+    ds.setOffsetX(5.0);
+    ds.setColor(Color.WHITE);
+    //glassPane.setEffect(ds);
+
     chat = new ChatComponent(this);
     chatController = chat.getChatcontroller();
     chatDock.getChildren().add(chat);
 
+    //LeverComponent lever = new LeverComponent();
+    //leverDock.getChildren().addAll(lever);
+    //leverDock.setBackground(new Background(new BackgroundFill(Color.RED,CornerRadii.EMPTY,Insets.EMPTY)));
+
+    display = new DisplayComponent();
+
     userList = new UserListComponent(this);
-    playerListButton = new ControlButton(this, "P", userList, statusBoxDock);
-    rightSideDock.getChildren().add(playerListButton);
+    playerListButton = new ControlButton(this, "P", userList, display);
+    userList.prefWidthProperty().bind(display.widthProperty());
+    userList.prefHeightProperty().bind(display.heightProperty());
 
     userListController = userList.getController();
 
     nameChange = new NameChangeComponent(this);
-    nameChangeButton = new ControlButton(this, "C", nameChange, statusBoxDock);
-    rightSideDock.getChildren().add(nameChangeButton);
+    nameChangeButton = new ControlButton(this, "C", nameChange, display);
+    //rightSideDock.getChildren().add(nameChangeButton);
     //rightSideDock.getChildren().add(nameChange);
 
     menu = new MenuComponent(this);
     settings = new SettingsComponent(this);
-    settingsButton = new ControlButton(this, "S", settings, statusBoxDock);
-    rightSideDock.getChildren().add(settingsButton);
+    settingsButton = new ControlButton(this, "S", settings, display);
+    //rightSideDock.getChildren().add(settingsButton);
 
     highscore = new HighscoreComponent();
 
@@ -168,7 +218,7 @@ public class MainController implements Initializable {
     game = new GameComponent(this);
     gameController = game.getController();
 
-    playArea.setMouseTransparent(true);
+    //playArea.setMouseTransparent(true);
 
     menuDock.getChildren().add(menu);
 
@@ -179,6 +229,58 @@ public class MainController implements Initializable {
 
     VBox debugDock = new VBox();
     window.getChildren().add(debugDock);
+
+    PerspectiveTransform perspect = new PerspectiveTransform();
+    perspect.setUlx(50);
+    perspect.setUly(10);
+    perspect.urxProperty().bind(Bindings
+        .createDoubleBinding(() -> boardComputerWrapper.getWidth() - 50,
+            boardComputer.widthProperty()));
+    perspect.setUry(10);
+
+    perspect.setLlx(0);
+    perspect.llyProperty().bind(boardComputer.heightProperty());
+    perspect.lrxProperty().bind(boardComputerWrapper.widthProperty());
+    perspect.lryProperty().bind(boardComputer.heightProperty());
+
+    Rotate rotate = new Rotate(-60, 0, 0, 0, Rotate.X_AXIS);
+    rotate.pivotYProperty().bind(boardComputerWrapper.heightProperty());
+    boardComputer.getTransforms().add(rotate);
+
+    Rotate rotateTl = new Rotate();
+    rotateTl.pivotYProperty().bind(chat.heightProperty());
+    rotateTl.setPivotX(0);
+    rotateTl.setPivotZ(0);
+    rotateTl.setAxis(Rotate.X_AXIS);
+    chat.getTransforms().add(rotateTl);
+
+    Timeline timeTlUp = new Timeline(
+        //new KeyFrame(Duration.ZERO, new KeyValue(rotateTl.angleProperty(), chat.getRotate())),
+        new KeyFrame(Duration.seconds(0.7), new KeyValue(rotateTl.angleProperty(), 60))
+    );
+
+    Timeline timeTlDown = new Timeline(
+        //new KeyFrame(Duration.ZERO, new KeyValue(rotateTl.angleProperty(), chat.getRotate())),
+        new KeyFrame(Duration.seconds(0.7), new KeyValue(rotateTl.angleProperty(), 0))
+    );
+
+    boardComputer.setOnMouseClicked((e) -> {
+      if (chatDown) {
+        timeTlDown.stop();
+        timeTlUp.play();
+        chatDown = false;
+      } else {
+        timeTlUp.stop();
+        timeTlDown.play();
+        chatDown = true;
+      }
+    });
+
+    buttonsDock.add(settingsButton, 0, 0);
+    buttonsDock.add(playerListButton, 0, 1);
+    buttonsDock.add(nameChangeButton, 0, 2);
+
+    monitorDock.add(display, 1, 0);
 
     window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
       if (keyEvent.getCode() == KeyCode.F4) {
@@ -193,29 +295,6 @@ public class MainController implements Initializable {
         } else {
           debugDock.getChildren().add(monitor);
         }
-      }
-    });
-
-    Platform.runLater(() -> {
-      chatWindow.translateXProperty().bind(Bindings
-          .createDoubleBinding(() -> chatDock.getWidth(), chatWindow.widthProperty(),
-              chatDock.widthProperty()));
-
-    });
-
-    chatHandle.setOnMouseClicked(e -> {
-      Logger.debug("pressed");
-      chatWindow.translateXProperty().unbind();
-      TranslateTransition transTl = new TranslateTransition(Duration.seconds(0.2), chatWindow);
-      double width = chatDock.widthProperty().getValue();
-      if (chatOut) {
-        transTl.setToX(width);
-        transTl.play();
-        chatOut = false;
-      } else {
-        transTl.setToX(-30);
-        transTl.play();
-        chatOut = true;
       }
     });
 
@@ -262,36 +341,23 @@ public class MainController implements Initializable {
     menuDock.getChildren().add(menu);
   }
 
+  public AnchorPane getPlayArea() {
+    return playArea;
+  }
+
   public void onMapOpenHandle() {
     Platform.runLater(() -> {
       menuDock.getChildren().clear();
 
-      playArea.setMouseTransparent(false);
+      //playArea.setMouseTransparent(false);
 
-      rightSideDock.getChildren().clear();
-      Pane leftSide = new Pane();
-      leftSide.setPrefWidth(rightSideDock.getWidth());
-      leftSide.prefHeightProperty().bind(chat.getScene().heightProperty());
-      Background bg = new Background(
-          new BackgroundImage(
-              new Image("/tech/subluminal/resources/tile_texture.jpg", 50, 50, true, false),
-              BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
-              BackgroundSize.DEFAULT));
-      leftSide.setBackground(bg);
-      VBox rightSide = new VBox();
-      rightSide.setPrefWidth(leftSideDock.getWidth());
-      rightSide.prefHeightProperty().bind(chat.getScene().heightProperty());
-      rightSide.setBackground(bg);
-      leftSideDock.getChildren().add(leftSide);
-      rightSideDock.getChildren().clear();
-      rightSideDock.getChildren().add(rightSide);
+      //rightSideDock.getChildren().clear();
 
       Button leave = new Button("X");
       leave.setOnAction(event -> {
         gameController.leaveGame();
         Logger.debug("LEAVE PLZ");
       });
-      rightSide.getChildren().addAll(leave, settingsButton, playerListButton, nameChangeButton);
       //rightSide.getChildren().add(new Label("this is a test"));
 
       chatController.setInGame(true);
@@ -301,11 +367,8 @@ public class MainController implements Initializable {
 
   public void onMapCloseHandle() {
     playArea.getChildren().clear();
-    rightSideDock.getChildren().clear();
-    leftSideDock.getChildren().clear();
 
-    rightSideDock.getChildren().addAll(settingsButton, playerListButton, nameChangeButton);
-    playArea.setMouseTransparent(true);
+    //playArea.setMouseTransparent(true);
     gameController.clearMap();
     chatController.setInGame(false);
 
@@ -324,24 +387,8 @@ public class MainController implements Initializable {
 
   public void sendRecipiantToChat(String recipiant) {
     chatController.writeAt(recipiant);
-    if (!chatOut) {
-      openChat();
-    }
   }
 
-  public void openChat() {
-    fireMouseClick(chatHandle);
-  }
-
-  private void fireMouseClick(Node node) {
-    if (!chatOut) {
-      MouseEvent event = new MouseEvent(MouseEvent.MOUSE_CLICKED,
-          node.getLayoutX(), node.getLayoutY(), node.getLayoutX(), node.getLayoutY(),
-          MouseButton.PRIMARY, 1,
-          true, true, true, true, true, true, true, true, true, true, null);
-      Event.fireEvent(chatHandle, event);
-    }
-  }
 
   public GameController getGameController() {
     return gameController;

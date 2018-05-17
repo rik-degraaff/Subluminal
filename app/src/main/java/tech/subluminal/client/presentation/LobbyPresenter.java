@@ -25,5 +25,7 @@ public interface LobbyPresenter {
     void getLobbyList();
 
     void startGame();
+
+    void startTutorial();
   }
 }

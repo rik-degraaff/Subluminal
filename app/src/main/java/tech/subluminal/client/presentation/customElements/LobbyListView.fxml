@@ -22,6 +22,7 @@
           <items>
             <Button mnemonicParsing="false" onAction="#onLobbyRefresh" text="Refresh Lobbies"/>
             <Button mnemonicParsing="false" onAction="#onLobbyCreate" text="Create Lobby"/>
+            <Button mnemonicParsing="false" onAction="#onTutorialStart" text="Tutorial"/>
           </items>
         </ToolBar>
 

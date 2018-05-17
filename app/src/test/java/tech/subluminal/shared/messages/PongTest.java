@@ -21,15 +21,11 @@ public class PongTest {
   }
 
   @Test
-  public void testParsing() {
+  public void testParsing() throws SONParsingError, SONConversionError {
     String pongMsg = pong.asSON().asString();
-    try {
-      Pong parsedPong = Pong.fromSON(SON.parse(pongMsg));
-      String parsedID = parsedPong.getId();
-      assertEquals(pong.getId(), parsedID);
-    } catch (SONParsingError | SONConversionError e) {
-      e.printStackTrace();
-    }
+    Pong parsedPong = Pong.fromSON(SON.parse(pongMsg));
+    String parsedID = parsedPong.getId();
+    assertEquals(pong.getId(), parsedID);
     System.out.println(pongMsg);
   }
 
@@ -46,7 +42,6 @@ public class PongTest {
       String ID = parsedPong.getId();
       System.out.println(ID);
     } catch (SONParsingError | SONConversionError e) {
-      e.printStackTrace();
       parsingSucceeded = false;
     }
     assertFalse(parsingSucceeded);

@@ -5,7 +5,13 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Represents the message that a player left.
+ * Represents the message that a player left. This message, when converted to SON and then to
+ * string, might look like this:
+ * <pre>
+ * {
+ *   "id":s"911"
+ * }
+ * </pre>
  */
 public class PlayerLeave implements SONRepresentable {
 

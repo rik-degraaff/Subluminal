@@ -18,6 +18,7 @@ docker/_secrets.sh
 
 #folders
 .app/
+.files/
 .idea/
 .gradle/
 .settings/
@@ -29,5 +30,4 @@ bin/
 build/
 classes/
 docs/javadoc/
-log\.txt
 classes/
