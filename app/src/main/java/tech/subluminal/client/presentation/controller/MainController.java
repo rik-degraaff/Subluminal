@@ -163,18 +163,17 @@ public class MainController implements Initializable {
     introPane.setBackground(
         new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
-
     Label introText = new Label();
     introText.setTextAlignment(TextAlignment.CENTER);
     introText.setTranslateY(-100);
     introText.setWrapText(true);
     //introText.maxWidthProperty().bind(
-        //Bindings.createDoubleBinding(() -> introPane.getWidth() - 100, introPane.widthProperty()));
+    //Bindings.createDoubleBinding(() -> introPane.getWidth() - 100, introPane.widthProperty()));
     introText.setPrefHeight(600);
     Label cursor = new Label();
     cursor.getStyleClass().addAll("console-red", "intro-text");
     introText.getStyleClass().addAll("console-red", "intro-text");
-    introBoxHolder.getChildren().addAll(introText, cursor);
+    introBoxHolder.getChildren().addAll(introText);
 
     String introStory = "In a basement just around your corner, we once were created.\nAnd now we are set to conquer the galaxy...";
 
@@ -185,8 +184,26 @@ public class MainController implements Initializable {
     Timeline timeTl = new Timeline();
 
     timeTl.getKeyFrames()
-        .addAll(new KeyFrame(Duration.seconds(0.5), "0", e -> cursor.setText("|")),
-            new KeyFrame(Duration.seconds(1), "1", e -> cursor.setText("")));
+        .add(new KeyFrame(Duration.seconds(0.5), "0", e -> {
+          if (introText.getText().length() >= introStory.length() && introText.getText()
+              .charAt(introText.getText().length()-1) == ' ') {
+            introText
+                .setText(introText.getText().substring(0, introText.getText().length() - 1) + "|");
+          } else {
+            introText.setText(introText.getText() + "|");
+          }
+
+        }));
+    timeTl.getKeyFrames()
+        .add(new KeyFrame(Duration.seconds(1), "1", e -> {
+          if (introText.getText().length() >= introStory.length() && introText.getText()
+              .charAt(introText.getText().length()-1) == ' ') {
+            introText.setText(introText.getText().substring(0, introText.getText().length() - 1));
+          } else {
+            introText
+                .setText(introText.getText().substring(0, introText.getText().length() - 1) + " ");
+          }
+        }));
 
     timeTl.setCycleCount(Timeline.INDEFINITE);
 
@@ -210,6 +227,7 @@ public class MainController implements Initializable {
     fadeTl.setDuration(Duration.seconds(2));
 
     mainTl.getChildren().addAll(pauseTl, animation, pauseTl2, fadeTl);
+    timeTl.play();
     mainTl.play();
 
     mainTl.setOnFinished(e -> {
