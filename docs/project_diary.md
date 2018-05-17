@@ -6,6 +6,14 @@
 **LUC** = Luc Kury  
 **RIK** = Rik de Graaff
 
+### Wednesday-Tuesday, May 09th-May 15th
+- The reconnection feature was implemented. For that, a reconnect-ID is stored in Preferences.userRoot, which in Windows is the registry and in Linux the hidden files.
+- A new feature in the game logic now is: While hopping from star to star to get to a target, a player might lose a small portion of his ships due to a hopping dematerialization tick. Only the hopping player can lose ships, though. The owner of a star can never lose ships to a hopping player.
+- The colonization time now linearly decreases with the fleet size up to size 5 and decreases sublinearly (by f(size) = sqrt(size)) above the size of 5.
+- Now every player has an arrow pointing to his mothership at the beginning of a game (this feature was buggy, previsously).
+- Now, finally, the unit test code coverage is shown during the GitLab CI.
+- The GUI is starting to have 3-D effects.
+
 ### Monday-Sunday, April 30th-May 6th, 2018
 We generated a property file, for the following reasons:
 - Global adjustable settings prevent "magic numbers" in our source code.
@@ -138,10 +146,10 @@ gameState
 ### Thursday, March 29th, 2018
 - Justified master merges are now allowed anytime. Issue templates for example need to be in the master branch to be detected correctly. However, direct merges of source code into the master branch are still forbidden.
 - Current to do's are:  
-  - to fix the NetCat-Situation of M2 (to be specified)
+  - to fix the NetCat-Situation of M2
   - to fix the faulty parsing of double quotes in strings
   - to improve the reaction logic of the server when it doesn't get the client's pong message anymore
-  - To overwork the QA plan: Instead of the latency time, we want to track the client and server tick rates and achieve certain rates (which yet are to be set).
+  - To overhaul the QA plan: Instead of the latency time, we want to track the client and server tick rates and achieve certain rates (which yet are to be set).
 - Log4J and Mockito are external libraries we are going to use until M3.
 ### Sunday, March 25th, 2018
 - Logout functionality implementation was finished.
@@ -225,18 +233,17 @@ In this meeting we decided about most of the rules of our game. They are:
 	c) How much effort it takes to colonize the star.
 - If a player colonizes a new star, the star automatically starts producing regular ships for the player, which are local to that star.
 - The regular ships that are local to a star that is owned by a player can be sent out by the player.
-- Every order to move regular ships from one star to another originate from the mother ship.
 - Each star also has an attribute that regulates the maximum radius a ship can reach without having to fuel up on another star.
 - The rule above implicates	that further destinations can only be reached by one's regular ships by "hopping" from star to star to be able to fuel up.
 - "Hopping" can occur on both neutral and owned (colonized) stars.
 - By hopping onto a star that is owned by an opponent, the hopping player gets punished by automatic tear-down of a certain percentage of his hopping ships.
-- If a player targets a certain star he or she can influence the hopping path his or her ships or use the one that is automatically calculated by the system, which is the shortest.
+- If a player targets a certain star he or she can influence the hopping path his or her ships should take or use the one that is automatically calculated by the system, which is the shortest.
 - Hopping stars and colonizing stars are two separate processes. Accidental colonization while hopping a star can not occur.
 - When regular ships reach the target they hopped to, two scenarios can happen:
 	a) Nobody is there yet, the star is neutral. The player's regular ships start colonizing the star. The speed of the colonization progress depends from the number of regular ships the player sent, the basic defense of the star and how much effort the star takes to be colonized.
 	b) The star is already under possession of an opponent. In this case the fleets of the opponents start tearing down themselves, until only regular ships of one of the fleets remain. If the remaining regular ships belong to the intruder, they immediately start neutralizing the star to then colonize it. If the remaining regular ships belong to the previous owner of the star, nothing else happens.
 - Every move one's regular ships make originates from the mother ship. Thus, the order takes longer to get to the concerning regular ships, the further their base star is away from the mother ship.
-- When a player orders a fleet to go colonize another star, the information about the number of available regular ships is always outdated (because of the distance). So the player has to options:
+- When a player orders a fleet to go colonize another star, the information about the number of available regular ships is always outdated (because of the distance). So the player has two options:
 	a) He/She sends out the order that a certain percentage of the regular ships should leave their base star.
 	b) He/She sends out the order that a certain number or regular ships should be the maximum number of sent out ships. If there are not that many regular ships left the moment the order arrives at the base, all regular ships are sent out.
 - Fleets of regular ships that are hopping to their target send out information to their mother ship about their position in regular intervals.
@@ -258,7 +265,7 @@ In this meeting we decided about most of the rules of our game. They are:
 ##### Decisions/ideas:
 - **Ideas for game names**: Ether, Far Away, Separation, Delay, Subluminal
 - **Team name**: Bordeaux Ink.
-- **Basic game principle**: The game happens on an outer space map with stars. In the beginning every player has his main ship placed in a random planet system and produces his fleet of smaller ships with the tech.subluminal.resources that his planets offer. The goal is to conquer the biggest number of planet systems. The players can inform themselves about the position of their adversaries and in which state of colonization other planet systems are by sending out requests. The twist is that the messenger ships take some time to get to their target and back, so when they are back the information is already not the latest anymore and the player has to make decisions upon outdated information.
+- **Basic game principle**: The game happens on an outer space map with stars. In the beginning every player has his main ship placed in a random planet system and produces his fleet of smaller ships with the resources that his planets offer. The goal is to conquer the biggest number of planet systems. The players can inform themselves about the position of their adversaries and in which state of colonization other planet systems are by sending out requests. The twist is that the messenger ships take some time to get to their target and back, so when they are back the information is already not the latest anymore and the player has to make decisions upon outdated information.
 
 ##### Task division:  
 **DAV**: Mock-ups; graphical sketches  
