@@ -7,13 +7,22 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.LobbyPresenter;
 import tech.subluminal.client.presentation.LobbyPresenter.Delegate;
 import tech.subluminal.client.presentation.customElements.LobbyStatusComponent;
 import tech.subluminal.client.stores.LobbyStore;
+import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.stores.records.SlimLobby;
 import tech.subluminal.shared.util.MapperList;
 
@@ -26,7 +35,11 @@ public class LobbyListController implements Initializable {
   @FXML
   private TextField lobbyName;
 
+  @FXML
+  private AnchorPane window;
+
   private LobbyPresenter.Delegate lobbyDelegate;
+  private UserStore userStore;
 
   public void setLobbyDelegate(Delegate lobbyDelegate) {
     this.lobbyDelegate = lobbyDelegate;
@@ -60,13 +73,67 @@ public class LobbyListController implements Initializable {
 
   @FXML
   private void onLobbyCreate() {
-    Logger.trace("Creating lobby");
-    String name = lobbyName.getText();
-    if (name.equals("")){
-      name = "404 lobby not found...";
-    }
-    lobbyDelegate.createLobby(name);
+    VBox vbox = new VBox();
+    //vbox.prefHeightProperty().bind(window.heightProperty());
+    //vbox.prefWidthProperty().bind(window.widthProperty());
+    vbox.setAlignment(Pos.CENTER);
 
+    HBox hbox = new HBox();
+    hbox.prefHeightProperty().bind(window.heightProperty());
+    hbox.prefWidthProperty().bind(window.widthProperty());
+    hbox.setAlignment(Pos.CENTER);
+
+    TextField lobbyName = new TextField();
+    Label lobbyLabel = new Label("Lobbyname: ");
+    lobbyLabel.getStyleClass().addAll("font-dos");
+    HBox lobbyNameBox = new HBox(lobbyLabel, lobbyName);
+    lobbyNameBox.setAlignment(Pos.CENTER);
+    vbox.getChildren().addAll(lobbyNameBox);
+
+    vbox.setSpacing(10);
+
+    Button cancel = new Button("Cancel");
+    Button ok = new Button("Ok");
+
+    HBox promptButtons = new HBox(cancel,ok);
+    promptButtons.setAlignment(Pos.CENTER);
+    promptButtons.setSpacing(10);
+    vbox.getChildren().addAll(promptButtons);
+
+    vbox.setSpacing(20);
+
+    hbox.getChildren().addAll(vbox);
+    hbox.getStyleClass().addAll("console");
+    window.getChildren().add(hbox);
+    lobbyName.requestFocus();
+    lobbyName.getStyleClass().addAll("font-dos", "textfield-green");
+    lobbyName.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
+      if(keyEvent.getCode() == KeyCode.ENTER){
+        ok.fire();
+        keyEvent.consume();
+      }
+    });
+
+    cancel.setOnAction(e -> {
+      removePrompt(hbox);
+    });
+
+    ok.setOnAction(e -> {
+      String name = lobbyName.getText();
+      if(name.equals("")){
+        name = userStore.currentUser().get().use(u -> u.get().getUsername());
+      }
+      removePrompt(hbox);
+      lobbyDelegate.createLobby(name);
+    });
+
+    Logger.trace("Creating lobby");
+  }
+
+  private void removePrompt(HBox hbox) {
+    if(window.getChildren().contains(hbox)){
+      window.getChildren().remove(hbox);
+    }
   }
 
   @FXML
@@ -75,4 +142,7 @@ public class LobbyListController implements Initializable {
   }
 
 
+  public void setUserStore(UserStore userStore) {
+    this.userStore = userStore;
+  }
 }

@@ -151,3 +151,12 @@
 .intro-text{
   -fx-font-size: 30;
 }
+
+.textfield-white{
+  -fx-background-color: white;
+  -fx-border-radius: 0;
+}
+
+.textfield-green{
+  -fx-border-color: #59FF00;
+}

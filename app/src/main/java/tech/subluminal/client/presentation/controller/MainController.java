@@ -167,11 +167,6 @@ public class MainController implements Initializable {
     introText.setTextAlignment(TextAlignment.CENTER);
     introText.setTranslateY(-100);
     introText.setWrapText(true);
-    //introText.maxWidthProperty().bind(
-    //Bindings.createDoubleBinding(() -> introPane.getWidth() - 100, introPane.widthProperty()));
-    introText.setPrefHeight(600);
-    Label cursor = new Label();
-    cursor.getStyleClass().addAll("console-red", "intro-text");
     introText.getStyleClass().addAll("console-red", "intro-text");
     introBoxHolder.getChildren().addAll(introText);
 
@@ -186,7 +181,7 @@ public class MainController implements Initializable {
     timeTl.getKeyFrames()
         .add(new KeyFrame(Duration.seconds(0.5), "0", e -> {
           if (introText.getText().length() >= introStory.length() && introText.getText()
-              .charAt(introText.getText().length()-1) == ' ') {
+              .charAt(introText.getText().length() - 1) == ' ') {
             introText
                 .setText(introText.getText().substring(0, introText.getText().length() - 1) + "|");
           } else {
@@ -196,8 +191,8 @@ public class MainController implements Initializable {
         }));
     timeTl.getKeyFrames()
         .add(new KeyFrame(Duration.seconds(1), "1", e -> {
-          if (introText.getText().length() >= introStory.length() && introText.getText()
-              .charAt(introText.getText().length()-1) == ' ') {
+          if (introText.getText().length() >= introStory.length() - 1 && introText.getText()
+              .charAt(introText.getText().length() - 1) == ' ') {
             introText.setText(introText.getText().substring(0, introText.getText().length() - 1));
           } else {
             introText
@@ -230,10 +225,14 @@ public class MainController implements Initializable {
     timeTl.play();
     mainTl.play();
 
+    window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
+      if (keyEvent.getCode() == KeyCode.ESCAPE) {
+        clearIntro(timeTl);
+      }
+    });
+
     mainTl.setOnFinished(e -> {
-      introPane.setMouseTransparent(true);
-      introPane.setVisible(false);
-      timeTl.stop();
+      clearIntro(timeTl);
     });
 
     //animation.play();
@@ -375,6 +374,12 @@ public class MainController implements Initializable {
       }
     });
 
+  }
+
+  private void clearIntro(Timeline timeTl) {
+    introPane.setMouseTransparent(true);
+    introPane.setVisible(false);
+    timeTl.stop();
   }
 
   private void bindDockButtons(Button3dComponent button) {
