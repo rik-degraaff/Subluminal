@@ -25,19 +25,21 @@ public class Button3dComponent extends AnchorPane {
     label.textProperty().bind(textProperty());
     label.prefHeightProperty().bind(this.heightProperty().subtract(10));
     label.prefWidthProperty().bind(this.widthProperty().subtract(10));
+    label.setTranslateY(5);
+    label.setTranslateX(5);
 
     label.getStyleClass().addAll("button3D", "font-dos");
-    label.setTranslateZ(-3);
+    //label.setTranslateZ(-3);
 
     Box box = new Box();
 
-    box.widthProperty().bind(widthProperty());
-    box.heightProperty().bind(this.heightProperty());
-    box.translateXProperty().bind(Bindings.createDoubleBinding(() -> getWidth()/2 + 5, widthProperty()));
-    box.translateYProperty().bind(Bindings.createDoubleBinding(() -> getHeight()/2 + 5, heightProperty()));
+    box.widthProperty().bind(widthProperty().subtract(10));
+    box.heightProperty().bind(this.heightProperty().subtract(10));
+    box.translateXProperty().bind(Bindings.createDoubleBinding(() -> getWidth()/2, widthProperty()));
+    box.translateYProperty().bind(Bindings.createDoubleBinding(() -> getHeight()/2, heightProperty()));
 
 
-    box.setDepth(10);
+    box.setDepth(7);
 
     PhongMaterial material = new PhongMaterial();
     material.setSpecularColor(Color.BLACK);
@@ -55,7 +57,7 @@ public class Button3dComponent extends AnchorPane {
     label.setOnMouseEntered((e) -> {
       Timeline timeTl = new Timeline();
       timeTl.getKeyFrames().addAll(
-          new KeyFrame(Duration.seconds(0.1), new KeyValue(trans.zProperty(), 5)),
+          new KeyFrame(Duration.seconds(0.1), new KeyValue(trans.zProperty(), 3)),
           new KeyFrame(Duration.seconds(0.1), new KeyValue(scale.zProperty(), 0.2)));
       timeTl.play();
     });

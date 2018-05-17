@@ -147,3 +147,7 @@
   -fx-stroke: black;
   -fx-stroke-width: 1;
 }
+
+.intro-text{
+  -fx-font-size: 30;
+}

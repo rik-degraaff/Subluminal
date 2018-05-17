@@ -406,6 +406,8 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
     chat3DBox.setMaterial(materialChat);
 
+    chatBox.setTranslateX(-5);
+
     sendAllBox.widthProperty().bind(sendOptions.widthProperty());
     sendBox.widthProperty().bind(sendOptions.widthProperty());
     Translate transAll = new Translate();

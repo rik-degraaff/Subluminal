@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.LobbyPresenter;
 import tech.subluminal.client.presentation.LobbyPresenter.Delegate;
@@ -21,6 +22,10 @@ public class LobbyListController implements Initializable {
   private final ListProperty<SlimLobby> slimLobbies = new SimpleListProperty<>();
   @FXML
   private ListView<LobbyStatusComponent> lobbyList;
+
+  @FXML
+  private TextField lobbyName;
+
   private LobbyPresenter.Delegate lobbyDelegate;
 
   public void setLobbyDelegate(Delegate lobbyDelegate) {
@@ -56,7 +61,11 @@ public class LobbyListController implements Initializable {
   @FXML
   private void onLobbyCreate() {
     Logger.trace("Creating lobby");
-    lobbyDelegate.createLobby("ExampleLobby");
+    String name = lobbyName.getText();
+    if (name.equals("")){
+      name = "404 lobby not found...";
+    }
+    lobbyDelegate.createLobby(name);
 
   }
 

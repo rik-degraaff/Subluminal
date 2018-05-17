@@ -4,27 +4,39 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
+import javafx.animation.Transition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
@@ -95,6 +107,12 @@ public class MainController implements Initializable {
   @FXML
   private AnchorPane menuHolder;
 
+  @FXML
+  private AnchorPane introPane;
+
+  @FXML
+  private HBox introBoxHolder;
+
   private GameComponent game;
 
   private UserStore userStore;
@@ -142,11 +160,72 @@ public class MainController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    introPane.setBackground(
+        new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+
+
+    Label introText = new Label();
+    introText.setTextAlignment(TextAlignment.CENTER);
+    introText.setTranslateY(-100);
+    introText.setWrapText(true);
+    //introText.maxWidthProperty().bind(
+        //Bindings.createDoubleBinding(() -> introPane.getWidth() - 100, introPane.widthProperty()));
+    introText.setPrefHeight(600);
+    Label cursor = new Label();
+    cursor.getStyleClass().addAll("console-red", "intro-text");
+    introText.getStyleClass().addAll("console-red", "intro-text");
+    introBoxHolder.getChildren().addAll(introText, cursor);
+
+    String introStory = "In a basement just around your corner, we once were created.\nAnd now we are set to conquer the galaxy...";
+
+    SequentialTransition mainTl = new SequentialTransition();
+    PauseTransition pauseTl = new PauseTransition(Duration.seconds(2));
+    PauseTransition pauseTl2 = new PauseTransition(Duration.seconds(2));
+
+    Timeline timeTl = new Timeline();
+
+    timeTl.getKeyFrames()
+        .addAll(new KeyFrame(Duration.seconds(0.5), "0", e -> cursor.setText("|")),
+            new KeyFrame(Duration.seconds(1), "1", e -> cursor.setText("")));
+
+    timeTl.setCycleCount(Timeline.INDEFINITE);
+
+    final Animation animation = new Transition() {
+      {
+        setCycleDuration(Duration.millis(5000));
+      }
+
+      protected void interpolate(double frac) {
+        final int length = introStory.length();
+        final int n = Math.round(length * (float) frac);
+        introText.setText(introStory.substring(0, n));
+      }
+
+    };
+
+    FadeTransition fadeTl = new FadeTransition();
+    fadeTl.setNode(introPane);
+    fadeTl.setToValue(0);
+    fadeTl.setFromValue(1);
+    fadeTl.setDuration(Duration.seconds(2));
+
+    mainTl.getChildren().addAll(pauseTl, animation, pauseTl2, fadeTl);
+    mainTl.play();
+
+    mainTl.setOnFinished(e -> {
+      introPane.setMouseTransparent(true);
+      introPane.setVisible(false);
+      timeTl.stop();
+    });
+
+    //animation.play();
+
     background = new BackgroundComponent(1000);
     spaceBackgroundDock.getChildren().add(background);
 
     CockpitComponent cockpit = new CockpitComponent();
     cockpitDock.getChildren().addAll(cockpit);
+    cockpit.setVisible(true);
 
     Rectangle clipNode = new Rectangle();
     clipNode.widthProperty().bind(playArea.widthProperty());
@@ -169,20 +248,20 @@ public class MainController implements Initializable {
     display = new DisplayComponent();
 
     userList = new UserListComponent(this, display);
-    playerListButton = new ControlButton(this, "P", userList, display, buttonsDock);
+    playerListButton = new ControlButton(this, "P", userList, display);
+
     userList.prefWidthProperty().bind(display.widthProperty());
     userList.prefHeightProperty().bind(display.heightProperty());
 
     userListController = userList.getController();
 
     nameChange = new NameChangeComponent(this);
-    nameChangeButton = new ControlButton(this, "C", nameChange, display, buttonsDock);
+    nameChangeButton = new ControlButton(this, "C", nameChange, display);
     //rightSideDock.getChildren().add(nameChangeButton);
     //rightSideDock.getChildren().add(nameChange);
 
     menu = new MenuComponent(this);
     settings = new SettingsComponent(this);
-    settingsButton = new ControlButton(this, "S", settings, display, buttonsDock);
     //rightSideDock.getChildren().add(settingsButton);
 
     highscore = new HighscoreComponent();
@@ -237,28 +316,28 @@ public class MainController implements Initializable {
       }
     });
 
-    Button3dComponent settingB = new Button3dComponent("S");
-    settingB.setOnMouseClicked((e) -> {
+    Button3dComponent settingButton = new Button3dComponent("S");
+    settingButton.setOnMouseClicked((e) -> {
       Button3dComponent settingClose = new Button3dComponent("X");
       settingClose.setOnMouseClicked(event -> {
         onWindowClose();
         event.consume();
-        buttonsDock.getChildren().remove(settingB);
-        buttonsDock.add(settingB,0,0);
+        buttonsDock.getChildren().remove(settingButton);
+        buttonsDock.add(settingButton, 0, 0);
       });
-      buttonsDock.getChildren().remove(settingB);
-      buttonsDock.add(settingClose,0,0);
+      buttonsDock.getChildren().remove(settingButton);
+      buttonsDock.add(settingClose, 0, 0);
       onSettingOpenHandle();
       e.consume();
     });
 
-    settingB.prefWidthProperty().bind(buttonsDock.widthProperty());
-    settingB.prefHeightProperty().bind(Bindings
-        .createDoubleBinding(() -> buttonsDock.getHeight() / buttonsDock.getChildren().size(),
-            buttonsDock.heightProperty(), buttonsDock.getChildren()));
-    buttonsDock.add(settingB, 0, 0);
+    buttonsDock.add(settingButton, 0, 0);
     buttonsDock.add(playerListButton, 0, 1);
     buttonsDock.add(nameChangeButton, 0, 2);
+
+    bindDockButtons(settingButton);
+    bindDockButtons(playerListButton);
+    bindDockButtons(nameChangeButton);
 
     monitorDock.add(display, 1, 0);
 
@@ -280,6 +359,20 @@ public class MainController implements Initializable {
 
   }
 
+  private void bindDockButtons(Button3dComponent button) {
+    button.prefWidthProperty().bind(buttonsDock.widthProperty());
+    button.prefHeightProperty().bind(Bindings
+        .createDoubleBinding(() -> buttonsDock.getHeight() / buttonsDock.getChildren().size(),
+            buttonsDock.heightProperty(), buttonsDock.getChildren()));
+  }
+
+  private void bindDockButtons(ControlButton button) {
+    button.prefWidthProperty().bind(buttonsDock.widthProperty());
+    button.prefHeightProperty().bind(Bindings
+        .createDoubleBinding(() -> buttonsDock.getHeight() / buttonsDock.getChildren().size(),
+            buttonsDock.heightProperty(), buttonsDock.getChildren()));
+  }
+
   public MainController getController() {
     return this;
   }
@@ -297,7 +390,7 @@ public class MainController implements Initializable {
   }
 
   public void onLobbyOpenHandle() {
-    menuDock.getChildren().clear();
+    saveMenuState();
 
     windowContainer = new WindowContainerComponent(this, lobby, "Lobbies");
     //lobby.setUserActive();
@@ -307,6 +400,15 @@ public class MainController implements Initializable {
   }
 
   public void onSettingOpenHandle() {
+    saveMenuState();
+
+    windowContainer = new WindowContainerComponent(this, settings, "Settings");
+
+    menuDock.getChildren().add(windowContainer);
+    windowContainer.onWindowOpen();
+  }
+
+  private void saveMenuState() {
     if (menuDock.getChildren().size() != 0) {
       menuDock.getChildren().forEach(tempMenu::add);
       menuDock.getChildren().clear();
@@ -316,11 +418,6 @@ public class MainController implements Initializable {
     if (menuHolder.isMouseTransparent()) {
       menuHolder.setMouseTransparent(false);
     }
-
-    windowContainer = new WindowContainerComponent(this, settings, "Settings");
-
-    menuDock.getChildren().add(windowContainer);
-    windowContainer.onWindowOpen();
   }
 
   public void onWindowClose() {
@@ -351,6 +448,10 @@ public class MainController implements Initializable {
       //rightSideDock.getChildren().clear();
 
       Button3dComponent leave = new Button3dComponent("LEAVE");
+      leave.prefHeightProperty().bind(Bindings
+          .createDoubleBinding(() -> buttonsDock.getHeight() / buttonsDock.getChildren().size(),
+              buttonsDock.heightProperty(), buttonsDock.getChildren()));
+      leave.prefWidthProperty().bind(buttonsDock.widthProperty());
       leave.setOnMouseClicked(event -> {
         gameController.leaveGame();
         Logger.debug("LEAVE PLZ");
@@ -400,7 +501,7 @@ public class MainController implements Initializable {
 
   public void onHighscoreHandle() {
     chatController.requestHighscores();
-    menuDock.getChildren().remove(menu);
+    saveMenuState();
 
     windowContainer = new WindowContainerComponent(this, highscore, "Highscore");
 
