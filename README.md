@@ -96,7 +96,7 @@ These documents will only appear once the project has been built with gradle.
 ## 3. Trailer & Screenshots
 > Insert Youtube trailer here  
 
-You can find a more images in [./assets/screenshots/](assets/screenshots/) folder.  
+You can find more images in the [./assets/screenshots/](assets/screenshots/) folder.  
 ![Menu](./assets/screenshots/menu-1.png)
 ![Ingame](./assets/screenshots/game-3.png)
 
