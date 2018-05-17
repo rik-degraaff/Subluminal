@@ -14,7 +14,7 @@ public class DrawingUtils {
    * Can be used to get a dynamic x property.
    *
    * @param parent on which the x propety has to be placed.
-   * @param xPos double value between 0 & 1, representing the x value.
+   * @param xPos double value between 0 and 1, representing the x value.
    * @return a dynamic x postion on the parent node.
    */
   public static DoubleProperty getXPosition(AnchorPane parent, DoubleProperty xPos) {

@@ -86,7 +86,9 @@ public class IntermediateGameState {
                     .ifPresent(fleet -> {
                       setFleetUnderway(fleet, signal.getPlayerID());
                       moveFleet(time, signal.getPlayerID(), fleet.getID(), deltaTime - time);
-                    })))))
+                    })
+            ))
+        ))
         .filter(Optional::isPresent)
         .map(Optional::get)
         .collect(Collectors.toSet());

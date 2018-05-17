@@ -145,4 +145,9 @@ public class LobbyListController implements Initializable {
   public void setUserStore(UserStore userStore) {
     this.userStore = userStore;
   }
+  
+  @FXML
+  private void onTutorialStart() {
+    lobbyDelegate.startTutorial();
+  }
 }

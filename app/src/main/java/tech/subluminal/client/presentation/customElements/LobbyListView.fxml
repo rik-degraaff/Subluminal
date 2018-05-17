@@ -16,8 +16,10 @@
         <ListView fx:id="lobbyList" prefHeight="401.0" prefWidth="600.0" style="-fx-background-color: grey;" />
         <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: transparent;">
           <items>
-            <Button mnemonicParsing="false" onAction="#onLobbyRefresh" text="Refresh Lobbies" />
-            <Button mnemonicParsing="false" onAction="#onLobbyCreate" text="Create Lobby" />
+            <Button mnemonicParsing="false" onAction="#onLobbyRefresh" text="Refresh Lobbies"/>
+            <Button mnemonicParsing="false" onAction="#onLobbyCreate" text="Create Lobby"/>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" onAction="#onTutorialStart" text="Tutorial"/>
           </items>
         </ToolBar>
 
