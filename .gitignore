@@ -13,6 +13,11 @@
 __*.tex
 *.synctex*
 log.txt
+<<<<<<< Updated upstream
+=======
+*.toc
+docker/_secrets.sh
+>>>>>>> Stashed changes
 
 #folders
 .app/
