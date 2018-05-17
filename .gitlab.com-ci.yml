@@ -9,23 +9,24 @@ cache:
     - .gradle/
 
 stages:
+  - check
   - build
   - test
-  - docker
+  - coverage
+  - javadoc
   - deploy
 
 checkstyle:
-  stage: test
+  stage: check
   script:
     - gradle check -x test
-  tags:
-    - cs108-dind
   allow_failure: true
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     expire_in: 2 hours
     paths:
      - app/build/reports/checkstyle/
+
   only:
     - /^rl-.*$/
 
@@ -34,8 +35,6 @@ build:
   script:
     - gradle clean
     - gradle build -x check -x test -x javadoc -x sourcesjar -x javadocjar -x distZip -x distTar
-  tags:
-    - cs108-dind
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     expire_in: 2 hours
@@ -46,8 +45,6 @@ test:
   stage: test
   script:
     - gradle test
-  tags:
-    - cs108-dind
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     expire_in: 2 hours
@@ -57,14 +54,12 @@ test:
       - app/build/jacoco/
 
 coverage:
-  stage: test
+  stage: coverage
   script:
     - gradle test jacocoTestReport
     - cat app/build/reports/coverage/index.html
     - "echo -n \"Coverage: \" && grep -Eo \"Total.*?([0–9]{1,3})%\" app/build/reports/coverage/index.html | sed \"s/%.*/%/;s/.*>//g;\""
   coverage: '/Coverage: \d+\%/'
-  tags:
-    - cs108-dind
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     expire_in: 2 hours
@@ -72,24 +67,21 @@ coverage:
       - app/build/reports/coverage/
 
 javadoc:
-  stage: test
+  stage: javadoc
   script:
     - gradle javadoc
     - gradle javadoccoverage
-  tags:
-    - cs108-dind
   artifacts:
     name: "$CI_JOB_NAME-$CI_COMMIT_SHA"
     expire_in: 2 hours
     paths:
       - docs/javadoc/
   only:
-    - master
     - /^rl-.*$/
     - ft-buildtools-luc
 
-build-image:
-  stage: docker
+testing:
+  stage: deploy
   image: docker:latest
   variables:
     DOCKER_DRIVER: 'overlay2'
@@ -97,18 +89,23 @@ build-image:
   services:
   - docker:dind
   script:
-  - TAG=$(cat ./VERSION)
+  - VERSION=$(cat VERSION)
   - DEPLOYHOST=164.132.199.58
-  - echo "Building and pushing server version $TAG to https://hub.docker.com."
-  - docker build -t subluminalthegame/subluminal:latest -t subluminalthegame/subluminal-server:$(echo $TAG) --file ./docker/dockerfile-subluminal.yml --build-arg VERSION=$(echo $TAG) --build-arg PORT=1729 .
+  - echo Building and deploying server verison $VERSION to $CI_JOB_NAME
+  - docker build -t subluminalthegame/subluminal:latest -t subluminalthegame/subluminal:$(echo $VERSION) --file ./docker/dockerfile-subluminal.yml --build-arg VERSION=$(echo $VERSION) --build-arg PORT=1729 .
   - docker login -u subluminalthegame -p $DOCKERHUB_PASSWORD
-  - docker push subluminalthegame/subluminal-server
-  tags:
-    - cs108-dind
-  when: on_success
+  - docker push subluminalthegame/subluminal
+  - apk update
+  - apk add --no-cache openssh-client sshpass
+  - ssh gitlab@164.132.199.58 exit
+  - sshpass -p $DEPLOY_PASSWORD ssh -o StrictHostKeyChecking=no gitlab@$DEPLOYHOST docker stop subluminal_staging || true
+  - sshpass -p $DEPLOY_PASSWORD ssh gitlab@$DEPLOYHOST docker pull subluminalthegame/subluminal:$VERSION
+  - sshpass -p $DEPLOY_PASSWORD ssh gitlab@$DEPLOYHOST docker run --rm -d -p 1727:1729/tcp --label subluminal --name subluminal_$CI_JOB_NAME subluminalthegame/subluminal:$VERSION
+  #when: on_success
+  when: manual
+  environment:
+    name: staging
   only:
-    - master
-    - /^rl-.*$/
     - dev
     - ft-buildtools-luc
 
@@ -117,35 +114,28 @@ staging:
   image: alpine:latest
   script:
     - apk update
-    - apk add --no-cache openssh-client sshpass bash
-#    - bash
-    - chmod +x ./docker/_deploy.sh
-    - ./docker/_deploy.sh
-  tags:
-    - cs108
+    - apk add --no-cache openssh-client sshpass
+    - ping -c 5 vps406724.ovh.net
+    - sshpass -p $DEPLOY_PASSWORD ssh gitlab@vps406724.ovh.net exit
+  #when: on_success
   when: manual
   environment:
-    name: "staging/$CI_COMMIT_SHA"
-    url: "$CI_COMMIT_SHA.s01.subluminal.tech"
-    on_stop: stop_env
+    name: staging
   only:
     - /^rl-.*$/
     - ft-buildtools-luc
 
 
-# production:
-#   stage: deploy
-#   image: bash:latest
-#   script:
-#     - echo "Missing sh script to setup production environment."
-#   tags:
-#     - cs108-dind
-#   when: manual
-#   environment:
-#     name: production
-#   only:
-#     - master
-
+production:
+  stage: deploy
+  image: bash:latest
+  script:
+    - echo "Missing sh script to setup production environment."
+  when: manual
+  environment:
+    name: production
+  only:
+    - master
 
 pages:
   stage: deploy
@@ -159,22 +149,9 @@ pages:
     - cp -r app/build/reports/test/* public/test
     - mkdir public/coverage
     - cp -r app/build/reports/coverage/* public/coverage
-  tags:
-    - cs108-dind
   artifacts:
     paths:
     - public
   only:
     - master
     - ft-buildtools-luc
-
-stop_env:
-  stage: deploy
-  variables:
-    GIT_STRATEGY: none
-  script:
-    - ./docker/_stop.sh
-  when: manual
-  environment:
-    name: "staging/$CI_COMMIT_SHA"
-    action: stop

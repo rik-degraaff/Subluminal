@@ -30,7 +30,7 @@ public class DrawingUtils {
    * Can be used to get a dynamic y property.
    *
    * @param parent on which the y propety has to be placed.
-   * @param yPos double value between 0 & 1, representing the y value.
+   * @param yPos double value between 0 and 1, representing the y value.
    * @return a dynamic y postion on the parent node.
    */
   public static DoubleProperty getYPosition(AnchorPane parent, DoubleProperty yPos) {
