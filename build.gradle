@@ -16,9 +16,9 @@ configurations {
 // Repos -----------------------------------
 repositories {
     jcenter()
-    flatDir {
-        dirs '3dImporter'
-    }
+    /*flatDir {
+        //dirs '3dImporter'
+    }*/
 }
 
 // Dependencies ----------------------------
@@ -31,7 +31,7 @@ dependencies {
     compile 'info.picocli:picocli:3.0.0-alpha-4'
     compile 'org.reflections:reflections:0.9.11'
     compile 'org.apache.commons:commons-lang3:3.7'
-    compile 'com.interactivemesh.jfx.importer.stl.StlMeshImporter:jimStlMeshImporterJFX'
+    //compile 'com.interactivemesh.jfx.importer.stl.StlMeshImporter:jimStlMeshImporterJFX'
 
     javadocCoverage 'com.manoelcampos:javadoc-coverage:1.1.0'
 }
