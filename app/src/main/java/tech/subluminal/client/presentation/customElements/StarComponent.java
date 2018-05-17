@@ -59,8 +59,8 @@ public class StarComponent extends Group {
     setColor(Color.GRAY);
 
     Platform.runLater(() -> {
-      parentHeightProperty.bind(getScene().heightProperty());
-      parentWidthProperty.bind(getScene().widthProperty());
+      parentHeightProperty.bind(main.getPlayArea().heightProperty());
+      parentWidthProperty.bind(main.getPlayArea().widthProperty());
 
       this.layoutXProperty().bind(DrawingUtils.getXPosition(main.getPlayArea(),xProperty));
       this.layoutYProperty().bind(DrawingUtils.getYPosition(main.getPlayArea(),yProperty));
@@ -124,7 +124,7 @@ public class StarComponent extends Group {
       starName.setLayoutX(-starName.getWidth() / 2);
     });
 
-    starName.setFont(new Font("PxPlus IBM VGA9", 10));
+    starName.setFont(new Font("PxPlus IBM VGA9", 11));
 
     starGroup.getChildren().addAll(glowBox, border, star, starName, possessionCount);
     Effect glow = new Bloom();

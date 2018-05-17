@@ -139,9 +139,24 @@
   -fx-border-color: transparent;
   -fx-border-width: 0px;
   -fx-border-radius: 0px;
+  -fx-background-color: transparent;
+  -fx-alignment: center;
 }
 
 .ship-amount{
   -fx-stroke: black;
   -fx-stroke-width: 1;
+}
+
+.intro-text{
+  -fx-font-size: 30;
+}
+
+.textfield-white{
+  -fx-background-color: white;
+  -fx-border-radius: 0;
+}
+
+.textfield-green{
+  -fx-border-color: #59FF00;
 }
