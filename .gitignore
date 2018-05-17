@@ -16,6 +16,7 @@ log.txt
 
 #folders
 .app/
+.files/
 .idea/
 .gradle/
 .settings/

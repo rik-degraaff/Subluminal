@@ -9,13 +9,16 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -29,12 +32,12 @@ import tech.subluminal.client.presentation.customElements.Jump;
 import tech.subluminal.client.presentation.customElements.JumpBox;
 import tech.subluminal.client.presentation.customElements.MotherShipComponent;
 import tech.subluminal.client.presentation.customElements.StarComponent;
+import tech.subluminal.client.presentation.customElements.ToastComponent;
 import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.client.stores.records.game.OwnerPair;
 import tech.subluminal.shared.records.Channel;
 import tech.subluminal.shared.stores.records.User;
-import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.stores.records.game.Star;
@@ -49,6 +52,9 @@ public class GameController implements Initializable, GamePresenter {
 
   @FXML
   private Pane map;
+
+  @FXML
+  private HBox toastDock;
 
   private StarComponent[] pressStore = new StarComponent[2];
 
@@ -90,6 +96,8 @@ public class GameController implements Initializable, GamePresenter {
         jump.clear();
       }
     });
+
+    toastDock.prefWidthProperty().bind(map.widthProperty());
   }
 
   private void starClicked(StarComponent star, MouseEvent mouseEvent) {
@@ -465,6 +473,30 @@ public class GameController implements Initializable, GamePresenter {
     });
     graph = null;
     gameID = null;
+  }
+
+  @Override
+  public void addToast(String message) {
+    ToastComponent toast = new ToastComponent(message);
+    Platform.runLater(() -> {
+      toastDock.getChildren().clear();
+      toastDock.getChildren().add(toast);
+
+      PauseTransition pause = new PauseTransition();
+      pause.setDuration(Duration.seconds(1 + message.length() / 10.0));
+      pause.setOnFinished(e -> {
+        FadeTransition fade = new FadeTransition();
+        fade.setFromValue(1);
+        fade.setToValue(0);
+        fade.setDuration(Duration.seconds(0.5));
+        fade.setNode(toast);
+        fade.setOnFinished(event -> {
+          toastDock.getChildren().remove(toast);
+        });
+        fade.play();
+      });
+      pause.play();
+    });
   }
 
   public void leaveGame() {

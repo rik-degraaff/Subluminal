@@ -78,11 +78,11 @@ public class Signal extends GameObject implements Comparable<Signal> {
    */
   public Optional<Signal> advanced(double deltaTime, Consumer<Double> signalArrivedHandler) {
     double newArrival = DeltaTimeUtils
-        .advanceBy(deltaTime, timeToArrive, Double.MAX_VALUE, signalArrivedHandler);
+        .advanceBy(deltaTime, timeToArrive, 10_000_000.00, signalArrivedHandler);
 
-    return newArrival > 0
-        ? Optional
-        .of(new Signal(getCoordinates(), getID(), getStarID(), getPlayerID(),
+    return newArrival < 1_000_000.00
+        ? Optional.of(
+            new Signal(getCoordinates(), getID(), getStarID(), getPlayerID(),
             newArrival, getAmount(), getTargets()))
         : Optional.empty();
   }
