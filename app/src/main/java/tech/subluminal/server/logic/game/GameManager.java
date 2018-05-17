@@ -41,6 +41,7 @@ import tech.subluminal.shared.messages.HighScoreRes;
 import tech.subluminal.shared.messages.LobbyUpdateRes;
 import tech.subluminal.shared.messages.MotherShipMoveReq;
 import tech.subluminal.shared.messages.MoveReq;
+import tech.subluminal.shared.messages.SpectateGameReq;
 import tech.subluminal.shared.messages.YouLose;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.records.LobbyStatus;
@@ -93,6 +94,23 @@ public class GameManager implements GameStarter {
         req -> onHighScoreReq(id));
     connection.registerHandler(GameLeaveReq.class, GameLeaveReq::fromSON,
         req -> onLeaveGame(req, id));
+    connection.registerHandler(SpectateGameReq.class, SpectateGameReq::fromSON,
+        req -> onSpectateGameReq(req, id));
+  }
+
+  private void onSpectateGameReq(SpectateGameReq req, String id) {
+    gameStore.games()
+        .getByID(req.getId())
+        .ifPresent(s -> s.consume(game -> {
+          game.getSpectators().add(id);List<Color> colors = getNiceColors(game.getPlayers().size());
+          int i = 0;
+          Map<String, Color> playerColors = new HashMap<>();
+          for (String player : game.getPlayers().keySet()) {
+            playerColors.put(player, colors.get(i));
+            i++;
+          }
+          distributor.sendMessage(new GameStartRes(game.getID(), playerColors), id);
+        }));
   }
 
   private void onLeaveGame(GameLeaveReq req, String id) {
@@ -294,6 +312,8 @@ public class GameManager implements GameStarter {
         }
       });
 
+      sendUpdatesToSpectators(gameState);
+
       gameState.getStars().forEach((starID, starHistory) ->
           starHistory.getLatestForPlayer(playerID, motherShipEntry)
               .flatMap(Either::left)
@@ -317,10 +337,53 @@ public class GameManager implements GameStarter {
     return false;
   }
 
+  private void sendUpdatesToSpectators(GameState gameState) {
+    Set<String> spectators = gameState.getSpectators();
+
+    if (spectators.isEmpty()) {
+      return;
+    }
+
+    GameStateDelta delta = new GameStateDelta();
+
+    gameState.getPlayers().forEach((playerID, player) -> {
+      final GameHistoryEntry<Ship> shipEntry = player.getMotherShip().getCurrent();
+      Optional<Ship> motherShip = shipEntry.isDestroyed()
+          ? Optional.empty()
+          : Optional.of(shipEntry.getState());
+
+      if (!motherShip.isPresent()) {
+        delta.addRemovedMotherShip(shipEntry.getState().getID());
+      }
+
+      tech.subluminal.client.stores.records.game.Player deltaPlayer =
+          new tech.subluminal.client.stores.records.game.Player(playerID, motherShip,
+              new LinkedList<>());
+      player.getFleets().forEach((fleetID, fleetHistory) -> {
+        final GameHistoryEntry<Fleet> fleetEntry = fleetHistory.getCurrent();
+        if (fleetEntry.isDestroyed()) {
+          delta.addRemovedFleet(playerID, fleetID);
+        } else {
+          deltaPlayer.getFleets().add(fleetEntry.getState());
+        }
+      });
+
+      delta.addPlayer(deltaPlayer);
+    });
+
+    gameState.getStars().forEach((starID, starHistory) -> {
+      delta.addStar(starHistory.getCurrent().getState());
+    });
+
+    distributor.sendMessage(delta, gameState.getSpectators());
+  }
+
   private void onGameOver(GameState gameState, List<Player> livingPlayers) {
     String winner = livingPlayers.size() == 1 ? livingPlayers.get(0).getID() : null;
     distributor.sendMessage(new EndGameRes(gameState.getID(), winner),
         gameState.getPlayers().keySet());
+    distributor.sendMessage(new EndGameRes(gameState.getID(), winner),
+        gameState.getSpectators());
     if (winner != null) {
       final Player winnerPlayer = gameState.getPlayers().get(winner);
       final double diff =
