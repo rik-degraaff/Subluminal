@@ -31,4 +31,9 @@ public class Ship extends Movable implements SONRepresentable {
     return new SON()
         .put(super.asSON(), MOVABLE_KEY);
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    return obj instanceof Ship && super.equals(obj);
+  }
 }
