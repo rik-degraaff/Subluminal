@@ -93,6 +93,10 @@
   -fx-border-radius: 4px;
 }
 
+.button:hover {
+  -fx-font-size: 14px;
+}
+
 /*Listview*/
 
 .list-cell:filled:selected:focused, .list-cell:filled:selected {
@@ -141,6 +145,10 @@
   -fx-border-radius: 0px;
   -fx-background-color: transparent;
   -fx-alignment: center;
+}
+
+.button3D:hover{
+  -fx-cursor: pointer;
 }
 
 .ship-amount{

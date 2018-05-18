@@ -2,7 +2,6 @@ package tech.subluminal.shared.util;
 
 
 import com.interactivemesh.jfx.importer.stl.StlMeshImporter;
-import javafx.scene.shape.Mesh;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 
@@ -22,20 +21,19 @@ public class MeshImporter {
     importer.read(MeshImporter.class.getResource(url));
     TriangleMesh mesh = importer.getImport();
 
-    TriangleMesh mesh1 = new TriangleMesh();
+    //TriangleMesh mesh1 = new TriangleMesh();
 
-    String points = mesh.getPoints().toString();
-    for(int i = 0; i < mesh.getPoints().size(); i++){
-      points += mesh.getPoints().get(i);
-    }
+    //float[] points = new float[mesh.getPoints().size()];
+    //mesh.getPoints().toArray(points);
 
-    mesh1.getPoints().addAll(mesh.getPoints());
-    mesh1.getFaces().addAll(mesh.getFaces());
-    mesh1.getTexCoords().addAll(mesh.getTexCoords());
-    mesh1.getFaceSmoothingGroups().addAll(mesh.getFaceSmoothingGroups());
-    mesh1.getNormals().addAll(mesh.getNormals());
-    mesh1.setVertexFormat(mesh.getVertexFormat());
+    //System.out.println(points);
+    //mesh1.getPoints().addAll(points);
+    //mesh1.getFaces().addAll(mesh.getFaces());
+    //mesh1.getTexCoords().addAll(mesh.getTexCoords());
+    //mesh1.getFaceSmoothingGroups().addAll(mesh.getFaceSmoothingGroups());
+    //mesh1.getNormals().addAll(mesh.getNormals());
+    //mesh1.setVertexFormat(mesh.getVertexFormat());
 
-    return new MeshView(mesh1);
+    return new MeshView(mesh);
   }
 }
