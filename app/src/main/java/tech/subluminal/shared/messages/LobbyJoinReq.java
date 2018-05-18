@@ -46,7 +46,7 @@ public class LobbyJoinReq implements SONRepresentable {
    *
    * @return the id of the lobby.
    */
-  public String getId() {
+  public String getID() {
     return id;
   }
 

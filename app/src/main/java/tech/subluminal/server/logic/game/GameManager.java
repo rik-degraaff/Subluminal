@@ -101,7 +101,7 @@ public class GameManager implements GameStarter {
 
   private void onSpectateGameReq(SpectateGameReq req, String id) {
     gameStore.games()
-        .getByID(req.getId())
+        .getByID(req.getID())
         .ifPresent(s -> s.consume(game -> {
           game.getSpectators().add(id);List<Color> colors = getNiceColors(game.getPlayers().size());
           int i = 0;
@@ -119,9 +119,14 @@ public class GameManager implements GameStarter {
   private void onLeaveGame(GameLeaveReq req, String id) {
     getGameWithUser(id).ifPresent(sync -> sync.consume(state -> {
       final Player player = state.getPlayers().get(id);
-      final GameHistory<Ship> motherShip = player.getMotherShip();
-      motherShip.add(GameHistoryEntry.destroyed(motherShip.getCurrent().getState()));
-      player.leave();
+      if (player != null) {
+        final GameHistory<Ship> motherShip = player.getMotherShip();
+        motherShip.add(GameHistoryEntry.destroyed(motherShip.getCurrent().getState()));
+        player.leave();
+      }
+
+      state.getSpectators().remove(id);
+
       lobbyStore.lobbies()
           .getByID(state.getID())
           .ifPresent(syncLobby -> {
