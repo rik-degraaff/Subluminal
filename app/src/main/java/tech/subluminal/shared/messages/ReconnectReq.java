@@ -5,7 +5,14 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Represents a reconnect request from client to server.
+ * Represents a reconnect request from client to server. This message, when converted to SON and
+ * then to string, might look like this:
+ * <pre>
+ * {
+ *   "id":s"his mom's basement",
+ *   "username":s"Bob"
+ * }
+ * </pre>
  */
 public class ReconnectReq implements SONRepresentable {
 
