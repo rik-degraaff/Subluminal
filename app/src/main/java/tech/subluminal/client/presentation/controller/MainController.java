@@ -57,6 +57,7 @@ import tech.subluminal.client.presentation.customElements.UserListComponent;
 import tech.subluminal.client.presentation.customElements.WindowContainerComponent;
 import tech.subluminal.client.presentation.customElements.custom3DComponents.Button3dComponent;
 import tech.subluminal.client.presentation.customElements.custom3DComponents.CockpitComponent;
+import tech.subluminal.client.presentation.customElements.custom3DComponents.LeverComponent;
 import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.server.stores.records.HighScore;
@@ -495,6 +496,8 @@ public class MainController implements Initializable {
     playArea.setMouseTransparent(true);
     gameController.clearMap();
     chatController.setInGame(false);
+
+    menuHolder.setMouseTransparent(false);
 
     menuDock.getChildren().add(menu);
   }

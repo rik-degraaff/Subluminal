@@ -11,9 +11,9 @@ import tech.subluminal.shared.util.MeshImporter;
 
 public class CockpitComponent extends Group {
 
-  private static final String MESH_PATH = "/tech/subluminal/resources/3D/cockpit.stl";
+  private static final String MESH_PATH = "/tech/subluminal/resources/3D/cockpit_v1.stl";
 
-  private static final double MODEL_SCALE_FACTOR = 170;
+  private static final double MODEL_SCALE_FACTOR = 180;
   private static final double MODEL_X_OFFSET = 0; // standard
   private static final double MODEL_Y_OFFSET = 0; // standard
   private static final int VIEWPORT_SIZE = 200;
@@ -38,7 +38,7 @@ public class CockpitComponent extends Group {
       this.translateXProperty().bind(Bindings
           .createDoubleBinding(() -> getScene().getWidth() / 2, getScene().widthProperty()));
       this.translateYProperty().bind(Bindings
-          .createDoubleBinding(() -> getScene().getHeight() / 2 + 100, getScene().heightProperty()));
+          .createDoubleBinding(() -> getScene().getHeight() / 2 + 150 , getScene().heightProperty()));
     });
 
 
