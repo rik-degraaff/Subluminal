@@ -35,6 +35,12 @@ public class LobbyStatusComponent extends HBox {
 
     Label playersMax = new Label(Integer.toString(max));
 
+    Label spectate = new Label("Spectate");
+    spectate.setOnMouseClicked(e -> {
+      lobbyToJoinProperty().set(lobbyID);
+      delegate.joinGame(lobbyID);
+    });
+
     Label join = new Label("Join Lobby");
     join.setOnMouseClicked(e -> {
       Logger.trace("on Mouse Click");
@@ -42,11 +48,14 @@ public class LobbyStatusComponent extends HBox {
       delegate.joinLobby(lobbyID);
     });
 
+    spectate.setVisible(status == LobbyStatus.INGAME);
+    join.setVisible(status == LobbyStatus.OPEN);
+
     Pane spacer = new Pane();
     HBox.setHgrow(spacer, Priority.ALWAYS);
 
     hbox.getChildren().addAll(statusBox, name, playersNow, playersMax);
-    this.getChildren().addAll(hbox, spacer, join);
+    this.getChildren().addAll(hbox, spacer, spectate, join);
   }
 
   public String getLobbyToJoin() {

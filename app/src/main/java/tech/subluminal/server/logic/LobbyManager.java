@@ -90,7 +90,7 @@ public class LobbyManager {
                     .getAdminID()
                     .equals(userID)))
                 .forEach(s -> s.consume(lobby -> {
-                  lobby.setStatus(LobbyStatus.FULL);
+                  lobby.setStatus(LobbyStatus.INGAME);
                   List<Color> colors = getNiceColors(lobby.getPlayerCount());
                   int i = 0;
                   Map<String, Color> playerColors = new HashMap<>();

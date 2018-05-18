@@ -12,7 +12,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -20,7 +19,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +35,6 @@ import tech.subluminal.shared.logic.game.GameLoop.Delegate;
 import tech.subluminal.shared.messages.YouLose;
 import tech.subluminal.shared.records.LobbyStatus;
 import tech.subluminal.shared.stores.records.Lobby;
-import tech.subluminal.shared.stores.records.LobbySettings;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.Ship;
@@ -171,7 +168,7 @@ public class GameManagerTest {
       Set<Star> stars, GameStore gameStore, Consumer<Delegate> gameLoop
   ) {
     BlockingQueue<Boolean> queue = new LinkedBlockingDeque<>();
-    lobbyStore.lobbies().add(new Lobby("game", null, LobbyStatus.FULL));
+    lobbyStore.lobbies().add(new Lobby("game", null, LobbyStatus.INGAME));
 
     final GameManager gameManager = new GameManager(
         gameStore, lobbyStore, distributor, highScoreStore,

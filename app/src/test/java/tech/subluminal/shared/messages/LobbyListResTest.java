@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.LinkedList;
 import java.util.List;
-import javafx.scene.paint.Color;
 import org.junit.Assert;
 import org.junit.Test;
 import tech.subluminal.shared.records.LobbyStatus;
@@ -14,7 +13,6 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONParsingError;
 import tech.subluminal.shared.stores.records.LobbySettings;
 import tech.subluminal.shared.stores.records.SlimLobby;
-import org.pmw.tinylog.Logger;
 
 
 public class LobbyListResTest {
@@ -22,8 +20,8 @@ public class LobbyListResTest {
   @Test
   public void testStringifyAndParsing() throws SONParsingError, SONConversionError {
     List<SlimLobby> slimLobbies = new LinkedList<>();
-    SlimLobby slimLobby1 = new SlimLobby("9439", new LobbySettings("weoi", "3472"), LobbyStatus.FULL);
-    SlimLobby slimLobby2 = new SlimLobby("1790", new LobbySettings("eruo", "1338"), LobbyStatus.LOCKED);
+    SlimLobby slimLobby1 = new SlimLobby("9439", new LobbySettings("weoi", "3472"), LobbyStatus.INGAME);
+    SlimLobby slimLobby2 = new SlimLobby("1790", new LobbySettings("eruo", "1338"), LobbyStatus.FINISHED);
     SlimLobby slimLobby3 = new SlimLobby("1295", new LobbySettings("sdfu", "1237"), LobbyStatus.OPEN);
     slimLobbies.add(slimLobby1);
     slimLobbies.add(slimLobby2);

@@ -242,7 +242,7 @@ public class GameManager implements GameStarter {
                 lobbyStore.lobbies()
                     .getByID(gameID)
                     .ifPresent(syncLobby -> {
-                      syncLobby.consume(lobby -> lobby.setStatus(LobbyStatus.LOCKED));
+                      syncLobby.consume(lobby -> lobby.setStatus(LobbyStatus.FINISHED));
                     });
               }
             }));
