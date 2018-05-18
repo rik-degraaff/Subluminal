@@ -74,6 +74,7 @@ public class LobbyComponent extends Group implements LobbyPresenter {
     this.userStore = userStore;
 
     lobbyUserController.setUserStore(userStore);
+    lobbyListController.setUserStore(userStore);
   }
 
   @Override

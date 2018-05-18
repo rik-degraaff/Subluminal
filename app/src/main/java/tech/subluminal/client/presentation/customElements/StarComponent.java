@@ -124,7 +124,7 @@ public class StarComponent extends Group {
       starName.setLayoutX(-starName.getWidth() / 2);
     });
 
-    starName.setFont(new Font("PxPlus IBM VGA9", 10));
+    starName.setFont(new Font("PxPlus IBM VGA9", 11));
 
     starGroup.getChildren().addAll(glowBox, border, star, starName, possessionCount);
     Effect glow = new Bloom();

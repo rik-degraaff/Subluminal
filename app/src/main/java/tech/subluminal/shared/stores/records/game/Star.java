@@ -134,4 +134,19 @@ public class Star extends GameObject implements SONRepresentable {
 
     return son;
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Star)) {
+      return false;
+    }
+
+    Star star = (Star) obj;
+
+    return super.equals(obj)
+        && isGenerating() == star.isGenerating()
+        && (getOwnerID() != null && getOwnerID().equals(star.getOwnerID())
+            || getOwnerID() == null && star.getOwnerID() == null)
+        && Math.abs(getPossession() - star.getPossession()) < 0.0001;
+  }
 }

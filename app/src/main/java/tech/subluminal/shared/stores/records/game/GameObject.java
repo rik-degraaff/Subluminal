@@ -60,4 +60,14 @@ public abstract class GameObject extends Identifiable {
         .put(coordinates.asSON(), COORDINATES_KEY);
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof GameObject)) {
+      return false;
+    }
+
+    GameObject go = (GameObject) obj;
+
+    return getID().equals(go.getID()) && getDistanceFrom(go) < 0.0001;
+  }
 }

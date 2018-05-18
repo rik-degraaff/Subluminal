@@ -1,32 +1,42 @@
 package tech.subluminal.client.presentation.controller;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
+import javafx.animation.Transition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.PerspectiveTransform;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
@@ -45,6 +55,7 @@ import tech.subluminal.client.presentation.customElements.NameChangeComponent;
 import tech.subluminal.client.presentation.customElements.SettingsComponent;
 import tech.subluminal.client.presentation.customElements.UserListComponent;
 import tech.subluminal.client.presentation.customElements.WindowContainerComponent;
+import tech.subluminal.client.presentation.customElements.custom3DComponents.Button3dComponent;
 import tech.subluminal.client.presentation.customElements.custom3DComponents.CockpitComponent;
 import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.client.stores.UserStore;
@@ -52,68 +63,55 @@ import tech.subluminal.server.stores.records.HighScore;
 
 public class MainController implements Initializable {
 
+  List<Node> tempMenu = new ArrayList<>();
   @FXML
   private AnchorPane spaceBackgroundDock;
-
   @FXML
   private AnchorPane menuDock;
-
   @FXML
   private AnchorPane playArea;
-
   private BackgroundComponent background;
-
   private MenuComponent menu;
-
   private SettingsComponent settings;
-
-
   private LobbyComponent lobby;
-
   @FXML
   private WindowContainerComponent windowContainer;
-
   @FXML
   private AnchorPane window;
-
   @FXML
   private AnchorPane chatDock;
-
   @FXML
   private AnchorPane playerBoardDock;
-
   @FXML
   private VBox statusBoxDock;
-
   @FXML
   private AnchorPane boardComputer;
-
   @FXML
   private AnchorPane boardComputerWrapper;
-
   @FXML
   private Cylinder boardCylinder;
-
   @FXML
   private GridPane buttonsDock;
-
   @FXML
   private GridPane monitorDock;
-
   @FXML
   private AnchorPane glassPane;
-
   @FXML
   private AnchorPane arcLeftDock;
-
   @FXML
   private AnchorPane arcRightDock;
-
   @FXML
   private AnchorPane leverDock;
-
   @FXML
   private AnchorPane cockpitDock;
+  @FXML
+  private AnchorPane menuHolder;
+
+  @FXML
+  private AnchorPane introPane;
+
+  @FXML
+  private HBox introBoxHolder;
 
   private GameComponent game;
 
@@ -162,11 +160,89 @@ public class MainController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    introPane.setBackground(
+        new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+
+    Label introText = new Label();
+    introText.setTextAlignment(TextAlignment.CENTER);
+    introText.setTranslateY(-100);
+    introText.setWrapText(true);
+    introText.getStyleClass().addAll("console-red", "intro-text");
+    introBoxHolder.getChildren().addAll(introText);
+
+    String introStory = "In a basement just around your corner, we once were created.\nAnd now we are set to conquer the galaxy...";
+
+    SequentialTransition mainTl = new SequentialTransition();
+    PauseTransition pauseTl = new PauseTransition(Duration.seconds(2));
+    PauseTransition pauseTl2 = new PauseTransition(Duration.seconds(2));
+
+    Timeline timeTl = new Timeline();
+
+    timeTl.getKeyFrames()
+        .add(new KeyFrame(Duration.seconds(0.5), "0", e -> {
+          if (introText.getText().length() >= introStory.length() && introText.getText()
+              .charAt(introText.getText().length() - 1) == ' ') {
+            introText
+                .setText(introText.getText().substring(0, introText.getText().length() - 1) + "|");
+          } else {
+            introText.setText(introText.getText() + "|");
+          }
+
+        }));
+    timeTl.getKeyFrames()
+        .add(new KeyFrame(Duration.seconds(1), "1", e -> {
+          if (introText.getText().length() >= introStory.length() - 1 && introText.getText()
+              .charAt(introText.getText().length() - 1) == ' ') {
+            introText.setText(introText.getText().substring(0, introText.getText().length() - 1));
+          } else {
+            introText
+                .setText(introText.getText().substring(0, introText.getText().length() - 1) + " ");
+          }
+        }));
+
+    timeTl.setCycleCount(Timeline.INDEFINITE);
+
+    final Animation animation = new Transition() {
+      {
+        setCycleDuration(Duration.millis(5000));
+      }
+
+      protected void interpolate(double frac) {
+        final int length = introStory.length();
+        final int n = Math.round(length * (float) frac);
+        introText.setText(introStory.substring(0, n));
+      }
+
+    };
+
+    FadeTransition fadeTl = new FadeTransition();
+    fadeTl.setNode(introPane);
+    fadeTl.setToValue(0);
+    fadeTl.setFromValue(1);
+    fadeTl.setDuration(Duration.seconds(2));
+
+    mainTl.getChildren().addAll(pauseTl, animation, pauseTl2, fadeTl);
+    timeTl.play();
+    mainTl.play();
+
+    window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
+      if (keyEvent.getCode() == KeyCode.ESCAPE) {
+        clearIntro(timeTl);
+      }
+    });
+
+    mainTl.setOnFinished(e -> {
+      clearIntro(timeTl);
+    });
+
+    //animation.play();
+
     background = new BackgroundComponent(1000);
     spaceBackgroundDock.getChildren().add(background);
 
     CockpitComponent cockpit = new CockpitComponent();
     cockpitDock.getChildren().addAll(cockpit);
+    cockpit.setVisible(true);
 
     Rectangle clipNode = new Rectangle();
     clipNode.widthProperty().bind(playArea.widthProperty());
@@ -178,12 +254,6 @@ public class MainController implements Initializable {
             BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
             BackgroundSize.DEFAULT)));
 
-    DropShadow ds = new DropShadow();
-    ds.setOffsetY(5.0);
-    ds.setOffsetX(5.0);
-    ds.setColor(Color.WHITE);
-    //glassPane.setEffect(ds);
-
     chat = new ChatComponent(this);
     chatController = chat.getChatcontroller();
     chatDock.getChildren().add(chat);
@@ -194,8 +264,9 @@ public class MainController implements Initializable {
 
     display = new DisplayComponent();
 
-    userList = new UserListComponent(this);
+    userList = new UserListComponent(this, display);
     playerListButton = new ControlButton(this, "P", userList, display);
+
     userList.prefWidthProperty().bind(display.widthProperty());
     userList.prefHeightProperty().bind(display.heightProperty());
 
@@ -208,7 +279,6 @@ public class MainController implements Initializable {
 
     menu = new MenuComponent(this);
     settings = new SettingsComponent(this);
-    settingsButton = new ControlButton(this, "S", settings, display);
     //rightSideDock.getChildren().add(settingsButton);
 
     highscore = new HighscoreComponent();
@@ -229,19 +299,6 @@ public class MainController implements Initializable {
 
     VBox debugDock = new VBox();
     window.getChildren().add(debugDock);
-
-    PerspectiveTransform perspect = new PerspectiveTransform();
-    perspect.setUlx(50);
-    perspect.setUly(10);
-    perspect.urxProperty().bind(Bindings
-        .createDoubleBinding(() -> boardComputerWrapper.getWidth() - 50,
-            boardComputer.widthProperty()));
-    perspect.setUry(10);
-
-    perspect.setLlx(0);
-    perspect.llyProperty().bind(boardComputer.heightProperty());
-    perspect.lrxProperty().bind(boardComputerWrapper.widthProperty());
-    perspect.lryProperty().bind(boardComputer.heightProperty());
 
     Rotate rotate = new Rotate(-60, 0, 0, 0, Rotate.X_AXIS);
     rotate.pivotYProperty().bind(boardComputerWrapper.heightProperty());
@@ -276,9 +333,28 @@ public class MainController implements Initializable {
       }
     });
 
-    buttonsDock.add(settingsButton, 0, 0);
+    Button3dComponent settingButton = new Button3dComponent("S");
+    settingButton.setOnMouseClicked((e) -> {
+      Button3dComponent settingClose = new Button3dComponent("X");
+      settingClose.setOnMouseClicked(event -> {
+        onWindowClose();
+        event.consume();
+        buttonsDock.getChildren().remove(settingButton);
+        buttonsDock.add(settingButton, 0, 0);
+      });
+      buttonsDock.getChildren().remove(settingButton);
+      buttonsDock.add(settingClose, 0, 0);
+      onSettingOpenHandle();
+      e.consume();
+    });
+
+    buttonsDock.add(settingButton, 0, 0);
     buttonsDock.add(playerListButton, 0, 1);
     buttonsDock.add(nameChangeButton, 0, 2);
+
+    bindDockButtons(settingButton);
+    bindDockButtons(playerListButton);
+    bindDockButtons(nameChangeButton);
 
     monitorDock.add(display, 1, 0);
 
@@ -300,6 +376,26 @@ public class MainController implements Initializable {
 
   }
 
+  private void clearIntro(Timeline timeTl) {
+    introPane.setMouseTransparent(true);
+    introPane.setVisible(false);
+    timeTl.stop();
+  }
+
+  private void bindDockButtons(Button3dComponent button) {
+    button.prefWidthProperty().bind(buttonsDock.widthProperty());
+    button.prefHeightProperty().bind(Bindings
+        .createDoubleBinding(() -> buttonsDock.getHeight() / buttonsDock.getChildren().size(),
+            buttonsDock.heightProperty(), buttonsDock.getChildren()));
+  }
+
+  private void bindDockButtons(ControlButton button) {
+    button.prefWidthProperty().bind(buttonsDock.widthProperty());
+    button.prefHeightProperty().bind(Bindings
+        .createDoubleBinding(() -> buttonsDock.getHeight() / buttonsDock.getChildren().size(),
+            buttonsDock.heightProperty(), buttonsDock.getChildren()));
+  }
+
   public MainController getController() {
     return this;
   }
@@ -317,7 +413,7 @@ public class MainController implements Initializable {
   }
 
   public void onLobbyOpenHandle() {
-    menuDock.getChildren().clear();
+    saveMenuState();
 
     windowContainer = new WindowContainerComponent(this, lobby, "Lobbies");
     //lobby.setUserActive();
@@ -327,7 +423,7 @@ public class MainController implements Initializable {
   }
 
   public void onSettingOpenHandle() {
-    menuDock.getChildren().remove(menu);
+    saveMenuState();
 
     windowContainer = new WindowContainerComponent(this, settings, "Settings");
 
@@ -335,10 +431,30 @@ public class MainController implements Initializable {
     windowContainer.onWindowOpen();
   }
 
+  private void saveMenuState() {
+    if (menuDock.getChildren().size() != 0) {
+      menuDock.getChildren().forEach(tempMenu::add);
+      menuDock.getChildren().clear();
+    }
+    menuDock.getChildren().remove(menu);
+
+    if (menuHolder.isMouseTransparent()) {
+      menuHolder.setMouseTransparent(false);
+    }
+  }
+
   public void onWindowClose() {
     menuDock.getChildren().clear();
 
-    menuDock.getChildren().add(menu);
+    if (tempMenu != null && tempMenu.size() != 0) {
+      tempMenu.forEach(menuDock.getChildren()::add);
+      tempMenu.clear();
+      menuHolder.setMouseTransparent(false);
+    } else {
+      menuHolder.setMouseTransparent(true);
+    }
+
+
   }
 
   public AnchorPane getPlayArea() {
@@ -347,17 +463,25 @@ public class MainController implements Initializable {
 
   public void onMapOpenHandle() {
     Platform.runLater(() -> {
+
       menuDock.getChildren().clear();
 
-      //playArea.setMouseTransparent(false);
+      menuHolder.setMouseTransparent(true);
 
       //rightSideDock.getChildren().clear();
 
-      Button leave = new Button("X");
-      leave.setOnAction(event -> {
+      Button3dComponent leave = new Button3dComponent("LEAVE");
+      leave.prefHeightProperty().bind(Bindings
+          .createDoubleBinding(() -> buttonsDock.getHeight() / buttonsDock.getChildren().size(),
+              buttonsDock.heightProperty(), buttonsDock.getChildren()));
+      leave.prefWidthProperty().bind(buttonsDock.widthProperty());
+      leave.setOnMouseClicked(event -> {
         gameController.leaveGame();
         Logger.debug("LEAVE PLZ");
       });
+
+      buttonsDock.addRow(3);
+      buttonsDock.add(leave, 0, 3);
       //rightSide.getChildren().add(new Label("this is a test"));
 
       chatController.setInGame(true);
@@ -368,7 +492,7 @@ public class MainController implements Initializable {
   public void onMapCloseHandle() {
     playArea.getChildren().clear();
 
-    //playArea.setMouseTransparent(true);
+    playArea.setMouseTransparent(true);
     gameController.clearMap();
     chatController.setInGame(false);
 
@@ -379,6 +503,10 @@ public class MainController implements Initializable {
     menuDock.getChildren().clear();
 
     menuDock.getChildren().add(menu);
+
+    if (menuHolder.isMouseTransparent()) {
+      menuHolder.setMouseTransparent(false);
+    }
   }
 
   public void onLobbyCreateHandle() {
@@ -396,7 +524,7 @@ public class MainController implements Initializable {
 
   public void onHighscoreHandle() {
     chatController.requestHighscores();
-    menuDock.getChildren().remove(menu);
+    saveMenuState();
 
     windowContainer = new WindowContainerComponent(this, highscore, "Highscore");
 
