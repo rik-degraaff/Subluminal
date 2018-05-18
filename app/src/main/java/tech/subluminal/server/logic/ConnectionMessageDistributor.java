@@ -59,7 +59,9 @@ public class ConnectionMessageDistributor implements MessageDistributor {
    */
   @Override
   public void broadcast(SONRepresentable message) {
-    connections.values().forEach(c -> c.sendMessage(message));
+    String type = message.getClass().getSimpleName();
+    String msg = message.asSON().asString();
+    connections.values().forEach(c -> c.sendMessage(type, msg));
   }
 
   /**
@@ -70,11 +72,17 @@ public class ConnectionMessageDistributor implements MessageDistributor {
    */
   @Override
   public void sendMessage(SONRepresentable message, String connectionID) {
+    String type = message.getClass().getSimpleName();
+    String msg = message.asSON().asString();
+    sendMessage(type, msg, connectionID);
+  }
+
+  private void sendMessage(String type, String message, String connectionID) {
     Connection cnx = connections.get(connectionID);
     if (cnx == null) {
       return;
     }
-    cnx.sendMessage(message);
+    cnx.sendMessage(type, message);
   }
 
   /**
@@ -85,7 +93,9 @@ public class ConnectionMessageDistributor implements MessageDistributor {
    */
   @Override
   public void sendMessage(SONRepresentable message, Collection<String> connectionIDs) {
-    connectionIDs.forEach(id -> sendMessage(message, id));
+    String type = message.getClass().getSimpleName();
+    String msg = message.asSON().asString();
+    connectionIDs.forEach(id -> sendMessage(type, msg, id));
   }
 
   /**
@@ -96,10 +106,12 @@ public class ConnectionMessageDistributor implements MessageDistributor {
    */
   @Override
   public void sendMessageToAllExcept(SONRepresentable message, String connectionID) {
+    String type = message.getClass().getSimpleName();
+    String msg = message.asSON().asString();
     connections.entrySet().stream()
         .filter(e -> e.getKey() != connectionID)
         .map(Entry::getValue)
-        .forEach(c -> c.sendMessage(message));
+        .forEach(c -> c.sendMessage(type, msg));
   }
 
   /**
