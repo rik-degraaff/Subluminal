@@ -42,6 +42,7 @@ import tech.subluminal.shared.messages.LobbyUpdateRes;
 import tech.subluminal.shared.messages.MotherShipMoveReq;
 import tech.subluminal.shared.messages.MoveReq;
 import tech.subluminal.shared.messages.SpectateGameReq;
+import tech.subluminal.shared.messages.Toast;
 import tech.subluminal.shared.messages.YouLose;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.records.LobbyStatus;
@@ -110,6 +111,8 @@ public class GameManager implements GameStarter {
             i++;
           }
           distributor.sendMessage(new GameStartRes(game.getID(), playerColors), id);
+          distributor.sendMessage(new Toast("Spectating", true), id);
+          distributor.sendMessage(new Toast("We've missed you Bob..."), id);
         }));
   }
 

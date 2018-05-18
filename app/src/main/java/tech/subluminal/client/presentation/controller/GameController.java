@@ -204,7 +204,8 @@ public class GameController implements Initializable, GamePresenter {
   public void setUserID() {
     new Thread(() -> {
       Optional<String> optID;
-      while (!(optID = userStore.currentUser().get().use(opt -> opt.map(User::getID))).isPresent()) {
+      while (!(optID = userStore.currentUser().get().use(opt -> opt.map(User::getID)))
+          .isPresent()) {
         Thread.yield();
       }
       playerID = optID.get();
@@ -451,7 +452,6 @@ public class GameController implements Initializable, GamePresenter {
 
       this.dummyFleetList.setItems(fleetComponents);
     });
-
   }
 
   public void setUserStore(UserStore userStore) {
@@ -482,23 +482,19 @@ public class GameController implements Initializable, GamePresenter {
   public void addToast(String message, boolean permanent) {
     ToastComponent toast = new ToastComponent(message, permanent);
     Platform.runLater(() -> {
-      if(toastDock.getChildren().isEmpty()){
+      if (toastDock.getChildren().isEmpty()) {
         toastDock.getChildren().add(toast);
       } else {
-        toastDock.getChildren()
-            .stream()
-            .filter(n -> ((ToastComponent) n).isPermanent())
-            .forEach(toastDock.getChildren()::remove);
-
         if (toast.isPermanent()) {
+          toastDock.getChildren()
+              .removeIf(n -> n instanceof  ToastComponent && ((ToastComponent) n).isPermanent());
           toastDock.getChildren().add(0, toast);
         } else {
           toastDock.getChildren().add(toast);
         }
       }
 
-
-      if(!permanent){
+      if (!permanent) {
         PauseTransition pause = new PauseTransition();
         pause.setDuration(Duration.seconds(1 + message.length() / 10.0));
         pause.setOnFinished(e -> {
