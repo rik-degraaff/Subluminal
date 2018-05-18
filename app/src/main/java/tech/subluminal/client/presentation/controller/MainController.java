@@ -40,6 +40,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Rotate;
 import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
+import tech.subluminal.client.presentation.KeyMap;
 import tech.subluminal.client.presentation.customElements.BackgroundComponent;
 import tech.subluminal.client.presentation.customElements.ChatComponent;
 import tech.subluminal.client.presentation.customElements.ControlButton;
@@ -133,11 +134,12 @@ public class MainController implements Initializable {
   private NameChangeComponent nameChange;
   private ControlButton playerListButton;
   private ControlButton nameChangeButton;
-  private ControlButton settingsButton;
   private DebugComponent debug;
   private MonitorComponent monitor;
   private HighscoreComponent highscore;
   private DisplayComponent display;
+
+  private KeyMap keyMap = new KeyMap();
 
   public LobbyComponent getLobby() {
     return lobby;
@@ -371,6 +373,12 @@ public class MainController implements Initializable {
         } else {
           debugDock.getChildren().add(monitor);
         }
+      }
+    });
+
+    window.addEventHandler(KeyEvent.KEY_RELEASED, keyEvent -> {
+      if(keyEvent.getCode().getName().equals(keyMap.getKeyMap().get("chat").getValue())){
+        togg
       }
     });
 
