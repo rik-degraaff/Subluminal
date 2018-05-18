@@ -48,14 +48,21 @@ public class LobbyStatusComponent extends HBox {
       delegate.joinLobby(lobbyID);
     });
 
-    spectate.setVisible(status == LobbyStatus.INGAME);
-    join.setVisible(status == LobbyStatus.OPEN);
-
     Pane spacer = new Pane();
     HBox.setHgrow(spacer, Priority.ALWAYS);
 
     hbox.getChildren().addAll(statusBox, name, playersNow, playersMax);
-    this.getChildren().addAll(hbox, spacer, spectate, join);
+    this.getChildren().addAll(hbox, spacer);
+
+    if(status == LobbyStatus.INGAME){
+      this.getChildren().add(spectate);
+    }
+
+    if(status == LobbyStatus.OPEN){
+      this.getChildren().add(join);
+    }
+
+
   }
 
   public String getLobbyToJoin() {

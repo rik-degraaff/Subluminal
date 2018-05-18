@@ -7,7 +7,10 @@
 
 <fx:root fx:id="playArea" type="javafx.scene.layout.AnchorPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.subluminal.client.presentation.controller.GameController">
   <children>
-      <HBox fx:id="toastDock" alignment="CENTER" />
+      <HBox alignment="CENTER" maxWidth="1.7976931348623157E308">
+         <children>
+            <VBox fx:id="toastDock" alignment="CENTER" />
+         </children></HBox>
     <Pane fx:id="map" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
   </children>
 </fx:root>

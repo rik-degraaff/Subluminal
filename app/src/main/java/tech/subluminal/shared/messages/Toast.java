@@ -15,7 +15,20 @@ import tech.subluminal.shared.son.SONRepresentable;
  */
 public class Toast implements SONRepresentable {
   public static final String MESSAGE_KEY = "message";
+  public static final String PERMANENT_KEY = "permanent";
   private String message;
+  private boolean permanent;
+
+  /**
+   * Creates a login request for the specified user.
+   *
+   * @param message for the login request.
+   * @param permanent if the toast is a permanent one.
+   */
+  public Toast(String message, boolean permanent) {
+    this.message = message;
+    this.permanent = permanent;
+  }
 
   /**
    * Creates a login request for the specified user.
@@ -37,8 +50,11 @@ public class Toast implements SONRepresentable {
     String message = son.getString(MESSAGE_KEY)
         .orElseThrow(() -> new SONConversionError(
             "Toast did not contain valid " + MESSAGE_KEY + "."));
+    boolean permanent = son.getBoolean(PERMANENT_KEY)
+        .orElseThrow(() -> new SONConversionError(
+            "Toast did not contain valid " + PERMANENT_KEY + "."));
 
-    return new Toast(message);
+    return new Toast(message, permanent);
   }
 
   /**
@@ -60,6 +76,24 @@ public class Toast implements SONRepresentable {
   }
 
   /**
+   * If the message is permanent.
+   *
+   * @return if it is permanent.
+   */
+  public boolean isPermanent() {
+    return permanent;
+  }
+
+  /**
+   * Set a new permanent status.
+   *
+   * @param permanent if it is permanent.
+   */
+  public void setPermanent(boolean permanent) {
+    this.permanent = permanent;
+  }
+
+  /**
    * Creates a SON object representing this login request.
    *
    * @return the SON representation.
@@ -67,7 +101,8 @@ public class Toast implements SONRepresentable {
   @Override
   public SON asSON() {
     return new SON()
-        .put(message, MESSAGE_KEY);
+        .put(message, MESSAGE_KEY)
+        .put(permanent, PERMANENT_KEY);
   }
 
 }
