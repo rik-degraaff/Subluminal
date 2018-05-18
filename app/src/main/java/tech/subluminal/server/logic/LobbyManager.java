@@ -32,6 +32,7 @@ import tech.subluminal.shared.records.LobbyStatus;
 import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.stores.records.LobbySettings;
 import tech.subluminal.shared.stores.records.SlimLobby;
+import tech.subluminal.shared.stores.records.User;
 import tech.subluminal.shared.util.Synchronized;
 
 /**
@@ -52,11 +53,15 @@ public class LobbyManager {
     this.distributor = distributor;
 
     distributor.addConnectionOpenedListener(this::attachHandlers);
-    distributor.addConnectionClosedListener(this::onConnectionClosed);
+    distributor.addConnectionOpenedListener(this::userConnected);
   }
 
-  private void onConnectionClosed(String id) {
-
+  private void userConnected(String id, Connection connection) {
+    lobbyStore.lobbies()
+        .getLobbiesWithUser(id)
+        .consume(coll -> coll.forEach(sync -> sync.consume(lobby -> {
+          connection.sendMessage(new LobbyJoinRes(lobby));
+        })));
   }
 
   private void attachHandlers(String id, Connection connection) {
@@ -86,7 +91,6 @@ public class LobbyManager {
                     .equals(userID)))
                 .forEach(s -> s.consume(lobby -> {
                   lobby.setStatus(LobbyStatus.FULL);
-                  //TODO: add colors
                   List<Color> colors = getNiceColors(lobby.getPlayerCount());
                   int i = 0;
                   Map<String, Color> playerColors = new HashMap<>();
@@ -96,7 +100,15 @@ public class LobbyManager {
                   }
                   distributor.sendMessage(new GameStartRes(lobby.getID(), playerColors),
                       lobby.getPlayers());
-                  gameStarter.startGame(lobby.getID(), new HashSet<>(lobby.getPlayers()));
+
+                  final Map<String, String> players = lobby.getPlayers()
+                      .stream()
+                      .map(userStore.connectedUsers()::getByID)
+                      .filter(Optional::isPresent)
+                      .map(Optional::get)
+                      .map(sync -> sync.use(Function.identity()))
+                      .collect(Collectors.toMap(User::getID, User::getUsername));
+                  gameStarter.startGame(lobby.getID(), players);
                 })));
   }
 

@@ -16,6 +16,9 @@ configurations {
 // Repos -----------------------------------
 repositories {
     jcenter()
+    /*flatDir {
+        //dirs '3dImporter'
+    }*/
 }
 
 // Dependencies ----------------------------
@@ -28,6 +31,7 @@ dependencies {
     compile 'info.picocli:picocli:3.0.0-alpha-4'
     compile 'org.reflections:reflections:0.9.11'
     compile 'org.apache.commons:commons-lang3:3.7'
+    //compile 'com.interactivemesh.jfx.importer.stl.StlMeshImporter:jimStlMeshImporterJFX'
 
     javadocCoverage 'com.manoelcampos:javadoc-coverage:1.1.0'
 }
@@ -93,7 +97,7 @@ jar {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
     manifest{
-        attributes 'Main-Class': 'tech.subluminal.main.Subluminal'
+        attributes("Main-Class": "tech.subluminal.main.Subluminal", "Implementation-Title": project.name, "Implementation-Version": version, "Implementation-Timestamp": new Date())
     }
 }
 
@@ -117,12 +121,14 @@ jacocoTestReport {
     }
 }
 
-// task openBrowser(type:Exec) {
-//     java.awt.Desktop.desktop.browse rootProject.path+"docs/javadocs/index.html".toURI()
-// }
+
 
 // Define new tasks -------------------------
 task "build-cs108"(dependsOn: [jar, test, javadoc]) << {
+    println "Building project cs108 named Subluminal. This could take a while..."
+}
+
+task "party-cs108"(dependsOn: [jar, test, javadoc]) << {
     println "Building project cs108 named Subluminal. This could take a while..."
     println "Please let me entertain you :-)"
     java.awt.Desktop.desktop.browse "https://www.youtube.com/watch?v=dQw4w9WgXcQ".toURI()

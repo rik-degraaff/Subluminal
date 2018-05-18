@@ -5,7 +5,13 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Represents a lobby create response from the server to the client.
+ * Represents a lobby create response from the server to the client. This message, when converted to
+ * SON and then to string, might look like this:
+ * <pre>
+ * {
+ *   "id":s"4053"
+ * }
+ * </pre>
  */
 public class LobbyCreateRes implements SONRepresentable {
 

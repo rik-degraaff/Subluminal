@@ -20,7 +20,7 @@ import org.pmw.tinylog.Logger;
 public class LobbyListResTest {
 
   @Test
-  public void testStringifyAndParsing() {
+  public void testStringifyAndParsing() throws SONParsingError, SONConversionError {
     List<SlimLobby> slimLobbies = new LinkedList<>();
     SlimLobby slimLobby1 = new SlimLobby("9439", new LobbySettings("weoi", "3472"), LobbyStatus.FULL);
     SlimLobby slimLobby2 = new SlimLobby("1790", new LobbySettings("eruo", "1338"), LobbyStatus.LOCKED);
@@ -35,14 +35,10 @@ public class LobbyListResTest {
     SlimLobby parsedSlimLobby3 = null;
     LobbyListRes parsedLobbyListRes = null;
 
-    try {
-      parsedLobbyListRes = LobbyListRes.fromSON(SON.parse(lobbyListResMsg));
-      parsedSlimLobby1 = parsedLobbyListRes.getSlimLobbies().get(0);
-      parsedSlimLobby2 = parsedLobbyListRes.getSlimLobbies().get(1);
-      parsedSlimLobby3 = parsedLobbyListRes.getSlimLobbies().get(2);
-    } catch (SONParsingError | SONConversionError error) {
-      error.printStackTrace();
-    }
+    parsedLobbyListRes = LobbyListRes.fromSON(SON.parse(lobbyListResMsg));
+    parsedSlimLobby1 = parsedLobbyListRes.getSlimLobbies().get(0);
+    parsedSlimLobby2 = parsedLobbyListRes.getSlimLobbies().get(1);
+    parsedSlimLobby3 = parsedLobbyListRes.getSlimLobbies().get(2);
 
     assertNotNull(parsedLobbyListRes);
     parsedLobbyListRes.getSlimLobbies().forEach(Assert::assertNotNull);

@@ -4,10 +4,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import tech.subluminal.client.presentation.controller.MainController;
 
-public class NameChangeComponent extends HBox {
+public class NameChangeComponent extends AnchorPane {
 
   public TextField field = new TextField();
   Button change;
@@ -27,6 +28,8 @@ public class NameChangeComponent extends HBox {
       field.setText("");
     });
 
+    box.getChildren().addAll(field,change);
+
 
     this.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
       if(keyEvent.getCode() == KeyCode.ENTER){
@@ -34,7 +37,10 @@ public class NameChangeComponent extends HBox {
         change.fire();
       }
     });
-    this.getChildren().addAll(field, change);
+    this.getChildren().addAll(box);
+    this.getStyleClass().add("console");
+    this.setMaxWidth(140);
+    this.setMaxHeight(400);
 
   }
 

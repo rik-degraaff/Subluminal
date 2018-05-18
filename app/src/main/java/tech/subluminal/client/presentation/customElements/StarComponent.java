@@ -19,7 +19,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import tech.subluminal.client.presentation.controller.MainController;
 import tech.subluminal.shared.stores.records.game.Coordinates;
+import tech.subluminal.shared.util.DrawingUtils;
 
 public class StarComponent extends Group {
 
@@ -44,8 +46,7 @@ public class StarComponent extends Group {
   //private final ObjectProperty
 
   public StarComponent(String ownerID, String name, double possession, Coordinates coordinates,
-      String id,
-      double jump) {
+      String id, double jump, MainController main) {
 
     setPossession(possession);
     setXProperty(coordinates.getX());
@@ -57,23 +58,12 @@ public class StarComponent extends Group {
 
     setColor(Color.GRAY);
 
-    this.layoutXProperty().bind(Bindings
-        .createDoubleBinding(
-            () -> parentWidthProperty.doubleValue() / 2 + (xProperty.doubleValue() - 0.5) * Math
-                .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue()),
-            xProperty, parentWidthProperty, parentHeightProperty));
-    this.layoutYProperty().bind(Bindings
-        .createDoubleBinding(
-            () -> parentHeightProperty.doubleValue() / 2 + (yProperty.doubleValue() - 0.5) * Math
-                .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue()),
-            yProperty, parentWidthProperty, parentHeightProperty));
     Platform.runLater(() -> {
-      if (getScene() == null) {
-        return;
-      }
+      parentHeightProperty.bind(main.getPlayArea().heightProperty());
+      parentWidthProperty.bind(main.getPlayArea().widthProperty());
 
-      this.parentWidthProperty.bind(getScene().widthProperty());
-      this.parentHeightProperty.bind(getScene().heightProperty());
+      this.layoutXProperty().bind(DrawingUtils.getXPosition(main.getPlayArea(),xProperty));
+      this.layoutYProperty().bind(DrawingUtils.getYPosition(main.getPlayArea(),yProperty));
     });
 
     this.name = name;
@@ -134,7 +124,7 @@ public class StarComponent extends Group {
       starName.setLayoutX(-starName.getWidth() / 2);
     });
 
-    starName.setFont(new Font("PxPlus IBM VGA9", 10));
+    starName.setFont(new Font("PxPlus IBM VGA9", 11));
 
     starGroup.getChildren().addAll(glowBox, border, star, starName, possessionCount);
     Effect glow = new Bloom();

@@ -5,7 +5,13 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Represents a pong (an answer to a ping) from client to server or vice versa.
+ * Represents a pong (an answer to a ping) from client to server or vice versa. This message, when
+ * converted to SON and then to string, might look like this:
+ * <pre>
+ * {
+ *   "id":s"1234"
+ * }
+ * </pre>
  */
 public class Pong implements SONRepresentable {
 

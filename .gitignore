@@ -14,9 +14,11 @@ __*.tex
 *.synctex*
 log.txt
 *.toc
+docker/_secrets.sh
 
 #folders
 .app/
+.files/
 .idea/
 .gradle/
 .settings/

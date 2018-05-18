@@ -10,16 +10,12 @@ import tech.subluminal.shared.son.SONParsingError;
 public class HighScoreReqTest {
 
   @Test
-  public void testStringifyAndParsing() {
+  public void testStringifyAndParsing() throws SONParsingError, SONConversionError {
     HighScoreReq h = new HighScoreReq();
     String hMsg = h.asSON().asString();
     HighScoreReq parsedH = null;
 
-    try {
-      parsedH = HighScoreReq.fromSON(SON.parse(hMsg));
-    } catch (SONParsingError | SONConversionError e) {
-      e.printStackTrace();
-    }
+    parsedH = HighScoreReq.fromSON(SON.parse(hMsg));
     assertNotNull(parsedH);
     System.out.println(hMsg);
 

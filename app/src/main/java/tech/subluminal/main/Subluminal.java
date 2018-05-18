@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.application.Application;
+import javax.sound.midi.Soundbank;
 import org.pmw.tinylog.Configurator;
 import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
@@ -37,7 +38,7 @@ public class Subluminal {
   @Option(names = {"-ll", "--loglevel"}, description = "Sets the loglevel for the application. ")
   private String loglevel = "off";
   @Option(names = {"-lf", "--logfile"}, description = "Sets the path and filename for the logfile")
-  private String logfile = "log.txt";
+  private String logfile = "";
   @Option(names = {"-d", "--debug"}, description = "Enables the debug mode.")
   private boolean debug;
   @Parameters(index = "0", arity = "1", description = "Sets the application mode. Must be one of "
@@ -50,9 +51,9 @@ public class Subluminal {
   @Parameters(index = "2", arity = "0..1", description =
       "Sets the username. If none is specified the "
           + "system username will be used instead.")
+  private String username = System.getProperty("user.name");
 
   // ======= OTHER VARIABLES =======
-  private String username = System.getProperty("user.name");
   private static final SettingsReaderWriter srw = new SettingsReaderWriter();
 
   /**
@@ -112,6 +113,7 @@ public class Subluminal {
 
       String host = "localhost";
       int port = 1729;
+      
       Logger.debug("mode:" + subl.mode + " hostAndOrPort:" + subl.hostAndOrPort + " debug:" + String
           .valueOf(subl.debug) + " logfile:" + subl.logfile + " loglevel:" + subl.loglevel
           + " username:" + subl.username);
@@ -149,24 +151,31 @@ public class Subluminal {
   }
 
   private static void initClient(String host, int port, String username, boolean debug) {
-    if (port >= 1024 && port < 65535) {
+    if (port >= 1 && port <= 1024) {
+      System.out.println(printASCII("Client (root)"));
+      Application.launch(ClientInitializer.class, host, Integer.toString(port), username,
+          String.valueOf(debug));
+    } else if (port > 1024 && port < 65535) {
       System.out.println(printASCII("Client"));
       Application.launch(ClientInitializer.class, host, Integer.toString(port), username,
           String.valueOf(debug));
     } else {
-      Logger.error("Port must be between 1024 and 65535.");
-      System.out.printf("Port must be between 1024 and 65535.");
+      Logger.error("Port must be between 0 and 65535.");
+      System.out.printf("Port must be between 0 and 65535.");
       System.exit(1);
     }
   }
 
   private static void initServer(int port, boolean debug) {
-    if (port >= 1024 && port < 65535) {
+    if (port >= 1 && port <= 1024) {
+      System.out.println(printASCII("Server (root)"));
+      ServerInitializer.init(port, debug);
+    } else if (port > 1024 && port < 65535) {
       System.out.println(printASCII("Server"));
       ServerInitializer.init(port, debug);
     } else {
-      Logger.error("Port must be between 1024 and 65535.");
-      System.out.printf("Port must be between 1024 and 65535.");
+      Logger.error("Port must be between 0 and 65535.");
+      System.out.printf("Port must be between 0 and 65535.");
       System.exit(1);
     }
   }

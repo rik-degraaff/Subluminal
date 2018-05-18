@@ -26,6 +26,7 @@ import org.junit.Before;
 import org.junit.Test;
 import tech.subluminal.server.logic.MessageDistributor;
 import tech.subluminal.server.stores.GameStore;
+import tech.subluminal.server.stores.HighScoreStore;
 import tech.subluminal.server.stores.InMemoryGameStore;
 import tech.subluminal.server.stores.InMemoryLobbyStore;
 import tech.subluminal.server.stores.LobbyStore;
@@ -50,12 +51,14 @@ public class GameManagerTest {
 
   private GameStore gameStore;
   private LobbyStore lobbyStore;
+  private HighScoreStore highScoreStore;
   private MessageDistributor distributor;
 
   @Before
   public void setup() {
     gameStore = new InMemoryGameStore();
     lobbyStore = new InMemoryLobbyStore();
+    highScoreStore = new HighScoreStore();
     distributor = mock(MessageDistributor.class);
   }
 
@@ -65,16 +68,16 @@ public class GameManagerTest {
 
     players.put(
         "0",
-        new Player("0", Collections.singleton("1"),
+        new Player("0", "name0", Collections.singleton("1"),
             new Ship(new Coordinates(0, 0), "0", Collections.emptyList(), "0", SHIP_SPEED),
-            LIGHT_SPEED, true, false)
+            LIGHT_SPEED)
     );
 
     players.put(
         "1",
-        new Player("1", Collections.singleton("0"),
+        new Player("1", "name1", Collections.singleton("0"),
             new Ship(new Coordinates(0, 0), "1", Collections.emptyList(), "0", SHIP_SPEED),
-            LIGHT_SPEED, true, false)
+            LIGHT_SPEED)
     );
 
     players.get("0").getFleets().put(
@@ -112,16 +115,16 @@ public class GameManagerTest {
 
     players.put(
         "0",
-        new Player("0", Collections.singleton("1"),
+        new Player("0", "name0", Collections.singleton("1"),
             new Ship(shipCoordinates, "0", Collections.singletonList("0"), "0", SHIP_SPEED),
-            LIGHT_SPEED, true, false)
+            LIGHT_SPEED)
     );
 
     players.put(
         "1",
-        new Player("1", Collections.singleton("0"),
+        new Player("1", "name1", Collections.singleton("0"),
             new Ship(shipCoordinates, "1", Collections.singletonList("0"), "0", SHIP_SPEED),
-            LIGHT_SPEED, true, false)
+            LIGHT_SPEED)
     );
 
     players.get("0").updateFleet(
@@ -171,7 +174,7 @@ public class GameManagerTest {
     lobbyStore.lobbies().add(new Lobby("game", null, LobbyStatus.FULL));
 
     final GameManager gameManager = new GameManager(
-        gameStore, lobbyStore, distributor, null,
+        gameStore, lobbyStore, distributor, highScoreStore,
         (ps, id) -> new GameState(id, stars, new HashSet<>(players.values()), 0.05, JUMP,
             SHIP_SPEED),
         (tps, delegate) -> () -> {
@@ -185,7 +188,12 @@ public class GameManagerTest {
         }
     );
 
-    gameManager.startGame("game", players.keySet());
+    Map<String, String> playerNames = new HashMap<>();
+    players.forEach((id, player) -> {
+      playerNames.put(id, player.getName());
+    });
+
+    gameManager.startGame("game", playerNames);
 
     try {
       if (queue.take()) {

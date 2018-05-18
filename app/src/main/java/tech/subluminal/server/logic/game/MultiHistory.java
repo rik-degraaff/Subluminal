@@ -15,6 +15,7 @@ public class MultiHistory<K, V> {
 
   protected final Map<K, Queue<V>> history = new HashMap<>();
   private final Set<K> keys;
+  private V lastUpdated;
   private V current;
 
   /**
@@ -34,7 +35,10 @@ public class MultiHistory<K, V> {
    * @param entry the entry that will be added to the history.
    */
   public void add(V entry) {
-    keys.forEach(key -> history.get(key).offer(entry));
+    if (!entry.equals(lastUpdated)) {
+      lastUpdated = entry;
+      keys.forEach(key -> history.get(key).offer(entry));
+    }
     current = entry;
   }
 

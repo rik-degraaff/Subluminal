@@ -66,4 +66,16 @@ public class Fleet extends Movable implements SONRepresentable {
         .put(super.asSON(), MOVABLE_KEY)
         .put(numberOfShips, AMOUNT_KEY);
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Fleet)) {
+      return false;
+    }
+
+    Fleet fleet = (Fleet) obj;
+
+    return super.equals(fleet)
+        && fleet.getNumberOfShips() == getNumberOfShips();
+  }
 }

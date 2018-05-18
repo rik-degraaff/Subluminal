@@ -26,6 +26,7 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -34,9 +35,11 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
+import tech.subluminal.client.presentation.controller.MainController;
 import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Star;
+import tech.subluminal.shared.util.DrawingUtils;
 
 public abstract class ShipComponent extends Pane {
 
@@ -54,8 +57,6 @@ public abstract class ShipComponent extends Pane {
   private final DoubleProperty x = new SimpleDoubleProperty();
   private final DoubleProperty y = new SimpleDoubleProperty();
 
-  private final IntegerProperty parentWidthProperty = new SimpleIntegerProperty();
-  private final IntegerProperty parentHeightProperty = new SimpleIntegerProperty();
   private final IntegerProperty numberOfShips = new SimpleIntegerProperty();
   private final RotateTransition rotateTl = new RotateTransition();
   public Pane group;
@@ -63,7 +64,7 @@ public abstract class ShipComponent extends Pane {
   private GameStore gamestore;
 
   public ShipComponent(Coordinates coordinates, String playerId, List<String> targetIDs,
-      GameStore gamestore) {
+      GameStore gamestore, MainController main) {
     this.gamestore = gamestore;
     Pane group = new Pane();
 
@@ -71,22 +72,8 @@ public abstract class ShipComponent extends Pane {
     setY(coordinates.getY());
 
     Platform.runLater(() -> {
-      if (getScene() == null) {
-        return;
-      }
-
-      this.parentWidthProperty.bind(getScene().widthProperty());
-      this.parentHeightProperty.bind(getScene().heightProperty());
-
-      this.layoutXProperty().bind(Bindings
-          .createDoubleBinding(() -> parentWidthProperty.doubleValue() / 2 + (getX() - 0.5) * Math
-                  .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue()),
-              xProperty(), parentWidthProperty, parentHeightProperty));
-      this.layoutYProperty().bind(Bindings
-          .createDoubleBinding(
-              () -> parentHeightProperty.doubleValue() / 2 + (getY() - 0.5) * Math
-                  .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue()),
-              yProperty(), parentWidthProperty, parentHeightProperty));
+      this.layoutXProperty().bind(DrawingUtils.getXPosition(main.getPlayArea(),xProperty()));
+      this.layoutYProperty().bind(DrawingUtils.getYPosition(main.getPlayArea(),yProperty()));
     });
 
     this.setOwnerID(playerId);
@@ -184,7 +171,7 @@ public abstract class ShipComponent extends Pane {
   }
 
   public ShipComponent(Coordinates coordinates, int numberOfShips, String ID, String ownerID,
-      List<String> targetIDs, GameStore gamestore) {
+      List<String> targetIDs, GameStore gamestore, MainController main) {
 
     this.gamestore = gamestore;
     Pane group = new Pane();
@@ -195,17 +182,8 @@ public abstract class ShipComponent extends Pane {
     setY(coordinates.getY());
 
     Platform.runLater(() -> {
-      this.parentWidthProperty.bind(getScene().widthProperty());
-      this.parentHeightProperty.bind(getScene().heightProperty());
-
-      this.layoutXProperty().bind(Bindings
-          .createDoubleBinding(() -> parentWidthProperty.doubleValue() / 2 + (getX() - 0.5) * Math
-                  .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue()),
-              xProperty(), parentWidthProperty, parentHeightProperty));
-      this.layoutYProperty().bind(Bindings
-          .createDoubleBinding(() -> parentHeightProperty.doubleValue() / 2 + (getY() - 0.5) * Math
-                  .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue()),
-              yProperty(), parentWidthProperty, parentHeightProperty));
+      this.layoutXProperty().bind(DrawingUtils.getXPosition(main.getPlayArea(),xProperty()));
+      this.layoutYProperty().bind(DrawingUtils.getYPosition(main.getPlayArea(),yProperty()));
     });
 
     this.setOwnerID(ownerID);
@@ -301,6 +279,13 @@ public abstract class ShipComponent extends Pane {
     Logger.debug("CREATING SHIP LABEL");
     amount = new Label();
     amount.setTextFill(Color.WHITE);
+    amount.getStyleClass().add("ship-amount");
+
+    DropShadow ds = new DropShadow();
+    ds.setOffsetY(3.0f);
+    ds.setColor(Color.color(0, 0, 0));
+
+    amount.setEffect(ds);
 
     amount.textProperty().bind(Bindings.createStringBinding(() ->
         this.numberOfShipsProperty().getValue().toString(), numberOfShipsProperty()));

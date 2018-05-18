@@ -6,15 +6,19 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
@@ -28,12 +32,12 @@ import tech.subluminal.client.presentation.customElements.Jump;
 import tech.subluminal.client.presentation.customElements.JumpBox;
 import tech.subluminal.client.presentation.customElements.MotherShipComponent;
 import tech.subluminal.client.presentation.customElements.StarComponent;
+import tech.subluminal.client.presentation.customElements.ToastComponent;
 import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.client.stores.records.game.OwnerPair;
 import tech.subluminal.shared.records.Channel;
 import tech.subluminal.shared.stores.records.User;
-import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.stores.records.game.Star;
@@ -48,6 +52,9 @@ public class GameController implements Initializable, GamePresenter {
 
   @FXML
   private Pane map;
+
+  @FXML
+  private HBox toastDock;
 
   private StarComponent[] pressStore = new StarComponent[2];
 
@@ -89,6 +96,8 @@ public class GameController implements Initializable, GamePresenter {
         jump.clear();
       }
     });
+
+    toastDock.prefWidthProperty().bind(map.widthProperty());
   }
 
   private void starClicked(StarComponent star, MouseEvent mouseEvent) {
@@ -139,14 +148,14 @@ public class GameController implements Initializable, GamePresenter {
               starComponents.get(i + 1).layoutXProperty(),
               starComponents.get(i + 1).layoutYProperty()));
     }
-    jump.stream().forEach(j -> map.getChildren().add(j));
+    jump.forEach(j -> map.getChildren().add(j));
 
     createJumpBox(starComponents.get(0));
 
   }
 
   public void removeJumpPath() {
-    jump.stream().forEach(j -> {
+    jump.forEach(j -> {
       map.getChildren().remove(j);
     });
     jump.clear();
@@ -182,15 +191,6 @@ public class GameController implements Initializable, GamePresenter {
     this.main = main;
   }
 
-  public String getPlayerID() {
-    return playerID;
-  }
-
-  public void setPlayerID(String playerID) {
-    this.playerID = playerID;
-  }
-
-
   @Override
   public void setGameDelegate(Delegate delegate) {
     gameDelegate = delegate;
@@ -199,9 +199,13 @@ public class GameController implements Initializable, GamePresenter {
 
   @Override
   public void setUserID() {
-    Platform.runLater(() -> {
-      playerID = userStore.currentUser().get().use(opt -> opt.get().getID());
-    });
+    new Thread(() -> {
+      Optional<String> optID;
+      while (!(optID = userStore.currentUser().get().use(opt -> opt.map(User::getID))).isPresent()) {
+        Thread.yield();
+      }
+      playerID = optID.get();
+    }).start();
   }
 
   @Override
@@ -292,9 +296,6 @@ public class GameController implements Initializable, GamePresenter {
     this.gameStore = gameStore;
 
     Platform.runLater(() -> {
-
-      //this.playerID = userStore.currentUser().get().use(opt -> opt.get().getID());
-
       MapperList<StarComponent, Star> starComponents = new MapperList<>(
           gameStore.stars().observableList(),
           star -> {
@@ -307,7 +308,8 @@ public class GameController implements Initializable, GamePresenter {
                   star.getPossession(),
                   star.getCoordinates(),
                   star.getID(),
-                  star.getJump());
+                  star.getJump(),
+                  main);
               stars.put(star.getID(), starComponent);
               stars.put(star.getID(), starComponent);
               if (star.getOwnerID() != null) {
@@ -341,12 +343,12 @@ public class GameController implements Initializable, GamePresenter {
               return null;
             }
             if (ships.get(pair.getID()) == null) {
-              System.out.println("new mothership!! " + pair.getID());
               MotherShipComponent shipComponent = new MotherShipComponent(
                   pair.getValue().getCoordinates(),
                   pair.getKey(),
                   pair.getValue().getTargetIDs(),
-                  gameStore);
+                  gameStore,
+                  main);
               ships.put(pair.getID(), shipComponent);
 
               if (pair.getKey() != null) {
@@ -356,7 +358,6 @@ public class GameController implements Initializable, GamePresenter {
               map.getChildren().add(shipComponent);
 
               if (pair.getKey().equals(playerID)) {
-                Coordinates coordinates = pair.getValue().getCoordinates();
                 ArrowComponent arrow = new ArrowComponent(shipComponent.layoutYProperty());
                 arrow.layoutXProperty().bind(shipComponent.layoutXProperty());
                 arrow.layoutYProperty().bind(shipComponent.layoutYProperty());
@@ -368,7 +369,7 @@ public class GameController implements Initializable, GamePresenter {
                       .add(
                           new KeyFrame(Duration.seconds(0), event -> map.getChildren().add(arrow)));
                   timeTl.getKeyFrames().add(
-                      new KeyFrame(Duration.seconds(03), event -> map.getChildren().remove(arrow)));
+                      new KeyFrame(Duration.seconds(4), event -> map.getChildren().remove(arrow)));
                   timeTl.play();
                 });
 
@@ -412,7 +413,8 @@ public class GameController implements Initializable, GamePresenter {
                   pair.getID(),
                   pair.getKey(),
                   pair.getValue().getTargetIDs(),
-                  gameStore);
+                  gameStore,
+                  main);
               fleets.put(pair.getID(), fleetComponent);
 
               if (pair.getKey() != null) {
@@ -459,16 +461,42 @@ public class GameController implements Initializable, GamePresenter {
 
   @Override
   public void clearGame() {
-    dummyFleetList = new ListView<>();
-    dummyShipList = new ListView<>();
-    dummyShipList = new ListView<>();
-    System.gc();
-    clearMap();
-    fleets.clear();
-    ships.clear();
-    stars.clear();
+    Platform.runLater(() -> {
+      dummyFleetList = new ListView<>();
+      dummyShipList = new ListView<>();
+      dummyShipList = new ListView<>();
+      System.gc();
+      clearMap();
+      fleets.clear();
+      ships.clear();
+      stars.clear();
+    });
     graph = null;
     gameID = null;
+  }
+
+  @Override
+  public void addToast(String message) {
+    ToastComponent toast = new ToastComponent(message);
+    Platform.runLater(() -> {
+      toastDock.getChildren().clear();
+      toastDock.getChildren().add(toast);
+
+      PauseTransition pause = new PauseTransition();
+      pause.setDuration(Duration.seconds(1 + message.length() / 10.0));
+      pause.setOnFinished(e -> {
+        FadeTransition fade = new FadeTransition();
+        fade.setFromValue(1);
+        fade.setToValue(0);
+        fade.setDuration(Duration.seconds(0.5));
+        fade.setNode(toast);
+        fade.setOnFinished(event -> {
+          toastDock.getChildren().remove(toast);
+        });
+        fade.play();
+      });
+      pause.play();
+    });
   }
 
   public void leaveGame() {

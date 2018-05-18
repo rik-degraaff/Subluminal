@@ -29,6 +29,8 @@ public class IntermediateGameState {
   private static final double DISTANCE_THRESHOLD = 0.00000001;
 
   private final double deltaTime;
+  private final Map<String, Double> dematerializedShips;
+  private final Map<String, Double> dematerializedEnemyShips;
   private final Map<String, List<Fleet>> destroyedFleets;
   private final Set<String> destroyedPlayers = new HashSet<>();
   private final Map<String, Map<String, Optional<Fleet>>> fleetsOnStars;
@@ -59,6 +61,8 @@ public class IntermediateGameState {
 
     destroyedFleets = createMapWithKeys(players, LinkedList::new);
     motherShipsUnderway = createMapWithKeys(players, Optional::empty);
+    dematerializedEnemyShips = createMapWithKeys(players, () -> 0.0);
+    dematerializedShips = createMapWithKeys(players, () -> 0.0);
   }
 
   private static <E> Map<String, E> createMapWithKeys(Set<String> keys, Supplier<E> supplier) {
@@ -82,7 +86,9 @@ public class IntermediateGameState {
                     .ifPresent(fleet -> {
                       setFleetUnderway(fleet, signal.getPlayerID());
                       moveFleet(time, signal.getPlayerID(), fleet.getID(), deltaTime - time);
-                    })))))
+                    })
+            ))
+        ))
         .filter(Optional::isPresent)
         .map(Optional::get)
         .collect(Collectors.toSet());
@@ -200,6 +206,7 @@ public class IntermediateGameState {
     final double dematStrength = getPassingDematStrength(playerID, starID);
 
     if (dematStrength >= 5) {
+      shipsDematerialized(playerID, 5, getPlayerStrengths(starID, playerID));
       getMotherShipsUnderway().remove(playerID);
       getDestroyedPlayers().add(playerID);
     }
@@ -211,12 +218,14 @@ public class IntermediateGameState {
     if (dematStrength >= 1) {
       final Fleet fleet = fleetsUnderway.get(playerID).get(fleetID);
       final int oldCount = fleet.getNumberOfShips();
-      final int maxLoss = Math.max(1, oldCount - (int) (0.85*oldCount));
+      final int maxLoss = Math.max(1, oldCount - (int) (0.85 * oldCount));
       final int loss = Math.min(maxLoss, (int) dematStrength);
+      shipsDematerialized(playerID, Math.min(oldCount, loss), getPlayerStrengths(starID, playerID));
       if (loss >= oldCount) {
         fleetsUnderway.get(playerID).remove(fleetID);
         destroyedFleets.get(playerID).add(fleet);
       } else {
+        dematerializedShips.compute(playerID, (key, old) -> old + loss);
         fleetsUnderway.get(playerID).remove(fleetID);
         fleetsUnderway.get(playerID).put(fleetID, fleet.expanded(-loss));
       }
@@ -232,7 +241,7 @@ public class IntermediateGameState {
         .sum();
     final int strengthDiff = opponentsStrength - playerStrengths.getOrDefault(playerID, 0);
 
-    return getDematStrength(strengthDiff)/2;
+    return getDematStrength(strengthDiff) / 2;
   }
 
   private void colonisationTick(String starID, double deltaTime) {
@@ -276,15 +285,30 @@ public class IntermediateGameState {
   }
 
   private Map<String, Integer> getPlayerStrengths(String starID) {
+    return getPlayerStrengths(starID, "");
+  }
+
+  private Map<String, Integer> getPlayerStrengths(String starID, String excluding) {
     final Map<String, Optional<Fleet>> fleets = fleetsOnStars.get(starID);
     final Map<String, Optional<Ship>> motherShips = motherShipsOnStars.get(starID);
 
-    return getStrengths(fleets, motherShips);
+    return getStrengths(fleets, motherShips, excluding);
   }
 
-  private Map<String, Integer> getStrengths(Map<String, Optional<Fleet>> fleets,
-      Map<String, Optional<Ship>> motherShips) {
+  private Map<String, Integer> getStrengths(
+      Map<String, Optional<Fleet>> fleets,
+      Map<String, Optional<Ship>> motherShips
+  ) {
+    return getStrengths(fleets, motherShips, "");
+  }
+
+  private Map<String, Integer> getStrengths(
+      Map<String, Optional<Fleet>> fleets,
+      Map<String, Optional<Ship>> motherShips,
+      String excluding
+  ) {
     return players.stream()
+        .filter(id -> !id.equals(excluding))
         .filter(player -> fleets.get(player).isPresent()
             || motherShips.get(player).isPresent()
         )
@@ -292,6 +316,16 @@ public class IntermediateGameState {
             fleets.get(player).map(Fleet::getNumberOfShips).orElse(0),
             motherShips.get(player).isPresent()
         )));
+  }
+
+  private void shipsDematerialized(String playerID, int amount, Map<String, Integer> opponents) {
+    dematerializedShips.compute(playerID,
+        (key, old) -> old + amount);
+    final int totalStrength = opponents.values().stream().mapToInt(s -> s).sum();
+    opponents.forEach((opponent, strength) -> {
+      dematerializedEnemyShips.compute(opponent,
+          (key, old) -> old + amount * (strength / (double) totalStrength));
+    });
   }
 
   private void dematerializeTick(String starID) {
@@ -302,39 +336,55 @@ public class IntermediateGameState {
 
     final Map<String, Integer> newPlayerStrengths = new HashMap<>(playerStrengths);
 
+    final Map<String, Map<String, Integer>> opponentStrengths = new HashMap<>();
+    playerStrengths.forEach((player, strength) -> {
+      final Map<String, Integer> strengths = playerStrengths.keySet()
+          .stream()
+          .filter(id -> !id.equals(player))
+          .collect(Collectors.toMap(Function.identity(), playerStrengths::get));
+      opponentStrengths.put(player, strengths);
+    });
+
     playerStrengths.forEach((playerID, strength) -> {
       final int totalOpponentDefense = playerStrengths.keySet().stream()
           .filter(p -> !p.equals(playerID))
           .mapToInt(playerStrengths::get)
           .sum();
 
-      final double dematPercentage = getDematStrength(strength) / totalOpponentDefense;
+      final double dematStrength = getDematStrength(strength);
+      final double dematPercentage = dematStrength / totalOpponentDefense;
 
       playerStrengths.keySet().stream()
           .filter(p -> !p.equals(playerID))
           .forEach(opponent -> {
             newPlayerStrengths.compute(opponent,
-                (o, str) -> str - (int) (playerStrengths.get(opponent)*dematPercentage));
+                (o, str) -> str - (int) (playerStrengths.get(opponent) * dematPercentage));
           });
     });
 
     newPlayerStrengths.forEach((player, newStrength) -> {
       if (newStrength <= 0) {
         motherShips.get(player).ifPresent(ship -> {
+          shipsDematerialized(player, 5, opponentStrengths.get(player));
           destroyedPlayers.add(player);
           motherShips.put(player, Optional.empty());
         });
       }
 
-      final int shipsLeft = newStrength - motherShips.get(player).map(s -> 5).orElse(0);
+      final int shipsLeft = newStrength - (motherShips.get(player).isPresent() ? 5 : 0);
 
       if (shipsLeft <= 0) {
         fleets.get(player).ifPresent(fleet -> {
+          shipsDematerialized(player, fleet.getNumberOfShips(), opponentStrengths.get(player));
           destroyedFleets.get(player).add(fleet);
           fleets.put(player, Optional.empty());
         });
       } else {
-        fleets.put(player, fleets.get(player).map(fleet -> fleet.expanded(shipsLeft - fleet.getNumberOfShips())));
+        fleets.put(player,
+            fleets.get(player).map(fleet -> {
+              shipsDematerialized(player, fleet.getNumberOfShips() - shipsLeft, opponentStrengths.get(player));
+              return fleet.expanded(shipsLeft - fleet.getNumberOfShips());
+            }));
       }
     });
   }
@@ -344,6 +394,13 @@ public class IntermediateGameState {
       return strength;
     }
     return 5 + Math.sqrt(strength - 5);
+  }
+
+  private double getOriginalStrength(double dematStrength) {
+    if (dematStrength <= 5) {
+      return dematStrength;
+    }
+    return 5 + Math.pow(dematStrength - 5, 2);
   }
 
   private double getColonizationStrength(int strength) {
@@ -455,5 +512,13 @@ public class IntermediateGameState {
 
   public Set<Signal> getSignals() {
     return signals;
+  }
+
+  public Map<String, Double> getDematerializedEnemyShips() {
+    return dematerializedEnemyShips;
+  }
+
+  public Map<String, Double> getDematerializedShips() {
+    return dematerializedShips;
   }
 }

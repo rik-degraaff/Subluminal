@@ -9,7 +9,59 @@ import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.SlimLobby;
 
 /**
- * Represents a lobby list response which was previously requested.
+ * Represents a lobby list response form server to client after a lobby list request. This message,
+ * when converted to SON and then to string, might look like this:
+ * <pre>
+ * {
+ *   "lobbies":l[
+ *     o{
+ *       "playerCount":i0,
+ *       "status":s"FULL",
+ *       "settings":o{
+ *         "maxPlayers":i8,
+ *         "minPlayers":i2,
+ *         "mapSize":d2.0,
+ *         "gameSpeed":d1.0,
+ *         "name":s"weoi",
+ *         "adminID":s"3472"
+ *       },
+ *       "identifiable":o{
+ *         "id":s"9439"
+ *       }
+ *     },
+ *     o{
+ *       "playerCount":i0,
+ *       "status":s"LOCKED",
+ *       "settings":o{
+ *         "maxPlayers":i8,
+ *         "minPlayers":i2,
+ *         "mapSize":d2.0,
+ *         "gameSpeed":d1.0,
+ *         "name":s"eruo",
+ *         "adminID":s"1338"
+ *       },
+ *       "identifiable":o{
+ *         "id":s"1790"
+ *       }
+ *     },
+ *     o{
+ *       "playerCount":i0,
+ *       "status":s"OPEN",
+ *       "settings":o{
+ *         "maxPlayers":i8,
+ *         "minPlayers":i2,
+ *         "mapSize":d2.0,
+ *         "gameSpeed":d1.0,
+ *         "name":s"sdfu",
+ *         "adminID":s"1237"
+ *       },
+ *       "identifiable":o{
+ *         "id":s"1295"
+ *       }
+ *     }
+ *   ]
+ * }
+ * </pre>
  */
 public class LobbyListRes implements SONRepresentable {
 

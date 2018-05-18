@@ -11,18 +11,14 @@ import tech.subluminal.shared.son.SONParsingError;
 public class LobbyCreateReqTest {
 
   @Test
-  public void testStringifyAndParsing() {
+  public void testStringifyAndParsing() throws SONParsingError, SONConversionError {
     LobbyCreateReq lobbyCreateReq = new LobbyCreateReq("greatest lobby ever");
     String lobbyName = lobbyCreateReq.getName();
     LobbyCreateReq parsedLobbyCreateMsg = null;
     String parsedLobbyName = null;
     String lobbyCreateReqMsg = lobbyCreateReq.asSON().asString();
 
-    try {
-      parsedLobbyCreateMsg = LobbyCreateReq.fromSON(SON.parse(lobbyCreateReqMsg));
-    } catch (SONParsingError | SONConversionError error) {
-      error.printStackTrace();
-    }
+    parsedLobbyCreateMsg = LobbyCreateReq.fromSON(SON.parse(lobbyCreateReqMsg));
 
     assertNotNull(parsedLobbyCreateMsg);
     assertNotNull(parsedLobbyCreateMsg.getName());

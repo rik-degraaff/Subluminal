@@ -1,18 +1,20 @@
 package tech.subluminal.server.logic;
 
-import static tech.subluminal.shared.util.IdUtils.generateId;
-
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.net.ConnectionManager;
+import tech.subluminal.shared.son.SONConverter;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
@@ -24,6 +26,7 @@ public class ConnectionMessageDistributor implements MessageDistributor {
   private final Map<String, Connection> connections = new HashMap<>();
   private final Set<BiConsumer<String, Connection>> connectionOpenedHandlers = new HashSet<>();
   private final Set<Consumer<String>> connectionClosedListeners = new HashSet<>();
+  private final Set<BiConsumer<Connection, Consumer<String>>> loginHandlers = new HashSet<>();
 
   /**
    * Creates a connection message distributor from a connection manager.
@@ -36,13 +39,17 @@ public class ConnectionMessageDistributor implements MessageDistributor {
   }
 
   private void connectionOpened(Connection connection) {
-    String id = generateId(6);
-    connections.put(id, connection);
-    connectionOpenedHandlers.forEach(handler -> handler.accept(id, connection));
-    connection.addCloseListener(() -> {
-      connections.remove(id);
-      connectionClosedListeners.forEach(l -> l.accept(id));
+    loginHandlers.forEach(loginHandler -> {
+      loginHandler.accept(connection, id -> {
+        connections.put(id, connection);
+        connectionOpenedHandlers.forEach(handler -> handler.accept(id, connection));
+        connection.addCloseListener(() -> {
+          connections.remove(id);
+          connectionClosedListeners.forEach(l -> l.accept(id));
+        });
+      });
     });
+
   }
 
   /**
@@ -131,5 +138,23 @@ public class ConnectionMessageDistributor implements MessageDistributor {
   @Override
   public void addConnectionOpenedListener(BiConsumer<String, Connection> listener) {
     connectionOpenedHandlers.add(listener);
+  }
+
+  /**
+   * Allows users of this class to react to a connection trying to log in various ways.
+   *
+   * @param type The message type which is to be regarded as a login message.
+   * @param converter a function that can convert a SON object to an object of the specified message
+   * type.
+   * @param handler the handler which should be called if a message of this type is received.
+   */
+  @Override
+  public <T extends SONRepresentable> void addLoginHandler(Class<T> type, SONConverter<T> converter,
+      BiFunction<T, Connection, Optional<String>> handler) {
+    loginHandlers.add((connection, loginHandler) -> {
+      connection.registerHandler(type, converter, msg -> {
+        handler.apply(msg, connection).ifPresent(loginHandler);
+      });
+    });
   }
 }
