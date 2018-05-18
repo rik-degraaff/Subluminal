@@ -460,4 +460,8 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     messageText.requestFocus();
 
   }
+
+  public TextField getTextField() {
+    return messageText;
+  }
 }

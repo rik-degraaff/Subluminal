@@ -144,6 +144,9 @@ public class ClientInitializer extends Application {
 
     PerspectiveCamera camera = new PerspectiveCamera();
     primaryStage.getScene().setCamera(camera);
+
+
+    controller.setScene(primaryStage);
     //camera.setTranslateZ(-1000);
 
 
