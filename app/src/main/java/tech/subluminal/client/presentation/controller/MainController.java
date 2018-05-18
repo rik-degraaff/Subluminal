@@ -57,13 +57,13 @@ import tech.subluminal.client.presentation.customElements.UserListComponent;
 import tech.subluminal.client.presentation.customElements.WindowContainerComponent;
 import tech.subluminal.client.presentation.customElements.custom3DComponents.Button3dComponent;
 import tech.subluminal.client.presentation.customElements.custom3DComponents.CockpitComponent;
-import tech.subluminal.client.presentation.customElements.custom3DComponents.LeverComponent;
 import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.server.stores.records.HighScore;
 
 public class MainController implements Initializable {
 
+  private final Timeline chatDownTl = new Timeline();
   List<Node> tempMenu = new ArrayList<>();
   @FXML
   private AnchorPane spaceBackgroundDock;
@@ -107,29 +107,18 @@ public class MainController implements Initializable {
   private AnchorPane cockpitDock;
   @FXML
   private AnchorPane menuHolder;
-
   @FXML
   private AnchorPane introPane;
-
   @FXML
   private HBox introBoxHolder;
-
   private GameComponent game;
-
   private UserStore userStore;
-
   private LobbyStore lobbyStore;
-
   private GameController gameController;
-
   private ChatComponent chat;
-
   private ChatController chatController;
-
   private UserListComponent userList;
-
   private UserListController userListController;
-
   private boolean chatDown = true;
   private NameChangeComponent nameChange;
   private ControlButton playerListButton;
@@ -139,6 +128,7 @@ public class MainController implements Initializable {
   private MonitorComponent monitor;
   private HighscoreComponent highscore;
   private DisplayComponent display;
+  private Timeline chatUpTl = new Timeline();
 
   public LobbyComponent getLobby() {
     return lobby;
@@ -312,26 +302,15 @@ public class MainController implements Initializable {
     rotateTl.setAxis(Rotate.X_AXIS);
     chat.getTransforms().add(rotateTl);
 
-    Timeline timeTlUp = new Timeline(
-        //new KeyFrame(Duration.ZERO, new KeyValue(rotateTl.angleProperty(), chat.getRotate())),
+    chatUpTl.getKeyFrames().add(
         new KeyFrame(Duration.seconds(0.7), new KeyValue(rotateTl.angleProperty(), 60))
     );
 
-    Timeline timeTlDown = new Timeline(
-        //new KeyFrame(Duration.ZERO, new KeyValue(rotateTl.angleProperty(), chat.getRotate())),
-        new KeyFrame(Duration.seconds(0.7), new KeyValue(rotateTl.angleProperty(), 0))
-    );
+    chatDownTl.getKeyFrames()
+        .add(new KeyFrame(Duration.seconds(0.7), new KeyValue(rotateTl.angleProperty(), 0)));
 
     boardComputer.setOnMouseClicked((e) -> {
-      if (chatDown) {
-        timeTlDown.stop();
-        timeTlUp.play();
-        chatDown = false;
-      } else {
-        timeTlUp.stop();
-        timeTlDown.play();
-        chatDown = true;
-      }
+      toggleChat();
     });
 
     Button3dComponent settingButton = new Button3dComponent("S");
@@ -372,9 +351,32 @@ public class MainController implements Initializable {
         } else {
           debugDock.getChildren().add(monitor);
         }
+      } else if (keyEvent.getCode() == KeyCode.C) {
+        toggleChat();
       }
     });
 
+  }
+
+  private void toggleChat() {
+    if (chatDown) {
+      openChat();
+    } else {
+      closeChat();
+    }
+  }
+
+  private void closeChat() {
+    chatUpTl.stop();
+    chatDownTl.play();
+    chatDown = true;
+  }
+
+  private void openChat() {
+    chatDownTl.stop();
+    chatUpTl.play();
+    chatController.requestFocus();
+    chatDown = false;
   }
 
   private void clearIntro(Timeline timeTl) {

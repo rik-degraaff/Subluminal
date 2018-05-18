@@ -44,10 +44,17 @@
   -fx-font-family: "PxPlus IBM VGA9";
   -fx-font-size: 16px;
   -fx-text-fill: #59FF00;
+  -fx-background-color: transparent;
+  -fx-border-color: #59FF00;
+  -fx-border-width: 2px;
+  -fx-border-radius: 0px;
 }
+
 
 .button:hover {
   -fx-cursor: hand;
+  -fx-background-color: #59FF00;
+  -fx-text-fill: white;
 }
 
 #chatBox {
@@ -86,16 +93,6 @@
   -fx-padding: 0;
 }
 
-.button {
-  -fx-background-color: transparent;
-  -fx-border-color: #59FF00;
-  -fx-border-width: 2px;
-  -fx-border-radius: 4px;
-}
-
-.button:hover {
-  -fx-font-size: 14px;
-}
 
 /*Listview*/
 
