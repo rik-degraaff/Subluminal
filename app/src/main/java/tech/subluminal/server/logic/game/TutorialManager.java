@@ -61,7 +61,7 @@ public class TutorialManager {
   }
 
   private void onStartTutorial(String id) {
-    startThirdStage(id);
+    startFirstStage(id);
   }
 
   private void sendToast(String message, String id) {
