@@ -5,11 +5,11 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Represents a request from client to server to join a lobby. This message, when converted to SON
+ * Represents a request from client to server to enter spectate mode. This message, when converted to SON
  * and then to string, might look like this:
  * <pre>
  * {
- *   "id":s"4053"
+ *   "id":s"8000"
  * }
  * </pre>
  */

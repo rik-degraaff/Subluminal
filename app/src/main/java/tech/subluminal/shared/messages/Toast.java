@@ -5,15 +5,17 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Represents a login request from server to client. This message, when converted to SON and then to
- * string, might look like this:
+ * Represents a text message the server wants the client to show on the screen. This message, when
+ * converted to SON and then to string, might look like this:
  * <pre>
  * {
- *   "message":s"Your message could be here"
+ *   "permanent":btrue,
+ *   "message":s"Snoop Dogg"
  * }
  * </pre>
  */
 public class Toast implements SONRepresentable {
+
   public static final String MESSAGE_KEY = "message";
   public static final String PERMANENT_KEY = "permanent";
   private String message;
