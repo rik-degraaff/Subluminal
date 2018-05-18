@@ -256,6 +256,7 @@ public class GameManager implements GameStarter {
 
   private boolean sendUpdatesToPlayers(GameState gameState, Consumer<List<Player>> onGameOver) {
     AtomicBoolean playersDestroyed = new AtomicBoolean(false);
+    Map<String, GameStateDelta> gameStates = new HashMap<>();
     gameState.getPlayers().keySet().forEach(playerID -> {
       final GameStateDelta delta = new GameStateDelta();
 
@@ -300,9 +301,13 @@ public class GameManager implements GameStarter {
               .ifPresent(delta::addStar));
 
       if (!gameState.getPlayers().get(playerID).hasLeft()) {
-        distributor.sendMessage(delta, playerID);
+        gameStates.put(playerID, delta);
       }
     });
+
+    new Thread(() -> {
+      gameStates.forEach((playerID, delta) -> distributor.sendMessage(delta, playerID));
+    }).start();
 
     if (playersDestroyed.get()) {
       final List<Player> livingPlayers = gameState.getPlayers().values().stream()
