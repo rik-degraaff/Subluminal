@@ -18,8 +18,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
@@ -54,7 +54,7 @@ public class GameController implements Initializable, GamePresenter {
   private Pane map;
 
   @FXML
-  private HBox toastDock;
+  private VBox toastDock;
 
   private StarComponent[] pressStore = new StarComponent[2];
 
@@ -97,7 +97,10 @@ public class GameController implements Initializable, GamePresenter {
       }
     });
 
+    //toastDock.setBackground(new Background(new BackgroundFill(Color.GREEN,CornerRadii.EMPTY,Insets.EMPTY)));
+
     toastDock.prefWidthProperty().bind(map.widthProperty());
+    toastDock.setFillWidth(false);
   }
 
   private void starClicked(StarComponent star, MouseEvent mouseEvent) {
@@ -201,7 +204,8 @@ public class GameController implements Initializable, GamePresenter {
   public void setUserID() {
     new Thread(() -> {
       Optional<String> optID;
-      while (!(optID = userStore.currentUser().get().use(opt -> opt.map(User::getID))).isPresent()) {
+      while (!(optID = userStore.currentUser().get().use(opt -> opt.map(User::getID)))
+          .isPresent()) {
         Thread.yield();
       }
       playerID = optID.get();
@@ -448,7 +452,6 @@ public class GameController implements Initializable, GamePresenter {
 
       this.dummyFleetList.setItems(fleetComponents);
     });
-
   }
 
   public void setUserStore(UserStore userStore) {
@@ -476,26 +479,37 @@ public class GameController implements Initializable, GamePresenter {
   }
 
   @Override
-  public void addToast(String message) {
-    ToastComponent toast = new ToastComponent(message);
+  public void addToast(String message, boolean permanent) {
+    ToastComponent toast = new ToastComponent(message, permanent);
     Platform.runLater(() -> {
-      toastDock.getChildren().clear();
-      toastDock.getChildren().add(toast);
+      if (toastDock.getChildren().isEmpty()) {
+        toastDock.getChildren().add(toast);
+      } else {
+        if (toast.isPermanent()) {
+          toastDock.getChildren()
+              .removeIf(n -> n instanceof  ToastComponent && ((ToastComponent) n).isPermanent());
+          toastDock.getChildren().add(0, toast);
+        } else {
+          toastDock.getChildren().add(toast);
+        }
+      }
 
-      PauseTransition pause = new PauseTransition();
-      pause.setDuration(Duration.seconds(1 + message.length() / 10.0));
-      pause.setOnFinished(e -> {
-        FadeTransition fade = new FadeTransition();
-        fade.setFromValue(1);
-        fade.setToValue(0);
-        fade.setDuration(Duration.seconds(0.5));
-        fade.setNode(toast);
-        fade.setOnFinished(event -> {
-          toastDock.getChildren().remove(toast);
+      if (!permanent) {
+        PauseTransition pause = new PauseTransition();
+        pause.setDuration(Duration.seconds(1 + message.length() / 10.0));
+        pause.setOnFinished(e -> {
+          FadeTransition fade = new FadeTransition();
+          fade.setFromValue(1);
+          fade.setToValue(0);
+          fade.setDuration(Duration.seconds(0.5));
+          fade.setNode(toast);
+          fade.setOnFinished(event -> {
+            toastDock.getChildren().remove(toast);
+          });
+          fade.play();
         });
-        fade.play();
-      });
-      pause.play();
+        pause.play();
+      }
     });
   }
 

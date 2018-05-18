@@ -13,32 +13,32 @@ import tech.subluminal.shared.son.SONRepresentable;
  * }
  * </pre>
  */
-public class LobbyJoinReq implements SONRepresentable {
+public class SpectateGameReq implements SONRepresentable {
 
   private static final String ID_KEY = "id";
   private String id;
 
   /**
-   * Creates a lobby join request with a given id.
+   * Creates a spectate game request with a given id.
    *
-   * @param id the id of the lobby.
+   * @param id the id of the game.
    */
-  public LobbyJoinReq(String id) {
+  public SpectateGameReq(String id) {
     this.id = id;
   }
 
   /**
-   * Creates a ping from a SON object.
+   * Creates a spectate game request from a SON object.
    *
-   * @param son the SON object to be converted to a lobby join request.
+   * @param son the SON object to be converted to a spectate game request.
    * @return the created request.
    * @throws SONConversionError when the conversion fails.
    */
-  public static LobbyJoinReq fromSON(SON son) throws SONConversionError {
+  public static SpectateGameReq fromSON(SON son) throws SONConversionError {
     String id = son.getString(ID_KEY)
         .orElseThrow(() -> new SONConversionError(
             "Request did not contain valid lobby " + ID_KEY + "."));
-    return new LobbyJoinReq(id);
+    return new SpectateGameReq(id);
   }
 
   /**

@@ -21,6 +21,7 @@ public class GameState extends Identifiable {
   private final Map<String, GameHistory<Star>> stars;
   private final Map<String, Player> players;
   private Set<Signal> signals = new HashSet<>();
+  private final Set<String> spectators = new HashSet<>();
 
   public GameState(String id, Set<Star> stars, Set<Player> players, double lightSpeed, double jump,
       double shipSpeed) {
@@ -83,7 +84,17 @@ public class GameState extends Identifiable {
     return signals;
   }
 
+  /**
+   * @param signals the signals for this gamestate.
+   */
   public void setSignals(Set<Signal> signals) {
     this.signals = signals;
+  }
+
+  /**
+   * @return all spectators currently in this game.
+   */
+  public Set<String> getSpectators() {
+    return spectators;
   }
 }

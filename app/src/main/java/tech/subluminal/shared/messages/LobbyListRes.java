@@ -16,7 +16,7 @@ import tech.subluminal.shared.stores.records.SlimLobby;
  *   "lobbies":l[
  *     o{
  *       "playerCount":i0,
- *       "status":s"FULL",
+ *       "status":s"INGAME",
  *       "settings":o{
  *         "maxPlayers":i8,
  *         "minPlayers":i2,
@@ -31,7 +31,7 @@ import tech.subluminal.shared.stores.records.SlimLobby;
  *     },
  *     o{
  *       "playerCount":i0,
- *       "status":s"LOCKED",
+ *       "status":s"FINISHED",
  *       "settings":o{
  *         "maxPlayers":i8,
  *         "minPlayers":i2,

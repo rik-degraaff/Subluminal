@@ -27,7 +27,7 @@ public interface GamePresenter {
 
   void clearGame();
 
-  void addToast(String message);
+  void addToast(String message, boolean permanent);
 
   interface Delegate {
 
