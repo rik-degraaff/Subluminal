@@ -22,6 +22,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -61,7 +63,7 @@ public class SettingsController implements Observer, Initializable {
 
     keyDock.getChildren().addAll(vBox);
 
-
+    vBox.setPadding(new Insets(20));
 
     Platform.runLater(() -> {
       keyMap.getKeyMap().forEach((k,v) -> {
@@ -71,17 +73,22 @@ public class SettingsController implements Observer, Initializable {
         Label change = new Label("Change");
         change.getStyleClass().addAll("button", "font-dos");
 
+        Label reset = new Label("Reset");
+        reset.getStyleClass().addAll("button", "font-dos");
+
+
         HBox hBox = new HBox();
         hBox.setFillHeight(false);
         hBox.setSpacing(20);
-        hBox.getChildren().addAll(keyName,keyKey, change);
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        hBox.getChildren().addAll(keyName,keyKey,spacer, change, reset);
         hBox.setAlignment(Pos.CENTER);
         //hBox.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 
 
 
         change.setOnMouseClicked(e -> {
-
           EventHandler handler = new EventHandler<KeyEvent>(){
             public void handle(KeyEvent keyEvent){
               keyEvent.consume();
@@ -95,8 +102,17 @@ public class SettingsController implements Observer, Initializable {
           main.getScene().addEventHandler(KeyEvent.KEY_PRESSED, handler);
         });
 
+        reset.setOnMouseClicked(e -> {
+          keyMap.reset(k);
+        });
+
         vBox.getChildren().add(hBox);
       });
+
+      Label resetAll = new Label("Reset All");
+      resetAll.setOnMouseClicked(e -> keyMap.resetAll());
+
+      vBox.getChildren().add(resetAll);
     });
 
 
