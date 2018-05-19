@@ -1,4 +1,6 @@
+
 # We are smarter now
+
 ## The lessons we learned over the course of this project
 
 1. We should have used the logger more for debugging, instead of System.out.printlns.
