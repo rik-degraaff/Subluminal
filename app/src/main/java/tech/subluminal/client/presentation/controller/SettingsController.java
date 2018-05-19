@@ -3,6 +3,7 @@ package tech.subluminal.client.presentation.controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
+import javafx.collections.ObservableMap;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,24 +22,30 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import tech.subluminal.client.presentation.KeyMap;
+import tech.subluminal.shared.util.ConfigModifier;
 
 public class SettingsController implements Observer, Initializable {
 
+  public static final String VOLUME_KEY = "Volume";
+  public static final String MUTE_SOUND_KEY = "MuteSound";
+  private static final boolean MUTE_SOUND_DEFAULT = false;
+  private final double VOLUME_DEFAULT = 0.5;
+  ObservableMap<String, String> settingsMap;
   private MainController main;
-
   @FXML
   private CheckBox muteMasterVolume;
-
   @FXML
   private Slider masterVolume;
-
   @FXML
   private AnchorPane keyDock;
-
   private KeyMap keyMap;
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    ConfigModifier<String, String> cm = new ConfigModifier<>("settings");
+    cm.attachToFile("settings.properties");
+    settingsMap = cm.getProps();
+
     initSound();
 
     VBox vBox = new VBox();
@@ -49,7 +56,6 @@ public class SettingsController implements Observer, Initializable {
     vBox.prefWidthProperty().bind(keyDock.widthProperty());
 
 
-
     //vBox.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
 
     keyDock.getChildren().addAll(vBox);
@@ -57,7 +63,7 @@ public class SettingsController implements Observer, Initializable {
     vBox.setPadding(new Insets(20));
 
     Platform.runLater(() -> {
-      keyMap.getKeyMap().forEach((k,v) -> {
+      keyMap.getKeyMap().forEach((k, v) -> {
         Label keyName = new Label(k);
         Label keyKey = new Label();
         keyKey.textProperty().bind(v.asString());
@@ -67,21 +73,18 @@ public class SettingsController implements Observer, Initializable {
         Label reset = new Label("Reset");
         reset.getStyleClass().addAll("button", "font-dos");
 
-
         HBox hBox = new HBox();
         hBox.setFillHeight(false);
         hBox.setSpacing(20);
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-        hBox.getChildren().addAll(keyName,keyKey,spacer, change, reset);
+        hBox.getChildren().addAll(keyName, keyKey, spacer, change, reset);
         hBox.setAlignment(Pos.CENTER);
         //hBox.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 
-
-
         change.setOnMouseClicked(e -> {
-          EventHandler handler = new EventHandler<KeyEvent>(){
-            public void handle(KeyEvent keyEvent){
+          EventHandler handler = new EventHandler<KeyEvent>() {
+            public void handle(KeyEvent keyEvent) {
               keyEvent.consume();
               v.setValue(keyEvent.getCode());
               main.getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this);
@@ -110,6 +113,14 @@ public class SettingsController implements Observer, Initializable {
   }
 
   private void initSound() {
+    if (settingsMap.get(VOLUME_KEY) == null) {
+      settingsMap.put(VOLUME_KEY, Double.toString(VOLUME_DEFAULT));
+      System.out.println("default sound");
+    }
+    if(settingsMap.get(MUTE_SOUND_KEY) == null){
+      settingsMap.put(MUTE_SOUND_KEY, Boolean.toString(MUTE_SOUND_DEFAULT));
+    }
+
     Media media[] = new Media[3];
 
     media[0] = new Media(
@@ -128,10 +139,19 @@ public class SettingsController implements Observer, Initializable {
     player.setVolume(0.1);
     player.play();
 
-    player.setOnEndOfMedia(() -> player.seek(Duration.ZERO)
-    );
+    player.setOnEndOfMedia(() -> player.seek(Duration.ZERO));
 
     player.volumeProperty().bind(masterVolume.valueProperty());
+
+    masterVolume.setValue(Double.parseDouble(settingsMap.get(VOLUME_KEY)));
+
+    masterVolume.valueProperty().addListener((observable, oldValue, newValue) -> {
+      settingsMap.put(VOLUME_KEY, newValue.toString());
+    });
+
+    muteMasterVolume.selectedProperty().addListener((observable, oldValue, newValue) -> {
+      settingsMap.put(MUTE_SOUND_KEY, newValue.toString());
+    });
 
     muteMasterVolume.selectedProperty().addListener(((observable, oldValue, newValue) -> {
       if (!oldValue && newValue) {
@@ -140,6 +160,9 @@ public class SettingsController implements Observer, Initializable {
         player.play();
       }
     }));
+
+    muteMasterVolume.setSelected(Boolean.parseBoolean(settingsMap.get(MUTE_SOUND_KEY)));
+
   }
 
   @Override

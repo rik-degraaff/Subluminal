@@ -40,7 +40,7 @@ public class KeyMap {
 
     //Property files needs to be pulled here
 
-    ConfigModifier<String, String> cm = new ConfigModifier<>("settings/keys");
+    ConfigModifier<String, String> cm = new ConfigModifier<>("settings");
     cm.attachToFile("keymap.properties");
     ObservableMap fileMap = cm.getProps();
 
