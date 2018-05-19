@@ -38,8 +38,10 @@ import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Rotate;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
+import tech.subluminal.client.presentation.KeyMap;
 import tech.subluminal.client.presentation.customElements.BackgroundComponent;
 import tech.subluminal.client.presentation.customElements.ChatComponent;
 import tech.subluminal.client.presentation.customElements.ControlButton;
@@ -64,6 +66,7 @@ import tech.subluminal.server.stores.records.HighScore;
 public class MainController implements Initializable {
 
   private final Timeline chatDownTl = new Timeline();
+  private KeyMap keyMap;
   List<Node> tempMenu = new ArrayList<>();
   @FXML
   private AnchorPane spaceBackgroundDock;
@@ -98,10 +101,6 @@ public class MainController implements Initializable {
   @FXML
   private AnchorPane glassPane;
   @FXML
-  private AnchorPane arcLeftDock;
-  @FXML
-  private AnchorPane arcRightDock;
-  @FXML
   private AnchorPane leverDock;
   @FXML
   private AnchorPane cockpitDock;
@@ -123,12 +122,12 @@ public class MainController implements Initializable {
   private NameChangeComponent nameChange;
   private ControlButton playerListButton;
   private ControlButton nameChangeButton;
-  private ControlButton settingsButton;
   private DebugComponent debug;
   private MonitorComponent monitor;
   private HighscoreComponent highscore;
   private DisplayComponent display;
   private Timeline chatUpTl = new Timeline();
+  private Stage scene;
 
   public LobbyComponent getLobby() {
     return lobby;
@@ -151,8 +150,12 @@ public class MainController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    keyMap = new KeyMap();
+
     introPane.setBackground(
         new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+
+
 
     Label introText = new Label();
     introText.setTextAlignment(TextAlignment.CENTER);
@@ -216,17 +219,11 @@ public class MainController implements Initializable {
     timeTl.play();
     mainTl.play();
 
-    window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
-      if (keyEvent.getCode() == KeyCode.ESCAPE) {
-        clearIntro(timeTl);
-      }
-    });
 
     mainTl.setOnFinished(e -> {
       clearIntro(timeTl);
     });
 
-    //animation.play();
 
     background = new BackgroundComponent(1000);
     spaceBackgroundDock.getChildren().add(background);
@@ -269,7 +266,7 @@ public class MainController implements Initializable {
     //rightSideDock.getChildren().add(nameChange);
 
     menu = new MenuComponent(this);
-    settings = new SettingsComponent(this);
+    settings = new SettingsComponent(this, keyMap);
     //rightSideDock.getChildren().add(settingsButton);
 
     highscore = new HighscoreComponent();
@@ -339,19 +336,27 @@ public class MainController implements Initializable {
     monitorDock.add(display, 1, 0);
 
     window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
-      if (keyEvent.getCode() == KeyCode.F4) {
+      if (keyEvent.getCode() == keyMap.get("Fps").get()) {
         if (debugDock.getChildren().contains(debug)) {
           debugDock.getChildren().remove(debug);
         } else {
           debugDock.getChildren().add(debug);
         }
-      } else if (keyEvent.getCode() == KeyCode.F5) {
+      } else if (keyEvent.getCode() == keyMap.get("DebugMonitor").get()) {
         if (debugDock.getChildren().contains(monitor)) {
           debugDock.getChildren().remove(monitor);
         } else {
           debugDock.getChildren().add(monitor);
         }
-      } else if (keyEvent.getCode() == KeyCode.C) {
+      } else if (keyEvent.getCode() == keyMap.get("Settings").get()){
+        onSettingOpenHandle();
+      } else if (keyEvent.getCode() == keyMap.get("Skip").get()) {
+        clearIntro(timeTl);
+      }
+    });
+
+    window.addEventHandler(KeyEvent.KEY_RELEASED, keyEvent -> {
+      if (keyEvent.getCode() == keyMap.get("Chat").getValue()) {
         toggleChat();
       }
     });
@@ -361,7 +366,7 @@ public class MainController implements Initializable {
   private void toggleChat() {
     if (chatDown) {
       openChat();
-    } else {
+    } else if (!chat.getTextField().isFocused()) {
       closeChat();
     }
   }
@@ -411,15 +416,12 @@ public class MainController implements Initializable {
     return this.userListController;
   }
 
-  public void onWindowResizeHandle(int diffX, int diffY) {
-    background.onWindowResize(diffX, diffY);
-  }
-
   public void onLobbyOpenHandle() {
     saveMenuState();
 
     windowContainer = new WindowContainerComponent(this, lobby, "Lobbies");
-    //lobby.setUserActive();
+
+    fitWindow();
 
     menuDock.getChildren().add(windowContainer);
     windowContainer.onWindowOpen();
@@ -430,8 +432,18 @@ public class MainController implements Initializable {
 
     windowContainer = new WindowContainerComponent(this, settings, "Settings");
 
+    fitWindow();
+
     menuDock.getChildren().add(windowContainer);
     windowContainer.onWindowOpen();
+  }
+
+  private void fitWindow() {
+    Platform.runLater(() -> {
+      windowContainer.prefHeightProperty().bind(playArea.prefHeightProperty());
+      windowContainer.prefWidthProperty().bind(playArea.prefWidthProperty());
+
+    });
   }
 
   private void saveMenuState() {
@@ -533,11 +545,21 @@ public class MainController implements Initializable {
 
     windowContainer = new WindowContainerComponent(this, highscore, "Highscore");
 
+    fitWindow();
+
     menuDock.getChildren().add(windowContainer);
     windowContainer.onWindowOpen();
   }
 
   public void onUpdateHighscoreHandle(List<HighScore> highScores) {
     highscore.update(highScores);
+  }
+
+  public Stage getScene() {
+    return scene;
+  }
+
+  public void setScene(Stage scene) {
+    this.scene = scene;
   }
 }

@@ -2,6 +2,7 @@ package tech.subluminal.client.presentation.customElements;
 
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import tech.subluminal.client.presentation.controller.ChatController;
 import tech.subluminal.client.presentation.controller.MainController;
@@ -26,5 +27,9 @@ public class ChatComponent extends AnchorPane {
 
   public ChatController getChatcontroller() {
     return controller;
+  }
+
+  public TextField getTextField() {
+    return controller.getTextField();
   }
 }
