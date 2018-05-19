@@ -1,6 +1,7 @@
 package tech.subluminal.server.init;
 
 import org.pmw.tinylog.Logger;
+import tech.subluminal.server.logic.BotManager;
 import tech.subluminal.server.logic.ChatManager;
 import tech.subluminal.server.logic.ConnectionMessageDistributor;
 import tech.subluminal.server.logic.LobbyManager;
@@ -49,6 +50,7 @@ public class ServerInitializer {
     new UserManager(userStore, messageDistributor);
     new PingManager(pingStore, userStore, messageDistributor);
     new ChatManager(messageDistributor, userStore, lobbyStore);
+    new BotManager(messageDistributor);
     GameManager gameManager = new GameManager(gameStore, lobbyStore, messageDistributor,
         highScoreStore, MapGeneration::getNewGameStateForPlayers, SleepGameLoop::new);
     new LobbyManager(lobbyStore, userStore, messageDistributor, gameManager);
