@@ -77,7 +77,7 @@ public class ConfigModifier<k, v> {
    */
   public List<File> getAllFiles(String fullName) {
     File theFile = new File(folderPath + DELIMETER_KEY + fullName.replace("/", DELIMETER_KEY));
-    File[] files = null;
+    File[] files;
     if (theFile.exists()) {
       files = theFile.listFiles();
     } else {
