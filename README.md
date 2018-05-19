@@ -1,8 +1,15 @@
-[![pipeline status](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/badges/master/pipeline.svg)](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/master)
+master: [![pipeline status](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/badges/master/pipeline.svg)](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/master)
 [![coverage report](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/badges/master/coverage.svg)](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/master)
-[![current version](https://img.shields.io/badge/version-4.0.0-blue.svg)](https://subluminal.tech/releases)
+[![current version](https://img.shields.io/badge/version-5.0.0-blue.svg)](https://subluminal.tech/#downloads)
 [![javadoc coverage](https://img.shields.io/badge/JavaDoc-74.40%25-blue.svg)](https://subluminal.tech/docs)
-[![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/subluminalthegame/subluminal/latest.svg)](https://hub.docker.com/r/subluminalthegame/subluminal/tags/)
+[![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/subluminalthegame/subluminal-server/stable.svg)](https://hub.docker.com/r/subluminalthegame/subluminal-server/tags)
+[![Twitter Follow](https://img.shields.io/twitter/follow/subluminalgame.svg?style=social&label=Follow)](https://twitter.com/subluminalgame)  
+
+dev: [![pipeline status](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/badges/dev/pipeline.svg)](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/dev)
+[![coverage report](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/badges/dev/coverage.svg)](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/dev)
+[![current version](https://img.shields.io/badge/version-5.0.0beta2-blue.svg)](https://subluminal.tech/#downloads)
+[![javadoc coverage](https://img.shields.io/badge/JavaDoc-74.40%25-blue.svg)](https://subluminal.tech/docs)
+[![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/subluminalthegame/subluminal-server/latest.svg)](https://hub.docker.com/r/subluminalthegame/subluminal-server/tags)
 [![Twitter Follow](https://img.shields.io/twitter/follow/subluminalgame.svg?style=social&label=Follow)](https://twitter.com/subluminalgame)  
 
 **Table of Contents**  
@@ -22,12 +29,12 @@
 
 ## 1. Overview
 ### Basic Usage:
-Download the current jar bundle (Subluminal-4.0.0.jar) or clone the repo and run ``gradle build-cs108`` (output in ``./app/build/libs/``).  Start the game with the following command:  
+Download the current jar bundle (Subluminal-5.0.0.jar) or clone the repo and run ``gradle build-cs108`` (output in ``./app/build/libs/``).  Start the game with the following command:  
 ``` sh
 # First start a server.
-$ java -jar Subluminal-4.0.0.jar server <port>
+$ java -jar Subluminal-5.0.0.jar server <port>
 # Then start the clients.
-$ java -jar Subluminal-4.0.0.jar client <hostaddress>:<port> [<username>]
+$ java -jar Subluminal-5.0.0.jar client <hostaddress>:<port> [<username>]
 ```
 
 Our application supports a number of command line arguments. Use ``--help`` or ``-h`` to get the usage information as shown below:
@@ -76,6 +83,7 @@ Starts the game in server or client mode.
 | Network protocol | network_protocol.md  | [``<md>``](docs/network_protocol.md)  | [``<pdf>``](docs/network_protocol.pdf)  | Network protocol specification                     |
 | Game rules       | game_rules.md        | [``<md>``](docs/game_rules.md)        | [``<pdf>``](docs/game_rules.pdf)        | Short list with all game rules                     |
 | Manual           | manual.pdf           | -                                     | [``<pdf>``](docs/manual/manual.pdf)     | Game manual                                        |
+| Presentations    | *.pptx               | [````]()                              |
 
 ### Generated docs / reports:
 These documents will only appear once the project has been built with gradle.
