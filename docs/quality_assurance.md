@@ -25,14 +25,15 @@
 ## Quality characteristics
 ### 1. Efficiency / Latency
 To ensure a fluid gaming experience, the server needs to be able to compute the data inside the game loop in a certain time frame. This is called the server tickrate. We are targeting a tickrate of 10 Hz per hosted game (up to 10 games) on the server (during a 4 player average). Is the server performing normally (faster than 10 Hz), the game loop is slowed down artificially with Thread.sleep(). The resulting tickrate is logged in the server console in debug mode. Additionally, the time difference from the game loop is sent to the client and can also be displayed in its debug view.  
-The chart shows a mostly stable framerate of around 45 frames per second (fps) with a fluctuation of +- 5 frames. This is sufficient for our purposes. An interesting remark: JavaFX tries to draw at a constant 60 fps, which clearly cannot be kept up with here. The server tick is artificially locked at 10 Hz, which works well performance and gameplay wise. FPS and Tickrate are averaged over the last 100 values, then the last 20 entries are shown in the chart.  
+The chart shows a mostly stable framerate of around 45 frames per second (fps) with a fluctuation of +- 5 frames. This is sufficient for our purposes. An interesting remark: JavaFX tries to draw at a constant 60 fps, which clearly cannot be kept up with here. The server tick is artificially locked at 10 Hz, which works well, performance and gameplay wise. FPS and Tickrate are averaged over the last 100 values, then the last 20 entries are shown in the chart.  
 
 ![Tickrate Graph](../assets/screenshots/qa/performance.png)
 
 
-### 2. Reliability / Error tolerance [![coverage report](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/badges/master/coverage.svg)](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/master)
-The software is tested with junit unit tests. For the more intricate tests, the mockito framework will be used to construct mock classes and simulate network connections. As a metric we use the code coverage percentage (``"degree to which the source code of a program is executed when a particular test suite runs".`` [Wikipedia][6]).  
-The goal is to achieve a coverage **35 %** (excluding gui packages). Current status is around **54 %**. For a yet unknow reason, the coverage can not be extracted in gitlab to generate an according badge. As of now, there are 76 test cases in our 7 most important classes.
+### 2. Reliability / Error tolerance [![coverage report](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/badges/master/coverage.svg)](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/tree/master)
+The software is tested with junit unit tests. For the more intricate tests, the mockito framework was used to construct mock classes and simulate network connections. As a metric we use the code coverage percentage (``"degree to which the source code of a program is executed when a particular test suite runs".`` [Wikipedia][6]).  
+The goal is to achieve a coverage of **35 %** (excluding gui packages). Currently, there are 146 unit tests and we are at **48 %** coverage, GUI packages excluded (May 19th, 2018). Some of the unit tests helped us finding a few logic flaws in our code and others helped us building some trust in our message parsing system.
+
 ![Jacoco Coverage](../assets/screenshots/qa/jacoco.png)  
 ![Test Report](../assets/screenshots/qa/test.png)
 
