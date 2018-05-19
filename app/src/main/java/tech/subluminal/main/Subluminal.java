@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.application.Application;
-import javax.sound.midi.Soundbank;
 import org.pmw.tinylog.Configurator;
 import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
@@ -20,6 +19,7 @@ import picocli.CommandLine.Parameters;
 import tech.subluminal.client.init.ClientInitializer;
 import tech.subluminal.server.init.ServerInitializer;
 import tech.subluminal.shared.records.GlobalSettings;
+import tech.subluminal.shared.util.ConfigModifier;
 import tech.subluminal.shared.util.SettingsReaderWriter;
 
 /**
@@ -99,14 +99,15 @@ public class Subluminal {
       final SecurityManager sm = System.getSecurityManager();
       if (sm != null) {
         Logger.info("Security Manager found. Trying to suppress access checks.");
-        System.out.println("Security Manager found. Trying to suppress access checks.");
-        //sm.checkPermission(new java.lang.reflect.ReflectPermission("suppressAccessChecks"));
       } else {
         Logger.info("No security manager detected");
-        System.out.println("No security manager detected");
       }
 
       GlobalSettings.PATH_JAR = getJarPath().toString();
+      ConfigModifier<String, String> cm = new ConfigModifier("settings");
+      cm.attachToFile("keys/keymap.properties");
+      cm.getProps().put("Shenanigans", "Alt+G");
+
       if (subl.debug) {
         srw.run(GlobalSettings.class, GlobalSettings.class, GlobalSettings.PATH_JAR);
       }
@@ -207,12 +208,11 @@ public class Subluminal {
     File jar = null;
     try {
       jar = new File(
-          GlobalSettings.class.getProtectionDomain().getCodeSource().getLocation().toURI()
+          Subluminal.class.getProtectionDomain().getCodeSource().getLocation().toURI()
               .getPath()).getParentFile();
     } catch (URISyntaxException e) {
       e.printStackTrace();
     }
-
     return jar;
   }
 }
