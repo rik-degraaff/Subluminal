@@ -118,6 +118,8 @@ public class GameController implements Initializable, GamePresenter {
         if (path != null) {
           path.clear();
         }
+        //System.out.println(pressStore[0].getStarID() + " " + pressStore[1].getStarID());
+
         this.path = graph
             .findShortestPath(pressStore[0].getStarID(), pressStore[1].getStarID());
         if (!path.isEmpty()) {
