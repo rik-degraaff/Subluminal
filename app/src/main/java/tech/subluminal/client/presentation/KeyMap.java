@@ -4,9 +4,9 @@ import java.util.Map;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.scene.input.KeyCode;
+import tech.subluminal.shared.util.ConfigModifier;
 
 /**
  * A KeyMap is used to get the prefered Keys from a user, store, update and expose them to the GUI.
@@ -21,7 +21,7 @@ public class KeyMap {
   private final KeyCode FPS_DEFAULT =  KeyCode.F4;
   private final KeyCode DEBUG_DEFAULT =  KeyCode.F5;
   private final KeyCode SETTINGS_DEFAULT =  KeyCode.S;
-  private final KeyCode SKIP_DEFAULT =  KeyCode.ESCAPE;
+  private final KeyCode SKIP_DEFAULT =  KeyCode.E;
 
   private final ObjectProperty fullscreen = new SimpleObjectProperty(FULLSCREEN_DEFAULT);
   private final ObjectProperty chatToggle = new SimpleObjectProperty(CHAT_DEFAULT);
@@ -31,7 +31,6 @@ public class KeyMap {
   private final ObjectProperty skip = new SimpleObjectProperty(SKIP_DEFAULT);
 
   public KeyMap() {
-
     defaultKeyMap.put("Fullscreen", fullscreen);
     defaultKeyMap.put("Chat", chatToggle);
     defaultKeyMap.put("Fps", fps);
@@ -40,7 +39,27 @@ public class KeyMap {
     defaultKeyMap.put("Skip", skip);
 
     //Property files needs to be pulled here
-    defaultKeyMap.forEach((k,v) -> keyMap.put(k,new SimpleObjectProperty<KeyCode>(v.getValue())));
+
+    ConfigModifier<String, String> cm = new ConfigModifier<>("settings/keys");
+    cm.attachToFile("keymap.properties");
+    ObservableMap fileMap = cm.getProps();
+
+
+    defaultKeyMap.forEach((k,v) -> {
+      if(fileMap.get(k) == null){
+        keyMap.put(k, new SimpleObjectProperty<>(defaultKeyMap.get(k).getValue()));
+        fileMap.put(k, defaultKeyMap.get(k).getValue().getName().toUpperCase());
+      }else{
+        keyMap.put(k, new SimpleObjectProperty<>(KeyCode.getKeyCode((String)fileMap.get(k))));
+      }
+
+    });
+
+    keyMap.forEach((k,v) -> {
+      v.addListener((observable, oldValue, newValue) -> {
+        fileMap.put(k, v.getValue().getName());
+      });
+    });
 
   }
 

@@ -104,9 +104,6 @@ public class Subluminal {
       }
 
       GlobalSettings.PATH_JAR = getJarPath().toString();
-      ConfigModifier<String, String> cm = new ConfigModifier("settings");
-      cm.attachToFile("keys/keymap.properties");
-      cm.getProps().put("Shenanigans", "Alt+G");
 
       if (subl.debug) {
         srw.run(GlobalSettings.class, GlobalSettings.class, GlobalSettings.PATH_JAR);
