@@ -75,7 +75,7 @@ Starts the game in server or client mode.
 ### Quicklinks for professors / assistants / tutors:
 
 | Document         | Filename             | md                                    | pdf                                     | Description                                        |
-| ---------------- | -------------------- | ------------------------------------- | --------------------------------------- | -------------------------------------------------- |
+| :---------------- |: -------------------- | :------------------------------------- | :--------------------------------------- |: -------------------------------------------------- |
 | Readme           | README.md            | [``<md>``](README.md)                 | [``<pdf>``](README.pdf)                 | Quickstart with lots of useful information         |
 | Changelog        | CHANGELOG.md         | [``<md>``](CHANGELOG.md)              | [``<pdf>``](CHANGELOG.pdf)              | Automaticly generated changelog (based on commits) |
 | Diary            | project_diary.md     | [``<md>``](docs/project_diary.md)     | [``<pdf>``](docs/project_diary.pdf)     | Project diary daily/weekly basis                   |
@@ -83,39 +83,37 @@ Starts the game in server or client mode.
 | Network protocol | network_protocol.md  | [``<md>``](docs/network_protocol.md)  | [``<pdf>``](docs/network_protocol.pdf)  | Network protocol specification                     |
 | Game rules       | game_rules.md        | [``<md>``](docs/game_rules.md)        | [``<pdf>``](docs/game_rules.pdf)        | Short list with all game rules                     |
 | Manual           | manual.pdf           | -                                     | [``<pdf>``](docs/manual/manual.pdf)     | Game manual                                        |
-| Presentations    | *.pptx               | [````]()                              |
+| Presentations    | .pptx               | [``.pptx``](/milestone)              | [``.pdf``](/milestone)                 | Slides and Gantt project                           |
 
 ### Generated docs / reports:
 These documents will only appear once the project has been built with gradle.
 
-| Document         | Path                                                                 | Description                     |
-| ---------------- | -------------------------------------------------------------------- | ------------------------------- |
-| JavaDoc          | [docs/javadoc/](docs/javadoc/index.html)                             | Javadoc Webpage                 |
-| JavaDocCoverage  | [docs/javadoc](docs/javadoc/javadoc-coverage.html)                   | Javadoc Coverage Report Webpage |
-| Test Report      | [app/build/reports/test/](app/build/reports/test/index.html)         | JUnit Test Report               |
-| Test Coverage    | [app/build/reports/coverage/](app/build/reports/coverage/index.html) | Test Coverage Report            |
+| Document          | Local Path                                                            | Hosted                                                                     | Description                      |
+| :---------------- | :-------------------------------------------------------------------- | :------------------------------------------------------------------------- | :------------------------------- | :------------------------------- |
+| JavaDoc           | [docs/javadoc/](docs/javadoc/index.html)                              | [gl.com](https://tairun.gitlab.io/Gruppe-11/javadoc/index.html)            | Javadoc Webpage                  |
+| JavaDocCoverage   | [docs/javadoc](docs/javadoc/javadoc-coverage.html)                    | [gl.com](https://tairun.gitlab.io/Gruppe-11/javadoc/javadoc-coverage.html) | Javadoc Coverage Report Webpage  |
+| Test Report       | [app/build/reports/test/](app/build/reports/test/index.html)          | [gl.com](https://tairun.gitlab.io/Gruppe-11/test/index.html)               | JUnit Test Report                |
+| Test Coverage     | [app/build/reports/coverage/](app/build/reports/coverage/index.html)  | [gl.com](https://tairun.gitlab.io/Gruppe-11/coverage/index.html)           | Test Coverage Report             |
 
 ## 2. Getting Started
 1. Clone the repo to your hard drive ``git clone https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11.git``  
 2. cd into the project directory and try to build the project with ``./gradlew build`` (on Unix) or ``gradlew.bat build`` (on Windows).
 3. Start writing code ...
-3.1 A more specific document on how to contribute is located in [docs/quality_assurance.md](docs/quality_assurance.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
+3.1 More information on how to contribute can be found in [docs/quality_assurance.md](docs/quality_assurance.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## 3. Trailer & Screenshots
-> Insert Youtube trailer here  
+> 404 Video not found
 
-You can find more images in the [./assets/screenshots/](assets/screenshots/) folder.  
-![Menu](./assets/screenshots/menu-1.png)
-![Ingame](./assets/screenshots/game-3.png)
+The screenshots can are located in [./assets/screenshots/](assets/screenshots/).  
 
 
 ## 4. How to play
 
-> Insert Youtube video here ...
+> https://youtu.be/CFz0pelxKns
 
 
 ## 5. Modding
-There is basic support for mods. Read the docs for more info ... [./docs/modding.md](./docs/modding.md). Additionally you can start the server in debug mode with the ``--debug`` flag. This will export the internal constants to a property file called ``settings.properties``. Now you can change and tweak the game settings to your liking. On the next launch of the server, the properties file is read back into the server. See [assets/settings/settings.properties](assets/settings/settings.properties) for example.
+Subluminal features support for mods. Read the docs for more info ... [./docs/modding.md](./docs/modding.md). Additionally you can start the server in debug mode with the ``--debug`` flag. This will export game settings to a property file called ``constants.properties``. Now you can change and tweak the game settings to your liking. On the next launch of the server, the properties file is read back into the server. See [assets/settings/constants.properties](assets/settings/constants.properties) for example.
 
 
 ## 6. License
