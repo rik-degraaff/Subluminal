@@ -153,16 +153,6 @@ public class ClientInitializer extends Application {
     String[] cmd = getParameters().getRaw().toArray(new String[4]);
 
     init(cmd[0], Integer.parseInt(cmd[1]), cmd[2], Boolean.getBoolean(cmd[3]));
-
-    primaryStage.widthProperty().addListener((v, oldV, newV) -> {
-      int diff = oldV.intValue() - newV.intValue();
-      controller.onWindowResizeHandle(diff, 0);
-    });
-
-    primaryStage.heightProperty().addListener((v, oldV, newV) -> {
-      int diff = oldV.intValue() - newV.intValue();
-      controller.onWindowResizeHandle(0, diff);
-    });
   }
 
   /**

@@ -150,10 +150,12 @@ public class MainController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
+    keyMap = new KeyMap();
+
     introPane.setBackground(
         new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
-    keyMap = new KeyMap();
+
 
     Label introText = new Label();
     introText.setTextAlignment(TextAlignment.CENTER);
@@ -217,17 +219,11 @@ public class MainController implements Initializable {
     timeTl.play();
     mainTl.play();
 
-    window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
-      if (keyEvent.getCode() == KeyCode.ESCAPE) {
-        clearIntro(timeTl);
-      }
-    });
 
     mainTl.setOnFinished(e -> {
       clearIntro(timeTl);
     });
 
-    //animation.play();
 
     background = new BackgroundComponent(1000);
     spaceBackgroundDock.getChildren().add(background);
@@ -340,23 +336,27 @@ public class MainController implements Initializable {
     monitorDock.add(display, 1, 0);
 
     window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
-      if (keyEvent.getCode().equals(keyMap.getKeyMap().get("fps").getValue())) {
+      if (keyEvent.getCode() == keyMap.get("Fps").get()) {
         if (debugDock.getChildren().contains(debug)) {
           debugDock.getChildren().remove(debug);
         } else {
           debugDock.getChildren().add(debug);
         }
-      } else if (keyEvent.getCode().equals(keyMap.getKeyMap().get("debugMonitor").getValue())) {
+      } else if (keyEvent.getCode() == keyMap.get("DebugMonitor").get()) {
         if (debugDock.getChildren().contains(monitor)) {
           debugDock.getChildren().remove(monitor);
         } else {
           debugDock.getChildren().add(monitor);
         }
+      } else if (keyEvent.getCode() == keyMap.get("Settings").get()){
+        onSettingOpenHandle();
+      } else if (keyEvent.getCode() == keyMap.get("Skip").get()) {
+        clearIntro(timeTl);
       }
     });
 
     window.addEventHandler(KeyEvent.KEY_RELEASED, keyEvent -> {
-      if (keyEvent.getCode().getName().equals(keyMap.getKeyMap().get("chat").getValue())) {
+      if (keyEvent.getCode() == keyMap.get("Chat").getValue()) {
         toggleChat();
       }
     });
@@ -416,15 +416,12 @@ public class MainController implements Initializable {
     return this.userListController;
   }
 
-  public void onWindowResizeHandle(int diffX, int diffY) {
-    background.onWindowResize(diffX, diffY);
-  }
-
   public void onLobbyOpenHandle() {
     saveMenuState();
 
     windowContainer = new WindowContainerComponent(this, lobby, "Lobbies");
-    //lobby.setUserActive();
+
+    fitWindow();
 
     menuDock.getChildren().add(windowContainer);
     windowContainer.onWindowOpen();
@@ -435,8 +432,18 @@ public class MainController implements Initializable {
 
     windowContainer = new WindowContainerComponent(this, settings, "Settings");
 
+    fitWindow();
+
     menuDock.getChildren().add(windowContainer);
     windowContainer.onWindowOpen();
+  }
+
+  private void fitWindow() {
+    Platform.runLater(() -> {
+      windowContainer.prefHeightProperty().bind(playArea.prefHeightProperty());
+      windowContainer.prefWidthProperty().bind(playArea.prefWidthProperty());
+
+    });
   }
 
   private void saveMenuState() {
@@ -537,6 +544,8 @@ public class MainController implements Initializable {
     saveMenuState();
 
     windowContainer = new WindowContainerComponent(this, highscore, "Highscore");
+
+    fitWindow();
 
     menuDock.getChildren().add(windowContainer);
     windowContainer.onWindowOpen();
