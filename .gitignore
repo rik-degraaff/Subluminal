@@ -23,6 +23,7 @@ docker/_secrets.sh
 .gradle/
 .settings/
 .vscode/
+files/
 
 app/out/
 app/build/
