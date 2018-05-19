@@ -143,6 +143,7 @@ public class UserManager implements UserPresenter.Delegate {
     connection.sendMessage(new GameLeaveReq());
     connection.sendMessage(new LobbyLeaveReq());
     connection.sendMessage(new LogoutReq());
+    
     try {
       connection.close();
     } catch (IOException e) {
