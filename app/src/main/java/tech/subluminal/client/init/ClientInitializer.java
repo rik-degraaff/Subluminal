@@ -89,15 +89,8 @@ public class ClientInitializer extends Application {
     userManager.start(username);
 
     final Thread mainThread = Thread.currentThread();
-    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-      userManager.logout();
-      try {
-        mainThread.join();
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-    }));
-  }
+    Runtime.getRuntime().addShutdownHook(new Thread(userManager::logoutNoShutdown));
+}
 
 
   /**
@@ -140,6 +133,10 @@ public class ClientInitializer extends Application {
           primaryStage.setFullScreen(true);
         }
       }
+    });
+
+    primaryStage.setOnCloseRequest(e -> {
+      System.exit(0);
     });
 
     PerspectiveCamera camera = new PerspectiveCamera();
