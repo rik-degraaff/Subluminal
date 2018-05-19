@@ -73,17 +73,17 @@ Starts the game in server or client mode.
 ```
 
 ### Quicklinks for professors / assistants / tutors:
-
-| Document         | Filename             | md                                    | pdf                                     | Description                                        |
-| :---------------- |: -------------------- | :------------------------------------- | :--------------------------------------- |: -------------------------------------------------- |
-| Readme           | README.md            | [``<md>``](README.md)                 | [``<pdf>``](README.pdf)                 | Quickstart with lots of useful information         |
-| Changelog        | CHANGELOG.md         | [``<md>``](CHANGELOG.md)              | [``<pdf>``](CHANGELOG.pdf)              | Automaticly generated changelog (based on commits) |
-| Diary            | project_diary.md     | [``<md>``](docs/project_diary.md)     | [``<pdf>``](docs/project_diary.pdf)     | Project diary daily/weekly basis                   |
-| QA concept       | quality_assurance.md | [``<md>``](docs/quality_assurance.md) | [``<pdf>``](docs/quality_assurance.pdf) | Quality assurance concept for the project          |
-| Network protocol | network_protocol.md  | [``<md>``](docs/network_protocol.md)  | [``<pdf>``](docs/network_protocol.pdf)  | Network protocol specification                     |
-| Game rules       | game_rules.md        | [``<md>``](docs/game_rules.md)        | [``<pdf>``](docs/game_rules.pdf)        | Short list with all game rules                     |
-| Manual           | manual.pdf           | -                                     | [``<pdf>``](docs/manual/manual.pdf)     | Game manual                                        |
-| Presentations    | .pptx               | [``.pptx``](/milestone)              | [``.pdf``](/milestone)                 | Slides and Gantt project                           |
+  
+| Document          | Filename              | md                                     | pdf                                      | Description                                          |
+| :---------------- | :-------------------- | :------------------------------------- | :--------------------------------------- | :--------------------------------------------------- |
+| Readme            | README.md             | [``<md>``](README.md)                  | [``<pdf>``](README.pdf)                  | Quickstart with lots of useful information           |
+| Changelog         | CHANGELOG.md          | [``<md>``](CHANGELOG.md)               | [``<pdf>``](CHANGELOG.pdf)               | Automatically generated changelog (based on commits) |
+| Diary             | project_diary.md      | [``<md>``](docs/project_diary.md)      | [``<pdf>``](docs/project_diary.pdf)      | Project diary daily/weekly basis                     |
+| QA concept        | quality_assurance.md  | [``<md>``](docs/quality_assurance.md)  | [``<pdf>``](docs/quality_assurance.pdf)  | Quality assurance concept for the project            |
+| Network protocol  | network_protocol.md   | [``<md>``](docs/network_protocol.md)   | [``<pdf>``](docs/network_protocol.pdf)   | Network protocol specification                       |
+| Game rules        | game_rules.md         | [``<md>``](docs/game_rules.md)         | [``<pdf>``](docs/game_rules.pdf)         | Short list with all game rules                       |
+| Manual            | manual.pdf            | -                                      | [``<pdf>``](docs/manual/manual.pdf)      | Game manual                                          |
+| Presentations     | .pptx                 | [``.pptx``](/milestone)                | [``.pdf``](/milestone)                   | Slides and Gantt project                             |
 
 ### Generated docs / reports:
 These documents will only appear once the project has been built with gradle.
