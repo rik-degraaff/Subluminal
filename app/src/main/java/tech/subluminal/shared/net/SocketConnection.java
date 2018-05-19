@@ -107,7 +107,18 @@ public class SocketConnection implements Connection {
   public void sendMessage(SONRepresentable message) {
     String typeName = message.getClass().getSimpleName();
     String msg = message.asSON().asString();
-    messages.add(typeName + " " + msg);
+    sendMessage(typeName, msg);
+  }
+
+  /**
+   * Sends a message over the connection.
+   *
+   * @param type the type of the message.
+   * @param message the message to send.
+   */
+  @Override
+  public void sendMessage(String type, String message) {
+    messages.add(type + " " + message);
   }
 
   private void outStreamLoop() {

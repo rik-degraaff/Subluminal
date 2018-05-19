@@ -21,7 +21,7 @@ public class NameGenerator {
   private List<Integer> starListWeights = new ArrayList<>();
   private int sumWeights;
   private int fileCounter = 0;
-  private List<String> planetNames; //for later use
+  private List<String> planetNames; // for later use
 
   public NameGenerator() {
     readStarFiles();

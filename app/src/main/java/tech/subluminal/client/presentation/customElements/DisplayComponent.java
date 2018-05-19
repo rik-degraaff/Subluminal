@@ -2,22 +2,15 @@ package tech.subluminal.client.presentation.customElements;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Box;
 
 public class DisplayComponent extends AnchorPane{
   private Box box;
   private VBox vbox;
   private final Integer width = 370;
-  private final Integer height = 140;
+  private final Integer height = 130;
 
 
   public DisplayComponent(){

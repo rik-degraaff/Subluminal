@@ -15,6 +15,8 @@ import tech.subluminal.shared.messages.LobbyLeaveRes;
 import tech.subluminal.shared.messages.LobbyListReq;
 import tech.subluminal.shared.messages.LobbyListRes;
 import tech.subluminal.shared.messages.LobbyUpdateRes;
+import tech.subluminal.shared.messages.SpectateGameReq;
+import tech.subluminal.shared.messages.StartTutorialReq;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.stores.records.Lobby;
 
@@ -65,6 +67,16 @@ public class LobbyManager implements LobbyPresenter.Delegate {
   @Override
   public void startGame() {
     connection.sendMessage(new GameStartReq());
+  }
+
+  @Override
+  public void startTutorial() {
+    connection.sendMessage(new StartTutorialReq());
+  }
+
+  @Override
+  public void joinGame(String lobbyID) {
+    connection.sendMessage(new SpectateGameReq(lobbyID));
   }
 
 

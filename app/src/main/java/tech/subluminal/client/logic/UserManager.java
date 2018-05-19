@@ -139,20 +139,25 @@ public class UserManager implements UserPresenter.Delegate {
    */
   @Override
   public void logout() {
+    logoutNoShutdown();
+    System.exit(0);
+  }
+
+  public void logoutNoShutdown() {
     userStore.reconnectID().update(old -> Optional.empty());
     connection.sendMessage(new GameLeaveReq());
     connection.sendMessage(new LobbyLeaveReq());
     connection.sendMessage(new LogoutReq());
+    
     try {
       connection.close();
     } catch (IOException e) {
       e.printStackTrace(); //TODO: sensible stuff
     }
     try {
-      Thread.sleep(2);
+      Thread.sleep(2000);
     } catch (InterruptedException e) {
       // No problem, since we're shutting down anyway
     }
-    System.exit(0);
   }
 }

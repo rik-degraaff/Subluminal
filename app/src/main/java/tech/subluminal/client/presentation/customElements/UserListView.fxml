@@ -7,11 +7,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<fx:root type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.subluminal.client.presentation.controller.UserListController">
+<fx:root fx:id="playerList" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="tech.subluminal.client.presentation.controller.UserListController">
   <children>
     <HBox>
       <children>
-        <ListView prefHeight="140" prefWidth="370" fx:id="playerBoard" style="-fx-background-color: black;" />
+        <ListView fx:id="playerBoard" style="-fx-background-color: black;" />
       </children>
     </HBox>
   </children>

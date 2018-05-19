@@ -406,6 +406,8 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
     chat3DBox.setMaterial(materialChat);
 
+    chatBox.setTranslateX(-5);
+
     sendAllBox.widthProperty().bind(sendOptions.widthProperty());
     sendBox.widthProperty().bind(sendOptions.widthProperty());
     Translate transAll = new Translate();
@@ -423,28 +425,28 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     sendButton.setOnMouseEntered((e) -> {
       Timeline timeTl = new Timeline();
       timeTl.getKeyFrames().addAll(
-          new KeyFrame(Duration.seconds(0.1), new KeyValue(trans.zProperty(),3)),
+          new KeyFrame(Duration.seconds(0.1), new KeyValue(trans.zProperty(), 3)),
           new KeyFrame(Duration.seconds(0.1), new KeyValue(scale.zProperty(), 0.5)));
       timeTl.play();
     });
     sendButton.setOnMouseExited((e) -> {
       Timeline timeTl = new Timeline();
       timeTl.getKeyFrames().addAll(
-          new KeyFrame(Duration.seconds(0.1), new KeyValue(trans.zProperty(),0)),
+          new KeyFrame(Duration.seconds(0.1), new KeyValue(trans.zProperty(), 0)),
           new KeyFrame(Duration.seconds(0.1), new KeyValue(scale.zProperty(), 1)));
       timeTl.play();
     });
     sendAllButton.setOnMouseEntered((e) -> {
       Timeline timeTl = new Timeline();
       timeTl.getKeyFrames().addAll(
-          new KeyFrame(Duration.seconds(0.1), new KeyValue(transAll.zProperty(),3)),
+          new KeyFrame(Duration.seconds(0.1), new KeyValue(transAll.zProperty(), 3)),
           new KeyFrame(Duration.seconds(0.1), new KeyValue(scaleAll.zProperty(), 0.5)));
       timeTl.play();
     });
     sendAllButton.setOnMouseExited((e) -> {
       Timeline timeTl = new Timeline();
       timeTl.getKeyFrames().addAll(
-          new KeyFrame(Duration.seconds(0.1), new KeyValue(transAll.zProperty(),0)),
+          new KeyFrame(Duration.seconds(0.1), new KeyValue(transAll.zProperty(), 0)),
           new KeyFrame(Duration.seconds(0.1), new KeyValue(scaleAll.zProperty(), 1)));
       timeTl.play();
     });
@@ -452,5 +454,14 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     sendBox.setMaterial(material);
     sendAllBox.setMaterial(material);
 
+  }
+
+  public void requestFocus() {
+    messageText.requestFocus();
+
+  }
+
+  public TextField getTextField() {
+    return messageText;
   }
 }
