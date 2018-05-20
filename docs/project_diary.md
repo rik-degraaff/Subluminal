@@ -6,6 +6,20 @@
 **LUC** = Luc Kury  
 **RIK** = Rik de Graaff
 
+### Wednesday - Sunday, May 16th - May 20th
+- Most recently added 3-D effects:
+  - The game view now is a cockpit view in 3-D style.
+  - There also is a cockpit board with buttons for name changing, logged in players, settings and game leaving.
+- The library interactive mesh was used for 3-D imports.
+- Now lobbies can be given names.
+- Some general refactoring in GUI assets had to be done.
+- Some work on the CI had to be done for Docker to build the images right.
+- A CI runner was set up for more freedom in communication with other servers.
+- A config modifier for interaction with files was created (e.g. used for sound settings, keymapping settings and modding support).
+- The manual was worked on.
+- Error code was refactored (stacktraces are now only showed in logger).
+- Some general issue management had to be done.
+
 ### Wednesday-Tuesday, May 09th-May 15th
 - The reconnection feature was implemented. For that, a reconnect-ID is stored in Preferences.userRoot, which in Windows is the registry and in Linux the hidden files.
 - A new feature in the game logic now is: While hopping from star to star to get to a target, a player might lose a small portion of his ships due to a hopping dematerialization tick. Only the hopping player can lose ships, though. The owner of a star can never lose ships to a hopping player.
