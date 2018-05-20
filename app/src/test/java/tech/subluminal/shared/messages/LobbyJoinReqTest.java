@@ -12,20 +12,16 @@ import tech.subluminal.shared.son.SONParsingError;
 public class LobbyJoinReqTest {
 
   @Test
-  public void testStringifyAndParsing() {
+  public void testStringifyAndParsing() throws SONParsingError, SONConversionError {
     String ID = "4053";
     LobbyJoinReq lobbyJoinReq = new LobbyJoinReq(ID);
     LobbyJoinReq parsedLobbyJoinReq = null;
     String parsedID = null;
 
-    try {
-      parsedLobbyJoinReq = LobbyJoinReq.fromSON(SON.parse(lobbyJoinReq.asSON().asString()));
-    } catch (SONParsingError | SONConversionError e) {
-      System.out.println("This error should not have occurred.");
-    }
+    parsedLobbyJoinReq = LobbyJoinReq.fromSON(SON.parse(lobbyJoinReq.asSON().asString()));
 
     assertNotNull(parsedLobbyJoinReq);
-    assertEquals(ID, parsedLobbyJoinReq.getId());
+    assertEquals(ID, parsedLobbyJoinReq.getID());
     System.out.println(lobbyJoinReq.asSON().asString());
 
     // now let's create a wrong id key in the SON object

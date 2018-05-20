@@ -19,6 +19,7 @@ import picocli.CommandLine.Parameters;
 import tech.subluminal.client.init.ClientInitializer;
 import tech.subluminal.server.init.ServerInitializer;
 import tech.subluminal.shared.records.GlobalSettings;
+import tech.subluminal.shared.util.ConfigModifier;
 import tech.subluminal.shared.util.SettingsReaderWriter;
 
 /**
@@ -37,7 +38,7 @@ public class Subluminal {
   @Option(names = {"-ll", "--loglevel"}, description = "Sets the loglevel for the application. ")
   private String loglevel = "off";
   @Option(names = {"-lf", "--logfile"}, description = "Sets the path and filename for the logfile")
-  private String logfile = "log.txt";
+  private String logfile = "";
   @Option(names = {"-d", "--debug"}, description = "Enables the debug mode.")
   private boolean debug;
   @Parameters(index = "0", arity = "1", description = "Sets the application mode. Must be one of "
@@ -50,9 +51,9 @@ public class Subluminal {
   @Parameters(index = "2", arity = "0..1", description =
       "Sets the username. If none is specified the "
           + "system username will be used instead.")
+  private String username = System.getProperty("user.name");
 
   // ======= OTHER VARIABLES =======
-  private String username = System.getProperty("user.name");
   private static final SettingsReaderWriter srw = new SettingsReaderWriter();
 
   /**
@@ -98,20 +99,19 @@ public class Subluminal {
       final SecurityManager sm = System.getSecurityManager();
       if (sm != null) {
         Logger.info("Security Manager found. Trying to suppress access checks.");
-        System.out.println("Security Manager found. Trying to suppress access checks.");
-        //sm.checkPermission(new java.lang.reflect.ReflectPermission("suppressAccessChecks"));
       } else {
         Logger.info("No security manager detected");
-        System.out.println("No security manager detected");
       }
 
       GlobalSettings.PATH_JAR = getJarPath().toString();
+
       if (subl.debug) {
         srw.run(GlobalSettings.class, GlobalSettings.class, GlobalSettings.PATH_JAR);
       }
 
       String host = "localhost";
       int port = 1729;
+      
       Logger.debug("mode:" + subl.mode + " hostAndOrPort:" + subl.hostAndOrPort + " debug:" + String
           .valueOf(subl.debug) + " logfile:" + subl.logfile + " loglevel:" + subl.loglevel
           + " username:" + subl.username);
@@ -149,24 +149,31 @@ public class Subluminal {
   }
 
   private static void initClient(String host, int port, String username, boolean debug) {
-    if (port >= 1024 && port < 65535) {
+    if (port >= 1 && port <= 1024) {
+      System.out.println(printASCII("Client (root)"));
+      Application.launch(ClientInitializer.class, host, Integer.toString(port), username,
+          String.valueOf(debug));
+    } else if (port > 1024 && port < 65535) {
       System.out.println(printASCII("Client"));
       Application.launch(ClientInitializer.class, host, Integer.toString(port), username,
           String.valueOf(debug));
     } else {
-      Logger.error("Port must be between 1024 and 65535.");
-      System.out.printf("Port must be between 1024 and 65535.");
+      Logger.error("Port must be between 0 and 65535.");
+      System.out.printf("Port must be between 0 and 65535.");
       System.exit(1);
     }
   }
 
   private static void initServer(int port, boolean debug) {
-    if (port >= 1024 && port < 65535) {
+    if (port >= 1 && port <= 1024) {
+      System.out.println(printASCII("Server (root)"));
+      ServerInitializer.init(port, debug);
+    } else if (port > 1024 && port < 65535) {
       System.out.println(printASCII("Server"));
       ServerInitializer.init(port, debug);
     } else {
-      Logger.error("Port must be between 1024 and 65535.");
-      System.out.printf("Port must be between 1024 and 65535.");
+      Logger.error("Port must be between 0 and 65535.");
+      System.out.printf("Port must be between 0 and 65535.");
       System.exit(1);
     }
   }
@@ -198,12 +205,11 @@ public class Subluminal {
     File jar = null;
     try {
       jar = new File(
-          GlobalSettings.class.getProtectionDomain().getCodeSource().getLocation().toURI()
+          Subluminal.class.getProtectionDomain().getCodeSource().getLocation().toURI()
               .getPath()).getParentFile();
     } catch (URISyntaxException e) {
       e.printStackTrace();
     }
-
     return jar;
   }
 }

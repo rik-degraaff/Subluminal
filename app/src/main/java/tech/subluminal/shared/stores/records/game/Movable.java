@@ -118,4 +118,17 @@ public abstract class Movable extends GameObject {
         .put(endTarget, END_TARGET_KEY)
         .put(speed, SPEED_KEY);
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Movable)) {
+      return false;
+    }
+
+    Movable mov = (Movable) obj;
+
+    return super.equals(mov)
+        && mov.getEndTarget().equals(getEndTarget())
+        && mov.getTargetIDs().equals(getTargetIDs());
+  }
 }

@@ -12,8 +12,8 @@ import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.game.Star;
 
 /**
- * Contains the changes that need to be made to the game state. A GameStateDelta message converted
- * to SON and then to string might look like this:
+ * Contains the changes that need to be made to the game state. A GameStateDelta message, converted
+ * to SON and then to string, might look like this:
  * <pre>
  * {
  *   "players":l[

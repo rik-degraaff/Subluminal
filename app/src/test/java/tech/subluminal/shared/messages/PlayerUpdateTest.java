@@ -21,17 +21,13 @@ public class PlayerUpdateTest {
   }
 
   @Test
-  public void testParsing() {
+  public void testParsing() throws SONConversionError, SONParsingError {
     String playerUpdateMsg = this.playerUpdate.asSON().asString();
     String parsedUsername = "";
     String parsedID = "";
-    try {
-      PlayerUpdate parsedPlayerUpdate = PlayerUpdate.fromSON(SON.parse(playerUpdateMsg));
-      parsedUsername = parsedPlayerUpdate.getUsername();
-      parsedID = parsedPlayerUpdate.getId();
-    } catch (SONConversionError | SONParsingError e) {
-      e.printStackTrace();
-    }
+    PlayerUpdate parsedPlayerUpdate = PlayerUpdate.fromSON(SON.parse(playerUpdateMsg));
+    parsedUsername = parsedPlayerUpdate.getUsername();
+    parsedID = parsedPlayerUpdate.getId();
 
     Assert.assertEquals(this.id, parsedID);
     Assert.assertEquals(this.username, parsedUsername);
@@ -48,13 +44,11 @@ public class PlayerUpdateTest {
       try {
         PlayerUpdate playerUpdate = PlayerUpdate.fromSON(SON.parse(faultyID));
       } catch (SONConversionError | SONParsingError e) {
-        e.printStackTrace();
         IDSuccessfullyParsed = false;
       }
       try {
         PlayerUpdate playerUpdate = PlayerUpdate.fromSON(SON.parse(faultyUsername));
       } catch (SONParsingError | SONConversionError e) {
-        e.printStackTrace();
         usernameSuccessfullyParsed = false;
       }
       Assert.assertFalse(IDSuccessfullyParsed);

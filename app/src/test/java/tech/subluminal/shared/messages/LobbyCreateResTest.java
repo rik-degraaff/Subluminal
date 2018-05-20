@@ -12,16 +12,12 @@ import tech.subluminal.shared.son.SONParsingError;
 public class LobbyCreateResTest {
 
   @Test
-  public void testStringifyAndParsing() {
+  public void testStringifyAndParsing() throws SONParsingError, SONConversionError {
     String ID = "4053";
     LobbyCreateRes lobbyCreateRes = new LobbyCreateRes(ID);
     LobbyCreateRes parsedLobbyCreateRes = null;
 
-    try {
-      parsedLobbyCreateRes = LobbyCreateRes.fromSON(SON.parse(lobbyCreateRes.asSON().asString()));
-    } catch (SONParsingError | SONConversionError error) {
-      System.out.println("An unexpected error occured here.");
-    }
+    parsedLobbyCreateRes = LobbyCreateRes.fromSON(SON.parse(lobbyCreateRes.asSON().asString()));
 
     assertNotNull(parsedLobbyCreateRes);
     assertEquals(ID, lobbyCreateRes.asSON().getString("id").orElse("not the wanted id"));

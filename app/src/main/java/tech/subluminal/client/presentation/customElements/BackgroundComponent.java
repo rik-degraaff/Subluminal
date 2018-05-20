@@ -10,6 +10,7 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.scene.Group;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -76,21 +77,11 @@ public class BackgroundComponent extends AnchorPane {
 
       this.getChildren().add(group);
 
-      this.setTranslateX(widthX / 2);
-      this.setTranslateY(heightY / 2);
+      Platform.runLater(() -> {
+        this.translateXProperty().bind(Bindings.createDoubleBinding(() -> getScene().getWidth() / 2, getScene().widthProperty()));
+        this.translateYProperty().bind(Bindings.createDoubleBinding(() -> getScene().getHeight() / 2, getScene().heightProperty()));
+      });
 
     });
-  }
-
-
-  /**
-   * Handler to call, when a window gets resized.
-   */
-  public void onWindowResize(int diffX, int diffY) {
-    Platform.runLater(() -> {
-      this.setTranslateX(((AnchorPane) this.getParent()).getWidth() / 2);
-      this.setTranslateY(((AnchorPane) this.getParent()).getHeight() / 2);
-    });
-
   }
 }

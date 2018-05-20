@@ -1,0 +1,10 @@
+@font-face {
+    font-family: 'PxPlus IBM VGA9';
+    src: url('PxPlus_IBM_VGA9.eot');
+    src: url('PxPlus_IBM_VGA9.eot?#iefix') format('embedded-opentype'),
+        url('PxPlus_IBM_VGA9.woff2') format('woff2'),
+        url('PxPlus_IBM_VGA9.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+

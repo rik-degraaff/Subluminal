@@ -31,7 +31,8 @@ public final class GlobalSettings {
   public static String PATH_JAR;
   public static final String FILE_SETTINGS = new String("settings.properties");
   @Export
-  public static final String FILE_HIGHSCORE = new String("highscore.txt");
+  public static final String FILE_HIGHSCORE = new String("highscore.son");
+  public static final String PATH_CONFIG = new String("config");
 
   // ======== GAME SETTINGS ========
   @Export
