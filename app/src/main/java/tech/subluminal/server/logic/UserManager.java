@@ -16,6 +16,7 @@ import tech.subluminal.shared.messages.ReconnectReq;
 import tech.subluminal.shared.messages.UsernameReq;
 import tech.subluminal.shared.messages.UsernameRes;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.records.GlobalSettings;
 import tech.subluminal.shared.stores.records.User;
 import tech.subluminal.shared.util.IdUtils;
 
@@ -108,7 +109,7 @@ public class UserManager {
    * @return the id of the user.
    */
   private Optional<String> onLogin(Connection connection, LoginReq loginReq) {
-    String id = IdUtils.generateId(8);
+    String id = IdUtils.generateId(GlobalSettings.SHARED_UUID_LENGTH);
     String username = loginReq.getUsername();
 
     username = getUnusedUsername(username);

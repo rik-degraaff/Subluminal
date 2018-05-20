@@ -45,6 +45,7 @@ import tech.subluminal.shared.messages.SpectateGameReq;
 import tech.subluminal.shared.messages.Toast;
 import tech.subluminal.shared.messages.YouLose;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.records.GlobalSettings;
 import tech.subluminal.shared.records.LobbyStatus;
 import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.stores.records.game.Coordinates;
@@ -598,7 +599,7 @@ public class GameManager implements GameStarter {
 
       // create a signal for the move request and write it into the game store
       gameState.getSignals().add(new Signal(motherShip.getCoordinates(),
-          IdUtils.generateId(8), req.getOriginID(), req.getTargets(), playerID,
+          IdUtils.generateId(GlobalSettings.SHARED_UUID_LENGTH), req.getOriginID(), req.getTargets(), playerID,
           gameState.getStars().get(req.getOriginID()).getCurrent().getState().getCoordinates(),
           req.getAmount(), gameState.getLightSpeed()));
     }
