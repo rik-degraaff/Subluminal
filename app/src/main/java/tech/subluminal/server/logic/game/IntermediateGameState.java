@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.server.stores.records.Signal;
 import tech.subluminal.server.stores.records.Star;
+import tech.subluminal.shared.records.GlobalSettings;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.Movable;
@@ -120,7 +121,7 @@ public class IntermediateGameState {
               new Fleet(fleet.getCoordinates(), fleet.getNumberOfShips() - amount, fleet.getID(),
                   fleet.getTargetIDs(), fleet.getEndTarget(), fleet.getSpeed())
           ));
-          return new Fleet(fleet.getCoordinates(), amount, generateId(8),
+          return new Fleet(fleet.getCoordinates(), amount, generateId(GlobalSettings.SHARED_UUID_LENGTH),
               targets, targets.get(targets.size() - 1), fleet.getSpeed());
         });
   }
@@ -418,7 +419,7 @@ public class IntermediateGameState {
       final Fleet fleet = optionalFleet
           .map(f -> f.expanded(1))
           .orElseGet(() ->
-              new Fleet(star.getCoordinates(), 1, generateId(8), Collections.emptyList(), starID,
+              new Fleet(star.getCoordinates(), 1, generateId(GlobalSettings.SHARED_UUID_LENGTH), Collections.emptyList(), starID,
                   shipSpeed));
       addFleetToStar(fleet, star.getOwnerID(), starID);
     }

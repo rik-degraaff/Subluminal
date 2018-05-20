@@ -62,6 +62,10 @@ public class SettingsReaderWriter implements PropertiesReaderWriter {
               tmp = Double.parseDouble(props.getProperty(field.getName()));
               break;
             }
+            case("long"): {
+              tmp = Long.parseLong(props.getProperty(field.getName()));
+              break;
+            }
             case("boolean"): {
               tmp = Boolean.parseBoolean(props.getProperty(field.getName()));
               break;
