@@ -63,6 +63,7 @@ public abstract class ShipComponent extends Pane {
   public Label amount;
   private GameStore gamestore;
 
+  //Mothership
   public ShipComponent(Coordinates coordinates, String playerId, List<String> targetIDs,
       GameStore gamestore, MainController main) {
     this.gamestore = gamestore;
@@ -170,6 +171,7 @@ public abstract class ShipComponent extends Pane {
 
   }
 
+  //Fleets
   public ShipComponent(Coordinates coordinates, int numberOfShips, String ID, String ownerID,
       List<String> targetIDs, GameStore gamestore, MainController main) {
 
@@ -269,7 +271,8 @@ public abstract class ShipComponent extends Pane {
     });
 
     Platform.runLater(() -> {
-      setIsRotating(targetsWrapperProperty().isEmpty());
+      //isRotatingProperty().bind(targetsWrapperProperty().emptyProperty());
+      setIsRotating(targetsWrapper.isEmpty());
     });
 
     this.getChildren().add(group);

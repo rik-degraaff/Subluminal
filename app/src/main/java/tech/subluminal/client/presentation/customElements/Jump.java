@@ -1,8 +1,10 @@
 package tech.subluminal.client.presentation.customElements;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -15,19 +17,27 @@ public class Jump extends Group {
 
   private final ObjectProperty<Color> color = new SimpleObjectProperty<Color>();
 
-  Line line = new Line();
-
+  private final DoubleProperty newStartX = new SimpleDoubleProperty();
+  private Line line = new Line();
+  private DoubleProperty newStartY = new SimpleDoubleProperty();
+  private DoubleProperty newEndX = new SimpleDoubleProperty();
+  private DoubleProperty newEndY = new SimpleDoubleProperty();
   private int OFFSET_DEFAULT = 5;
 
   public Jump(DoubleProperty startX, DoubleProperty startY, DoubleProperty endX,
       DoubleProperty endY) {
-    Double endAngle = getAngle(new Coordinates(startX.get(), startY.get()),
+    double endAngle = getAngle(new Coordinates(startX.get(), startY.get()),
         new Coordinates(endX.get(), endY.get()));
 
-    line.startXProperty().bind(startX);
-    line.startYProperty().bind(startY);
-    line.endXProperty().bind(endX);
-    line.endYProperty().bind(endY);
+    newStartX.bind(getDoubleXBinding(endX, startX, endAngle));
+    newStartY.bind(getDoubleYBinding(endY, startY, endAngle));
+    newEndX.bind(getDoubleXBinding(startX, endX, endAngle));
+    newEndY.bind(getDoubleYBinding(startY, endY, endAngle));
+
+    line.startXProperty().bind(newStartX);
+    line.startYProperty().bind(newStartY);
+    line.endXProperty().bind(newEndX);
+    line.endYProperty().bind(newEndY);
 
     Polygon arrow = new Polygon();
     arrow.getPoints().addAll(new Double[]{
@@ -35,26 +45,8 @@ public class Jump extends Group {
         -20.0, -10.0,
         -20.0, 10.0});
 
-    int dirX;
-    if (startX.getValue() < endX.getValue()) {
-      dirX = 1;
-    } else {
-      dirX = -1;
-    }
-
-    int dirY;
-    if (startY.getValue() < endY.getValue()) {
-      dirY = 1;
-    } else {
-      dirY = -1;
-    }
-
-    double deltaX = OFFSET_DEFAULT * Math.sin(endAngle);
-    double deltaY = OFFSET_DEFAULT * Math.cos(endAngle);
-
-    arrow.layoutXProperty().bind(Bindings.createDoubleBinding(() -> endX.getValue() + deltaX*dirX, endX));
-    arrow.layoutYProperty().bind(Bindings
-        .createDoubleBinding(() -> endY.getValue() + deltaY*dirY, endY));
+    arrow.layoutXProperty().bind(newEndX);
+    arrow.layoutYProperty().bind(newEndY);
     //arrow.layoutXProperty().
     arrow.fillProperty().bind(color);
 
@@ -63,40 +55,40 @@ public class Jump extends Group {
     line.setStroke(Color.RED);
     line.strokeProperty().bind(color);
 
-    line.setStrokeWidth(5);
+    line.setStrokeWidth(3);
 
     setColor(Color.RED);
 
     this.getChildren().addAll(line, arrow);
   }
 
-  public Jump(double startX, double startY, double endX, double endY) {
-    Double endAngle = getAngle(new Coordinates(startX, startY), new Coordinates(endX, endY));
-    line.setStartX(startX);
-    line.setStartY(startY);
-    line.setEndX(endX);
-    line.setEndY(endY);
+  private DoubleBinding getDoubleYBinding(DoubleProperty startY, DoubleProperty endY,
+      double endAngle) {
+    int dirY;
+    if (startY.getValue() < endY.getValue()) {
+      dirY = 1;
+    } else {
+      dirY = -1;
+    }
 
-    Polygon arrow = new Polygon();
-    arrow.getPoints().addAll(new Double[]{
-        0.0, 0.0,
-        -20.0, -10.0,
-        -20.0, 10.0});
+    double deltaY = OFFSET_DEFAULT * Math.cos(endAngle);
 
-    arrow.setLayoutX(endX);
-    arrow.setLayoutY(endY);
-    arrow.fillProperty().bind(color);
-    arrow.getTransforms()
-        .add(new Rotate(endAngle));
+    return Bindings
+        .createDoubleBinding(() -> endY.getValue() + deltaY * dirY, endY);
+  }
 
-    line.fillProperty().bind(color);
-    line.setStroke(Color.RED);
-    line.setStrokeWidth(5);
+  private DoubleBinding getDoubleXBinding(DoubleProperty startX, DoubleProperty endX,
+      double endAngle) {
+    int dirX;
+    if (startX.getValue() < endX.getValue()) {
+      dirX = 1;
+    } else {
+      dirX = -1;
+    }
 
-    setColor(Color.RED);
-
-    this.getChildren().addAll(line, arrow);
-
+    double deltaX = OFFSET_DEFAULT * Math.sin(endAngle);
+    return Bindings
+        .createDoubleBinding(() -> endX.getValue() + deltaX * dirX, endX);
   }
 
   private double getAngle(Coordinates start, Coordinates end) {
