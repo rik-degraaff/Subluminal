@@ -104,6 +104,10 @@ public class ConfigModifier<k, v> {
     }
   }
 
+  public File getAttachedFile() {
+    return attachedFile;
+  }
+
   public ObservableMap<k, v> getProps() {
     return propMap;
   }
@@ -116,21 +120,38 @@ public class ConfigModifier<k, v> {
    */
   public void attachToFile(String fullName) {
     File theFile = new File(folderPath + DELIMETER_KEY + fullName.replace("/", DELIMETER_KEY));
-    createIfNotExists(theFile);
-    this.attachedFile = theFile;
-    getProperties();
-    propMap.addListener((MapChangeListener<k, v>) change -> {
-      Properties props = new Properties();
-      try {
-        OutputStream out = new FileOutputStream(theFile);
-        propMap.forEach((k,v) -> props.setProperty(k.toString(), v.toString()));
-        props.store(out, "Subluminal Properties");
-      } catch (FileNotFoundException e) {
-        Logger.error(e);
-      } catch (IOException e) {
-        Logger.error(e);
+    String[] parts = fullName.split("\\.");
+
+    switch (parts[parts.length-1]) {
+      case ("properties"): {
+        createIfNotExists(theFile);
+        this.attachedFile = theFile;
+        getProperties();
+        propMap.addListener((MapChangeListener<k, v>) change -> {
+          Properties props = new Properties();
+          try {
+            OutputStream out = new FileOutputStream(theFile);
+            propMap.forEach((k,v) -> props.setProperty(k.toString(), v.toString()));
+            props.store(out, "Subluminal Properties");
+          } catch (FileNotFoundException e) {
+            Logger.error(e);
+          } catch (IOException e) {
+            Logger.error(e);
+          }
+        });
+        break;
       }
-    });
+      case ("son"): {
+        createIfNotExists(theFile);
+        this.attachedFile = theFile;
+        Logger.info("SON file attached.");
+        break;
+      }
+      default: {
+        Logger.info(parts[parts.length-1]);
+        break;
+      }
+    }
     this.isAttachedToFile = true;
   }
 

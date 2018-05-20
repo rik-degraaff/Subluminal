@@ -8,8 +8,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import tech.subluminal.server.stores.records.HighScore;
+import tech.subluminal.shared.records.GlobalSettings;
 import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONParsingError;
+import tech.subluminal.shared.util.ConfigModifier;
 import tech.subluminal.shared.util.RemoteSynchronized;
 import tech.subluminal.shared.util.Synchronized;
 
@@ -18,11 +20,16 @@ import tech.subluminal.shared.util.Synchronized;
  */
 public class HighScoreStore {
 
-  private static final String HIGHSCORES_PATH = "./files/highscores.son";
-
+  private static ConfigModifier  cm = new ConfigModifier("highscore");
+  private static String HIGHSCORES_PATH;
   private final Synchronized<List<HighScore>> highScores = new RemoteSynchronized<>(
       HighScoreStore::getHighScoresFromFile,
       HighScoreStore::writeHighscoresToFile);
+
+  public HighScoreStore() {
+    cm.attachToFile(GlobalSettings.FILE_HIGHSCORE);
+    HIGHSCORES_PATH = cm.getAttachedFile().getPath();
+  }
 
   private static List<HighScore> getHighScoresFromFile() {
     List<HighScore> list = new LinkedList<>();
