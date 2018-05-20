@@ -53,12 +53,9 @@ public class ArrowComponent extends Pane {
 
     yProperty.addListener(e -> {
       if (yProperty.getValue() <= 100) {
-        rotate.setPivotX(0);
-        rotate.setPivotY(0);
         rotate.setAngle(0);
+        this.getTransforms().add(new Translate(0, 40));
       } else {
-        rotate.setPivotX(0);
-        rotate.setPivotY(0);
         rotate.setAngle(180);
       }
     });
