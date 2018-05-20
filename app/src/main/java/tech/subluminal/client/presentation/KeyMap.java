@@ -9,7 +9,7 @@ import javafx.scene.input.KeyCode;
 import tech.subluminal.shared.util.ConfigModifier;
 
 /**
- * A KeyMap is used to get the prefered Keys from a user, store, update and expose them to the GUI.
+ * A KeyMap is used to get the preferred Keys from a user, store, update and expose them to the GUI.
  */
 public class KeyMap {
 
@@ -30,6 +30,9 @@ public class KeyMap {
   private final ObjectProperty settings = new SimpleObjectProperty(SETTINGS_DEFAULT);
   private final ObjectProperty skip = new SimpleObjectProperty(SKIP_DEFAULT);
 
+  /**
+   * Initializes the KeyMap with default values.
+   */
   public KeyMap() {
     defaultKeyMap.put("Fullscreen", fullscreen);
     defaultKeyMap.put("Chat", chatToggle);

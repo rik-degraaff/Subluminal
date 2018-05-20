@@ -49,6 +49,9 @@ public class WindowContainerController implements Initializable {
     this.main = main;
   }
 
+  /**
+   * Open hook for windows. Animates the window into view.
+   */
   public void openWindow() {
     ScaleTransition scaleTlX = new ScaleTransition(Duration.seconds(0.2), window.getParent());
     scaleTlX.setFromX(0);
@@ -64,6 +67,9 @@ public class WindowContainerController implements Initializable {
     paraTl.play();
   }
 
+  /**
+   * Close hook for windows. Removes the window from the view after the animation has finished.
+   */
   public void closeWindow() {
     ScaleTransition scaleTlX = new ScaleTransition(Duration.seconds(0.2), window.getParent());
     scaleTlX.setFromX(1);

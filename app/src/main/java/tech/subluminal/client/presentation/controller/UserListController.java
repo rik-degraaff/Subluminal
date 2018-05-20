@@ -36,6 +36,10 @@ public class UserListController implements Initializable, UserPresenter {
   }
 
 
+  /**
+   * Set the user store in this controller.
+   * @param userStore the user store to be set.
+   */
   public void setUserStore(UserStore userStore) {
     this.userStore = userStore;
 

@@ -30,6 +30,13 @@ public class LobbyManager implements LobbyPresenter.Delegate {
   private final LobbyPresenter lobbyPresenter;
   private final MainController mainController;
 
+  /**
+   * Initializes the lobbymanager.
+   * @param lobbyStore is the data structure to store all the created lobbies on the server.
+   * @param connection holds the socket connection to the server.
+   * @param lobbyPresenter the component to show the lobbies in.
+   * @param mainController connects all the controllers and handles the communication between them.
+   */
   public LobbyManager(LobbyStore lobbyStore, Connection connection,
       LobbyComponent lobbyPresenter, MainController mainController) {
     this.mainController = mainController;

@@ -20,7 +20,6 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
@@ -155,8 +154,6 @@ public class MainController implements Initializable {
     introPane.setBackground(
         new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
-
-
     Label introText = new Label();
     introText.setTextAlignment(TextAlignment.CENTER);
     introText.setTranslateY(-100);
@@ -219,11 +216,9 @@ public class MainController implements Initializable {
     timeTl.play();
     mainTl.play();
 
-
     mainTl.setOnFinished(e -> {
       clearIntro(timeTl);
     });
-
 
     background = new BackgroundComponent(1000);
     spaceBackgroundDock.getChildren().add(background);
@@ -348,7 +343,7 @@ public class MainController implements Initializable {
         } else {
           debugDock.getChildren().add(monitor);
         }
-      } else if (keyEvent.getCode() == keyMap.get("Settings").get()){
+      } else if (keyEvent.getCode() == keyMap.get("Settings").get()) {
         onSettingOpenHandle();
       } else if (keyEvent.getCode() == keyMap.get("Skip").get()) {
         clearIntro(timeTl);
@@ -416,6 +411,9 @@ public class MainController implements Initializable {
     return this.userListController;
   }
 
+  /**
+   * Creates a windows when the play button is pressed.
+   */
   public void onLobbyOpenHandle() {
     saveMenuState();
 
@@ -427,6 +425,9 @@ public class MainController implements Initializable {
     windowContainer.onWindowOpen();
   }
 
+  /**
+   * Creates a window when the settings button is pressed.
+   */
   public void onSettingOpenHandle() {
     saveMenuState();
 
@@ -458,6 +459,9 @@ public class MainController implements Initializable {
     }
   }
 
+  /**
+   * Removes a window from the dock.
+   */
   public void onWindowClose() {
     menuDock.getChildren().clear();
 
@@ -476,6 +480,9 @@ public class MainController implements Initializable {
     return playArea;
   }
 
+  /**
+   * Adds all the windows and buttons on game start.
+   */
   public void onMapOpenHandle() {
     Platform.runLater(() -> {
 
@@ -504,6 +511,9 @@ public class MainController implements Initializable {
     });
   }
 
+  /**
+   * Removes the game windows components.
+   */
   public void onMapCloseHandle() {
     playArea.getChildren().clear();
 
@@ -516,18 +526,16 @@ public class MainController implements Initializable {
     menuDock.getChildren().add(menu);
   }
 
+  /**
+   * Removes a window component from the menu dock.
+   */
   public void removeWindow() {
     menuDock.getChildren().clear();
-
     menuDock.getChildren().add(menu);
 
     if (menuHolder.isMouseTransparent()) {
       menuHolder.setMouseTransparent(false);
     }
-  }
-
-  public void onLobbyCreateHandle() {
-
   }
 
   public void sendRecipiantToChat(String recipiant) {
@@ -539,6 +547,9 @@ public class MainController implements Initializable {
     return gameController;
   }
 
+  /**
+   * Gets triggered when opening the highscore view via a button.
+   */
   public void onHighscoreHandle() {
     chatController.requestHighscores();
     saveMenuState();
