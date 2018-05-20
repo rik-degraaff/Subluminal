@@ -123,7 +123,6 @@ public class StarComponent extends Group {
     });
 
     hoverShownProperty().addListener((observable, oldValue, newValue) -> {
-      System.out.println("Hover changed: " + newValue);
       if(newValue){
         setOnHover(true);
       }else{

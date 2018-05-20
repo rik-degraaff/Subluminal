@@ -49,7 +49,7 @@ public class Jump extends Group {
     line.endYProperty().bind(newEndY);
 
     Polygon arrow = new Polygon();
-    
+
 
     arrow.getPoints().addAll(new Double[]{
         15.0, 0.0,
@@ -95,8 +95,6 @@ public class Jump extends Group {
 
     double deltaY = OFFSET_DEFAULT * Math.cos(Math.toRadians(endAngle));
 
-    System.out.println("DeltaY: " + deltaY + " " + dirY);
-
     return Bindings
         .createDoubleBinding(() -> endY.getValue() + deltaY * dirY, endY);
   }
@@ -111,8 +109,7 @@ public class Jump extends Group {
     }
 
     double deltaX = OFFSET_DEFAULT * Math.sin(Math.toRadians(endAngle));
-
-    System.out.println("DeltaX: " + deltaX + " " + dirX);
+    
     return Bindings
         .createDoubleBinding(() -> endX.getValue() + deltaX * dirX, endX);
   }
