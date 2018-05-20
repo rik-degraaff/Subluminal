@@ -7,6 +7,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Group;
+import javafx.scene.effect.Bloom;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
@@ -22,12 +23,20 @@ public class Jump extends Group {
   private DoubleProperty newStartY = new SimpleDoubleProperty();
   private DoubleProperty newEndX = new SimpleDoubleProperty();
   private DoubleProperty newEndY = new SimpleDoubleProperty();
-  private int OFFSET_DEFAULT = 5;
+  private int OFFSET_DEFAULT = 40;
 
   public Jump(DoubleProperty startX, DoubleProperty startY, DoubleProperty endX,
       DoubleProperty endY) {
     double endAngle = getAngle(new Coordinates(startX.get(), startY.get()),
         new Coordinates(endX.get(), endY.get()));
+
+    endAngle = Math.abs(endAngle);
+
+    if (endAngle < 90) {
+      endAngle = 90 - endAngle;
+    } else {
+      endAngle = endAngle % 90;
+    }
 
     newStartX.bind(getDoubleXBinding(endX, startX, endAngle));
     newStartY.bind(getDoubleYBinding(endY, startY, endAngle));
@@ -40,24 +49,37 @@ public class Jump extends Group {
     line.endYProperty().bind(newEndY);
 
     Polygon arrow = new Polygon();
+    
+
     arrow.getPoints().addAll(new Double[]{
-        0.0, 0.0,
-        -20.0, -10.0,
-        -20.0, 10.0});
+        15.0, 0.0,
+        00.0, -5.0,
+        00.0, 5.0});
 
     arrow.layoutXProperty().bind(newEndX);
     arrow.layoutYProperty().bind(newEndY);
     //arrow.layoutXProperty().
     arrow.fillProperty().bind(color);
+    arrow.setOpacity(0.8);
+
+    endAngle = getAngle(new Coordinates(startX.get(), startY.get()),
+        new Coordinates(endX.get(), endY.get()));
 
     arrow.getTransforms().add(new Rotate(endAngle));
+    //arrow.setRotate(endAngle);
 
-    line.setStroke(Color.RED);
+    line.setStroke(Color.web("#42aaf4"));
     line.strokeProperty().bind(color);
 
-    line.setStrokeWidth(3);
+    line.setStrokeWidth(1);
+    line.setOpacity(0.8);
 
-    setColor(Color.RED);
+    Bloom effect = new Bloom();
+    effect.setThreshold(0.1);
+    line.setEffect(effect);
+    arrow.setEffect(effect);
+
+    setColor(Color.web("#42aaf4"));
 
     this.getChildren().addAll(line, arrow);
   }
@@ -66,12 +88,14 @@ public class Jump extends Group {
       double endAngle) {
     int dirY;
     if (startY.getValue() < endY.getValue()) {
-      dirY = 1;
-    } else {
       dirY = -1;
+    } else {
+      dirY = 1;
     }
 
-    double deltaY = OFFSET_DEFAULT * Math.cos(endAngle);
+    double deltaY = OFFSET_DEFAULT * Math.cos(Math.toRadians(endAngle));
+
+    System.out.println("DeltaY: " + deltaY + " " + dirY);
 
     return Bindings
         .createDoubleBinding(() -> endY.getValue() + deltaY * dirY, endY);
@@ -81,12 +105,14 @@ public class Jump extends Group {
       double endAngle) {
     int dirX;
     if (startX.getValue() < endX.getValue()) {
-      dirX = 1;
-    } else {
       dirX = -1;
+    } else {
+      dirX = 1;
     }
 
-    double deltaX = OFFSET_DEFAULT * Math.sin(endAngle);
+    double deltaX = OFFSET_DEFAULT * Math.sin(Math.toRadians(endAngle));
+
+    System.out.println("DeltaX: " + deltaX + " " + dirX);
     return Bindings
         .createDoubleBinding(() -> endX.getValue() + deltaX * dirX, endX);
   }
