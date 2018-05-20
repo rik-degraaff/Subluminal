@@ -7,10 +7,18 @@ import javafx.scene.layout.AnchorPane;
 import tech.subluminal.client.presentation.controller.ChatController;
 import tech.subluminal.client.presentation.controller.MainController;
 
+/**
+ * Represents the chat window.
+ */
 public class ChatComponent extends AnchorPane {
 
   private ChatController controller;
 
+  /**
+   * Initializes the chat window and attaches it to the a controller.
+   *
+   * @param mainController the controller to attach to.
+   */
   public ChatComponent(MainController mainController) {
     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ChatView.fxml"));
     fxmlLoader.setRoot(this);
