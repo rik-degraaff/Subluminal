@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.function.Function;
 import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -24,12 +25,11 @@ import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.controller.MainController;
@@ -56,7 +56,7 @@ public abstract class ShipComponent extends Pane {
 
   private final IntegerProperty numberOfShips = new SimpleIntegerProperty();
   private final RotateTransition rotateTl = new RotateTransition();
-  public Pane group;
+  private final TranslateTransition transTl = new TranslateTransition();
   public Label amount;
   private GameStore gamestore;
 
@@ -87,10 +87,12 @@ public abstract class ShipComponent extends Pane {
     ImageView shipDetails = initShipImage("/tech/subluminal/resources/100w/shipDetails.png");
 
     ship.getChildren().addAll(shipBody, shipDetails);
-
     ship.setMouseTransparent(true);
+    //ship.prefWidth(SHIP_HEIGHT);
+    //ship.prefHeight(SHIP_HEIGHT);
 
-    TranslateTransition transTl = new TranslateTransition(Duration.seconds(0.8), ship);
+    transTl.setNode(ship);
+    transTl.setDuration(Duration.seconds(0.8));
     transTl.setFromY(0);
     transTl.setToY(2);
     transTl.setAutoReverse(true);
@@ -100,39 +102,20 @@ public abstract class ShipComponent extends Pane {
       targetsWrapperProperty().addListener((observable, oldValue, newValue) -> {
         System.out.println("NEW VAL" + newValue);
         if (!newValue.isEmpty()) {
-          //rotate to star
-          System.out.println("ROTATION" + ship.getRotate());
-          Star next = gamestore.stars().getByID(targetsWrapper.get(0)).get()
-              .use(Function.identity());
-          double angle = getAngle(new Coordinates(this.getLayoutX(), this.getLayoutY()),
-              next.getCoordinates());
-
-          //not too much spins
-          ship.getTransforms().add(new Rotate(angle));
-
-          //stop hover
-          transTl.stop();
+          setShipMoving(ship);
         } else if (newValue.isEmpty()) {
-          //reset rotation
-          ship.getTransforms().add(new Rotate(-ship.getRotate()%360));
-          //start hover
-          transTl.play();
+          setShipOnStar(ship);
         }
       });
 
-      this.setMouseTransparent(true);
-
-      isRotatingProperty().addListener((observable, oldValue, newValue) -> {
-        if (newValue && !oldValue) {
-
-        }
-      });
+      if (targetsWrapper.isEmpty()) {
+        setShipOnStar(ship);
+      } else {
+        setShipMoving(ship);
+      }
     });
 
-    Platform.runLater(() -> {
-      setIsRotating(targetsWrapperProperty().isEmpty());
-    });
-
+    this.setMouseTransparent(true);
     this.getChildren().add(ship);
 
   }
@@ -142,7 +125,6 @@ public abstract class ShipComponent extends Pane {
       List<String> targetIDs, GameStore gamestore, MainController main) {
 
     this.gamestore = gamestore;
-    Pane group = new Pane();
 
     setX(coordinates.getX());
     setY(coordinates.getY());
@@ -158,42 +140,50 @@ public abstract class ShipComponent extends Pane {
 
     setColor(Color.GRAY);
 
-    Pane ship = new Pane();
+    Group ship = new Group();
     //group.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY,Insets.EMPTY)));
 
     ImageView shipBody = initShipImage("/tech/subluminal/resources/100w/fleetBody.png");
-    shipBody.setPreserveRatio(true);
+    //shipBody.setPreserveRatio(true);
 
     ImageView shipDetails = initShipImage("/tech/subluminal/resources/100w/fleetDetails.png");
-    shipDetails.setPreserveRatio(true);
+    //shipDetails.setPreserveRatio(true);
 
     setShipColor(shipBody);
 
     ship.getChildren().addAll(shipBody, shipDetails);
 
-    group.getChildren().add(ship);
-    group.setMouseTransparent(true);
-
     this.setMouseTransparent(true);
 
-    rotateTl.setDuration(Duration.seconds(5));
-    rotateTl.setNode(group);
-    rotateTl.setToAngle(360);
-    rotateTl.setCycleCount(RotateTransition.INDEFINITE);
+    rotateTl.setDuration(Duration.seconds(7));
+    rotateTl.setNode(ship);
+    rotateTl.setToAngle(-360);
+    rotateTl.setCycleCount(Timeline.INDEFINITE);
     rotateTl.setInterpolator(Interpolator.LINEAR);
 
     Platform.runLater(() -> {
       targetsWrapperProperty().addListener((observable, oldValue, newValue) -> {
-
+        System.out.println("NEW VAL" + newValue);
+        if (targetsWrapper.isEmpty()) {
+          //reset rotation
+          setFleetRotating(ship);
+        } else {
+          //rotate to star
+          setFleetMoving(ship);
+        }
       });
+
+      this.setMouseTransparent(true);
+
+      if(targetsWrapper.isEmpty()){
+        setFleetRotating(ship);
+      }else{
+        setFleetMoving(ship);
+      }
+
     });
 
-    Platform.runLater(() -> {
-      //isRotatingProperty().bind(targetsWrapperProperty().emptyProperty());
-      setIsRotating(targetsWrapper.isEmpty());
-    });
-
-    this.getChildren().add(group);
+    this.getChildren().add(ship);
 
     this.setNumberOfShips(numberOfShips);
 
@@ -202,20 +192,69 @@ public abstract class ShipComponent extends Pane {
     amount.setTextFill(Color.WHITE);
     amount.getStyleClass().add("ship-amount");
 
-    DropShadow ds = new DropShadow();
-    ds.setOffsetY(3.0f);
-    ds.setColor(Color.color(0, 0, 0));
-
-    amount.setEffect(ds);
-
     amount.textProperty().bind(Bindings.createStringBinding(() ->
         this.numberOfShipsProperty().getValue().toString(), numberOfShipsProperty()));
-    group.getChildren().add(amount);
+    ship.getChildren().addAll(amount);
 
     amount.rotateProperty()
         .bind(Bindings
-            .createDoubleBinding(() -> -group.getRotate(), group.rotateProperty()));
+            .createDoubleBinding(() -> -ship.getRotate(), ship.rotateProperty()));
 
+    Platform.runLater(() -> {
+      amount.translateXProperty().bind(
+          Bindings.createDoubleBinding(() -> -amount.prefWidth(-1) / 2, amount.widthProperty()));
+
+      amount.translateYProperty().bind(
+          Bindings.createDoubleBinding(() -> -amount.prefHeight(-1) / 2, amount.heightProperty()));
+    });
+
+  }
+
+  private void setFleetMoving(Group ship) {
+    ship.getTransforms().clear();
+    ship.setRotate(0);
+    rotateTl.stop();
+
+    rotateToStar(ship);
+    //stop hover
+  }
+
+  private void setFleetRotating(Group ship) {
+    ship.setRotate(0);
+    //start hover
+    ship.getTransforms().clear();
+
+    //movePivot(ship, 0, 30);
+    ship.getTransforms().add(new Translate(0, -40));
+
+    rotateTl.play();
+  }
+
+  private void setShipMoving(Group ship) {
+    ship.getTransforms().clear();
+    //rotate to star
+    rotateToStar(ship);
+    //stop hover
+    transTl.stop();
+  }
+
+  private void setShipOnStar(Group ship) {
+    ship.setRotate(90);
+    //start hover
+    ship.getTransforms().add(new Translate(-20, -20));
+    transTl.play();
+  }
+
+  private void rotateToStar(Group ship) {
+    Star next = gamestore.stars().getByID(targetsWrapper.get(0)).get()
+        .use(Function.identity());
+    double angle = getAngle(new Coordinates(xProperty().getValue(), yProperty().getValue()),
+        next.getCoordinates()) - 180;
+
+    double delta = (ship.getRotate() - (angle));
+
+    //not too much spins
+    ship.setRotate(angle % 360);
   }
 
   private double getAngle(Coordinates start, Coordinates end) {

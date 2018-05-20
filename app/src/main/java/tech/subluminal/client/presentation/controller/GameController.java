@@ -89,8 +89,8 @@ public class GameController implements Initializable, GamePresenter {
   public void initialize(URL location, ResourceBundle resources) {
 
     map.setOnMouseClicked(mouseEvent -> {
-      pressStore[0] = null;
-      pressStore[1] = null;
+      clearPressStore();
+
       removeJumpPath();
       if (jump != null) {
         jump.clear();
@@ -103,11 +103,19 @@ public class GameController implements Initializable, GamePresenter {
     toastDock.setFillWidth(false);
   }
 
+  private void clearPressStore() {
+    if(pressStore[0] != null) pressStore[0].setHoverShown(false);
+    if(pressStore[1] != null) pressStore[1].setHoverShown(false);
+    pressStore[0] = null;
+    pressStore[1] = null;
+  }
+
   private void starClicked(StarComponent star, MouseEvent mouseEvent) {
     if (pressStore[1] == null) {
       if (pressStore[0] == null) {
         removeJumpPath();
         pressStore[0] = star;
+        star.setHoverShown(true);
         pressStore[1] = null;
       } else if (pressStore[0] == star) {
 
@@ -115,6 +123,7 @@ public class GameController implements Initializable, GamePresenter {
         Logger.debug("creating JumpPath");
         removeJumpPath();
         pressStore[1] = star;
+        star.setHoverShown(true);
         if (path != null) {
           path.clear();
         }
@@ -126,6 +135,8 @@ public class GameController implements Initializable, GamePresenter {
           removeJumpPath();
           createJumpPath(path);
         } else {
+          pressStore[0].setHoverShown(false);
+          pressStore[1].setHoverShown(false);
           pressStore[0] = null;
           pressStore[1] = null;
           removeJumpPath();
@@ -136,6 +147,8 @@ public class GameController implements Initializable, GamePresenter {
 
       }
     } else {
+      pressStore[0].setHoverShown(false);
+      pressStore[1].setHoverShown(false);
       removeJumpPath();
       pressStore[0] = star;
       pressStore[1] = null;
@@ -176,6 +189,7 @@ public class GameController implements Initializable, GamePresenter {
           if (!jump.isEmpty()) {
             jump.clear();
           }
+          clearPressStore();
         },
         () -> {
           gameDelegate.sendMothership(path);
@@ -183,6 +197,7 @@ public class GameController implements Initializable, GamePresenter {
           if (!jump.isEmpty()) {
             jump.clear();
           }
+          clearPressStore();
         });
 
     map.getChildren().add(box);
@@ -232,6 +247,7 @@ public class GameController implements Initializable, GamePresenter {
           (s1, s2) -> starMap.get(s1).getDistanceFrom(starMap.get(s2)),
           false);
     });
+
 
   }
 

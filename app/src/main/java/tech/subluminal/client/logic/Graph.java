@@ -35,6 +35,8 @@ public class Graph<E> {
     this.nodes = nodes.stream().map(Node::new).collect(Collectors.toSet());
 
     connectNodes(canReach, weightCalculator, symmetric);
+    System.out.println("path created");
+    nodes.forEach(n -> System.out.println(n.toString()));
   }
 
   private void connectNodes(BiPredicate<E, E> canReach, BiFunction<E, E, Double> weightCalculator,
@@ -69,6 +71,7 @@ public class Graph<E> {
    * @return the node elements representing the shortest path from alpha to omega.
    */
   public List<E> findShortestPath(E alpha, E omega) {
+    System.out.println("PATH: " + alpha+ " " + omega);
     Node<E> start = nodes.stream()
         .filter(n -> n.getData().equals(alpha))
         .findFirst()
