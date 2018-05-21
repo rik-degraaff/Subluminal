@@ -105,7 +105,6 @@ Represents the response of the server to a game start request from the client.
 Example:
 ```
 GameStartRes {
-  "tps":d9.95,
   "gameID":s"0123",
   "playerColors":l[
     o{
@@ -140,6 +139,7 @@ Contains the changes that need to be made to the game state.
 Example:
 ```
 GameStateDelta {
+  "tps":d9.95,
   "players":l[
     o{
       "motherShip":o{
