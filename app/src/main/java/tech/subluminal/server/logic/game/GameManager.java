@@ -45,6 +45,7 @@ import tech.subluminal.shared.messages.SpectateGameReq;
 import tech.subluminal.shared.messages.Toast;
 import tech.subluminal.shared.messages.YouLose;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.records.GlobalSettings;
 import tech.subluminal.shared.records.LobbyStatus;
 import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.stores.records.game.Coordinates;
@@ -103,7 +104,8 @@ public class GameManager implements GameStarter {
     gameStore.games()
         .getByID(req.getID())
         .ifPresent(s -> s.consume(game -> {
-          game.getSpectators().add(id);List<Color> colors = getNiceColors(game.getPlayers().size());
+          game.getSpectators().add(id);
+          List<Color> colors = getNiceColors(game.getPlayers().size());
           int i = 0;
           Map<String, Color> playerColors = new HashMap<>();
           for (String player : game.getPlayers().keySet()) {
@@ -285,6 +287,7 @@ public class GameManager implements GameStarter {
     Map<String, GameStateDelta> gameStates = new HashMap<>();
     gameState.getPlayers().keySet().forEach(playerID -> {
       final GameStateDelta delta = new GameStateDelta();
+      delta.setTps(gameState.getTps());
 
       final Player currentPlayer = gameState.getPlayers()
           .get(playerID);
@@ -469,6 +472,12 @@ public class GameManager implements GameStarter {
   }
 
   private void gameTick(GameState gameState, double elapsedTime) {
+    if (Math.abs(elapsedTime) < 0.0001) {
+      gameState.setTps(0.0);
+    } else {
+      gameState.setTps(1 / elapsedTime);
+    }
+
     final Map<String, Star> stars = gameState.getStars()
         .entrySet()
         .stream()
@@ -598,7 +607,8 @@ public class GameManager implements GameStarter {
 
       // create a signal for the move request and write it into the game store
       gameState.getSignals().add(new Signal(motherShip.getCoordinates(),
-          IdUtils.generateId(8), req.getOriginID(), req.getTargets(), playerID,
+          IdUtils.generateId(GlobalSettings.SHARED_UUID_LENGTH), req.getOriginID(),
+          req.getTargets(), playerID,
           gameState.getStars().get(req.getOriginID()).getCurrent().getState().getCoordinates(),
           req.getAmount(), gameState.getLightSpeed()));
     }

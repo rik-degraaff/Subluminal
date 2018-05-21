@@ -29,12 +29,12 @@ import tech.subluminal.shared.messages.LobbyUpdateReq;
 import tech.subluminal.shared.messages.LobbyUpdateRes;
 import tech.subluminal.shared.messages.SpectateGameReq;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.records.GlobalSettings;
 import tech.subluminal.shared.records.LobbyStatus;
 import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.stores.records.LobbySettings;
 import tech.subluminal.shared.stores.records.SlimLobby;
 import tech.subluminal.shared.stores.records.User;
-import tech.subluminal.shared.util.Synchronized;
 
 /**
  * Manages the chat/game lobbies.
@@ -129,7 +129,7 @@ public class LobbyManager {
   }
 
   private void onLobbyCreate(String userID, LobbyCreateReq req, Connection connection) {
-    String lobbyID = generateId(6);
+    String lobbyID = generateId(GlobalSettings.SHARED_UUID_LENGTH);
     String name = req.getName();
     LobbyStatus status = LobbyStatus.OPEN;
     Lobby lobby = new Lobby(lobbyID, new LobbySettings(name, userID), status);
@@ -202,7 +202,7 @@ public class LobbyManager {
    * @param adminID references the user who created the lobby.
    */
   public void createLobby(String name, String adminID) {
-    String id = generateId(6);
+    String id = generateId(GlobalSettings.SHARED_UUID_LENGTH);
     lobbyStore.lobbies().add(new Lobby(id, new LobbySettings(name, adminID), LobbyStatus.OPEN));
   }
 

@@ -22,6 +22,7 @@ public class GameState extends Identifiable {
   private final Map<String, Player> players;
   private Set<Signal> signals = new HashSet<>();
   private final Set<String> spectators = new HashSet<>();
+  private double tps;
 
   public GameState(String id, Set<Star> stars, Set<Player> players, double lightSpeed, double jump,
       double shipSpeed) {
@@ -40,6 +41,20 @@ public class GameState extends Identifiable {
         .map(GameHistoryEntry::foreverAgo)
         .map(s -> new GameHistory<>(playerIDs, s, lightSpeed))
         .collect(Collectors.toMap(h -> h.getCurrent().getState().getID(), h -> h));
+  }
+
+  /**
+   * @return the server tick rate for this tick.
+   */
+  public double getTps() {
+    return tps;
+  }
+
+  /**
+   * @param tps the server tick rate for this tick.
+   */
+  public void setTps(double tps) {
+    this.tps = tps;
   }
 
   /**

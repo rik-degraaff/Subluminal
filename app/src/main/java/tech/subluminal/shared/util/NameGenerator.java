@@ -15,14 +15,13 @@ import java.util.regex.Pattern;
 import org.pmw.tinylog.Logger;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
+import tech.subluminal.shared.records.GlobalSettings;
 
 public class NameGenerator {
 
-  Random rand = new Random(); //TODO: Global Seed
-  private List<List<String>> starNames = new LinkedList<>();
-  private List<File> starNamesMod;
-  private LinkedList<String> starNamesReserve = new LinkedList<>();
-  private List<Integer> starListWeights = new LinkedList<>();
+  private Random rand = new Random(GlobalSettings.SHARED_RANDOM.nextLong());
+  private List<List<String>> starNames = new ArrayList<>();
+  private List<Integer> starListWeights = new ArrayList<>();
   private int sumWeights;
   private int fileCounter = 0;
   private ConfigModifier<String, String> cm = new ConfigModifier("mods");
@@ -101,8 +100,8 @@ public class NameGenerator {
   }
 
   public String getName() {
-    Random rand = new Random(); //TODO: Set seed from Global.Setings class
-    int randRange = (int) (rand.nextDouble() * sumWeights);
+    Random rand = new Random(GlobalSettings.SHARED_RANDOM.nextLong());
+    int randRange = (int) (rand.nextDouble()*sumWeights);
     int tempIndex = 0;
     int tempSum = starListWeights.get(tempIndex);
 

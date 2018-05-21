@@ -1,6 +1,7 @@
 package tech.subluminal.client.presentation.controller;
 
 import java.net.URL;
+import java.util.Random;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.ObservableMap;
@@ -22,10 +23,12 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import tech.subluminal.client.presentation.KeyMap;
+import tech.subluminal.shared.records.GlobalSettings;
 import tech.subluminal.shared.util.ConfigModifier;
 
 public class SettingsController implements Observer, Initializable {
 
+  private Random rand = new Random(GlobalSettings.SHARED_RANDOM.nextLong());
   public static final String VOLUME_KEY = "Volume";
   public static final String MUTE_SOUND_KEY = "MuteSound";
   private static final boolean MUTE_SOUND_DEFAULT = false;
@@ -133,7 +136,7 @@ public class SettingsController implements Observer, Initializable {
         getClass().getResource("/tech/subluminal/resources/music/urban-Jjngle-2061_looping.wav")
             .toString());
 
-    int random = (int) Math.floor(Math.random() * 3);
+    int random = (int) Math.floor(rand.nextDouble() * 3);
 
     MediaPlayer player = new MediaPlayer(media[random]);
     player.setVolume(0.1);
