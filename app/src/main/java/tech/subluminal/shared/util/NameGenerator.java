@@ -20,8 +20,10 @@ import tech.subluminal.shared.records.GlobalSettings;
 public class NameGenerator {
 
   private Random rand = new Random(GlobalSettings.SHARED_RANDOM.nextLong());
-  private List<List<String>> starNames = new ArrayList<>();
-  private List<Integer> starListWeights = new ArrayList<>();
+  private List<List<String>> starNames = new LinkedList<>();
+  private List<File> starNamesMod;
+  private LinkedList<String> starNamesReserve = new LinkedList<>();
+  private List<Integer> starListWeights = new LinkedList<>();
   private int sumWeights;
   private int fileCounter = 0;
   private ConfigModifier<String, String> cm = new ConfigModifier("mods");
