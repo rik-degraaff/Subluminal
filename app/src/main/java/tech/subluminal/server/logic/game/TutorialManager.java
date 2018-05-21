@@ -1,26 +1,15 @@
 package tech.subluminal.server.logic.game;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.scene.paint.Color;
 import tech.subluminal.server.logic.MessageDistributor;
-import tech.subluminal.server.stores.records.GameState;
-import tech.subluminal.server.stores.records.Player;
-import tech.subluminal.server.stores.records.Star;
 import tech.subluminal.shared.messages.ClearGame;
 import tech.subluminal.shared.messages.EndGameRes;
-import tech.subluminal.shared.messages.GameStartRes;
 import tech.subluminal.shared.messages.StartTutorialReq;
 import tech.subluminal.shared.messages.Toast;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.stores.records.game.Coordinates;
-import tech.subluminal.shared.stores.records.game.Fleet;
-import tech.subluminal.shared.stores.records.game.Ship;
-import tech.subluminal.shared.util.function.Either;
 
 public class TutorialManager {
 
@@ -49,9 +38,11 @@ public class TutorialManager {
   }
 
   private void nextStage(String id, Runnable nextStage) {
-    distributor.sendMessage(new ClearGame(), id);
+    starter.stopGame(id);
     new Thread(() -> {
       try {
+        Thread.sleep(200);
+        distributor.sendMessage(new ClearGame(), id);
         Thread.sleep(2000);
       } catch (InterruptedException e) {
         throw new RuntimeException(e); // This should never happen
@@ -234,8 +225,9 @@ public class TutorialManager {
         state -> state.getSignals().stream().anyMatch(s -> s.getTimeToArrive() > 0.2),
         () -> {
           sendToast("Have you noticed that some commands have a delay?", id);
-          sendToast("The further away your mother ship is from the star you're sending a command to," +
-           " the longer it will take for you to see the results.", id, 3000);
+          sendToast(
+              "The further away your mother ship is from the star you're sending a command to," +
+                  " the longer it will take for you to see the results.", id, 3000);
         }
     );
 

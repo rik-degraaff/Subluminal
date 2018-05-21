@@ -59,10 +59,9 @@ public class NameGenerator {
         fileCounter++;
       });
     } else {
-      throw new IllegalArgumentException("No list with starnames in resources found!");
+      throw new IllegalArgumentException("No list with star names in resources found!");
     }
   }
-
 
   private void readLines(File file) {
     try {

@@ -65,6 +65,7 @@ public class GameManager implements GameStarter {
   private final LobbyStore lobbyStore;
   private final MessageDistributor distributor;
   private final Map<String, Thread> gameThreads = new HashMap<>();
+  private final Set<String> stoppedGames = new HashSet<>();
   private final HighScoreStore highScoreStore;
   private final BiFunction<Map<String, String>, String, GameState> mapGenerator;
   private final BiFunction<Integer, SleepGameLoop.Delegate, GameLoop> gameLoopProvider;
@@ -255,6 +256,11 @@ public class GameManager implements GameStarter {
 
       @Override
       public boolean afterTick() {
+        if (stoppedGames.contains(gameID)) {
+          stoppedGames.remove(gameID);
+          return true;
+        }
+
         AtomicBoolean stop = new AtomicBoolean(false);
 
         gameStore.games()
@@ -273,6 +279,7 @@ public class GameManager implements GameStarter {
 
         if (afterTick.apply(stop.get())) {
           gameThreads.remove(gameID);
+          stoppedGames.remove(gameID);
           return true;
         }
         return false;
@@ -281,6 +288,16 @@ public class GameManager implements GameStarter {
     Thread gameThread = new Thread(gameLoop::start);
     gameThread.start();
     gameThreads.put(gameID, gameThread);
+  }
+
+  /**
+   * Immediately stops a game.
+   *
+   * @param gameID the id of the game to be stopped.
+   */
+  @Override
+  public void stopGame(String gameID) {
+    stoppedGames.add(gameID);
   }
 
   /**
