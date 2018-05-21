@@ -32,10 +32,14 @@ public class ConfigModifier<k, v> {
   private final String DELIMETER_KEY = "\\";
 
   public ConfigModifier(String path) {
-    configPath = GlobalSettings.PATH_JAR + DELIMETER_KEY + GlobalSettings.PATH_CONFIG;
-
-    folderPath = configPath + DELIMETER_KEY + path.replace("/", DELIMETER_KEY);
-    createDirectory(folderPath);
+    //if (!GlobalSettings.PATH_JAR.equals("")) {
+      configPath = GlobalSettings.PATH_JAR + DELIMETER_KEY + GlobalSettings.PATH_CONFIG;
+      folderPath = configPath + DELIMETER_KEY + path.replace("/", DELIMETER_KEY);
+      createDirectory(folderPath);
+    //} else {
+    // configPath = ".\\config";
+    // folderPath = ".\\config\\settings";
+    //}
   }
 
   /**
@@ -77,7 +81,7 @@ public class ConfigModifier<k, v> {
    */
   public List<File> getAllFiles(String fullName) {
     File theFile = new File(folderPath + DELIMETER_KEY + fullName.replace("/", DELIMETER_KEY));
-    File[] files = null;
+    File[] files;
     if (theFile.exists()) {
       files = theFile.listFiles();
     } else {
@@ -104,6 +108,10 @@ public class ConfigModifier<k, v> {
     }
   }
 
+  public File getAttachedFile() {
+    return attachedFile;
+  }
+
   public ObservableMap<k, v> getProps() {
     return propMap;
   }
@@ -115,22 +123,45 @@ public class ConfigModifier<k, v> {
    * @param fullName filename or relative path with filename originating from the default location.
    */
   public void attachToFile(String fullName) {
-    File theFile = new File(folderPath + DELIMETER_KEY + fullName.replace("/", DELIMETER_KEY));
-    createIfNotExists(theFile);
-    this.attachedFile = theFile;
-    getProperties();
-    propMap.addListener((MapChangeListener<k, v>) change -> {
-      Properties props = new Properties();
-      try {
-        OutputStream out = new FileOutputStream(theFile);
-        propMap.forEach((k,v) -> props.setProperty(k.toString(), v.toString()));
-        props.store(out, "Subluminal Properties");
-      } catch (FileNotFoundException e) {
-        Logger.error(e);
-      } catch (IOException e) {
-        Logger.error(e);
+    File theFile;
+    if (GlobalSettings.PATH_JAR.equals("")) {
+      theFile = new File(folderPath + DELIMETER_KEY + fullName.replace("/", DELIMETER_KEY));
+    } else {
+      theFile = new File(folderPath + DELIMETER_KEY + fullName.replace("/", DELIMETER_KEY));
+    }
+    System.out.println(theFile.getPath());
+    String[] parts = fullName.split("\\.");
+
+    switch (parts[parts.length-1]) {
+      case ("properties"): {
+        createIfNotExists(theFile);
+        this.attachedFile = theFile;
+        getProperties();
+        propMap.addListener((MapChangeListener<k, v>) change -> {
+          Properties props = new Properties();
+          try {
+            OutputStream out = new FileOutputStream(theFile);
+            propMap.forEach((k,v) -> props.setProperty(k.toString(), v.toString()));
+            props.store(out, "Subluminal Properties");
+          } catch (FileNotFoundException e) {
+            Logger.error(e);
+          } catch (IOException e) {
+            Logger.error(e);
+          }
+        });
+        break;
       }
-    });
+      case ("son"): {
+        createIfNotExists(theFile);
+        this.attachedFile = theFile;
+        Logger.info("SON file attached.");
+        break;
+      }
+      default: {
+        Logger.info(parts[parts.length-1]);
+        break;
+      }
+    }
     this.isAttachedToFile = true;
   }
 

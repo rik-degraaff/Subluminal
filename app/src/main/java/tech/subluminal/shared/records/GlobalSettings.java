@@ -50,11 +50,11 @@ public final class GlobalSettings {
 
 
   // ======== PATH + FILE SETTINGS ========
+  public static String PATH_JAR = new String(""); // Is set by the main class on application start.
+  public static final String PATH_CONFIG = new String("config");
+  public static final String FILE_SETTINGS = new String("constants.properties");
   @Export
   public static final String FILE_HIGHSCORE = new String("highscore.son");
-  public static String PATH_JAR;
-  public static final String FILE_SETTINGS = new String("settings.properties");
-  public static final String PATH_CONFIG = new String("config");
 
   // ======== GAME SETTINGS ========
   @Export
