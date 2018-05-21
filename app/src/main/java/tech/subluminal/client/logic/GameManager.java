@@ -83,6 +83,8 @@ public class GameManager implements GamePresenter.Delegate {
   }
 
   private void onGameStateDeltaReceived(GameStateDelta delta) {
+    gamePresenter.setTps(delta.getTps());
+
     delta.getRemovedMotherShips().forEach(gameStore.motherShips()::removeByID);
     delta.getPlayers().forEach(player -> {
       ifPresent(player.getMotherShip())

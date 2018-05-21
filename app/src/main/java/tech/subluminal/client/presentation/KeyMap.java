@@ -19,16 +19,20 @@ public class KeyMap {
   private final KeyCode FULLSCREEN_DEFAULT =  KeyCode.F11;
   private final KeyCode CHAT_DEFAULT =  KeyCode.C;
   private final KeyCode FPS_DEFAULT =  KeyCode.F4;
-  private final KeyCode DEBUG_DEFAULT =  KeyCode.F5;
+  private final KeyCode FPS_MONITOR_DEFAULT =  KeyCode.F5;
+  private final KeyCode TPS_DEFAULT =  KeyCode.F6;
+  private final KeyCode TPS_MONITOR_DEFAULT =  KeyCode.F7;
   private final KeyCode SETTINGS_DEFAULT =  KeyCode.S;
   private final KeyCode SKIP_DEFAULT =  KeyCode.E;
 
-  private final ObjectProperty fullscreen = new SimpleObjectProperty(FULLSCREEN_DEFAULT);
-  private final ObjectProperty chatToggle = new SimpleObjectProperty(CHAT_DEFAULT);
-  private final ObjectProperty fps = new SimpleObjectProperty(FPS_DEFAULT);
-  private final ObjectProperty debugMonitor = new SimpleObjectProperty(DEBUG_DEFAULT);
-  private final ObjectProperty settings = new SimpleObjectProperty(SETTINGS_DEFAULT);
-  private final ObjectProperty skip = new SimpleObjectProperty(SKIP_DEFAULT);
+  private final ObjectProperty<KeyCode> fullscreen = new SimpleObjectProperty<>(FULLSCREEN_DEFAULT);
+  private final ObjectProperty<KeyCode> chatToggle = new SimpleObjectProperty<>(CHAT_DEFAULT);
+  private final ObjectProperty<KeyCode> fps = new SimpleObjectProperty<>(FPS_DEFAULT);
+  private final ObjectProperty<KeyCode> fpsMonitor = new SimpleObjectProperty<>(FPS_MONITOR_DEFAULT);
+  private final ObjectProperty<KeyCode> tps = new SimpleObjectProperty<>(TPS_DEFAULT);
+  private final ObjectProperty<KeyCode> tpsMonitor = new SimpleObjectProperty<>(TPS_MONITOR_DEFAULT);
+  private final ObjectProperty<KeyCode> settings = new SimpleObjectProperty<>(SETTINGS_DEFAULT);
+  private final ObjectProperty<KeyCode> skip = new SimpleObjectProperty<>(SKIP_DEFAULT);
 
   /**
    * Initializes the KeyMap with default values.
@@ -36,8 +40,10 @@ public class KeyMap {
   public KeyMap() {
     defaultKeyMap.put("Fullscreen", fullscreen);
     defaultKeyMap.put("Chat", chatToggle);
-    defaultKeyMap.put("Fps", fps);
-    defaultKeyMap.put("DebugMonitor", debugMonitor);
+    defaultKeyMap.put("FPS", fps);
+    defaultKeyMap.put("FPSMonitor", fpsMonitor);
+    defaultKeyMap.put("TPS", tps);
+    defaultKeyMap.put("TPSMonitor", tpsMonitor);
     defaultKeyMap.put("Settings", settings);
     defaultKeyMap.put("Skip", skip);
 

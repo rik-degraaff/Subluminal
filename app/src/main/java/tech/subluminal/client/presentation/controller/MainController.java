@@ -14,6 +14,9 @@ import javafx.animation.Timeline;
 import javafx.animation.Transition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -121,12 +124,15 @@ public class MainController implements Initializable {
   private NameChangeComponent nameChange;
   private ControlButton playerListButton;
   private ControlButton nameChangeButton;
-  private DebugComponent debug;
-  private MonitorComponent monitor;
+  private DebugComponent fpsTracker;
+  private MonitorComponent fpsMonitor;
+  private DebugComponent tpsTracker;
+  private MonitorComponent tpsMonitor;
   private HighscoreComponent highscore;
   private DisplayComponent display;
   private Timeline chatUpTl = new Timeline();
   private Stage scene;
+  private DoubleProperty tpsProperty = new SimpleDoubleProperty();
 
   public LobbyComponent getLobby() {
     return lobby;
@@ -277,8 +283,11 @@ public class MainController implements Initializable {
 
     FpsUpdater updater = new FpsUpdater();
 
-    debug = new DebugComponent(updater.averageFpsProperty());
-    monitor = new MonitorComponent(updater.averageFpsProperty());
+    fpsTracker = new DebugComponent(updater.averageFpsProperty(), "FPS");
+    fpsMonitor = new MonitorComponent(updater.averageFpsProperty(), "FPS");
+
+    tpsTracker = new DebugComponent(tpsProperty, "TPS");
+    tpsMonitor = new MonitorComponent(tpsProperty, "TPS");
 
     VBox debugDock = new VBox();
     window.getChildren().add(debugDock);
@@ -331,17 +340,29 @@ public class MainController implements Initializable {
     monitorDock.add(display, 1, 0);
 
     window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
-      if (keyEvent.getCode() == keyMap.get("Fps").get()) {
-        if (debugDock.getChildren().contains(debug)) {
-          debugDock.getChildren().remove(debug);
+      if (keyEvent.getCode() == keyMap.get("FPS").get()) {
+        if (debugDock.getChildren().contains(fpsTracker)) {
+          debugDock.getChildren().remove(fpsTracker);
         } else {
-          debugDock.getChildren().add(debug);
+          debugDock.getChildren().add(fpsTracker);
         }
-      } else if (keyEvent.getCode() == keyMap.get("DebugMonitor").get()) {
-        if (debugDock.getChildren().contains(monitor)) {
-          debugDock.getChildren().remove(monitor);
+      } else if (keyEvent.getCode() == keyMap.get("FPSMonitor").get()) {
+        if (debugDock.getChildren().contains(fpsMonitor)) {
+          debugDock.getChildren().remove(fpsMonitor);
         } else {
-          debugDock.getChildren().add(monitor);
+          debugDock.getChildren().add(fpsMonitor);
+        }
+      } else if (keyEvent.getCode() == keyMap.get("TPS").get()) {
+        if (debugDock.getChildren().contains(tpsTracker)) {
+          debugDock.getChildren().remove(tpsTracker);
+        } else {
+          debugDock.getChildren().add(tpsTracker);
+        }
+      } else if (keyEvent.getCode() == keyMap.get("TPSMonitor").get()) {
+        if (debugDock.getChildren().contains(tpsMonitor)) {
+          debugDock.getChildren().remove(tpsMonitor);
+        } else {
+          debugDock.getChildren().add(tpsMonitor);
         }
       } else if (keyEvent.getCode() == keyMap.get("Settings").get()) {
         onSettingOpenHandle();
@@ -524,6 +545,10 @@ public class MainController implements Initializable {
     menuHolder.setMouseTransparent(false);
 
     menuDock.getChildren().add(menu);
+  }
+
+  public void setTps(double tps) {
+    Platform.runLater(() -> tpsProperty.setValue(tps));
   }
 
   /**
