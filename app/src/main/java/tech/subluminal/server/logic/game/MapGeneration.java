@@ -43,8 +43,6 @@ public class MapGeneration {
     int additionalStars = (int) Math.pow(10 + 3 * playerIDs.size(), 0.75);
     int offset = rand.nextInt(90);
     AtomicInteger playerPosCounter = new AtomicInteger();
-    //final UniformPoissonDiskSampler ufpds = new UniformPoissonDiskSampler(x0, y0, x1, y1, minDist, totalStars);
-    //List<Coordinates> coordinates = ufpds.sample();
 
     List<Coordinates> coordinates = new ArrayList<>(additionalStars + playerIDs.size());
 
