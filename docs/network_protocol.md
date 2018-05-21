@@ -35,7 +35,8 @@ Each message can contain zero or more values of the following java variable type
 
 
 ### ChatMessageIn
-The chat message which is received by the client from the server.
+The chat message which is received by the client from the server.  
+Example:
 ```
 ChatMessageIn {
   "channel":s"CRITICAL",
@@ -44,7 +45,8 @@ ChatMessageIn {
 }
 ```
 ### ChatMessageOut
-The chat message object which was built by the client for the server.
+The chat message object which was built by the client for the server.  
+Example:
 ```
 ChatMessageOut {
   "receiverID":s"1234",
@@ -52,12 +54,14 @@ ChatMessageOut {
 }  
 ```
 ### ClearGame
-Represents the clear game message from the server to the client.
+Represents the clear game message from the server to the client.  
+Example:
 ```
 ClearGame {}
 ```
 ### EndGameRes
-The message which is sent to all clients when a game ends.
+The message which is sent to all clients when a game ends.  
+Example:
 ```
 EndGameRes {
   "game":s"4054",
@@ -65,7 +69,8 @@ EndGameRes {
 }
 ```
 ### FleetMoveReq
-Represents a fleet move request from a client to the server.
+Represents a fleet move request from a client to the server.  
+Example:
 ```
 FleetMoveReq {
   "amount":i3,
@@ -78,22 +83,26 @@ FleetMoveReq {
 }
 ```
 ### GameLeaveReq
-Message that is sent from a leaving client to the server.
+Message that is sent from a leaving client to the server.  
+Example:
 ```
 GameLeaveReq {}
 ```
 ### GameLeaveRes
-Message that is sent from a server to a leaving client.
+Message that is sent from a server to a leaving client.  
+Example:
 ```
 GameLeaveRes {}
 ```
 ### GameStartReq
-Represents a game start request from a client to the server.
+Represents a game start request from a client to the server.  
+Example:
 ```
 GameStartReq {}
 ```
 ### GameStartRes
-Represents the response of the server to a game start request from the client.
+Represents the response of the server to a game start request from the client.  
+Example:
 ```
 GameStartRes {
   "tps":d9.95,
@@ -127,7 +136,8 @@ GameStartRes {
 }
 ```
 ### GameStateDelta
-Contains the changes that need to be made to the game state.
+Contains the changes that need to be made to the game state.  
+Example:
 ```
 GameStateDelta {
   "players":l[
@@ -297,12 +307,14 @@ GameStateDelta {
 }
 ```
 ### HighScoreReq
-Represents a request message for the highscore.
+Represents a request message for the highscore.  
+Example:
 ```
 HighScoreReq {}
 ```
 ### HighScoreRes
-Represents an answer to a highscore request and contains the highscore in form of a list.
+Represents an answer to a highscore request and contains the highscore in form of a list.  
+Example:
 ```
 HighScoreRes {
   "highScores":l[
@@ -318,7 +330,8 @@ HighScoreRes {
 }
 ```
 ### InitialUsers
-Represents the initial users connected to the server.
+Represents the initial users connected to the server.  
+Example:
 ```
 InitialUsers {
   "users":l[
@@ -338,21 +351,24 @@ InitialUsers {
 }
 ```
 ### LobbyCreateReq
-Represents a lobby create request from the client to the server.
+Represents a lobby create request from the client to the server.  
+Example:
 ```
 LobbyCreateReq {
   "name":s"greatest lobby ever"
 }
 ```
 ### LobbyCreateRes
-Represents a lobby create response from the server to the client.
+Represents a lobby create response from the server to the client.  
+Example:
 ```
 LobbyCreateRes {
   "id":s"4053"
 }
 ```
 ### LobbyJoinReq
-Represents a request from client to server to join a lobby.
+Represents a request from client to server to join a lobby.  
+Example:
 ```
 LobbyJoinReq {
   "id":s"4053"
@@ -360,7 +376,8 @@ LobbyJoinReq {
 ```
 ### LobbyJoinRes
 Represents a response from server to client with the joined lobby and sends the users that are
-already in the lobby.
+already in the lobby.  
+Example:
 ```
 LobbyJoinRes {
   "lobby":o{
@@ -383,22 +400,26 @@ LobbyJoinRes {
 }
 ```
 ### LobbyLeaveReq
-Represents the lobby leave request from the client to the server.
+Represents the lobby leave request from the client to the server.  
+Example:
 ```
 LobbyLeaveReq {}
 ```
 ### LobbyLeaveRes
-Represents the lobby leave response from the server to the client.
+Represents the lobby leave response from the server to the client.  
+Example:
 ```
 LobbyLeaveRes {}
 ```
 ### LobbyListReq
-Represents a lobby list request from a client to the server.
+Represents a lobby list request from a client to the server.  
+Example:
 ```
 LobbyListReq {}
 ```
 ### LobbyListRes
-Represents a lobby list response form server to client after a lobby list request.
+Represents a lobby list response form server to client after a lobby list request.  
+Example:
 ```
 LobbyListRes {
   "lobbies":l[
@@ -451,7 +472,8 @@ LobbyListRes {
 }
 ```
 ### LobbyUpdateReq
-Represents a lobby update request message from client to server.
+Represents a lobby update request message from client to server.  
+Example:
 ```
 LobbyUpdateReq {
   "settings":o{
@@ -465,7 +487,8 @@ LobbyUpdateReq {
 }
 ```
 ### LobbyUpdateRes
-Represents a lobby update response message from server to client.
+Represents a lobby update response message from server to client.  
+Example:
 ```
 LobbyUpdateRes {
   "settings":o{
@@ -479,14 +502,16 @@ LobbyUpdateRes {
 }
 ```
 ### LoginReq
-Represents a login request from client to server.
+Represents a login request from client to server.  
+Example:
 ```
 LoginReq {
   "username":s"Bob"
 }
 ```
 ### LoginRes
-Represents the login response from the server to the client.
+Represents the login response from the server to the client.  
+Example:
 ```
 LoginRes {
   "userID":s"1111",
@@ -494,12 +519,14 @@ LoginRes {
 }
 ```
 ### LogoutReq
-Represents the logout request from the client to the server.
+Represents the logout request from the client to the server.  
+Example:
 ```
 LogoutReq {}
 ```
 ### MotherShipMoveReq
-Represents the request from a client to the server to move the mothership.
+Represents the request from a client to the server to move the mothership.  
+Example:
 ```
 MotherShipMoveReq {
   "starList":l[
@@ -510,101 +537,104 @@ MotherShipMoveReq {
 }
 ```
 ### Ping
-Represents a ping from client to server or vice versa.
+Represents a ping from client to server or vice versa.  
+Example:
 ```
 Ping {
   "id":s"1234"
 }
 ```
-
-
-
-
-
-### LoginReq
-***Client***: Register a new user to the server. Expects response with ``LoginRes`` object.
-
+### PlayerJoin
+Represents the message that a player joined.  
+Example:
 ```
-loginreq {
-  "username":s"<String>"
+PlayerJoin {
+  "user":o{
+    "username":s"Luc",
+    "identifiable":o{
+      "id":s"4107"
+    }
+  }
 }
 ```
-
-### LoginRes
-***Server***: Confirms login and returns ``userid``.
-
+### PlayerLeave
+Represents the message that a player left.  
+Example:
 ```
-loginres {
-  "userid":i"<integer>",
-  "username":s"<String>"
+PlayerLeave {
+  "id":s"911"
 }
 ```
-
-### LogoutReq
-***Client***: Properly disconnects the client from the server.
-
+### PlayerUpdate
+Updates player usernames.  
+Example:
 ```
-logoutreq {
- //empty object
+PlayerUpdate {
+  "id":s"007",
+  "username":s"Rik"
 }
 ```
-
-### ChatMessageOut
-***Client***: Send ``message`` to server. ``message`` and  ``global`` are handled by the server.
-
-```
-chatmessageout {
-  "message":s"<String>",
-  "receiverID":s"<String>",
-  "global":b<boolean>
-}
-```
-
-### ChatMessageIn
-***Server***: Send ``message`` to client.
-
-```
-chatmassagein {
-  "message":s"<String>",
-  "username":s"<String>",
-  "channel":s"<String>"
-}
-```
-
-### Ping
-***Server & Client***: Initiate ping/pong. Expects response with ``Pong`` object.
-
-```
-ping {
-  "id":s"<String>"
-}
-```
-
 ### Pong
-***Server & Client***: Respond to ping with pong.
-
+Represents a pong (an answer to a ping) from client to server or vice versa.  
+Example:
 ```
-pong {
-  "id":s"<String>"
+Pong {
+  "id":s"1234"
 }
 ```
-
+### ReconnectReq
+Represents a reconnect request from client to server.  
+Example:
+```
+ReconnectReq {
+  "id":s"his mom's basement",
+  "username":s"Bob"
+}
+```
+### SpecateGameReq
+Represents a request from client to server to enter spectate mode.  
+Example:
+```
+SpectateGameReq {
+  "id":s"8000"
+}
+```
+### StartTutorialReq
+Represents the start tutorial request from the client to the server.  
+Example:
+```
+StartTutorailReq {}
+```
+### Toast
+Represents a text message the server wants the client to show on the screen.  
+Example:
+```
+Toast {
+  "permanent":btrue,
+  "message":s"Snoop Dogg"
+}
+```
 ### UsernameReq
-***Client***: Send request to change the ``username``. Expects response with ``UsernameRes`` object.
-
+Represents a username change request from the client to the server.  
+Example:
 ```
-usernamereq {
-  "username":s"<String>"
+UsernameReq {
+  "username":s"Pingu"
 }
 ```
-
 ### UsernameRes
-***Server***: Sends new ``username`` to client.
-
+Represents a username change response from the server to the client.  
+Example:
 ```
-usernameres {
-  "username":s"<String>"
+UsernameRes {
+  "username":s"Donald"
 }
+```
+### YouLose
+A message that is sent from the server to the client when the particular player loses in a game.  
+Example:
+```
+YouLose {}
 ```
 
 ## Diagram
