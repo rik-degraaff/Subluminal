@@ -54,10 +54,9 @@ public class ClientInitializer extends Application {
     try {
       socket = new Socket(server, port);
     } catch (IOException e) {
-      //TODO: Proper error handling
-      e.printStackTrace();
+      throw new RuntimeException(e); // we're all doomed
     }
-    Connection connection = new SocketConnection(socket);
+    Connection connection = new SocketConnection(socket, () -> System.exit(1));
     connection.start();
 
     UserStore userStore = new InMemoryUserStore();
@@ -74,7 +73,7 @@ public class ClientInitializer extends Application {
     new PingManager(connection, pingStore);
 
     LobbyComponent lobbyPresenter = controller.getLobby();
-    LobbyManager lobbyManager = new LobbyManager(lobbyStore, connection, lobbyPresenter,
+    new LobbyManager(lobbyStore, connection, lobbyPresenter,
         controller);
 
     lobbyPresenter.setLobbyStore(lobbyStore);
@@ -82,13 +81,12 @@ public class ClientInitializer extends Application {
 
     GameStore gameStore = new InMemoryGameStore();
     GameController gamePresenter = controller.getGameController();
-    GameManager gameManager = new GameManager(gameStore, connection, gamePresenter);
+    new GameManager(gameStore, connection, gamePresenter);
     gamePresenter.setUserStore(userStore);
     gamePresenter.setGameStore(gameStore);
 
     userManager.start(username);
 
-    final Thread mainThread = Thread.currentThread();
     Runtime.getRuntime().addShutdownHook(new Thread(userManager::logoutNoShutdown));
 }
 
@@ -142,10 +140,7 @@ public class ClientInitializer extends Application {
     PerspectiveCamera camera = new PerspectiveCamera();
     primaryStage.getScene().setCamera(camera);
 
-
     controller.setScene(primaryStage);
-    //camera.setTranslateZ(-1000);
-
 
     String[] cmd = getParameters().getRaw().toArray(new String[4]);
 
