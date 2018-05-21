@@ -472,7 +472,11 @@ public class GameManager implements GameStarter {
   }
 
   private void gameTick(GameState gameState, double elapsedTime) {
-    gameState.setTps(1 / elapsedTime);
+    if (Math.abs(elapsedTime) < 0.0001) {
+      gameState.setTps(0.0);
+    } else {
+      gameState.setTps(1 / elapsedTime);
+    }
 
     final Map<String, Star> stars = gameState.getStars()
         .entrySet()

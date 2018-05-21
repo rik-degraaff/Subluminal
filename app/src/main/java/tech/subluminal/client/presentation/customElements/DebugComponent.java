@@ -1,22 +1,22 @@
 package tech.subluminal.client.presentation.customElements;
 
+import java.text.DecimalFormat;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
 public class DebugComponent extends HBox {
 
-  private IntegerProperty averageFps;
+  private DoubleProperty averageFps;
+  private static DecimalFormat format = new DecimalFormat("#.0");
 
-
-  public DebugComponent(IntegerProperty averageFps) {
+  public DebugComponent(DoubleProperty averageFps, String label) {
     this.averageFps = averageFps;
-    Label fpsLabel = new Label("FPS: ");
-    Label fpsCounter = new Label("0");
+    Label fpsLabel = new Label(label + ": ");
+    Label fpsCounter = new Label("0.0");
     fpsCounter.textProperty().bind(
-        Bindings.createStringBinding(() -> Integer.toString( averageFps.getValue()), averageFps));
-
+        Bindings.createStringBinding(() -> format.format(averageFps.getValue()), averageFps));
 
     this.getChildren().addAll(fpsLabel, fpsCounter);
     this.getStyleClass().add("fps-counter");
@@ -26,7 +26,7 @@ public class DebugComponent extends HBox {
     return averageFps.get();
   }
 
-  public IntegerProperty averageFpsProperty() {
+  public DoubleProperty averageFpsProperty() {
     return averageFps;
   }
 

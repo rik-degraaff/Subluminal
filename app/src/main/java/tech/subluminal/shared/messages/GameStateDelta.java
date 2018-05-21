@@ -250,6 +250,8 @@ public class GameStateDelta implements SONRepresentable {
     double tps = son.getDouble(TPS_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, REMOVED_FLEETS_KEY));
 
+    delta.setTps(tps);
+
     for (int i = 0; i < removedFleetsList.size(); i++) {
       int ii = i;
       SON playerFleets = removedFleetsList.getObject(i)

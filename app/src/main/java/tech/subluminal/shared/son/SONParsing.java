@@ -121,9 +121,13 @@ public class SONParsing {
       StringBuilder builder = new StringBuilder();
       char nextChar = str.charAt(i);
       while (nextChar == '-' || nextChar == '.' || nextChar == 'e' || nextChar == 'E'
-          || nextChar >= '0' && nextChar <= '9') {
+          || nextChar >= '0' && nextChar <= '9' ) {
         builder.append(nextChar);
         nextChar = str.charAt(++i);
+      }
+
+      if (builder.toString().length() == 0) {
+        System.out.println(str.substring(0, 20));
       }
 
       //create double from StringBuilder
@@ -131,7 +135,7 @@ public class SONParsing {
         double value = Double.parseDouble(builder.toString());
         return new PartialParseResult<>(value, i);
       } catch (NumberFormatException e) {
-        throw new SONParsingError("Invalid double value.");
+        throw new SONParsingError("Invalid double value: " + builder.toString());
       }
     } catch (IndexOutOfBoundsException e) {
       throw new SONParsingError("Double was not terminated.");
