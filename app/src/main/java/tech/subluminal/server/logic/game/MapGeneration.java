@@ -3,13 +3,16 @@ package tech.subluminal.server.logic.game;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import tech.subluminal.client.logic.Graph;
 import tech.subluminal.server.stores.records.GameState;
 import tech.subluminal.server.stores.records.Player;
 import tech.subluminal.server.stores.records.Star;
@@ -47,7 +50,7 @@ public class MapGeneration {
 
     playerNames.forEach((playerID, name) -> {
       Coordinates homeCoords = getHomeCoordinates(playerIDs.size(), 0.45, 0.5, 0.5,
-          playerPosCounter.get(), offset); // getStarCoordinates(coordinates);
+          playerPosCounter.get(), offset, 0.1); // getStarCoordinates(coordinates);
       coordinates.add(homeCoords);
       playerPosCounter.getAndIncrement();
 
@@ -70,18 +73,54 @@ public class MapGeneration {
       players.add(player);
     });
 
-    Stream.generate(() -> {
-      Coordinates coords =  getStarCoordinates(coordinates); //coordinates.remove(0);
-      coordinates.add(coords);
+    List<Coordinates> homeCoordinates = new ArrayList<>(coordinates);
+    Stream
+        .generate(() -> {
+          Coordinates coords = getStarCoordinates(coordinates); //coordinates.remove(0);
+          coordinates.add(coords);
 
-      return new Star(null, 0, coords,
-          IdUtils.generateId(8), false, JUMP_DISTANCE, DEMAT_RATE, DEMAT_RATE, GENERATION_RATE,
-          GENERATION_RATE, ng.getName());
-    })
+          return new Star(null, 0, coords,
+              IdUtils.generateId(8), false, JUMP_DISTANCE, DEMAT_RATE, DEMAT_RATE, GENERATION_RATE,
+              GENERATION_RATE, ng.getName());
+        })
         .limit(additionalStars)
         .forEach(stars::add);
 
+    final Set<Integer> keys = IntStream.range(0, coordinates.size())
+        .mapToObj(i -> i)
+        .collect(Collectors.toSet());
+    Graph<Integer> graph = new Graph<>(
+        keys,
+        (i1, i2) -> coordinates.get(i1).getDistanceFrom(coordinates.get(i2)) < JUMP_DISTANCE,
+        (i1, i2) -> coordinates.get(i1).getDistanceFrom(coordinates.get(i2)),
+        true);
+
+    List<Integer> components = new ArrayList<>(keys);
+
+    while ((components = getComponents(graph, components)).size() > 1) {
+      Coordinates coords = getStarCoordinates(coordinates);
+      coordinates.add(coords);
+      graph.addNode(coordinates.size() - 1);
+      stars.add(new Star(null, 0, coords,
+          IdUtils.generateId(8), false, JUMP_DISTANCE, DEMAT_RATE, DEMAT_RATE, GENERATION_RATE,
+          GENERATION_RATE, ng.getName()));
+    }
+
     return new GameState(gameID, stars, players, LIGHT_SPEED, JUMP_DISTANCE, SHIP_SPEED);
+  }
+
+  private static List<Integer> getComponents(Graph<Integer> graph, List<Integer> core) {
+    List<Integer> components = new LinkedList<>();
+    outer:
+    for (final Integer alpha : core) {
+      for (final Integer omega : components) {
+        if (!graph.findShortestPath(alpha, omega).isEmpty()) {
+          continue outer;
+        }
+      }
+      components.add(alpha);
+    }
+    return components;
   }
 
   private static Coordinates getStarCoordinates(List<Coordinates> existingCoordinates) {
@@ -97,10 +136,15 @@ public class MapGeneration {
     return coordinates;
   }
 
-  private static Coordinates getHomeCoordinates(int playerCount, double radius, double xCenter, double yCenter, int counter, double offset) {
-    double angle = 360/playerCount * counter + offset;
-    Coordinates p = new Coordinates((float) (xCenter + radius * Math.cos(Math.toRadians(angle))),
-        (float) (yCenter + radius* Math.sin(Math.toRadians(angle))));
+  private static Coordinates getHomeCoordinates(
+      int playerCount, double radius, double xCenter, double yCenter, int counter, double offset,
+      double fuzz
+  ) {
+    final double angle = 360.0 / playerCount * counter + offset;
+    final double x = xCenter + radius * Math.cos(Math.toRadians(angle));
+    final double y = yCenter + radius * Math.sin(Math.toRadians(angle));
+    Coordinates p = new Coordinates(x + fuzz * (Math.random() - 0.5),
+        y + fuzz * (Math.random() - 0.5));
     return p;
   }
 
