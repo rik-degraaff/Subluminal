@@ -1,44 +1,29 @@
-\chapter{game rules}
+\chapter*{how to play the game}
 Below you can find the basic game rules which are implemented in the game logic. All rules are subject to change in further versions.
 
-\section{how to play the game}
+\section*{list of game rules}
 \begin{enumerate}
-	\item 2 to n players, maximum number of players is 8.
+	\item The maximum number of players is 8.
 	\item At the beginning of a game, the map is created randomly.
-	\item You lose the game when your mother ship does not exist anymore.
-	\item You win the game when your mother ship is the only remaining mother ship on the map.
-	\item Starting positions of the players are assigned randomly, but in a way no player has an advantage or disadvantage.
+	\item The map consists of stars.
+	\item At the beginning of a game, every player's mothership is randomly assigned to a star.
+	\item You lose the game when your mothership dies.
+	\item You win the game when your mothership is the only remaining mothership on the map.
 	\item Every player is able to see the whole map.
-	\item The map consists of stars. At the beginning of a game every player's mother ship is randomly assigned to a star.
-	\item Each star has its own attributes, which influence:  
-		\begin{enumerate}[label=\alph*]
-		\item The frequency of production of new regular ships.
-		\item The basic defence of a star against intruders.
-		\item How much effort it takes to colonize the star.
-		\end{enumerate}
-		\item If a player colonizes a new star, the star automatically starts to produce ships for the player, which are local to that star.
-	\item The ships that are local to a star, that is owned by the player, can be sent to neighbouring stars
-	\item Every command to move ships from one star to another originate from the mother ship.
-	\item Each star also has an attribute that regulates the maximum radius a ship can reach without having to fuel up on another star.
-	\item The rule above implicates	that further destinations can only be reached by one's regular ships by ``hopping'' from star to star to be able to fuel up.
+	\item When a player colonizes a star, the star automatically starts to produce ships for the player, which accumulate on that star.
+	\item The ships that are local to a star that is owned by a player, can be sent to neighbouring stars as fleets.
+	\item Stars can be colonized by sending fleets to them. If a star already belongs to another player, dematerialization occurs between the two fleets and the winning player (the one with the bigger fleet) keeps the star.
+	\item Since the fleets have to fuel up at some point, the maximum jumping distance between two stars is restricted.
+	\item The rule above implicates   that further destinations can only be reached by one's ships by ``hopping'' from star to star to be able to fuel up.
+	\item A pathfinding algorithm computes the shortest path between the origin and target star. The target star can only be reached by that path.
 	\item ``Hopping'' can occur on both neutral and owned (colonized) stars.
-	\item By hopping onto a star that is owned by an opponent, the hopping player gets punished by dematerialization of a certain percentage of his hopping ships.
-	\item If a player targets a certain star he or she can influence the hopping path his or her ships or use the one that is automatically calculated by the system, which is the shortest.
+	\item By hopping onto a star that is owned by an opponent, the hopping player gets punished by dematerialization of a small part of his hopping fleet.
 	\item Hopping and colonizing stars are two separate processes. Accidental colonization while hopping a star can not occur.
-	\item When ships reach the target they hopped to, two scenarios can happen:
-		\begin{enumerate}[label=\alph*]
-			\item Nobody is there yet and the star is considered neutral. The player's ships start colonizing the star. The speed of the colonization progress depends on the number of ships the player sent, the basic defence of the star and how much effort the star takes to be colonized.
-			\item The star is already under possession of an opponent. In this case the fleets of the opponents start tearing down each other, until only regular ships of one of the fleets remain. If the remaining regular ships belong to the intruder, they immediately start neutralizing the star to then colonize it. If the remaining regular ships belong to the previous owner of the star, nothing else happens.
-		\end{enumerate}
-		\item Every move one's regular ships make originates from the mother ship. Thus, the order takes longer to get to the concerning regular ships, the further their base star is away from the mother ship.
-	\item When a player orders a fleet to go colonize another star, the information about the number of available regular ships is always outdated (because of the distance). So the player has to options:
-		\begin{enumerate}[label=\alph*]
-			\item He/She sends out the order that a certain percentage of the regular ships should leave their base star.
-			\item He/She sends out the order that a certain number or regular ships should be the maximum number of sent out ships. If there are not that many regular ships left the moment the order arrives at the base, all regular ships are sent out.
-		\end{enumerate}
-	\item Fleets of regular ships that are hopping to their target send out information to their mother ship about their position in regular intervals.
-	\item The mother ship can also be moved from her base, it's slower than the regular ships.
-	\item The mother ship has its own basic defence value.
-	\item If the base of the mother ship is intruded, the mother ship is the last one to be torn down.
-	\item Every mother ship and every regular ship broadcast their position so that every player can see it.
+	\item Every move one’s ships make originates from the mothership. Thus, the order takes longer to get to the concerning ships, the further their base star is away from the mothership.
+	\item The rule above also implies that, the further away from one's mothership something happens, the more outdated the respective information is when it arrives at a player (i.e. his mothership).
+	\item When a player orders a fleet to go colonize another star, the information about the number of available regular ships is always outdated (because of the distance). So the player simply enters the maximum number of ships to be sent and, if there are not that many, all available ships are sent.
+	\item Every event on the map is broadcasted to all the players and reaches a player's mothership according to the time delay caused by the distance.
+	\item The mothership can also be moved from her base, it's slower than ships.
+	\item The mothership is as strong as 5 ships.
+	\item If the base of the mothership is intruded, the mothership is the last one to be torn down.
 \end{enumerate}
