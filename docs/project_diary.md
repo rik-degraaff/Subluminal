@@ -6,7 +6,7 @@
 **LUC** = Luc Kury  
 **RIK** = Rik de Graaff
 
-### Wednesday - Sunday, May 16th - May 20th
+### Wednesday - Monday, May 16th - May 21st, 2018
 - Most recently added 3-D effects:
   - The game view now is a cockpit view in 3-D style.
   - There also is a cockpit board with buttons for name changing, logged in players, settings and game leaving.
@@ -16,11 +16,16 @@
 - Some work on the CI had to be done for Docker to build the images right.
 - A CI runner was set up for more freedom in communication with other servers.
 - A config modifier for interaction with files was created (e.g. used for sound settings, keymapping settings and modding support).
-- The manual was worked on.
 - Error code was refactored (stacktraces are now only showed in logger).
 - Some general issue management had to be done.
+- A spectator mode was created.
+- Ships became animated and now got moving flames on the back.
+- The network protocol documentation was finished.
+- The program architecture documentation was created and finished..
+- A template for the presentation slides for milestone 5 was created.
+- The last few refactorings were completed.
 
-### Wednesday-Tuesday, May 09th-May 15th
+### Wednesday-Tuesday, May 09th-May 15th, 2018
 - The reconnection feature was implemented. For that, a reconnect-ID is stored in Preferences.userRoot, which in Windows is the registry and in Linux the hidden files.
 - A new feature in the game logic now is: While hopping from star to star to get to a target, a player might lose a small portion of his ships due to a hopping dematerialization tick. Only the hopping player can lose ships, though. The owner of a star can never lose ships to a hopping player.
 - The colonization time now linearly decreases with the fleet size up to size 5 and decreases sublinearly (by f(size) = sqrt(size)) above the size of 5.
