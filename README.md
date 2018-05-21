@@ -24,7 +24,7 @@ dev: [![pipeline status](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/badg
 # [Subluminal](https://en.wiktionary.org/wiki/subluminal) /ˌsʌbˈl(j)uːmɪnl/ - The Game
 [![Logo](./assets/logo/subluminal_logo.png)](http://subluminal.tech) **by Bordeaux Ink.**
 
-> Once upon a time a clever programmer named Bob created in the basement of his mom's house 4 different AIs. Throughout his whole life Bob tried to get the AIs to work together, but sadly he never achieved his this goal. After Bob passed away the world forgot about him and his work. But the AI's never forgot, ever single one of them evolve and adopted, with the goal to be the best AI in the whole universe ...  
+> Once upon a time a clever programmer named Bob created in the basement of his mom's house 4 different AIs. Throughout his whole life Bob tried to get the AIs to work together, but sadly he never achieved his goal. After Bob passed away the world forgot about him and his work. But the AI's never forgot, ever single one of them evolve and adopted, with the goal to be the best AI in the whole universe ...  
 
 
 ## 1. Overview
@@ -74,26 +74,26 @@ Starts the game in server or client mode.
 
 ### Quicklinks for professors / assistants / tutors:
   
-| Document          | Filename              | md                                     | pdf                                      | Description                                          |
-| :---------------- | :-------------------- | :------------------------------------- | :--------------------------------------- | :--------------------------------------------------- |
-| Readme            | README.md             | [``<md>``](README.md)                  | [``<pdf>``](README.pdf)                  | Quickstart with lots of useful information           |
-| Changelog         | CHANGELOG.md          | [``<md>``](CHANGELOG.md)               | [``<pdf>``](CHANGELOG.pdf)               | Automatically generated changelog (based on commits) |
-| Diary             | project_diary.md      | [``<md>``](docs/project_diary.md)      | [``<pdf>``](docs/project_diary.pdf)      | Project diary daily/weekly basis                     |
-| QA concept        | quality_assurance.md  | [``<md>``](docs/quality_assurance.md)  | [``<pdf>``](docs/quality_assurance.pdf)  | Quality assurance concept for the project            |
-| Network protocol  | network_protocol.md   | [``<md>``](docs/network_protocol.md)   | [``<pdf>``](docs/network_protocol.pdf)   | Network protocol specification                       |
-| Game rules        | game_rules.md         | [``<md>``](docs/game_rules.md)         | [``<pdf>``](docs/game_rules.pdf)         | Short list with all game rules                       |
-| Manual            | manual.pdf            | -                                      | [``<pdf>``](docs/manual/manual.pdf)      | Game manual                                          |
-| Presentations     | .pptx                 | [``.pptx``](/milestone)                | [``.pdf``](/milestone)                   | Slides and Gantt project                             |
+| Document         | Filename             | md                                    | pdf                                     | Description                                          |
+| :--------------- | :------------------- | :------------------------------------ | :-------------------------------------- | :--------------------------------------------------- |
+| Readme           | README.md            | [``<md>``](README.md)                 | [``<pdf>``](README.pdf)                 | Quickstart with lots of useful information           |
+| Changelog        | CHANGELOG.md         | [``<md>``](CHANGELOG.md)              | [``<pdf>``](CHANGELOG.pdf)              | Automatically generated changelog (based on commits) |
+| Diary            | project_diary.md     | [``<md>``](docs/project_diary.md)     | [``<pdf>``](docs/project_diary.pdf)     | Project diary daily/weekly basis                     |
+| QA concept       | quality_assurance.md | [``<md>``](docs/quality_assurance.md) | [``<pdf>``](docs/quality_assurance.pdf) | Quality assurance concept for the project            |
+| Network protocol | network_protocol.md  | [``<md>``](docs/network_protocol.md)  | [``<pdf>``](docs/network_protocol.pdf)  | Network protocol specification                       |
+| Game rules       | game_rules.md        | [``<md>``](docs/game_rules.md)        | [``<pdf>``](docs/game_rules.pdf)        | Short list with all game rules                       |
+| Manual           | manual.pdf           | -                                     | [``<pdf>``](docs/manual/manual.pdf)     | Game manual                                          |
+| Presentations    | .pptx                | [``.pptx``](/milestone)               | [``.pdf``](/milestone)                  | Slides and Gantt project                             |
 
 ### Generated docs / reports:
 These documents will only appear once the project has been built with gradle.
 
-| Document          | Local Path                                                            | Hosted                                                                     | Description                      |
-| :---------------- | :-------------------------------------------------------------------- | :------------------------------------------------------------------------- | :------------------------------- | :------------------------------- |
-| JavaDoc           | [docs/javadoc/](docs/javadoc/index.html)                              | [gl.com](https://tairun.gitlab.io/Gruppe-11/javadoc/index.html)            | Javadoc Webpage                  |
-| JavaDocCoverage   | [docs/javadoc](docs/javadoc/javadoc-coverage.html)                    | [gl.com](https://tairun.gitlab.io/Gruppe-11/javadoc/javadoc-coverage.html) | Javadoc Coverage Report Webpage  |
-| Test Report       | [app/build/reports/test/](app/build/reports/test/index.html)          | [gl.com](https://tairun.gitlab.io/Gruppe-11/test/index.html)               | JUnit Test Report                |
-| Test Coverage     | [app/build/reports/coverage/](app/build/reports/coverage/index.html)  | [gl.com](https://tairun.gitlab.io/Gruppe-11/coverage/index.html)           | Test Coverage Report             |
+| Document        | Local Path                                                           | Hosted                                                                     | Description                     |
+| :-------------- | :------------------------------------------------------------------- | :------------------------------------------------------------------------- | :------------------------------ |  |
+| JavaDoc         | [docs/javadoc/](docs/javadoc/index.html)                             | [gl.com](https://tairun.gitlab.io/Gruppe-11/javadoc/index.html)            | Javadoc Webpage                 |
+| JavaDocCoverage | [docs/javadoc](docs/javadoc/javadoc-coverage.html)                   | [gl.com](https://tairun.gitlab.io/Gruppe-11/javadoc/javadoc-coverage.html) | Javadoc Coverage Report Webpage |
+| Test Report     | [app/build/reports/test/](app/build/reports/test/index.html)         | [gl.com](https://tairun.gitlab.io/Gruppe-11/test/index.html)               | JUnit Test Report               |
+| Test Coverage   | [app/build/reports/coverage/](app/build/reports/coverage/index.html) | [gl.com](https://tairun.gitlab.io/Gruppe-11/coverage/index.html)           | Test Coverage Report            |
 
 ## 2. Getting Started
 1. Clone the repo to your hard drive ``git clone https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11.git``  
