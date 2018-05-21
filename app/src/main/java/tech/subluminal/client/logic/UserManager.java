@@ -4,6 +4,7 @@ import static tech.subluminal.shared.util.function.IfPresent.ifPresent;
 
 import java.io.IOException;
 import java.util.Optional;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.messages.GameLeaveReq;
@@ -139,20 +140,28 @@ public class UserManager implements UserPresenter.Delegate {
    */
   @Override
   public void logout() {
+    logoutNoShutdown();
+    System.exit(0);
+  }
+
+  /**
+   * Disconnects the client properly from the server, if client window is closed.
+   */
+  public void logoutNoShutdown() {
     userStore.reconnectID().update(old -> Optional.empty());
     connection.sendMessage(new GameLeaveReq());
     connection.sendMessage(new LobbyLeaveReq());
     connection.sendMessage(new LogoutReq());
+    
     try {
       connection.close();
     } catch (IOException e) {
-      e.printStackTrace(); //TODO: sensible stuff
+      Logger.error(e); //TODO: sensible stuff
     }
     try {
-      Thread.sleep(2);
+      Thread.sleep(2000);
     } catch (InterruptedException e) {
       // No problem, since we're shutting down anyway
     }
-    System.exit(0);
   }
 }

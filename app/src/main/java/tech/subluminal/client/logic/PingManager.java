@@ -10,12 +10,13 @@ import tech.subluminal.shared.messages.LogoutReq;
 import tech.subluminal.shared.messages.Ping;
 import tech.subluminal.shared.messages.Pong;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.records.GlobalSettings;
 import tech.subluminal.shared.stores.records.SentPing;
 
 
 public class PingManager {
 
-  public static final int PING_TIMEOUT_KEY = 6000;
+  public static final int PING_TIMEOUT_KEY = GlobalSettings.SERVER_PING_TIMEOUT;
   private final PingStore pingStore;
   private final Connection connection;
 
@@ -49,7 +50,7 @@ public class PingManager {
               //TODO: handle this accordingly
             }
           } else {
-            SentPing ping = new SentPing(System.currentTimeMillis(), null, generateId(6));
+            SentPing ping = new SentPing(System.currentTimeMillis(), null, generateId(GlobalSettings.SHARED_UUID_LENGTH));
             pingStore.lastPing().set(ping);
             connection.sendMessage(new Ping(ping.getID()));
           }

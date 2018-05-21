@@ -2,9 +2,11 @@ package tech.subluminal.client.presentation.customElements;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -40,8 +42,11 @@ public class StarComponent extends Group {
   private final IntegerProperty parentWidthProperty = new SimpleIntegerProperty();
   private final IntegerProperty parentHeightProperty = new SimpleIntegerProperty();
 
+  private final BooleanProperty hoverShown = new SimpleBooleanProperty();
+
   private final String name;
   private final Group border;
+  private Circle jumpCircle;
 
   //private final ObjectProperty
 
@@ -62,8 +67,8 @@ public class StarComponent extends Group {
       parentHeightProperty.bind(main.getPlayArea().heightProperty());
       parentWidthProperty.bind(main.getPlayArea().widthProperty());
 
-      this.layoutXProperty().bind(DrawingUtils.getXPosition(main.getPlayArea(),xProperty));
-      this.layoutYProperty().bind(DrawingUtils.getYPosition(main.getPlayArea(),yProperty));
+      this.layoutXProperty().bind(DrawingUtils.getXPosition(main.getPlayArea(), xProperty));
+      this.layoutYProperty().bind(DrawingUtils.getYPosition(main.getPlayArea(), yProperty));
     });
 
     this.name = name;
@@ -91,30 +96,38 @@ public class StarComponent extends Group {
     glowBox.setTranslateY(-sizeAll / 2);
 
     border = makeBorder();
-    Circle jumpCircle = new Circle();
+    jumpCircle = new Circle();
     jumpCircle.radiusProperty().bind(Bindings
         .createDoubleBinding(() -> jump * parentHeightProperty.getValue(), parentHeightProperty,
             jumpProperty()));
     jumpCircle.setFill(Color.TRANSPARENT);
     jumpCircle.setStroke(Color.RED);
+    jumpCircle.setMouseTransparent(true);
 
-    border.setVisible(false);
-    jumpCircle.setVisible(false);
+    setOnHover(false);
 
     //starGroup.setB(new Background(new BackgroundFill(Color.RED,CornerRadii.EMPTY,Insets.EMPTY)));
 
     starGroup.setOnMouseEntered(event -> {
-
-      border.setVisible(true);
-      jumpCircle.setVisible(true);
-
+      if(!isHoverShown()){
+        setOnHover(true);
+      }
     });
 
     starGroup.setOnMouseExited(event -> {
 
-      border.setVisible(false);
-      jumpCircle.setVisible(false);
+      if(!isHoverShown()){
+        setOnHover(false);
+      }
 
+    });
+
+    hoverShownProperty().addListener((observable, oldValue, newValue) -> {
+      if(newValue){
+        setOnHover(true);
+      }else{
+        setOnHover(false);
+      }
     });
 
     Label starName = new Label(name);
@@ -131,6 +144,23 @@ public class StarComponent extends Group {
     starGroup.setEffect(glow);
     this.getChildren().addAll(jumpCircle, starGroup);
 
+  }
+
+  public void setOnHover(boolean b) {
+    border.setVisible(b);
+    jumpCircle.setVisible(b);
+  }
+
+  public boolean isHoverShown() {
+    return hoverShown.get();
+  }
+
+  public BooleanProperty hoverShownProperty() {
+    return hoverShown;
+  }
+
+  public void setHoverShown(boolean hoverShown) {
+    this.hoverShown.set(hoverShown);
   }
 
   public double getJump() {

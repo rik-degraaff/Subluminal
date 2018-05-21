@@ -16,7 +16,7 @@ public class LobbyJoinResTest {
 
   @Test
   public void testStringifyAndParsing() throws SONParsingError, SONConversionError {
-    Lobby lobby = new Lobby("1729", new LobbySettings("Batman", "9000"), LobbyStatus.FULL);
+    Lobby lobby = new Lobby("1729", new LobbySettings("Batman", "9000"), LobbyStatus.INGAME);
     LobbyJoinRes lobbyJoinRes = new LobbyJoinRes(lobby);
     Lobby parsedLobby = null;
     LobbyJoinRes parsedLobbyJoinRes = null;

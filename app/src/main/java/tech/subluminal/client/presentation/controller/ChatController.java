@@ -103,6 +103,11 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     this.userStore = store;
   }
 
+  /**
+   * Passes message to the channel formatter.
+   * @param message the message to send.
+   * @param channel the channel to send the message in.
+   */
   public void addMessageChat(String message, Channel channel) {
     Platform.runLater(() -> {
       Label msg = new Label(message);
@@ -121,6 +126,12 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     });
   }
 
+  /**
+   * Formats the whisper message and prints it to the chat.
+   * @param message the message to send.
+   * @param username the user who sent the message.
+   * @param channel the channel to send the message in.
+   */
   public void addMessageChat(String message, String username, Channel channel) {
     if (channel == Channel.WHISPER) {
       addMessageChat(username + "@you: " + message, channel);
@@ -131,6 +142,10 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     }
   }
 
+  /**
+   * Filters the global message from the chat view.
+   * @param e changes the predicate for filtering.
+   */
   public void updateFilter(ActionEvent e) {
     if (isGlobalShown.isSelected()) {
       filteredList.setPredicate(l -> true);
@@ -140,6 +155,9 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
   }
 
+  /**
+   * Scrolls the chat view to bottom (last message).
+   */
   private void scrollToBottom() {
     chatHistory.scrollTo(chatHistory.getItems().size() - 1);
   }
@@ -162,6 +180,10 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     }
   }
 
+  /**
+   * Send the message to all users.
+   * @param actionEvent the trigger for when to the send message.
+   */
   public void sendMessageAll(ActionEvent actionEvent) {
     String line = messageText.getText();
     if (!line.equals("")) {
@@ -182,7 +204,6 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
   /**
    * Handles all possible commands input by the user.
-   *
    * @param line is the whole command input by the user.
    */
   private void handleCommand(String line) {
@@ -199,6 +220,10 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     }
   }
 
+  /**
+   * Sends a private message to a user.
+   * @param recipiant is the user to receive the message.
+   */
   public void writeAt(String recipiant) {
     String temp = messageText.getText();
     clearInput();
@@ -425,28 +450,28 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     sendButton.setOnMouseEntered((e) -> {
       Timeline timeTl = new Timeline();
       timeTl.getKeyFrames().addAll(
-          new KeyFrame(Duration.seconds(0.1), new KeyValue(trans.zProperty(),3)),
+          new KeyFrame(Duration.seconds(0.1), new KeyValue(trans.zProperty(), 3)),
           new KeyFrame(Duration.seconds(0.1), new KeyValue(scale.zProperty(), 0.5)));
       timeTl.play();
     });
     sendButton.setOnMouseExited((e) -> {
       Timeline timeTl = new Timeline();
       timeTl.getKeyFrames().addAll(
-          new KeyFrame(Duration.seconds(0.1), new KeyValue(trans.zProperty(),0)),
+          new KeyFrame(Duration.seconds(0.1), new KeyValue(trans.zProperty(), 0)),
           new KeyFrame(Duration.seconds(0.1), new KeyValue(scale.zProperty(), 1)));
       timeTl.play();
     });
     sendAllButton.setOnMouseEntered((e) -> {
       Timeline timeTl = new Timeline();
       timeTl.getKeyFrames().addAll(
-          new KeyFrame(Duration.seconds(0.1), new KeyValue(transAll.zProperty(),3)),
+          new KeyFrame(Duration.seconds(0.1), new KeyValue(transAll.zProperty(), 3)),
           new KeyFrame(Duration.seconds(0.1), new KeyValue(scaleAll.zProperty(), 0.5)));
       timeTl.play();
     });
     sendAllButton.setOnMouseExited((e) -> {
       Timeline timeTl = new Timeline();
       timeTl.getKeyFrames().addAll(
-          new KeyFrame(Duration.seconds(0.1), new KeyValue(transAll.zProperty(),0)),
+          new KeyFrame(Duration.seconds(0.1), new KeyValue(transAll.zProperty(), 0)),
           new KeyFrame(Duration.seconds(0.1), new KeyValue(scaleAll.zProperty(), 1)));
       timeTl.play();
     });
@@ -454,5 +479,14 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     sendBox.setMaterial(material);
     sendAllBox.setMaterial(material);
 
+  }
+
+  public void requestFocus() {
+    messageText.requestFocus();
+
+  }
+
+  public TextField getTextField() {
+    return messageText;
   }
 }

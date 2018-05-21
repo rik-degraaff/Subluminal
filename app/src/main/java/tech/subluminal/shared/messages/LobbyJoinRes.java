@@ -12,7 +12,7 @@ import tech.subluminal.shared.stores.records.Lobby;
  * {
  *   "lobby":o{
  *     "playerCount":i0,
- *     "status":s"FULL",
+ *     "status":s"INGAME",
  *     "settings":o{
  *       "maxPlayers":i8,
  *       "minPlayers":i2,

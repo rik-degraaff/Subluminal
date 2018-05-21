@@ -19,11 +19,15 @@ import java.util.stream.Collectors;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.server.stores.records.Signal;
 import tech.subluminal.server.stores.records.Star;
+import tech.subluminal.shared.records.GlobalSettings;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Fleet;
 import tech.subluminal.shared.stores.records.game.Movable;
 import tech.subluminal.shared.stores.records.game.Ship;
 
+/**
+ * This class is used for calculating
+ */
 public class IntermediateGameState {
 
   private static final double DISTANCE_THRESHOLD = 0.00000001;
@@ -44,7 +48,16 @@ public class IntermediateGameState {
       Comparator.reverseOrder());
   private final double shipSpeed;
 
-  public IntermediateGameState(double deltaTime, Map<String, Star> stars, Set<String> players,
+  /**
+   * Creates an intermediate game state for a single game tick.
+   *
+   * @param deltaTime the amount of time passed this tick.
+   * @param stars the current states of all stars.
+   * @param players the ids of the players in this game.
+   * @param shipSpeed the speed of ship fleets.
+   * @param signals all fleet move requests that haven't arrived yet.
+   */
+  IntermediateGameState(double deltaTime, Map<String, Star> stars, Set<String> players,
       double shipSpeed, Set<Signal> signals) {
     this.deltaTime = deltaTime;
     this.stars = stars;
@@ -52,13 +65,12 @@ public class IntermediateGameState {
     this.shipSpeed = shipSpeed;
     this.signals = signals;
 
+    // create all maps with default values for all stars/players.
     fleetsOnStars = createMapWithKeys(stars.keySet(),
         () -> createMapWithKeys(players, Optional::empty));
     motherShipsOnStars = createMapWithKeys(stars.keySet(),
         () -> createMapWithKeys(players, Optional::empty));
-
     fleetsUnderway = createMapWithKeys(players, HashMap::new);
-
     destroyedFleets = createMapWithKeys(players, LinkedList::new);
     motherShipsUnderway = createMapWithKeys(players, Optional::empty);
     dematerializedEnemyShips = createMapWithKeys(players, () -> 0.0);
@@ -69,18 +81,26 @@ public class IntermediateGameState {
     return keys.stream().collect(Collectors.toMap(id -> id, id -> supplier.get()));
   }
 
+  /**
+   * Advances the game state by the delta time that was specified before.
+   * This class will contain the updated game state after this method returns.
+   */
   public void advance() {
+    // calculate the colonization rate of all stars immediately.
     stars.keySet().forEach(starID -> colonisationTick(starID, deltaTime));
 
+    // advance stars and determine if/when dematerialization and ship generation should take place.
     stars.replaceAll((starID, star) ->
         star.advancedBy(deltaTime,
             time -> tasks.add(new PriorityRunnable(time, () -> generateShips(starID))),
             time -> tasks.add(new PriorityRunnable(time, () -> dematerializeTick(starID))))
     );
 
+    // advance signals
     signals = signals.stream()
         .map(signal -> signal.advanced(deltaTime,
             time -> tasks.add(new PriorityRunnable(time, () ->
+                // send a fleet when a signal arrives
                 splitFleetOnStar(signal.getStarID(), signal.getPlayerID(), signal.getAmount(),
                     signal.getTargets())
                     .ifPresent(fleet -> {
@@ -93,14 +113,17 @@ public class IntermediateGameState {
         .map(Optional::get)
         .collect(Collectors.toSet());
 
+    // move all ships that are already underway
     fleetsUnderway.forEach((playerID, fleetMap) -> {
       fleetMap.keySet().forEach(fleetID -> moveFleet(0.0, playerID, fleetID, deltaTime));
     });
 
+    // move all ships that are already underway
     motherShipsUnderway.forEach((playerID, optShip) -> {
       optShip.ifPresent(ship -> moveMotherShip(0.0, playerID, ship.getID(), deltaTime));
     });
 
+    // run all tasks that will take place this tick in order
     while (!tasks.isEmpty()) {
       tasks.poll().run();
     }
@@ -111,22 +134,26 @@ public class IntermediateGameState {
     return fleetsOnStars.get(starID)
         .get(playerID)
         .map(fleet -> {
+          // send all ships if there are not enough ships on the star
           if (amount >= fleet.getNumberOfShips()) {
             fleetsOnStars.get(starID).put(playerID, Optional.empty());
             return new Fleet(fleet.getCoordinates(), fleet.getNumberOfShips(), fleet.getID(),
                 targets, targets.get(targets.size() - 1), fleet.getSpeed());
           }
+          // remove all ships that are going to be sent from the fleet on the star
           fleetsOnStars.get(starID).put(playerID, Optional.of(
               new Fleet(fleet.getCoordinates(), fleet.getNumberOfShips() - amount, fleet.getID(),
                   fleet.getTargetIDs(), fleet.getEndTarget(), fleet.getSpeed())
           ));
-          return new Fleet(fleet.getCoordinates(), amount, generateId(8),
+          // send only as many ships as were requested
+          return new Fleet(fleet.getCoordinates(), amount,
+              generateId(GlobalSettings.SHARED_UUID_LENGTH),
               targets, targets.get(targets.size() - 1), fleet.getSpeed());
         });
   }
 
   private void moveFleet(double start, String playerID, String fleetID, double deltaTimeLeft) {
-    if (fleetsUnderway.get(playerID).get(fleetID) == null) {
+    if (fleetsUnderway.get(playerID) == null || fleetsUnderway.get(playerID).get(fleetID) == null) {
       return;
     }
 
@@ -135,6 +162,7 @@ public class IntermediateGameState {
 
     double timeToArrive = fleet.getTimeToReach(star.getCoordinates());
     if (deltaTimeLeft < timeToArrive) {
+      // just send the fleet towards its destination, it won't arrive this tick
       Fleet newFleet = new Fleet(
           fleet.getPositionMovingTowards(star.getCoordinates(), deltaTimeLeft),
           fleet.getNumberOfShips(), fleetID, fleet.getTargetIDs(), fleet.getEndTarget(),
@@ -145,6 +173,7 @@ public class IntermediateGameState {
           new Coordinates(star.getCoordinates().getX(), star.getCoordinates().getY()));
       double newStart = start + timeToArrive;
       if (fleet.getTargetIDs().size() == 1) {
+        // add the fleet to the star when it arrives at its final destination
         tasks.add(new PriorityRunnable(newStart, () -> {
           fleetsUnderway.get(playerID).remove(fleetID);
           addFleetToStar(fleet, playerID, star.getID());
@@ -153,6 +182,7 @@ public class IntermediateGameState {
         fleet.setTargetIDs(fleet.getTargetIDs().subList(1, fleet.getTargetIDs().size()));
         tasks.add(new PriorityRunnable(newStart,
             () -> {
+              // pass the fleet by a star as it travels on to its final destination
               passFleetByStar(playerID, fleetID, star.getID());
               moveFleet(newStart, playerID, fleetID, deltaTimeLeft - timeToArrive);
             }));
@@ -161,7 +191,7 @@ public class IntermediateGameState {
   }
 
   private void moveMotherShip(double start, String playerID, String shipID, double deltaTimeLeft) {
-    if (!motherShipsUnderway.get(playerID).isPresent()) {
+    if (motherShipsUnderway.get(playerID) == null || !motherShipsUnderway.get(playerID).isPresent()) {
       return;
     }
 
@@ -178,6 +208,7 @@ public class IntermediateGameState {
           "new x: " + ship.getPositionMovingTowards(star.getCoordinates(), deltaTimeLeft).getX()
               + " new y: " + ship.getPositionMovingTowards(star.getCoordinates(), deltaTimeLeft)
               .getY());
+      // just send the ship towards its destination, it won't arrive this tick
       Ship newShip = new Ship(
           ship.getPositionMovingTowards(star.getCoordinates(), deltaTimeLeft), shipID,
           ship.getTargetIDs(), ship.getEndTarget(), ship.getSpeed());
@@ -188,6 +219,7 @@ public class IntermediateGameState {
       double newStart = start + timeToArrive;
       if (ship.getTargetIDs().size() == 1) {
         tasks.add(new PriorityRunnable(newStart, () -> {
+          // add the ship to the star when it arrives at its final destination
           motherShipsUnderway.remove(playerID);
           addMotherShipToStar(ship, playerID, star.getID());
         }));
@@ -195,6 +227,7 @@ public class IntermediateGameState {
         ship.setTargetIDs(ship.getTargetIDs().subList(1, ship.getTargetIDs().size()));
         tasks.add(new PriorityRunnable(newStart,
             () -> {
+              // pass the ship by a star as it travels on to its final destination
               passMotherShipByStar(playerID, shipID, star.getID());
               moveMotherShip(newStart, playerID, shipID, deltaTimeLeft - timeToArrive);
             }));
@@ -222,9 +255,11 @@ public class IntermediateGameState {
       final int loss = Math.min(maxLoss, (int) dematStrength);
       shipsDematerialized(playerID, Math.min(oldCount, loss), getPlayerStrengths(starID, playerID));
       if (loss >= oldCount) {
+        // destroy the fleet if the star has enough enemy ships
         fleetsUnderway.get(playerID).remove(fleetID);
         destroyedFleets.get(playerID).add(fleet);
       } else {
+        // destroy some ships otherwise
         dematerializedShips.compute(playerID, (key, old) -> old + loss);
         fleetsUnderway.get(playerID).remove(fleetID);
         fleetsUnderway.get(playerID).put(fleetID, fleet.expanded(-loss));
@@ -248,6 +283,7 @@ public class IntermediateGameState {
     String highestID = null;
     int highest = 0;
     int secondHighest = 0;
+    // check who has the most strength on the star and how much more they have
     for (String playerID : players) {
       int score = fleetsOnStars.get(starID).get(playerID).map(Fleet::getNumberOfShips).orElse(0)
           + motherShipsOnStars.get(starID).get(playerID).map(s -> 2).orElse(0);
@@ -336,6 +372,7 @@ public class IntermediateGameState {
 
     final Map<String, Integer> newPlayerStrengths = new HashMap<>(playerStrengths);
 
+    // calculate the total strength of the opponents of each player
     final Map<String, Map<String, Integer>> opponentStrengths = new HashMap<>();
     playerStrengths.forEach((player, strength) -> {
       final Map<String, Integer> strengths = playerStrengths.keySet()
@@ -354,6 +391,7 @@ public class IntermediateGameState {
       final double dematStrength = getDematStrength(strength);
       final double dematPercentage = dematStrength / totalOpponentDefense;
 
+      // destroy ships of each opponent proportional to how many ships they have on the star
       playerStrengths.keySet().stream()
           .filter(p -> !p.equals(playerID))
           .forEach(opponent -> {
@@ -362,6 +400,7 @@ public class IntermediateGameState {
           });
     });
 
+    // actually update all fleets / mother ships
     newPlayerStrengths.forEach((player, newStrength) -> {
       if (newStrength <= 0) {
         motherShips.get(player).ifPresent(ship -> {
@@ -382,7 +421,8 @@ public class IntermediateGameState {
       } else {
         fleets.put(player,
             fleets.get(player).map(fleet -> {
-              shipsDematerialized(player, fleet.getNumberOfShips() - shipsLeft, opponentStrengths.get(player));
+              shipsDematerialized(player, fleet.getNumberOfShips() - shipsLeft,
+                  opponentStrengths.get(player));
               return fleet.expanded(shipsLeft - fleet.getNumberOfShips());
             }));
       }
@@ -418,7 +458,8 @@ public class IntermediateGameState {
       final Fleet fleet = optionalFleet
           .map(f -> f.expanded(1))
           .orElseGet(() ->
-              new Fleet(star.getCoordinates(), 1, generateId(8), Collections.emptyList(), starID,
+              new Fleet(star.getCoordinates(), 1, generateId(GlobalSettings.SHARED_UUID_LENGTH),
+                  Collections.emptyList(), starID,
                   shipSpeed));
       addFleetToStar(fleet, star.getOwnerID(), starID);
     }

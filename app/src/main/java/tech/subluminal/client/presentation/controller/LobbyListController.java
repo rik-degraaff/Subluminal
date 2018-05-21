@@ -57,6 +57,10 @@ public class LobbyListController implements Initializable {
     return slimLobbies;
   }
 
+  /**
+   * Sets the lobbystore on the controller.
+   * @param store that holds the lobbies on the client.
+   */
   public void setLobbyStore(LobbyStore store) {
     Logger.trace("Setting lobbystore of lobbyListComponent");
     lobbyList.setItems(new MapperList<>(store.observableLobbies(),

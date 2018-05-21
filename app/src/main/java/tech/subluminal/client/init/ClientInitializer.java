@@ -89,15 +89,8 @@ public class ClientInitializer extends Application {
     userManager.start(username);
 
     final Thread mainThread = Thread.currentThread();
-    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-      userManager.logout();
-      try {
-        mainThread.join();
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-    }));
-  }
+    Runtime.getRuntime().addShutdownHook(new Thread(userManager::logoutNoShutdown));
+}
 
 
   /**
@@ -142,24 +135,21 @@ public class ClientInitializer extends Application {
       }
     });
 
+    primaryStage.setOnCloseRequest(e -> {
+      System.exit(0);
+    });
+
     PerspectiveCamera camera = new PerspectiveCamera();
     primaryStage.getScene().setCamera(camera);
+
+
+    controller.setScene(primaryStage);
     //camera.setTranslateZ(-1000);
 
 
     String[] cmd = getParameters().getRaw().toArray(new String[4]);
 
     init(cmd[0], Integer.parseInt(cmd[1]), cmd[2], Boolean.getBoolean(cmd[3]));
-
-    primaryStage.widthProperty().addListener((v, oldV, newV) -> {
-      int diff = oldV.intValue() - newV.intValue();
-      controller.onWindowResizeHandle(diff, 0);
-    });
-
-    primaryStage.heightProperty().addListener((v, oldV, newV) -> {
-      int diff = oldV.intValue() - newV.intValue();
-      controller.onWindowResizeHandle(0, diff);
-    });
   }
 
   /**

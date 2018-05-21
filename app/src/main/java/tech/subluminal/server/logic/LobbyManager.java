@@ -27,13 +27,14 @@ import tech.subluminal.shared.messages.LobbyListReq;
 import tech.subluminal.shared.messages.LobbyListRes;
 import tech.subluminal.shared.messages.LobbyUpdateReq;
 import tech.subluminal.shared.messages.LobbyUpdateRes;
+import tech.subluminal.shared.messages.SpectateGameReq;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.records.GlobalSettings;
 import tech.subluminal.shared.records.LobbyStatus;
 import tech.subluminal.shared.stores.records.Lobby;
 import tech.subluminal.shared.stores.records.LobbySettings;
 import tech.subluminal.shared.stores.records.SlimLobby;
 import tech.subluminal.shared.stores.records.User;
-import tech.subluminal.shared.util.Synchronized;
 
 /**
  * Manages the chat/game lobbies.
@@ -45,6 +46,14 @@ public class LobbyManager {
   private final GameStarter gameStarter;
   private final MessageDistributor distributor;
 
+  /**
+   * Cerates a lobby manager with all dependencies
+   *
+   * @param lobbyStore where the lobbies are stored.
+   * @param userStore where the users are read from.
+   * @param distributor the distributor this manager communicates with the client through.
+   * @param gameStarter is called when a game should be started for a lobby
+   */
   public LobbyManager(LobbyStore lobbyStore, ReadOnlyUserStore userStore,
       MessageDistributor distributor, GameStarter gameStarter) {
     this.gameStarter = gameStarter;
@@ -60,6 +69,7 @@ public class LobbyManager {
     lobbyStore.lobbies()
         .getLobbiesWithUser(id)
         .consume(coll -> coll.forEach(sync -> sync.consume(lobby -> {
+          // rejoin a lobby if this is a reconnect
           connection.sendMessage(new LobbyJoinRes(lobby));
         })));
   }
@@ -67,6 +77,8 @@ public class LobbyManager {
   private void attachHandlers(String id, Connection connection) {
     connection
         .registerHandler(LobbyJoinReq.class, LobbyJoinReq::fromSON, req -> onLobbyJoin(id, req));
+    connection
+        .registerHandler(SpectateGameReq.class, SpectateGameReq::fromSON, req -> onSpectateGame(id, req));
     connection
         .registerHandler(LobbyLeaveReq.class, LobbyLeaveReq::fromSON, req -> onLobbyLeave(id, req));
     connection
@@ -90,7 +102,8 @@ public class LobbyManager {
                     .getAdminID()
                     .equals(userID)))
                 .forEach(s -> s.consume(lobby -> {
-                  lobby.setStatus(LobbyStatus.FULL);
+                  lobby.setStatus(LobbyStatus.INGAME);
+                  // generate the colors for the players
                   List<Color> colors = getNiceColors(lobby.getPlayerCount());
                   int i = 0;
                   Map<String, Color> playerColors = new HashMap<>();
@@ -98,6 +111,7 @@ public class LobbyManager {
                     playerColors.put(player, colors.get(i));
                     i++;
                   }
+                  // inform all clients that the game has started
                   distributor.sendMessage(new GameStartRes(lobby.getID(), playerColors),
                       lobby.getPlayers());
 
@@ -108,6 +122,8 @@ public class LobbyManager {
                       .map(Optional::get)
                       .map(sync -> sync.use(Function.identity()))
                       .collect(Collectors.toMap(User::getID, User::getUsername));
+
+                  // start the game
                   gameStarter.startGame(lobby.getID(), players);
                 })));
   }
@@ -126,7 +142,7 @@ public class LobbyManager {
   }
 
   private void onLobbyCreate(String userID, LobbyCreateReq req, Connection connection) {
-    String lobbyID = generateId(6);
+    String lobbyID = generateId(GlobalSettings.SHARED_UUID_LENGTH);
     String name = req.getName();
     LobbyStatus status = LobbyStatus.OPEN;
     Lobby lobby = new Lobby(lobbyID, new LobbySettings(name, userID), status);
@@ -135,24 +151,34 @@ public class LobbyManager {
     connection.sendMessage(new LobbyJoinRes(lobby));
   }
 
+  private void onSpectateGame(String userID, SpectateGameReq req) {
+    joinLobby(userID, req.getID(), LobbyStatus.INGAME);
+  }
+
   private void onLobbyJoin(String userID, LobbyJoinReq req) {
-    Optional<Synchronized<Lobby>> lobby = lobbyStore.lobbies().getByID(req.getId());
-    if (!lobby.isPresent()) {
-      //TODO: Send message to client: Lobby doesn't exist
-      return;
-    }
-    //TODO: Check if player is already in a lobby
-    lobby.get().update(l -> {
-      if (l.getPlayerCount() >= l.getSettings().getMaxPlayers()) {
-        //TODO: Send message to client: Lobby full
-        return l;
-      }
-      Set<String> players = new HashSet<>(l.getPlayers());
-      l.addPlayer(userID, false);
-      distributor.sendMessage(new LobbyJoinRes(l), userID);
-      distributor.sendMessage(new LobbyUpdateRes(l), players);
-      return l;
-    });
+    joinLobby(userID, req.getID(), LobbyStatus.OPEN);
+  }
+
+  private void joinLobby(String userID, String lobbyID, LobbyStatus status) {
+    lobbyStore.lobbies()
+        .getByID(lobbyID)
+        .ifPresent(lobby -> lobby.sync(() -> {
+          if (lobby.use(l -> l.getStatus() != status)) {
+            return;
+          }
+
+          lobby.update(l -> {
+            if (status == LobbyStatus.OPEN
+                && l.getPlayerCount() >= l.getSettings().getMaxPlayers()) {
+              return l;
+            }
+            Set<String> players = new HashSet<>(l.getPlayers());
+            l.addPlayer(userID, false);
+            distributor.sendMessage(new LobbyJoinRes(l), userID);
+            distributor.sendMessage(new LobbyUpdateRes(l), players);
+            return l;
+          });
+        }));
   }
 
   private void onLobbyLeave(String userID, LobbyLeaveReq req) {
@@ -189,7 +215,7 @@ public class LobbyManager {
    * @param adminID references the user who created the lobby.
    */
   public void createLobby(String name, String adminID) {
-    String id = generateId(6);
+    String id = generateId(GlobalSettings.SHARED_UUID_LENGTH);
     lobbyStore.lobbies().add(new Lobby(id, new LobbySettings(name, adminID), LobbyStatus.OPEN));
   }
 

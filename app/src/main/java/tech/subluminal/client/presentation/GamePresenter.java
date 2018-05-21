@@ -27,7 +27,9 @@ public interface GamePresenter {
 
   void clearGame();
 
-  void addToast(String message);
+  void addToast(String message, boolean permanent);
+
+  void setTps(double tps);
 
   interface Delegate {
 

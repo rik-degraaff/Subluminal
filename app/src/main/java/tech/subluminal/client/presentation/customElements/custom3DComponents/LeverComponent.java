@@ -1,45 +1,85 @@
 package tech.subluminal.client.presentation.customElements.custom3DComponents;
 
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.MeshView;
+import javafx.scene.shape.Sphere;
+import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
-import tech.subluminal.shared.util.MeshImporter;
 
 public class LeverComponent extends Pane {
-  private static final String MESH_PATH = "/tech/subluminal/resources/3D/lever.stl";
 
-  private static final double MODEL_SCALE_FACTOR = 20;
-  private static final double MODEL_X_OFFSET = 0; // standard
-  private static final double MODEL_Y_OFFSET = 0; // standard
-  private static final int VIEWPORT_SIZE = 200;
-  public LeverComponent(){
-    MeshView meshView = MeshImporter.importMesh(MESH_PATH);
+  private final int SCALE_FACTOR = 1;
 
-    //meshView.setTranslateX(VIEWPORT_SIZE / 2 + MODEL_X_OFFSET + 50);
-    //meshView.setTranslateY(VIEWPORT_SIZE / 4 + MODEL_Y_OFFSET - 300);
-    //meshView.setTranslateZ(50);
+  public LeverComponent() {
+    this.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+    Cylinder cylinder = new Cylinder();
+    cylinder.setScaleX(2);
+    cylinder.setScaleY(2);
+    cylinder.setScaleZ(2);
+    cylinder.getTransforms().addAll(new Rotate(90, Rotate.X_AXIS), new Rotate(90, Rotate.Z_AXIS));
 
-    meshView.setScaleX(MODEL_SCALE_FACTOR);
-    meshView.setScaleY(MODEL_SCALE_FACTOR);
-    meshView.setScaleZ(MODEL_SCALE_FACTOR);
+    Cylinder handle = new Cylinder();
+    handle.setHeight(10);
+    /*handle.translateXProperty().bind(Bindings.createDoubleBinding(() -> {
+      return cylinder.getHeight();
+    }, cylinder.heightProperty()));*/
 
-    PhongMaterial material = new PhongMaterial(Color.BLACK);
-    //meshView.setMaterial(material);
+    Sphere ball = new Sphere();
+    /*ball.translateXProperty().bind(Bindings.createDoubleBinding(() -> {
+      return cylinder.getHeight();
+    }, cylinder.heightProperty()));*/
 
-    this.getChildren().addAll(meshView);
+    //this.getChildren().addAll(cylinder, handle, ball);
 
-    this.getTransforms().addAll(
-        new Rotate(90, Rotate.Y_AXIS),
-        new Translate(0,50,60));
+    this.setScaleX(SCALE_FACTOR);
+    this.setScaleY(SCALE_FACTOR);
+    this.setScaleZ(SCALE_FACTOR);
 
-    this.setBackground(new Background(new BackgroundFill(Color.RED,CornerRadii.EMPTY,Insets.EMPTY)));
+    this.setTranslateX(-500);
+
+
+    float h = 150;                    // Height
+    float s = 300;                    // Side
+
+    float[] points = {
+        0,    0,    0,            // Point 0 - Top
+        0,    h,    -s/2,         // Point 1 - Front
+        -s/2, h,    0,            // Point 2 - Left
+        s/2,  h,    0,            // Point 3 - Back
+        0,    h,    s/2           // Point 4 - Right
+    };
+    float[] texCoords = {
+        1, 1,
+        1, 0,
+        0, 1,
+        0, 0
+    };
+    int[] faces = {
+        0,0,  2,0,  1,0,          // Front left face
+        0,0,  1,0,  3,0,          // Front right face
+        0,0,  3,0,  4,0,          // Back right face
+        0,0,  4,0,  2,0,          // Back left face
+        4,0,  1,0,  2,0,          // Bottom rear face
+        4,0,  3,0,  1,0           // Bottom front face
+    };
+
+    TriangleMesh mesh = new TriangleMesh();
+    mesh.getPoints().setAll(points);
+    //mesh.getTexCoords().setAll(texCoords);
+    mesh.getTexCoords().addAll(0,0);
+    mesh.getFaces().setAll(faces);
+
+    this.getChildren().addAll(new MeshView(mesh));
 
   }
+
 }

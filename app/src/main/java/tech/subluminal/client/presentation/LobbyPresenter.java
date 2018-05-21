@@ -27,5 +27,7 @@ public interface LobbyPresenter {
     void startGame();
 
     void startTutorial();
+
+    void joinGame(String lobbyID);
   }
 }

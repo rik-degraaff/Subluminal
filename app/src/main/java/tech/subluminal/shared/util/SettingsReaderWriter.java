@@ -19,8 +19,11 @@ import org.pmw.tinylog.Logger;
 import tech.subluminal.shared.records.GlobalSettings;
 
 public class SettingsReaderWriter implements PropertiesReaderWriter {
-  public SettingsReaderWriter() {
 
+  ConfigModifier<String, String> cm = new ConfigModifier<>("settings");
+
+  public SettingsReaderWriter() {
+    cm.attachToFile(GlobalSettings.FILE_SETTINGS);
   }
 
   @Override
@@ -31,7 +34,7 @@ public class SettingsReaderWriter implements PropertiesReaderWriter {
 
   @Override
   public void readProperties(Class type, Object obj, String jarPath) {
-    File f = new File(jarPath + "\\" + GlobalSettings.FILE_SETTINGS);
+    File f = cm.getAttachedFile();
 
     if (f.exists() && !f.isDirectory()) {
       Properties props = new Properties();
@@ -60,6 +63,10 @@ public class SettingsReaderWriter implements PropertiesReaderWriter {
             }
             case("double"): {
               tmp = Double.parseDouble(props.getProperty(field.getName()));
+              break;
+            }
+            case("long"): {
+              tmp = Long.parseLong(props.getProperty(field.getName()));
               break;
             }
             case("boolean"): {
@@ -94,9 +101,9 @@ public class SettingsReaderWriter implements PropertiesReaderWriter {
 
   @Override
   public void writeProperties(Class type, Object obj, String jarPath) {
-    File f = new File(jarPath + "\\" + GlobalSettings.FILE_SETTINGS);
+    File f = cm.getAttachedFile();
 
-    if (!f.exists() && !f.isDirectory()) {
+    if (!f.isDirectory()) { //TODO: FIX not being able to write in empty properties file with --> !f.exists()
       Properties props = new Properties();
       Stream<Field> fields = getFields(type, Export.class);
       fields.forEach(field -> {

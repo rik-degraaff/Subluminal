@@ -21,7 +21,7 @@ public class LobbyJoinReqTest {
     parsedLobbyJoinReq = LobbyJoinReq.fromSON(SON.parse(lobbyJoinReq.asSON().asString()));
 
     assertNotNull(parsedLobbyJoinReq);
-    assertEquals(ID, parsedLobbyJoinReq.getId());
+    assertEquals(ID, parsedLobbyJoinReq.getID());
     System.out.println(lobbyJoinReq.asSON().asString());
 
     // now let's create a wrong id key in the SON object

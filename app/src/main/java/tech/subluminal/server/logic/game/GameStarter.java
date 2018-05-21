@@ -33,4 +33,11 @@ public interface GameStarter {
       String gameID, Map<String, String> players, GameState initialState,
       Function<Boolean, Boolean> afterTick, Consumer<List<Player>> onEnd
   );
+
+  /**
+   * Immediately stops a game.
+   *
+   * @param gameID the id of the game to be stopped.
+   */
+  void stopGame(String gameID);
 }

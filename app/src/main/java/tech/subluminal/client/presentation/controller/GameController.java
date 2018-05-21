@@ -18,8 +18,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
@@ -54,7 +54,7 @@ public class GameController implements Initializable, GamePresenter {
   private Pane map;
 
   @FXML
-  private HBox toastDock;
+  private VBox toastDock;
 
   private StarComponent[] pressStore = new StarComponent[2];
 
@@ -89,15 +89,25 @@ public class GameController implements Initializable, GamePresenter {
   public void initialize(URL location, ResourceBundle resources) {
 
     map.setOnMouseClicked(mouseEvent -> {
-      pressStore[0] = null;
-      pressStore[1] = null;
+      clearPressStore();
+
       removeJumpPath();
       if (jump != null) {
         jump.clear();
       }
     });
 
+    //toastDock.setBackground(new Background(new BackgroundFill(Color.GREEN,CornerRadii.EMPTY,Insets.EMPTY)));
+
     toastDock.prefWidthProperty().bind(map.widthProperty());
+    toastDock.setFillWidth(false);
+  }
+
+  private void clearPressStore() {
+    if(pressStore[0] != null) pressStore[0].setHoverShown(false);
+    if(pressStore[1] != null) pressStore[1].setHoverShown(false);
+    pressStore[0] = null;
+    pressStore[1] = null;
   }
 
   private void starClicked(StarComponent star, MouseEvent mouseEvent) {
@@ -105,6 +115,7 @@ public class GameController implements Initializable, GamePresenter {
       if (pressStore[0] == null) {
         removeJumpPath();
         pressStore[0] = star;
+        star.setHoverShown(true);
         pressStore[1] = null;
       } else if (pressStore[0] == star) {
 
@@ -112,15 +123,25 @@ public class GameController implements Initializable, GamePresenter {
         Logger.debug("creating JumpPath");
         removeJumpPath();
         pressStore[1] = star;
+        star.setHoverShown(true);
         if (path != null) {
           path.clear();
         }
-        this.path = graph
-            .findShortestPath(pressStore[0].getStarID(), pressStore[1].getStarID());
+        //System.out.println(pressStore[0].getStarID() + " " + pressStore[1].getStarID());
+        try {
+          this.path = graph
+              .findShortestPath(pressStore[0].getStarID(), pressStore[1].getStarID());
+        } catch (IllegalStateException e) {
+          calculateGraph();
+          this.path = graph
+              .findShortestPath(pressStore[0].getStarID(), pressStore[1].getStarID());
+        }
         if (!path.isEmpty()) {
           removeJumpPath();
           createJumpPath(path);
         } else {
+          pressStore[0].setHoverShown(false);
+          pressStore[1].setHoverShown(false);
           pressStore[0] = null;
           pressStore[1] = null;
           removeJumpPath();
@@ -131,6 +152,8 @@ public class GameController implements Initializable, GamePresenter {
 
       }
     } else {
+      pressStore[0].setHoverShown(false);
+      pressStore[1].setHoverShown(false);
       removeJumpPath();
       pressStore[0] = star;
       pressStore[1] = null;
@@ -164,13 +187,14 @@ public class GameController implements Initializable, GamePresenter {
   }
 
   public void createJumpBox(StarComponent start) {
-    box = new JumpBox(start.layoutXProperty(), start.layoutYProperty(),
+    box = new JumpBox(main,
         amount -> {
           gameDelegate.sendShips(path, amount);
           removeJumpPath();
           if (!jump.isEmpty()) {
             jump.clear();
           }
+          clearPressStore();
         },
         () -> {
           gameDelegate.sendMothership(path);
@@ -178,6 +202,7 @@ public class GameController implements Initializable, GamePresenter {
           if (!jump.isEmpty()) {
             jump.clear();
           }
+          clearPressStore();
         });
 
     map.getChildren().add(box);
@@ -201,7 +226,8 @@ public class GameController implements Initializable, GamePresenter {
   public void setUserID() {
     new Thread(() -> {
       Optional<String> optID;
-      while (!(optID = userStore.currentUser().get().use(opt -> opt.map(User::getID))).isPresent()) {
+      while (!(optID = userStore.currentUser().get().use(opt -> opt.map(User::getID)))
+          .isPresent()) {
         Thread.yield();
       }
       playerID = optID.get();
@@ -221,12 +247,17 @@ public class GameController implements Initializable, GamePresenter {
       if (graph != null) {
         return;
       }
-      this.graph = new Graph<>(stars.keySet(),
-          (s1, s2) -> starMap.get(s1).getDistanceFrom(starMap.get(s2)) <= starMap.get(s1).getJump(),
-          (s1, s2) -> starMap.get(s1).getDistanceFrom(starMap.get(s2)),
-          false);
+      calculateGraph();
     });
 
+
+  }
+
+  private void calculateGraph() {
+    this.graph = new Graph<>(stars.keySet(),
+        (s1, s2) -> starMap.get(s1).getDistanceFrom(starMap.get(s2)) <= starMap.get(s1).getJump(),
+        (s1, s2) -> starMap.get(s1).getDistanceFrom(starMap.get(s2)),
+        false);
   }
 
   @Override
@@ -448,7 +479,6 @@ public class GameController implements Initializable, GamePresenter {
 
       this.dummyFleetList.setItems(fleetComponents);
     });
-
   }
 
   public void setUserStore(UserStore userStore) {
@@ -476,27 +506,43 @@ public class GameController implements Initializable, GamePresenter {
   }
 
   @Override
-  public void addToast(String message) {
-    ToastComponent toast = new ToastComponent(message);
+  public void addToast(String message, boolean permanent) {
+    ToastComponent toast = new ToastComponent(message, permanent);
     Platform.runLater(() -> {
-      toastDock.getChildren().clear();
-      toastDock.getChildren().add(toast);
+      if (toastDock.getChildren().isEmpty()) {
+        toastDock.getChildren().add(toast);
+      } else {
+        if (toast.isPermanent()) {
+          toastDock.getChildren()
+              .removeIf(n -> n instanceof  ToastComponent && ((ToastComponent) n).isPermanent());
+          toastDock.getChildren().add(0, toast);
+        } else {
+          toastDock.getChildren().add(toast);
+        }
+      }
 
-      PauseTransition pause = new PauseTransition();
-      pause.setDuration(Duration.seconds(1 + message.length() / 10.0));
-      pause.setOnFinished(e -> {
-        FadeTransition fade = new FadeTransition();
-        fade.setFromValue(1);
-        fade.setToValue(0);
-        fade.setDuration(Duration.seconds(0.5));
-        fade.setNode(toast);
-        fade.setOnFinished(event -> {
-          toastDock.getChildren().remove(toast);
+      if (!permanent) {
+        PauseTransition pause = new PauseTransition();
+        pause.setDuration(Duration.seconds(1 + message.length() / 10.0));
+        pause.setOnFinished(e -> {
+          FadeTransition fade = new FadeTransition();
+          fade.setFromValue(1);
+          fade.setToValue(0);
+          fade.setDuration(Duration.seconds(0.5));
+          fade.setNode(toast);
+          fade.setOnFinished(event -> {
+            toastDock.getChildren().remove(toast);
+          });
+          fade.play();
         });
-        fade.play();
-      });
-      pause.play();
+        pause.play();
+      }
     });
+  }
+
+  @Override
+  public void setTps(double tps) {
+    main.setTps(tps);
   }
 
   public void leaveGame() {

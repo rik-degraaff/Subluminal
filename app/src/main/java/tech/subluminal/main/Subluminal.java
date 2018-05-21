@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javafx.application.Application;
-import javax.sound.midi.Soundbank;
 import org.pmw.tinylog.Configurator;
 import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
@@ -54,7 +53,7 @@ public class Subluminal {
   private String username = System.getProperty("user.name");
 
   // ======= OTHER VARIABLES =======
-  private static final SettingsReaderWriter srw = new SettingsReaderWriter();
+  private static SettingsReaderWriter srw;
 
   /**
    * Parses the command line arguments and calls the relevant packages.
@@ -99,26 +98,24 @@ public class Subluminal {
       final SecurityManager sm = System.getSecurityManager();
       if (sm != null) {
         Logger.info("Security Manager found. Trying to suppress access checks.");
-        System.out.println("Security Manager found. Trying to suppress access checks.");
-        //sm.checkPermission(new java.lang.reflect.ReflectPermission("suppressAccessChecks"));
       } else {
         Logger.info("No security manager detected");
-        System.out.println("No security manager detected");
       }
 
       GlobalSettings.PATH_JAR = getJarPath().toString();
       if (subl.debug) {
+        srw = new SettingsReaderWriter();
         srw.run(GlobalSettings.class, GlobalSettings.class, GlobalSettings.PATH_JAR);
       }
 
-      String host = "localhost";
-      int port = 1729;
-      
+
       Logger.debug("mode:" + subl.mode + " hostAndOrPort:" + subl.hostAndOrPort + " debug:" + String
           .valueOf(subl.debug) + " logfile:" + subl.logfile + " loglevel:" + subl.loglevel
           + " username:" + subl.username);
 
       String[] parts = subl.hostAndOrPort.split(":");
+      String host;
+      int port = 0;
 
       if ("client".equals(subl.mode)) {
         if (parts.length != 2) {
@@ -129,7 +126,7 @@ public class Subluminal {
         try {
           port = Integer.parseInt(parts[1]);
         } catch (NumberFormatException e) {
-          System.out.println(port);
+          Logger.error(e);
         }
 
         initClient(host, port, subl.username, subl.debug);
@@ -138,7 +135,7 @@ public class Subluminal {
         try {
           port = Integer.parseInt(parts[0]);
         } catch (NumberFormatException e) {
-          System.out.println(port);
+          Logger.error(e);
         }
 
         initServer(port, subl.debug);
@@ -207,12 +204,11 @@ public class Subluminal {
     File jar = null;
     try {
       jar = new File(
-          GlobalSettings.class.getProtectionDomain().getCodeSource().getLocation().toURI()
+          Subluminal.class.getProtectionDomain().getCodeSource().getLocation().toURI()
               .getPath()).getParentFile();
     } catch (URISyntaxException e) {
       e.printStackTrace();
     }
-
     return jar;
   }
 }
