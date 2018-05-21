@@ -32,15 +32,14 @@ public class ConfigModifier<k, v> {
   private final String DELIMETER_KEY = "\\";
 
   public ConfigModifier(String path) {
-    if (GlobalSettings.PATH_JAR != null) {
+    if (!GlobalSettings.PATH_JAR.equals("")) {
       configPath = GlobalSettings.PATH_JAR + DELIMETER_KEY + GlobalSettings.PATH_CONFIG;
       folderPath = configPath + DELIMETER_KEY + path.replace("/", DELIMETER_KEY);
       createDirectory(folderPath);
     } else {
-      configPath = "config";
-      folderPath = "";
+     configPath = "config";
+     folderPath = "config";
     }
-
   }
 
   /**
@@ -124,7 +123,13 @@ public class ConfigModifier<k, v> {
    * @param fullName filename or relative path with filename originating from the default location.
    */
   public void attachToFile(String fullName) {
-    File theFile = new File(folderPath + DELIMETER_KEY + fullName.replace("/", DELIMETER_KEY));
+    File theFile;
+    if (GlobalSettings.PATH_JAR.equals("")) {
+      theFile = new File(folderPath + DELIMETER_KEY + fullName.replace("/", DELIMETER_KEY));
+    } else {
+      theFile = new File(folderPath + DELIMETER_KEY + fullName.replace("/", DELIMETER_KEY));
+    }
+    System.out.println(theFile.getPath());
     String[] parts = fullName.split("\\.");
 
     switch (parts[parts.length-1]) {

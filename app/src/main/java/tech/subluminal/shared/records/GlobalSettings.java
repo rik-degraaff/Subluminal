@@ -28,7 +28,7 @@ public final class GlobalSettings {
   public static final boolean TESTBOOL = new Boolean(true);
 
   // ======== PATH + FILE SETTINGS ========
-  public static String PATH_JAR; // Is set by the main class on application start.
+  public static String PATH_JAR = new String(""); // Is set by the main class on application start.
   public static final String PATH_CONFIG = new String("config");
   public static final String FILE_SETTINGS = new String("constants.properties");
   @Export

@@ -27,8 +27,8 @@ public class HighScoreStore {
       HighScoreStore::writeHighscoresToFile);
 
   public HighScoreStore() {
+
     cm.attachToFile(GlobalSettings.FILE_HIGHSCORE);
-    System.out.println(cm.getAttachedFile().getPath());
     HIGHSCORES_PATH = cm.getAttachedFile().getPath();
   }
 
