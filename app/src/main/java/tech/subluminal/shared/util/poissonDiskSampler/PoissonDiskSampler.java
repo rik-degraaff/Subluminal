@@ -9,7 +9,7 @@ import tech.subluminal.shared.stores.records.game.Coordinates;
  * Algorithm based on <i>Fast Poisson Disk Sampling in Arbitrary Dimensions</i> by Robert
  * Bridson, but with an arbitrary minimum distance function. See also the paper <i>A Spatial Data
  * Structure for Fast Poisson-Disk Sample Generation</i> Daniel Dunbar and Greg Humphreys for
- * other algorithms and a comparrisson.
+ * other algorithms and a comparison.
  */
 public class PoissonDiskSampler {
 

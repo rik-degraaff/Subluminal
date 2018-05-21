@@ -3,8 +3,6 @@ package tech.subluminal.shared.util.poissonDiskSampler;
 /**
  * Represents smooth noise, that is noise sampled from uniform noise, and
  * linearly interpolated.
- * 
- * @author Herman Tulleken (herman@luma.co.za)
  */
 public class SmoothNoise2D
 {
