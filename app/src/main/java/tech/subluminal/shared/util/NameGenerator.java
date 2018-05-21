@@ -11,10 +11,14 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.regex.Pattern;
+import org.pmw.tinylog.Logger;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import tech.subluminal.shared.records.GlobalSettings;
 
+/**
+ * Allows you to generate any number of star names.
+ */
 public class NameGenerator {
 
   private Random rand = new Random(GlobalSettings.SHARED_RANDOM.nextLong());
@@ -24,11 +28,15 @@ public class NameGenerator {
   private int fileCounter = 0;
   private List<String> planetNames; // for later use
 
+  /**
+   * Creates a new name generator
+   */
   public NameGenerator() {
     readStarFiles();
   }
 
-  public void readStarFiles() {
+  // reads fields with stars that are saved inside the jar.
+  private void readStarFiles() {
     Reflections reflections = new Reflections("tech.subluminal", new ResourcesScanner());
     Pattern pat = Pattern.compile(".*\\.*star.*\\.txt");
     Set<String> fileNames = reflections.getResources(pat);
@@ -50,6 +58,7 @@ public class NameGenerator {
       br = new BufferedReader(new InputStreamReader(
           NameGenerator.class.getResource("/" + path).openStream(), "UTF-8"));
 
+      // check how rare these stars should be
       int tempWeight = 0;
       br.mark(1);
       if (br.read() != 0xFEFF) {
@@ -66,15 +75,14 @@ public class NameGenerator {
       br.lines().forEach(l -> {
         starNames.get(fileCounter).add(l);
       });
-    } catch (UnsupportedEncodingException e) {
-      e.printStackTrace();
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
     } catch (IOException e) {
-      e.printStackTrace();
+      Logger.error(e);
     }
   }
 
+  /**
+   * @return a single random star name.
+   */
   public String getName() {
     Random rand = new Random(GlobalSettings.SHARED_RANDOM.nextLong());
     int randRange = (int) (rand.nextDouble()*sumWeights);
@@ -89,6 +97,10 @@ public class NameGenerator {
     return starNames.get(tempIndex).remove(rand.nextInt(starNames.get(tempIndex).size()));
   }
 
+  /**
+   * @param count the amount of names to generate.
+   * @return a list of star names.
+   */
   public List<String> getNames(int count) {
     List<String> names = new LinkedList<>();
     int rIndex;
