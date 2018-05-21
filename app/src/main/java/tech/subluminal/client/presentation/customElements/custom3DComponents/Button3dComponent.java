@@ -11,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
+import javafx.scene.text.Font;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
@@ -29,6 +30,7 @@ public class Button3dComponent extends AnchorPane {
     label.setTranslateX(5);
 
     label.getStyleClass().addAll("button3D", "font-dos");
+    label.setFont(new Font( "PxPlus IBM VGA9", 16));
     //label.setTranslateZ(-3);
 
     Box box = new Box();

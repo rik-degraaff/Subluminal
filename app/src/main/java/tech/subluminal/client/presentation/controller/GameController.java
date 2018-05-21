@@ -182,7 +182,7 @@ public class GameController implements Initializable, GamePresenter {
   }
 
   public void createJumpBox(StarComponent start) {
-    box = new JumpBox(start.layoutXProperty(), start.layoutYProperty(),
+    box = new JumpBox(main,
         amount -> {
           gameDelegate.sendShips(path, amount);
           removeJumpPath();
