@@ -12,21 +12,194 @@ import tech.subluminal.shared.son.SONRepresentable;
 import tech.subluminal.shared.stores.records.game.Star;
 
 /**
- * Contains the changes that need to be made to the game state.
+ * Contains the changes that need to be made to the game state. A GameStateDelta message, converted
+ * to SON and then to string, might look like this:
+ * <pre>
+ * {
+ *   "tps":d10.0,
+ *   "players":l[
+ *     o{
+ *       "motherShip":o{
+ *         "movable":o{
+ *           "speed":d0.2,
+ *           "target":s"3",
+ *           "gameObject":o{
+ *             "identifiable":o{
+ *               "id":s"4321"
+ *             },"coordinates":o{
+ *               "x":d1.0,
+ *               "y":d2.3
+ *             }
+ *           },"targets":l[
+ *             s"1",
+ *             s"2",
+ *             s"3"
+ *           ]
+ *         }
+ *       },
+ *       "identifiable":o{
+ *         "id":s"1234"
+ *       },
+ *       "fleets":l[
+ *         o{
+ *           "amount":i17,
+ *           "movable":o{
+ *             "speed":d0.2,
+ *             "target":s"3",
+ *             "gameObject":o{
+ *               "identifiable":o{
+ *                 "id":s"4321321"
+ *               },
+ *               "coordinates":o{
+ *                 "x":d1.0,
+ *                 "y":d2.3
+ *               }
+ *             },
+ *             "targets":l[
+ *               s"2",
+ *               s"3"
+ *             ]
+ *           }
+ *         },
+ *         o{
+ *           "amount":i17,
+ *           "movable":o{
+ *             "speed":d0.2,
+ *             "target":s"3",
+ *             "gameObject":o{
+ *               "identifiable":o{
+ *                 "id":s"4qd321"
+ *               },
+ *               "coordinates":o{
+ *                 "x":d0.0,
+ *                 "y":d2000.13
+ *               }
+ *             },
+ *             "targets":l[
+ *               s"1",
+ *               s"2",
+ *               s"3"
+ *             ]
+ *           }
+ *         },
+ *         o{
+ *           "amount":i17,
+ *           "movable":o{
+ *             "speed":d0.2,
+ *             "target":s"2",
+ *             "gameObject":o{
+ *               "identifiable":o{
+ *                 "id":s"432gte1"
+ *               },
+ *               "coordinates":o{
+ *                 "x":d1.0,
+ *                 "y":d12.3
+ *               }
+ *             },
+ *             "targets":l[
+ *               s"2"
+ *             ]
+ *           }
+ *         }
+ *       ]
+ *     },
+ *     o{
+ *       "motherShip":o{
+ *         "movable":o{
+ *           "speed":d0.2,
+ *           "target":s"5",
+ *           "gameObject":o{
+ *             "identifiable":o{
+ *               "id":s"4321"
+ *             },
+ *             "coordinates":o{
+ *               "x":d10.0,
+ *               "y":d2.3
+ *             }
+ *           },
+ *           "targets":l[
+ *           ]
+ *         }
+ *       },
+ *       "identifiable":o{
+ *         "id":s"2345"
+ *       },
+ *       "fleets":l[
+ *       ]
+ *     }
+ *   ],
+ *   "removedFleets":l[
+ *     o{
+ *       "key":s"1234",
+ *       "value":l[
+ *         s"645",
+ *         s"123"
+ *       ]
+ *     },
+ *     o{
+ *       "key":s"4321",
+ *       "value":l[
+ *         s"345",
+ *         s"134vj"
+ *       ]
+ *     }
+ *   ],
+ *   "stars":l[
+ *     o{
+ *       "possession":d1.0,
+ *       "jump":d0.1,
+ *       "generating":btrue,
+ *       "name":s"Twinkle",
+ *       "ownerID":s"1234",
+ *       "gameObject":o{
+ *         "identifiable":o{
+ *           "id":s"starid"
+ *         },
+ *         "coordinates":o{
+ *           "x":d0.0,
+ *           "y":d0.0
+ *         }
+ *       }
+ *     },
+ *     o{
+ *       "possession":d0.0,
+ *       "jump":d0.3,
+ *       "generating":bfalse,
+ *       "name":s"TwinkleTwinkle",
+ *       "gameObject":o{
+ *         "identifiable":o{
+ *           "id":s"starid2"
+ *         },
+ *         "coordinates":o{
+ *           "x":d0.0,
+ *           "y":d42.0
+ *         }
+ *       }
+ *     }
+ *   ],
+ *   "removedPlayers":l[
+ *     s"ftdq"
+ *   ]
+ * }
+ * </pre>
  */
 public class GameStateDelta implements SONRepresentable {
 
+  private static final String CLASS_NAME = GameStateDelta.class.getSimpleName();
+
   private static final String PLAYERS_KEY = "players";
+  private static final String TPS_KEY = "tps";
   private static final String STARS_KEY = "stars";
   private static final String REMOVED_MOTHER_SHIPS = "removedMotherShips";
   private static final String REMOVED_FLEETS_KEY = "removedFleets";
   private static final String KEY = "key";
   private static final String VALUE = "value";
-  private static final String CLASS_NAME = GameStateDelta.class.getSimpleName();
+
   private List<Player> players = new LinkedList<>();
   private List<Star> stars = new LinkedList<>();
   private List<String> removedMotherShips = new LinkedList<>();
   private Map<String, List<String>> removedFleets = new HashMap<>();
+  private double tps;
 
   /**
    * Converts a SON of the GameStateDelta back to the GameStateDelta type itself.
@@ -74,6 +247,11 @@ public class GameStateDelta implements SONRepresentable {
     SONList removedFleetsList = son.getList(REMOVED_FLEETS_KEY)
         .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, REMOVED_FLEETS_KEY));
 
+    double tps = son.getDouble(TPS_KEY)
+        .orElseThrow(() -> SONRepresentable.error(CLASS_NAME, REMOVED_FLEETS_KEY));
+
+    delta.setTps(tps);
+
     for (int i = 0; i < removedFleetsList.size(); i++) {
       int ii = i;
       SON playerFleets = removedFleetsList.getObject(i)
@@ -92,6 +270,20 @@ public class GameStateDelta implements SONRepresentable {
     }
 
     return delta;
+  }
+
+  /**
+   * @return the server tick rate for this tick.
+   */
+  public double getTps() {
+    return tps;
+  }
+
+  /**
+   * @param tps the server tick rate for this tick.
+   */
+  public void setTps(double tps) {
+    this.tps = tps;
   }
 
   /**
@@ -153,11 +345,7 @@ public class GameStateDelta implements SONRepresentable {
    * Adds a new fleet to the list to be removed.
    */
   public void addRemovedFleet(String playerID, String fleetID) {
-    List<String> fleets = removedFleets.get(playerID);
-    if (fleets == null) {
-      fleets = new LinkedList<>();
-      removedFleets.put(playerID, fleets);
-    }
+    List<String> fleets = removedFleets.computeIfAbsent(playerID, k -> new LinkedList<>());
     fleets.add(fleetID);
   }
 
@@ -189,6 +377,7 @@ public class GameStateDelta implements SONRepresentable {
     });
 
     return new SON()
+        .put(tps, TPS_KEY)
         .put(playerList, PLAYERS_KEY)
         .put(starList, STARS_KEY)
         .put(removedPlayersList, REMOVED_MOTHER_SHIPS)

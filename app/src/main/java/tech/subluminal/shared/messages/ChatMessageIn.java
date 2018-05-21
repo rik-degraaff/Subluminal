@@ -6,7 +6,15 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * ChatMessage which is received by the client from the server.
+ * The ChatMessage which is received by the client from the server. A ChatMessageIn message
+ * converted to SON and then to string might look like this:
+ * <pre>
+ * {
+ *   "channel":s"CRITICAL",
+ *   "message":s"!Hello!",
+ *   "username":s"Luke"
+ * }
+ * </pre>
  */
 public class ChatMessageIn implements SONRepresentable {
 

@@ -1,6 +1,7 @@
 package tech.subluminal.server.logic;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import tech.subluminal.server.stores.UserStore;
@@ -11,10 +12,13 @@ import tech.subluminal.shared.messages.LogoutReq;
 import tech.subluminal.shared.messages.PlayerJoin;
 import tech.subluminal.shared.messages.PlayerLeave;
 import tech.subluminal.shared.messages.PlayerUpdate;
+import tech.subluminal.shared.messages.ReconnectReq;
 import tech.subluminal.shared.messages.UsernameReq;
 import tech.subluminal.shared.messages.UsernameRes;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.records.GlobalSettings;
 import tech.subluminal.shared.stores.records.User;
+import tech.subluminal.shared.util.IdUtils;
 
 /**
  * Manages the information of connected users.
@@ -36,25 +40,43 @@ public class UserManager {
     this.distributor = distributor;
     distributor.addConnectionOpenedListener(this::attachHandlers);
     distributor.addConnectionClosedListener(this::onConnectionClosed);
+
+    distributor.addLoginHandler(LoginReq.class, LoginReq::fromSON,
+        (req, c) -> onLogin(c, req));
+    distributor.addLoginHandler(ReconnectReq.class, ReconnectReq::fromSON,
+        (req, c) -> onReconnect(c, req));
+  }
+
+  private Optional<String> onReconnect(Connection connection, ReconnectReq req) {
+    return userStore.disconnectedUsers().getByID(req.getID())
+        .map(s -> s.use(oldUser -> {
+          userStore.disconnectedUsers().removeByID(oldUser.getID());
+          final User user = new User(getUnusedUsername(req.getUsername()), oldUser.getID());
+          successfulLogin(connection, user);
+          return Optional.of(oldUser.getID());
+        }))
+        .orElseGet(() -> onLogin(connection, new LoginReq(req.getUsername())));
   }
 
   private void onConnectionClosed(String id) {
-    userStore.connectedUsers().removeByID(id);
+    userStore.connectedUsers().getByID(id).ifPresent(s -> s.consume(user -> {
+      userStore.disconnectedUsers().add(user);
+      userStore.connectedUsers().removeByID(id);
+    }));
 
     distributor.broadcast(new PlayerLeave(id));
   }
 
   private void attachHandlers(String id, Connection connection) {
-    connection.registerHandler(LoginReq.class, LoginReq::fromSON,
-        req -> onLogin(id, connection, req));
     connection.registerHandler(UsernameReq.class, UsernameReq::fromSON,
         req -> onUsernameChange(id, connection, req));
     connection.registerHandler(LogoutReq.class, LogoutReq::fromSON,
-        req -> onLogout(connection));
+        req -> onLogout(id, connection));
   }
 
-  private void onLogout(Connection connection) {
+  private void onLogout(String id, Connection connection) {
     try {
+      userStore.connectedUsers().removeByID(id);
       connection.close();
     } catch (IOException e) {
       //TODO: handle this accordingly
@@ -82,24 +104,34 @@ public class UserManager {
   /**
    * This function handles a user trying to log in to the server.
    *
-   * @param id the id of the user/connection as determined by the message distributor.
    * @param connection the connection belonging to the user.
    * @param loginReq the login request sent by the user.
+   * @return the id of the user.
    */
-  private void onLogin(String id, Connection connection, LoginReq loginReq) {
+  private Optional<String> onLogin(Connection connection, LoginReq loginReq) {
+    String id = IdUtils.generateId(GlobalSettings.SHARED_UUID_LENGTH);
     String username = loginReq.getUsername();
 
     username = getUnusedUsername(username);
     User user = new User(username, id);
+
+    successfulLogin(connection, user);
+
+    return Optional.of(id);
+  }
+
+  private void successfulLogin(Connection connection, User user) {
+    System.out.println("new user connected: " + user.getUsername() + ": " + user.getID());
+
     userStore.connectedUsers().add(user);
 
-    connection.sendMessage(new LoginRes(username, id));
+    connection.sendMessage(new LoginRes(user.getUsername(), user.getID()));
     InitialUsers initialUsers = new InitialUsers();
     userStore.connectedUsers().getAll().consume(
         users -> users.stream().map(synUser -> synUser.use(u -> u)).forEach(initialUsers::addUser));
     connection.sendMessage(initialUsers);
 
-    distributor.sendMessageToAllExcept(new PlayerJoin(user), id);
+    distributor.sendMessageToAllExcept(new PlayerJoin(user), user.getID());
   }
 
   private String getUnusedUsername(String requestedUsername) {

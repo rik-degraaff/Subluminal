@@ -28,16 +28,20 @@ public class Graph<E> {
    * @param symmetric determines whether the reachability of two given nodes shall be symmetric or
    * asymmetric.
    */
-  public Graph(Set<E> nodes, BiPredicate<E, E> canReach, BiFunction<E, E, Double> weightCalculator,
-      boolean symmetric) {
+  public Graph(
+      Set<E> nodes, BiPredicate<E, E> canReach, BiFunction<E, E, Double> weightCalculator,
+      boolean symmetric
+  ) {
     this.nodes = nodes.stream().map(Node::new).collect(Collectors.toSet());
 
     connectNodes(canReach, weightCalculator, symmetric);
+    System.out.println("path created");
+    nodes.forEach(n -> System.out.println(n.toString()));
   }
 
   private void connectNodes(BiPredicate<E, E> canReach, BiFunction<E, E, Double> weightCalculator,
       boolean symmetric) {
-    List<Node<E>> nodes = this.nodes.stream().collect(Collectors.toList());
+    List<Node<E>> nodes = new ArrayList<>(this.nodes);
 
     for (int i = 0; i < nodes.size(); i++) {
       int start = symmetric ? i + 1 : 0;
@@ -54,10 +58,6 @@ public class Graph<E> {
             n2.addNeighbour(n1, weight);
           }
         }
-        if (!symmetric && canReach.test(n2.getData(), n1.getData())) {
-          double weight = weightCalculator.apply(n2.getData(), n1.getData());
-          n2.addNeighbour(n1, weight);
-        }
       }
     }
   }
@@ -71,6 +71,7 @@ public class Graph<E> {
    * @return the node elements representing the shortest path from alpha to omega.
    */
   public List<E> findShortestPath(E alpha, E omega) {
+    System.out.println("PATH: " + alpha+ " " + omega);
     Node<E> start = nodes.stream()
         .filter(n -> n.getData().equals(alpha))
         .findFirst()

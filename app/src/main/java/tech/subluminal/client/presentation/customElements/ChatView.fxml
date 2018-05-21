@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
@@ -10,76 +15,77 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<fx:root type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8"
+<?import javafx.scene.shape.Box?>
+<?import javafx.scene.shape.Cylinder?>
+
+<fx:root fx:id="chatBox" maxWidth="1.7976931348623157E308" style="-fx-background-color: grey;"
+  styleClass="" type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8"
   xmlns:fx="http://javafx.com/fxml/1"
-  fx:controller="tech.subluminal.client.presentation.controller.ChatController"
-  styleClass="console">
-  <GridPane>
-    <columnConstraints>
-      <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="434.0" minWidth="10.0"
-        percentWidth="100.0"/>
-    </columnConstraints>
-    <rowConstraints>
-      <RowConstraints maxHeight="212.0" minHeight="10.0" prefHeight="211.0" vgrow="SOMETIMES"/>
-      <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="70.0" vgrow="NEVER"/>
-      <RowConstraints maxHeight="100.0" minHeight="10.0" prefHeight="70.0" vgrow="NEVER"/>
-    </rowConstraints>
-    <children>
-      <GridPane GridPane.rowIndex="2">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="400.0" minWidth="10.0" prefWidth="328.0"/>
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-        </rowConstraints>
-        <children>
-          <CheckBox fx:id="isGlobalShown" mnemonicParsing="false" onAction="#updateFilter"
-            selected="true" text="Show Global Chat" GridPane.rowIndex="1"/>
-          <GridPane fx:id="chatOptions">
-            <columnConstraints>
-              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
-              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"/>
-            </columnConstraints>
-            <rowConstraints>
-              <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
-            </rowConstraints>
-            <children>
-              <Button fx:id="sendAllButton" contentDisplay="CENTER"
-                maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#sendMessageAll"
-                prefHeight="25.0" text="Send All" GridPane.columnIndex="1">
-              </Button>
-              <Button fx:id="sendButton" contentDisplay="CENTER" maxWidth="1.7976931348623157E308"
-                mnemonicParsing="false" onAction="#sendMessage" prefHeight="25.0" text="Send">
-              </Button>
-            </children>
-          </GridPane>
-        </children>
-      </GridPane>
-      <GridPane style="-fx-background-color: black;" GridPane.rowIndex="1">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="212.0" minWidth="10.0" prefWidth="20.0"/>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="415.0" minWidth="10.0" prefWidth="380.0"/>
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-        </rowConstraints>
-        <children>
-          <TextField fx:id="messageText" onAction="#sendMessage" prefHeight="25.0" prefWidth="375.0"
-            GridPane.columnIndex="1">
-            <GridPane.margin>
-              <Insets/>
-            </GridPane.margin>
-          </TextField>
-          <Label style="-fx-background-color: transparent;" styleClass="font-dos" text="&gt;">
-            <padding>
-              <Insets left="5.0"/>
-            </padding>
-          </Label>
-        </children>
-      </GridPane>
-      <ListView fx:id="chatHistory" prefHeight="200.0" style="-fx-background-color: black;"
-        GridPane.hgrow="NEVER" GridPane.vgrow="NEVER"/>
-    </children>
-  </GridPane>
+  fx:controller="tech.subluminal.client.presentation.controller.ChatController">
+  <children>
+    <Box fx:id="chat3DBox" depth="8.0" height="150.0" width="500.0" AnchorPane.bottomAnchor="0.0"
+      AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+    <GridPane hgap="10.0" prefHeight="140.0" AnchorPane.bottomAnchor="5.0"
+      AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+      <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="370.0" minWidth="10.0" prefWidth="340.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="224.0" minWidth="10.0" prefWidth="119.0"/>
+      </columnConstraints>
+      <rowConstraints>
+        <RowConstraints maxHeight="118.0" minHeight="10.0" prefHeight="109.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="65.0" minHeight="10.0" prefHeight="31.0" vgrow="SOMETIMES"/>
+      </rowConstraints>
+      <children>
+        <ListView fx:id="chatHistory" prefHeight="68.0" prefWidth="350.0"
+          style="-fx-background-color: black;" GridPane.hgrow="NEVER" GridPane.vgrow="NEVER"/>
+        <CheckBox fx:id="isGlobalShown" mnemonicParsing="false" onAction="#updateFilter"
+          selected="true" text="GLOBAL" GridPane.columnIndex="1" GridPane.halignment="CENTER"
+          GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
+        <GridPane style="-fx-background-color: black;" GridPane.rowIndex="1">
+          <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="212.0" minWidth="10.0" prefWidth="20.0"/>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="415.0" minWidth="10.0"
+              prefWidth="380.0"/>
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+          </rowConstraints>
+          <children>
+            <TextField fx:id="messageText" onAction="#sendMessage" prefHeight="25.0"
+              prefWidth="375.0" GridPane.columnIndex="1">
+              <GridPane.margin>
+                <Insets/>
+              </GridPane.margin>
+            </TextField>
+            <Label style="-fx-background-color: transparent;" styleClass="font-dos" text="&gt;">
+              <padding>
+                <Insets left="5.0"/>
+              </padding>
+            </Label>
+          </children>
+        </GridPane>
+        <GridPane fx:id="sendOptions" GridPane.columnIndex="1">
+          <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+          </rowConstraints>
+          <children>
+            <Box fx:id="sendBox" depth="5.0" height="30.0" width="100.0"/>
+            <Box fx:id="sendAllBox" depth="5.0" height="30.0" width="100.0" GridPane.rowIndex="1"/>
+            <Button fx:id="sendButton" contentDisplay="CENTER" maxWidth="1.7976931348623157E308"
+              mnemonicParsing="false" onAction="#sendMessage" prefHeight="25.0"
+              styleClass="button3D" text="SEND">
+            </Button>
+            <Button fx:id="sendAllButton" contentDisplay="CENTER" maxWidth="1.7976931348623157E308"
+              mnemonicParsing="false" onAction="#sendMessageAll" prefHeight="6.0" prefWidth="111.0"
+              styleClass="button3D" text="SEND ALL" GridPane.rowIndex="1">
+            </Button>
+          </children>
+        </GridPane>
+      </children>
+    </GridPane>
+  </children>
 </fx:root>

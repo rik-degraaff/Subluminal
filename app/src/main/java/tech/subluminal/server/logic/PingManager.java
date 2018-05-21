@@ -10,6 +10,7 @@ import tech.subluminal.shared.logic.PingResponder;
 import tech.subluminal.shared.messages.Ping;
 import tech.subluminal.shared.messages.Pong;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.records.GlobalSettings;
 import tech.subluminal.shared.stores.records.SentPing;
 import tech.subluminal.shared.stores.records.User;
 
@@ -61,20 +62,21 @@ public class PingManager {
         e.printStackTrace(); // TODO: do something sensible
       }
 
-      Set<SentPing> pings = userStore.connectedUsers().getAll().use(us ->
-          us.stream()
-              .map(syncUser -> syncUser.use(User::getID))
-              .map(id -> new SentPing(System.currentTimeMillis(), id, generateId(8)))
-              .collect(Collectors.toSet())
-      );
-
-      pings.forEach(p -> distributor.sendMessage(new Ping(p.getID()), p.getUserID()));
-
       pingStore.sentPings().sync(() -> {
+        Set<SentPing> pings = userStore.connectedUsers().getAll().use(us ->
+            us.stream()
+                .map(syncUser -> syncUser.use(User::getID))
+                .map(id -> new SentPing(System.currentTimeMillis(), id, generateId(GlobalSettings.SHARED_UUID_LENGTH)))
+                .collect(Collectors.toSet())
+        );
+
+        pings.forEach(p -> {
+          distributor.sendMessage(new Ping(p.getID()), p.getUserID());
+        });
+
         Set<String> usersWithPings = pingStore.sentPings().getUsersWithPings();
-        usersWithPings.forEach(System.out::println);
         usersWithPings.forEach(distributor::closeConnection);
-        pingStore.sentPings().removeAll();
+        pingStore.sentPings().clear();
         pings.forEach(pingStore.sentPings()::add);
       });
     }

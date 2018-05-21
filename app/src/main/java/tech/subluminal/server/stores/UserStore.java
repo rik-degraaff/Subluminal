@@ -1,6 +1,7 @@
 package tech.subluminal.server.stores;
 
 import tech.subluminal.shared.stores.IdentifiableCollection;
+import tech.subluminal.shared.stores.SingleEntity;
 import tech.subluminal.shared.stores.records.User;
 
 /**
@@ -9,4 +10,6 @@ import tech.subluminal.shared.stores.records.User;
 public interface UserStore extends ReadOnlyUserStore {
 
   IdentifiableCollection<User> connectedUsers();
+
+  IdentifiableCollection<User> disconnectedUsers();
 }

@@ -24,16 +24,12 @@ public class PlayerJoinTest {
   }
 
   @Test
-  public void testParsing() {
+  public void testParsing() throws SONParsingError, SONConversionError {
     String PlayerJoinTestMsg = this.playerJoin.asSON().asString();
     String parsedUsername = "";
     String parsedID = "";
     PlayerJoin parsedPlayerJoin = null;
-    try {
-      parsedPlayerJoin = PlayerJoin.fromSON(SON.parse(PlayerJoinTestMsg));
-    } catch (SONParsingError | SONConversionError e) {
-      e.printStackTrace();
-    }
+    parsedPlayerJoin = PlayerJoin.fromSON(SON.parse(PlayerJoinTestMsg));
     Assert.assertEquals(parsedPlayerJoin.getUser().getUsername(), this.username);
     Assert.assertEquals(parsedPlayerJoin.getUser().getID(), this.id);
     System.out.println(PlayerJoinTestMsg);
@@ -58,28 +54,24 @@ public class PlayerJoinTest {
     try {
       parsedPlayerJoin = PlayerJoin.fromSON(SON.parse(faultyUserKey));
     } catch(SONParsingError | SONConversionError e) {
-      e.printStackTrace();
       userSuccessfullyParsed = false;
     }
 
     try {
       parsedPlayerJoin = PlayerJoin.fromSON(SON.parse(faultyUsernameKey));
     } catch(SONParsingError | SONConversionError e) {
-      e.printStackTrace();
       usernameSuccessfullyParsed = false;
     }
 
     try {
       parsedPlayerJoin = PlayerJoin.fromSON(SON.parse(faultyIdentifiableKey));
     } catch(SONParsingError | SONConversionError e) {
-      e.printStackTrace();
       identifiableSuccessfullyParsed = false;
     }
 
     try {
       parsedPlayerJoin = PlayerJoin.fromSON(SON.parse(faultyIDKey));
     } catch(SONParsingError | SONConversionError e) {
-      e.printStackTrace();
       IDSuccessfullyParsed = false;
     }
 

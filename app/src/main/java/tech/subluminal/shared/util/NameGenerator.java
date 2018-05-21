@@ -13,15 +13,16 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
+import tech.subluminal.shared.records.GlobalSettings;
 
 public class NameGenerator {
 
-  Random rand = new Random(); //TODO: Global Seed
+  private Random rand = new Random(GlobalSettings.SHARED_RANDOM.nextLong());
   private List<List<String>> starNames = new ArrayList<>();
   private List<Integer> starListWeights = new ArrayList<>();
   private int sumWeights;
   private int fileCounter = 0;
-  private List<String> planetNames; //for later use
+  private List<String> planetNames; // for later use
 
   public NameGenerator() {
     readStarFiles();
@@ -75,7 +76,7 @@ public class NameGenerator {
   }
 
   public String getName() {
-    Random rand = new Random(); //TODO: Set seed from Global.Setings class
+    Random rand = new Random(GlobalSettings.SHARED_RANDOM.nextLong());
     int randRange = (int) (rand.nextDouble()*sumWeights);
     int tempIndex = 0;
     int tempSum = starListWeights.get(tempIndex);

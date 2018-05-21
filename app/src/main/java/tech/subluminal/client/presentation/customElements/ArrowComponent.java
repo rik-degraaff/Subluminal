@@ -15,17 +15,26 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import javafx.util.Duration;
 
+/**
+ * Represents the arrow which shows the player starting position.
+ */
 public class ArrowComponent extends Pane {
+
   private static final double DEFAULT_SIZE = 30.0;
   private final ObjectProperty fill = new SimpleObjectProperty();
 
-  public ArrowComponent(double size, DoubleProperty yProperty){
+  /**
+   * Initializes the arrow.
+   * @param size is the size of the arrow.
+   * @param yProperty is the vertical position of the arrow tip.
+   */
+  public ArrowComponent(double size, DoubleProperty yProperty) {
     super();
     setFill(Color.RED);
     VBox box = new VBox();
     box.setAlignment(Pos.CENTER);
 
-    Rectangle rect = new Rectangle(size/2, size);
+    Rectangle rect = new Rectangle(size / 2, size);
     rect.fillProperty().bind(fillProperty());
     box.getChildren().add(rect);
 
@@ -33,48 +42,41 @@ public class ArrowComponent extends Pane {
     head.getPoints().addAll(new Double[]{
         20.0, 00.0,
         0.0, 30.0,
-        40.0, 30.0 });
+        40.0, 30.0});
     head.fillProperty().bind(fillProperty());
 
     box.getChildren().add(0, head);
-    this.getChildren().add(0,box);
+    this.getChildren().add(0, box);
     Rotate rotate = new Rotate();
     rotate.setPivotX(0);
     rotate.setPivotY(0);
 
-
     yProperty.addListener(e -> {
-      if(yProperty.getValue() <= 100){
-        rotate.setPivotX(0);
-        rotate.setPivotY(0);
+      if (yProperty.getValue() <= 100) {
         rotate.setAngle(0);
-      }else{
-        rotate.setPivotX(0);
-        rotate.setPivotY(0);
+        this.getTransforms().add(new Translate(0, 40));
+      } else {
         rotate.setAngle(180);
       }
     });
 
-
-
-
     this.getTransforms().add(rotate);
-    this.getTransforms().add(new Translate(-40/2, 0));
-    TranslateTransition transTl = new TranslateTransition(Duration.seconds(0.5),this);
+    this.getTransforms().add(new Translate(-40 / 2, 0));
+    TranslateTransition transTl = new TranslateTransition(Duration.seconds(0.5), this);
     Double from = 20.0;
     Double to = 30.0;
-    transTl.fromYProperty().bind(Bindings.createDoubleBinding(()->{
-      if(rotate.getAngle() == 0){
+    transTl.fromYProperty().bind(Bindings.createDoubleBinding(() -> {
+      if (rotate.getAngle() == 0) {
         return from * (-1);
-      }else{
+      } else {
         return from;
       }
     }));
 
-    transTl.toYProperty().bind(Bindings.createDoubleBinding(()->{
-      if(rotate.getAngle() == 0){
+    transTl.toYProperty().bind(Bindings.createDoubleBinding(() -> {
+      if (rotate.getAngle() == 0) {
         return to * (-1);
-      }else{
+      } else {
         return to;
       }
     }));
@@ -85,7 +87,7 @@ public class ArrowComponent extends Pane {
 
   }
 
-  public ArrowComponent(DoubleProperty yProperty){
+  public ArrowComponent(DoubleProperty yProperty) {
     this(DEFAULT_SIZE, yProperty);
   }
 

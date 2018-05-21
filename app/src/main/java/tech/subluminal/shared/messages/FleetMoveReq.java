@@ -7,7 +7,19 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Represents a fleet move request from a client to the server.
+ * Represents a fleet move request from a client to the server. A FleetMoveReq message, converted to
+ * SON and then to string, might look like this:
+ * <pre>
+ * {
+ *   "amount":i3,
+ *   "originID":s"1234",
+ *   "starList":l[
+ *     s"1234",
+ *     s"2345",
+ *     s"3456"
+ *   ]
+ * }
+ * </pre>
  */
 public class FleetMoveReq extends MoveReq {
 

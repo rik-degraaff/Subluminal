@@ -1,36 +1,54 @@
 package tech.subluminal.client.presentation.controller;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.animation.TranslateTransition;
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.PauseTransition;
+import javafx.animation.SequentialTransition;
+import javafx.animation.Timeline;
+import javafx.animation.Transition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.event.Event;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.transform.Rotate;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.pmw.tinylog.Logger;
+import tech.subluminal.client.presentation.KeyMap;
 import tech.subluminal.client.presentation.customElements.BackgroundComponent;
 import tech.subluminal.client.presentation.customElements.ChatComponent;
 import tech.subluminal.client.presentation.customElements.ControlButton;
 import tech.subluminal.client.presentation.customElements.DebugComponent;
+import tech.subluminal.client.presentation.customElements.DisplayComponent;
 import tech.subluminal.client.presentation.customElements.FpsUpdater;
 import tech.subluminal.client.presentation.customElements.GameComponent;
 import tech.subluminal.client.presentation.customElements.HighscoreComponent;
@@ -41,81 +59,80 @@ import tech.subluminal.client.presentation.customElements.NameChangeComponent;
 import tech.subluminal.client.presentation.customElements.SettingsComponent;
 import tech.subluminal.client.presentation.customElements.UserListComponent;
 import tech.subluminal.client.presentation.customElements.WindowContainerComponent;
+import tech.subluminal.client.presentation.customElements.custom3DComponents.Button3dComponent;
+import tech.subluminal.client.presentation.customElements.custom3DComponents.CockpitComponent;
 import tech.subluminal.client.stores.LobbyStore;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.server.stores.records.HighScore;
 
 public class MainController implements Initializable {
 
+  private final Timeline chatDownTl = new Timeline();
+  private KeyMap keyMap;
+  List<Node> tempMenu = new ArrayList<>();
   @FXML
   private AnchorPane spaceBackgroundDock;
-
-  @FXML
-  private VBox leftSideDock;
-
-  @FXML
-  private VBox rightSideDock;
-
   @FXML
   private AnchorPane menuDock;
-
   @FXML
   private AnchorPane playArea;
-
-  @FXML
-  private Rectangle chatHandle;
-
   private BackgroundComponent background;
-
   private MenuComponent menu;
-
   private SettingsComponent settings;
-
-
   private LobbyComponent lobby;
-
   @FXML
   private WindowContainerComponent windowContainer;
-
   @FXML
   private AnchorPane window;
-
   @FXML
   private AnchorPane chatDock;
-
-  @FXML
-  private AnchorPane chatWindow;
-
   @FXML
   private AnchorPane playerBoardDock;
-
   @FXML
   private VBox statusBoxDock;
-
+  @FXML
+  private AnchorPane boardComputer;
+  @FXML
+  private AnchorPane boardComputerWrapper;
+  @FXML
+  private Cylinder boardCylinder;
+  @FXML
+  private GridPane buttonsDock;
+  @FXML
+  private GridPane monitorDock;
+  @FXML
+  private AnchorPane glassPane;
+  @FXML
+  private AnchorPane leverDock;
+  @FXML
+  private AnchorPane cockpitDock;
+  @FXML
+  private AnchorPane menuHolder;
+  @FXML
+  private AnchorPane introPane;
+  @FXML
+  private HBox introBoxHolder;
   private GameComponent game;
-
   private UserStore userStore;
-
   private LobbyStore lobbyStore;
-
   private GameController gameController;
-
   private ChatComponent chat;
-
   private ChatController chatController;
-
   private UserListComponent userList;
-
   private UserListController userListController;
-
-  private boolean chatOut = false;
+  private boolean chatDown = true;
   private NameChangeComponent nameChange;
   private ControlButton playerListButton;
   private ControlButton nameChangeButton;
-  private ControlButton settingsButton;
-  private DebugComponent debug;
-  private MonitorComponent monitor;
+  private DebugComponent fpsTracker;
+  private MonitorComponent fpsMonitor;
+  private DebugComponent tpsTracker;
+  private MonitorComponent tpsMonitor;
   private HighscoreComponent highscore;
+  private DisplayComponent display;
+  private Timeline chatUpTl = new Timeline();
+  private Stage scene;
+  private DoubleProperty tpsProperty = new SimpleDoubleProperty();
 
   public LobbyComponent getLobby() {
     return lobby;
@@ -138,28 +155,120 @@ public class MainController implements Initializable {
 
   @Override
   public void initialize(URL location, ResourceBundle resources) {
-    background = new BackgroundComponent(100);
+    keyMap = new KeyMap();
+
+    introPane.setBackground(
+        new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
+
+    Label introText = new Label();
+    introText.setTextAlignment(TextAlignment.CENTER);
+    introText.setTranslateY(-100);
+    introText.setWrapText(true);
+    introText.getStyleClass().addAll("console-red", "intro-text");
+    introBoxHolder.getChildren().addAll(introText);
+
+    String introStory = "In a basement just around your corner, we once were created.\nAnd now we are set to conquer the galaxy...";
+
+    SequentialTransition mainTl = new SequentialTransition();
+    PauseTransition pauseTl = new PauseTransition(Duration.seconds(2));
+    PauseTransition pauseTl2 = new PauseTransition(Duration.seconds(2));
+
+    Timeline timeTl = new Timeline();
+
+    timeTl.getKeyFrames()
+        .add(new KeyFrame(Duration.seconds(0.5), "0", e -> {
+          if (introText.getText().length() >= introStory.length() && introText.getText()
+              .charAt(introText.getText().length() - 1) == ' ') {
+            introText
+                .setText(introText.getText().substring(0, introText.getText().length() - 1) + "|");
+          } else {
+            introText.setText(introText.getText() + "|");
+          }
+
+        }));
+    timeTl.getKeyFrames()
+        .add(new KeyFrame(Duration.seconds(1), "1", e -> {
+          if (introText.getText().length() >= introStory.length() - 1 && introText.getText()
+              .charAt(introText.getText().length() - 1) == ' ') {
+            introText.setText(introText.getText().substring(0, introText.getText().length() - 1));
+          } else {
+            introText
+                .setText(introText.getText().substring(0, introText.getText().length() - 1) + " ");
+          }
+        }));
+
+    timeTl.setCycleCount(Timeline.INDEFINITE);
+
+    final Animation animation = new Transition() {
+      {
+        setCycleDuration(Duration.millis(5000));
+      }
+
+      protected void interpolate(double frac) {
+        final int length = introStory.length();
+        final int n = Math.round(length * (float) frac);
+        introText.setText(introStory.substring(0, n));
+      }
+
+    };
+
+    FadeTransition fadeTl = new FadeTransition();
+    fadeTl.setNode(introPane);
+    fadeTl.setToValue(0);
+    fadeTl.setFromValue(1);
+    fadeTl.setDuration(Duration.seconds(2));
+
+    mainTl.getChildren().addAll(pauseTl, animation, pauseTl2, fadeTl);
+    timeTl.play();
+    mainTl.play();
+
+    mainTl.setOnFinished(e -> {
+      clearIntro(timeTl);
+    });
+
+    background = new BackgroundComponent(1000);
     spaceBackgroundDock.getChildren().add(background);
+
+    CockpitComponent cockpit = new CockpitComponent();
+    cockpitDock.getChildren().addAll(cockpit);
+    cockpit.setVisible(true);
+
+    Rectangle clipNode = new Rectangle();
+    clipNode.widthProperty().bind(playArea.widthProperty());
+    clipNode.heightProperty().bind(playArea.heightProperty());
+    playArea.setClip(clipNode);
+
+    playArea.setBackground(new Background(
+        new BackgroundImage(new Image("/tech/subluminal/resources/Pixel_Overlay.png"),
+            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+            BackgroundSize.DEFAULT)));
 
     chat = new ChatComponent(this);
     chatController = chat.getChatcontroller();
     chatDock.getChildren().add(chat);
 
-    userList = new UserListComponent(this);
-    playerListButton = new ControlButton(this, "P", userList, statusBoxDock);
-    rightSideDock.getChildren().add(playerListButton);
+    //LeverComponent lever = new LeverComponent();
+    //leverDock.getChildren().addAll(lever);
+    //leverDock.setBackground(new Background(new BackgroundFill(Color.RED,CornerRadii.EMPTY,Insets.EMPTY)));
+
+    display = new DisplayComponent();
+
+    userList = new UserListComponent(this, display);
+    playerListButton = new ControlButton(this, "P", userList, display);
+
+    userList.prefWidthProperty().bind(display.widthProperty());
+    userList.prefHeightProperty().bind(display.heightProperty());
 
     userListController = userList.getController();
 
     nameChange = new NameChangeComponent(this);
-    nameChangeButton = new ControlButton(this, "C", nameChange, statusBoxDock);
-    rightSideDock.getChildren().add(nameChangeButton);
+    nameChangeButton = new ControlButton(this, "C", nameChange, display);
+    //rightSideDock.getChildren().add(nameChangeButton);
     //rightSideDock.getChildren().add(nameChange);
 
     menu = new MenuComponent(this);
-    settings = new SettingsComponent(this);
-    settingsButton = new ControlButton(this, "S", settings, statusBoxDock);
-    rightSideDock.getChildren().add(settingsButton);
+    settings = new SettingsComponent(this, keyMap);
+    //rightSideDock.getChildren().add(settingsButton);
 
     highscore = new HighscoreComponent();
 
@@ -168,57 +277,147 @@ public class MainController implements Initializable {
     game = new GameComponent(this);
     gameController = game.getController();
 
-    playArea.setMouseTransparent(true);
+    //playArea.setMouseTransparent(true);
 
     menuDock.getChildren().add(menu);
 
     FpsUpdater updater = new FpsUpdater();
 
-    debug = new DebugComponent(updater.averageFpsProperty());
-    monitor = new MonitorComponent(updater.averageFpsProperty());
+    fpsTracker = new DebugComponent(updater.averageFpsProperty(), "FPS");
+    fpsMonitor = new MonitorComponent(updater.averageFpsProperty(), "FPS");
+
+    tpsTracker = new DebugComponent(tpsProperty, "TPS");
+    tpsMonitor = new MonitorComponent(tpsProperty, "TPS");
 
     VBox debugDock = new VBox();
     window.getChildren().add(debugDock);
 
+    Rotate rotate = new Rotate(-60, 0, 0, 0, Rotate.X_AXIS);
+    rotate.pivotYProperty().bind(boardComputerWrapper.heightProperty());
+    boardComputer.getTransforms().add(rotate);
+
+    Rotate rotateTl = new Rotate();
+    rotateTl.pivotYProperty().bind(chat.heightProperty());
+    rotateTl.setPivotX(0);
+    rotateTl.setPivotZ(0);
+    rotateTl.setAxis(Rotate.X_AXIS);
+    chat.getTransforms().add(rotateTl);
+
+    chatUpTl.getKeyFrames().add(
+        new KeyFrame(Duration.seconds(0.7), new KeyValue(rotateTl.angleProperty(), 60))
+    );
+
+    chatDownTl.getKeyFrames()
+        .add(new KeyFrame(Duration.seconds(0.7), new KeyValue(rotateTl.angleProperty(), 0)));
+
+    boardComputer.setOnMouseClicked((e) -> {
+      toggleChat();
+    });
+
+    Button3dComponent settingButton = new Button3dComponent("S");
+    settingButton.setOnMouseClicked((e) -> {
+      Button3dComponent settingClose = new Button3dComponent("X");
+      settingClose.setOnMouseClicked(event -> {
+        onWindowClose();
+        event.consume();
+        buttonsDock.getChildren().remove(settingButton);
+        buttonsDock.add(settingButton, 0, 0);
+      });
+      buttonsDock.getChildren().remove(settingButton);
+      buttonsDock.add(settingClose, 0, 0);
+      onSettingOpenHandle();
+      e.consume();
+    });
+
+    buttonsDock.add(settingButton, 0, 0);
+    buttonsDock.add(playerListButton, 0, 1);
+    buttonsDock.add(nameChangeButton, 0, 2);
+
+    bindDockButtons(settingButton);
+    bindDockButtons(playerListButton);
+    bindDockButtons(nameChangeButton);
+
+    monitorDock.add(display, 1, 0);
+
     window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
-      if (keyEvent.getCode() == KeyCode.F4) {
-        if (debugDock.getChildren().contains(debug)) {
-          debugDock.getChildren().remove(debug);
+      if (keyEvent.getCode() == keyMap.get("FPS").get()) {
+        if (debugDock.getChildren().contains(fpsTracker)) {
+          debugDock.getChildren().remove(fpsTracker);
         } else {
-          debugDock.getChildren().add(debug);
+          debugDock.getChildren().add(fpsTracker);
         }
-      } else if (keyEvent.getCode() == KeyCode.F5) {
-        if (debugDock.getChildren().contains(monitor)) {
-          debugDock.getChildren().remove(monitor);
+      } else if (keyEvent.getCode() == keyMap.get("FPSMonitor").get()) {
+        if (debugDock.getChildren().contains(fpsMonitor)) {
+          debugDock.getChildren().remove(fpsMonitor);
         } else {
-          debugDock.getChildren().add(monitor);
+          debugDock.getChildren().add(fpsMonitor);
         }
+      } else if (keyEvent.getCode() == keyMap.get("TPS").get()) {
+        if (debugDock.getChildren().contains(tpsTracker)) {
+          debugDock.getChildren().remove(tpsTracker);
+        } else {
+          debugDock.getChildren().add(tpsTracker);
+        }
+      } else if (keyEvent.getCode() == keyMap.get("TPSMonitor").get()) {
+        if (debugDock.getChildren().contains(tpsMonitor)) {
+          debugDock.getChildren().remove(tpsMonitor);
+        } else {
+          debugDock.getChildren().add(tpsMonitor);
+        }
+      } else if (keyEvent.getCode() == keyMap.get("Settings").get()) {
+        onSettingOpenHandle();
+      } else if (keyEvent.getCode() == keyMap.get("Skip").get()) {
+        clearIntro(timeTl);
       }
     });
 
-    Platform.runLater(() -> {
-      chatWindow.translateXProperty().bind(Bindings
-          .createDoubleBinding(() -> chatDock.getWidth(), chatWindow.widthProperty(),
-              chatDock.widthProperty()));
-
-    });
-
-    chatHandle.setOnMouseClicked(e -> {
-      Logger.debug("pressed");
-      chatWindow.translateXProperty().unbind();
-      TranslateTransition transTl = new TranslateTransition(Duration.seconds(0.2), chatWindow);
-      double width = chatDock.widthProperty().getValue();
-      if (chatOut) {
-        transTl.setToX(width);
-        transTl.play();
-        chatOut = false;
-      } else {
-        transTl.setToX(-30);
-        transTl.play();
-        chatOut = true;
+    window.addEventHandler(KeyEvent.KEY_RELEASED, keyEvent -> {
+      if (keyEvent.getCode() == keyMap.get("Chat").getValue()) {
+        toggleChat();
       }
     });
 
+  }
+
+  private void toggleChat() {
+    if (chatDown) {
+      openChat();
+    } else if (!chat.getTextField().isFocused()) {
+      closeChat();
+    }
+  }
+
+  private void closeChat() {
+    chatUpTl.stop();
+    chatDownTl.play();
+    chatDown = true;
+  }
+
+  private void openChat() {
+    chatDownTl.stop();
+    chatUpTl.play();
+    chatController.requestFocus();
+    chatDown = false;
+  }
+
+  private void clearIntro(Timeline timeTl) {
+    introPane.setMouseTransparent(true);
+    introPane.setVisible(false);
+    timeTl.stop();
+  }
+
+  private void bindDockButtons(Button3dComponent button) {
+    button.prefWidthProperty().bind(buttonsDock.widthProperty());
+    button.prefHeightProperty().bind(Bindings
+        .createDoubleBinding(() -> buttonsDock.getHeight() / buttonsDock.getChildren().size(),
+            buttonsDock.heightProperty(), buttonsDock.getChildren()));
+  }
+
+  private void bindDockButtons(ControlButton button) {
+    button.prefWidthProperty().bind(buttonsDock.widthProperty());
+    button.prefHeightProperty().bind(Bindings
+        .createDoubleBinding(() -> buttonsDock.getHeight() / buttonsDock.getChildren().size(),
+            buttonsDock.heightProperty(), buttonsDock.getChildren()));
   }
 
   public MainController getController() {
@@ -233,65 +432,99 @@ public class MainController implements Initializable {
     return this.userListController;
   }
 
-  public void onWindowResizeHandle(int diffX, int diffY) {
-    background.onWindowResize(diffX, diffY);
-  }
-
+  /**
+   * Creates a windows when the play button is pressed.
+   */
   public void onLobbyOpenHandle() {
-    menuDock.getChildren().clear();
+    saveMenuState();
 
     windowContainer = new WindowContainerComponent(this, lobby, "Lobbies");
-    //lobby.setUserActive();
+
+    fitWindow();
 
     menuDock.getChildren().add(windowContainer);
     windowContainer.onWindowOpen();
   }
 
+  /**
+   * Creates a window when the settings button is pressed.
+   */
   public void onSettingOpenHandle() {
-    menuDock.getChildren().remove(menu);
+    saveMenuState();
 
     windowContainer = new WindowContainerComponent(this, settings, "Settings");
 
+    fitWindow();
+
     menuDock.getChildren().add(windowContainer);
     windowContainer.onWindowOpen();
   }
 
+  private void fitWindow() {
+    Platform.runLater(() -> {
+      windowContainer.prefHeightProperty().bind(playArea.prefHeightProperty());
+      windowContainer.prefWidthProperty().bind(playArea.prefWidthProperty());
+
+    });
+  }
+
+  private void saveMenuState() {
+    if (menuDock.getChildren().size() != 0) {
+      menuDock.getChildren().forEach(tempMenu::add);
+      menuDock.getChildren().clear();
+    }
+    menuDock.getChildren().remove(menu);
+
+    if (menuHolder.isMouseTransparent()) {
+      menuHolder.setMouseTransparent(false);
+    }
+  }
+
+  /**
+   * Removes a window from the dock.
+   */
   public void onWindowClose() {
     menuDock.getChildren().clear();
 
-    menuDock.getChildren().add(menu);
+    if (tempMenu != null && tempMenu.size() != 0) {
+      tempMenu.forEach(menuDock.getChildren()::add);
+      tempMenu.clear();
+      menuHolder.setMouseTransparent(false);
+    } else {
+      menuHolder.setMouseTransparent(true);
+    }
+
+
   }
 
+  public AnchorPane getPlayArea() {
+    return playArea;
+  }
+
+  /**
+   * Adds all the windows and buttons on game start.
+   */
   public void onMapOpenHandle() {
     Platform.runLater(() -> {
+
       menuDock.getChildren().clear();
 
-      playArea.setMouseTransparent(false);
+      menuHolder.setMouseTransparent(true);
 
-      rightSideDock.getChildren().clear();
-      Pane leftSide = new Pane();
-      leftSide.setPrefWidth(rightSideDock.getWidth());
-      leftSide.prefHeightProperty().bind(chat.getScene().heightProperty());
-      Background bg = new Background(
-          new BackgroundImage(
-              new Image("/tech/subluminal/resources/tile_texture.jpg", 50, 50, true, false),
-              BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT,
-              BackgroundSize.DEFAULT));
-      leftSide.setBackground(bg);
-      VBox rightSide = new VBox();
-      rightSide.setPrefWidth(leftSideDock.getWidth());
-      rightSide.prefHeightProperty().bind(chat.getScene().heightProperty());
-      rightSide.setBackground(bg);
-      leftSideDock.getChildren().add(leftSide);
-      rightSideDock.getChildren().clear();
-      rightSideDock.getChildren().add(rightSide);
+      //rightSideDock.getChildren().clear();
 
-      Button leave = new Button("X");
-      leave.setOnAction(event -> {
+      Button3dComponent leave = new Button3dComponent("LEAVE");
+      leave.prefHeightProperty().bind(Bindings
+          .createDoubleBinding(() -> buttonsDock.getHeight() / buttonsDock.getChildren().size(),
+              buttonsDock.heightProperty(), buttonsDock.getChildren()));
+      leave.prefWidthProperty().bind(buttonsDock.widthProperty());
+      leave.setOnMouseClicked(event -> {
         gameController.leaveGame();
         Logger.debug("LEAVE PLZ");
       });
-      rightSide.getChildren().addAll(leave, settingsButton, playerListButton, nameChangeButton);
+
+      buttonsDock.addRow(3);
+      buttonsDock.add(leave, 0, 3);
       //rightSide.getChildren().add(new Label("this is a test"));
 
       chatController.setInGame(true);
@@ -299,59 +532,56 @@ public class MainController implements Initializable {
     });
   }
 
+  /**
+   * Removes the game windows components.
+   */
   public void onMapCloseHandle() {
     playArea.getChildren().clear();
-    rightSideDock.getChildren().clear();
-    leftSideDock.getChildren().clear();
 
-    rightSideDock.getChildren().addAll(settingsButton, playerListButton, nameChangeButton);
     playArea.setMouseTransparent(true);
     gameController.clearMap();
     chatController.setInGame(false);
 
+    menuHolder.setMouseTransparent(false);
+
     menuDock.getChildren().add(menu);
   }
 
+  public void setTps(double tps) {
+    Platform.runLater(() -> tpsProperty.setValue(tps));
+  }
+
+  /**
+   * Removes a window component from the menu dock.
+   */
   public void removeWindow() {
     menuDock.getChildren().clear();
-
     menuDock.getChildren().add(menu);
-  }
 
-  public void onLobbyCreateHandle() {
-
+    if (menuHolder.isMouseTransparent()) {
+      menuHolder.setMouseTransparent(false);
+    }
   }
 
   public void sendRecipiantToChat(String recipiant) {
     chatController.writeAt(recipiant);
-    if (!chatOut) {
-      openChat();
-    }
   }
 
-  public void openChat() {
-    fireMouseClick(chatHandle);
-  }
-
-  private void fireMouseClick(Node node) {
-    if (!chatOut) {
-      MouseEvent event = new MouseEvent(MouseEvent.MOUSE_CLICKED,
-          node.getLayoutX(), node.getLayoutY(), node.getLayoutX(), node.getLayoutY(),
-          MouseButton.PRIMARY, 1,
-          true, true, true, true, true, true, true, true, true, true, null);
-      Event.fireEvent(chatHandle, event);
-    }
-  }
 
   public GameController getGameController() {
     return gameController;
   }
 
+  /**
+   * Gets triggered when opening the highscore view via a button.
+   */
   public void onHighscoreHandle() {
     chatController.requestHighscores();
-    menuDock.getChildren().remove(menu);
+    saveMenuState();
 
     windowContainer = new WindowContainerComponent(this, highscore, "Highscore");
+
+    fitWindow();
 
     menuDock.getChildren().add(windowContainer);
     windowContainer.onWindowOpen();
@@ -359,5 +589,13 @@ public class MainController implements Initializable {
 
   public void onUpdateHighscoreHandle(List<HighScore> highScores) {
     highscore.update(highScores);
+  }
+
+  public Stage getScene() {
+    return scene;
+  }
+
+  public void setScene(Stage scene) {
+    this.scene = scene;
   }
 }

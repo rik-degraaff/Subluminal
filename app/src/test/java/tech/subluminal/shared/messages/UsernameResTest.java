@@ -22,15 +22,11 @@ public class UsernameResTest {
   }
 
   @Test
-  public void testParsing() {
+  public void testParsing() throws SONParsingError, SONConversionError {
     String usernameResMsg = this.usernameRes.asSON().asString();
-    try {
-      UsernameRes parsedUsernameRes = UsernameRes.fromSON(SON.parse(usernameResMsg));
-      String parsedUsername = parsedUsernameRes.getUsername();
-      assertEquals(parsedUsername, this.username);
-    } catch (SONConversionError | SONParsingError e) {
-      e.printStackTrace();
-    }
+    UsernameRes parsedUsernameRes = UsernameRes.fromSON(SON.parse(usernameResMsg));
+    String parsedUsername = parsedUsernameRes.getUsername();
+    assertEquals(parsedUsername, this.username);
     System.out.println(usernameResMsg);
   }
 
@@ -41,7 +37,6 @@ public class UsernameResTest {
     try {
       UsernameRes parsedUsernameRes = UsernameRes.fromSON(SON.parse(faultyUsernameResMsg));
     } catch (SONParsingError | SONConversionError e) {
-      e.printStackTrace();
       parsingSucceeded = false;
     }
     assertFalse(parsingSucceeded);

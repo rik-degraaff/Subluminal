@@ -3,6 +3,7 @@ package tech.subluminal.client.presentation;
 import java.util.List;
 import java.util.Map;
 import javafx.scene.paint.Color;
+import tech.subluminal.client.stores.GameStore;
 
 public interface GamePresenter {
 
@@ -21,6 +22,14 @@ public interface GamePresenter {
   void removeMotherShips(List<String> removedMotherShips);
 
   void setGameID(String gameID);
+
+  void setGameStore(GameStore gameStore);
+
+  void clearGame();
+
+  void addToast(String message, boolean permanent);
+
+  void setTps(double tps);
 
   interface Delegate {
 
