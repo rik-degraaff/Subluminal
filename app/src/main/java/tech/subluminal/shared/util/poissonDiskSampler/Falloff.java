@@ -3,9 +3,6 @@ package tech.subluminal.shared.util.poissonDiskSampler;
 /**
  * A function that represents a cone - a linear falloff from a given point, but
  * clamped so that it cannot exceed a certain value.
- * 
- * @author Herman Tulleken
- * 
  */
 public class Falloff extends RealFunction2DDouble
 {

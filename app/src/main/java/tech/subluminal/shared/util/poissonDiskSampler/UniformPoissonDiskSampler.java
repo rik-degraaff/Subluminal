@@ -7,11 +7,9 @@ import tech.subluminal.shared.stores.records.game.Coordinates;
 
 
 /**
- * Algorithm based on <emph>Fast Poisson Disk Sampling in Arbitrary Dimensions</emph> by Robert
+ * Algorithm based on <i>Fast Poisson Disk Sampling in Arbitrary Dimensions</i> by Robert
  * Bridson. To use, construct a new PoissonDisk with suitable parameters, and call generate to get a
  * list of points.
- *
- * @author Herman Tulleken
  */
 public class UniformPoissonDiskSampler {
 

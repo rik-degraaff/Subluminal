@@ -2,8 +2,6 @@ package tech.subluminal.shared.util.poissonDiskSampler;
 
 /**
  * A class that wraps a RealFunction2D in a RealFunction2DDouble object.
- * 
- * @author Herman Tulleken
  */
 public class RealFunction2DWrapper extends RealFunction2DDouble
 {
