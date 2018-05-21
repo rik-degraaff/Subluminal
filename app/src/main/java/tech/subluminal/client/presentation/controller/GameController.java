@@ -128,9 +128,14 @@ public class GameController implements Initializable, GamePresenter {
           path.clear();
         }
         //System.out.println(pressStore[0].getStarID() + " " + pressStore[1].getStarID());
-
-        this.path = graph
-            .findShortestPath(pressStore[0].getStarID(), pressStore[1].getStarID());
+        try {
+          this.path = graph
+              .findShortestPath(pressStore[0].getStarID(), pressStore[1].getStarID());
+        } catch (IllegalStateException e) {
+          calculateGraph();
+          this.path = graph
+              .findShortestPath(pressStore[0].getStarID(), pressStore[1].getStarID());
+        }
         if (!path.isEmpty()) {
           removeJumpPath();
           createJumpPath(path);
@@ -242,13 +247,17 @@ public class GameController implements Initializable, GamePresenter {
       if (graph != null) {
         return;
       }
-      this.graph = new Graph<>(stars.keySet(),
-          (s1, s2) -> starMap.get(s1).getDistanceFrom(starMap.get(s2)) <= starMap.get(s1).getJump(),
-          (s1, s2) -> starMap.get(s1).getDistanceFrom(starMap.get(s2)),
-          false);
+      calculateGraph();
     });
 
 
+  }
+
+  private void calculateGraph() {
+    this.graph = new Graph<>(stars.keySet(),
+        (s1, s2) -> starMap.get(s1).getDistanceFrom(starMap.get(s2)) <= starMap.get(s1).getJump(),
+        (s1, s2) -> starMap.get(s1).getDistanceFrom(starMap.get(s2)),
+        false);
   }
 
   @Override
