@@ -45,7 +45,7 @@ public class IntermediateGameState {
       Comparator.reverseOrder());
   private final double shipSpeed;
 
-  public IntermediateGameState(double deltaTime, Map<String, Star> stars, Set<String> players,
+  IntermediateGameState(double deltaTime, Map<String, Star> stars, Set<String> players,
       double shipSpeed, Set<Signal> signals) {
     this.deltaTime = deltaTime;
     this.stars = stars;
@@ -127,7 +127,7 @@ public class IntermediateGameState {
   }
 
   private void moveFleet(double start, String playerID, String fleetID, double deltaTimeLeft) {
-    if (fleetsUnderway.get(playerID).get(fleetID) == null) {
+    if (fleetsUnderway.get(playerID) == null || fleetsUnderway.get(playerID).get(fleetID) == null) {
       return;
     }
 
@@ -162,7 +162,7 @@ public class IntermediateGameState {
   }
 
   private void moveMotherShip(double start, String playerID, String shipID, double deltaTimeLeft) {
-    if (!motherShipsUnderway.get(playerID).isPresent()) {
+    if (motherShipsUnderway.get(playerID) == null || !motherShipsUnderway.get(playerID).isPresent()) {
       return;
     }
 
