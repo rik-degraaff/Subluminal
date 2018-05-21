@@ -6,12 +6,10 @@ import java.util.Random;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 
 /**
- * Algorithm based on <emph>Fast Poisson Disk Sampling in Arbitrary Dimensions</emph> by Robert
- * Bridson, but with an arbitrary minimum distance function. See also the paper <emph>A Spatial Data
- * Structure for Fast Poisson-Disk Sample Generation</emph> Daniel Dunbar and Greg Humphreys for
+ * Algorithm based on <i>Fast Poisson Disk Sampling in Arbitrary Dimensions</i> by Robert
+ * Bridson, but with an arbitrary minimum distance function. See also the paper <i>A Spatial Data
+ * Structure for Fast Poisson-Disk Sample Generation</i> Daniel Dunbar and Greg Humphreys for
  * other algorithms and a comparrisson.
- *
- * @author Herman Tulleken
  */
 public class PoissonDiskSampler {
 

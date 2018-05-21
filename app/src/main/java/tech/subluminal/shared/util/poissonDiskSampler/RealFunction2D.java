@@ -2,8 +2,6 @@ package tech.subluminal.shared.util.poissonDiskSampler;
 
 /**
  * Class suitable for representing mappings from discrete 2D space to [0, 1]
- * 
- * @author Herman
  */
 public abstract class RealFunction2D
 {
