@@ -46,6 +46,14 @@ public class LobbyManager {
   private final GameStarter gameStarter;
   private final MessageDistributor distributor;
 
+  /**
+   * Cerates a lobby manager with all dependencies
+   *
+   * @param lobbyStore where the lobbies are stored.
+   * @param userStore where the users are read from.
+   * @param distributor the distributor this manager communicates with the client through.
+   * @param gameStarter is called when a game should be started for a lobby
+   */
   public LobbyManager(LobbyStore lobbyStore, ReadOnlyUserStore userStore,
       MessageDistributor distributor, GameStarter gameStarter) {
     this.gameStarter = gameStarter;
@@ -61,6 +69,7 @@ public class LobbyManager {
     lobbyStore.lobbies()
         .getLobbiesWithUser(id)
         .consume(coll -> coll.forEach(sync -> sync.consume(lobby -> {
+          // rejoin a lobby if this is a reconnect
           connection.sendMessage(new LobbyJoinRes(lobby));
         })));
   }
@@ -94,6 +103,7 @@ public class LobbyManager {
                     .equals(userID)))
                 .forEach(s -> s.consume(lobby -> {
                   lobby.setStatus(LobbyStatus.INGAME);
+                  // generate the colors for the players
                   List<Color> colors = getNiceColors(lobby.getPlayerCount());
                   int i = 0;
                   Map<String, Color> playerColors = new HashMap<>();
@@ -101,6 +111,7 @@ public class LobbyManager {
                     playerColors.put(player, colors.get(i));
                     i++;
                   }
+                  // inform all clients that the game has started
                   distributor.sendMessage(new GameStartRes(lobby.getID(), playerColors),
                       lobby.getPlayers());
 
@@ -111,6 +122,8 @@ public class LobbyManager {
                       .map(Optional::get)
                       .map(sync -> sync.use(Function.identity()))
                       .collect(Collectors.toMap(User::getID, User::getUsername));
+
+                  // start the game
                   gameStarter.startGame(lobby.getID(), players);
                 })));
   }
