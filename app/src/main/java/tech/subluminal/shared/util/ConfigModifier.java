@@ -37,8 +37,8 @@ public class ConfigModifier<k, v> {
       folderPath = configPath + DELIMETER_KEY + path.replace("/", DELIMETER_KEY);
       createDirectory(folderPath);
     } else {
-     configPath = "config";
-     folderPath = "config";
+     configPath = ".\\config";
+     folderPath = ".\\config\\settings";
     }
   }
 
