@@ -165,7 +165,5 @@ public class Graph<E> {
       this.distance = distance;
       this.path = path;
     }
-
   }
-
 }

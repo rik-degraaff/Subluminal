@@ -69,6 +69,17 @@ public class GameManager implements GameStarter {
   private final BiFunction<Map<String, String>, String, GameState> mapGenerator;
   private final BiFunction<Integer, SleepGameLoop.Delegate, GameLoop> gameLoopProvider;
 
+  /**
+   * Creates a game manager with all dependencies.
+   *
+   * @param gameStore where all the game states are stored.
+   * @param lobbyStore is used to check if a player is in a lobby with a associated game.
+   * @param distributor the message distributor the manager communicates through.
+   * @param highScoreStore where the hogh scores are saved.
+   * @param mapGenerator a function which can create an initial game state when a new game is
+   * started.
+   * @param gameLoopProvider a function which provides a game loop.
+   */
   public GameManager(
       GameStore gameStore, LobbyStore lobbyStore, MessageDistributor distributor,
       HighScoreStore highScoreStore,
@@ -142,6 +153,8 @@ public class GameManager implements GameStarter {
   }
 
   private void userConnected(String id) {
+    // check if this is a reconnect and make sure the client reenters the game
+    // if they were in a game that is still ongoing
     getGameWithUser(id).ifPresent(sync -> sync.consume(state -> {
       final Map<String, Player> players = state.getPlayers();
       final Player player = players.get(id);
@@ -156,6 +169,7 @@ public class GameManager implements GameStarter {
         }
         distributor.sendMessage(new GameStartRes(state.getID(), playerColors), id);
         player.join();
+        // create a full game state delta so they don't miss any updates
         GameStateDelta delta = new GameStateDelta();
         delta.addPlayer(
             createInitialPlayerDelta(Optional.of(motherShipEntry.getState()), player, id));
@@ -292,10 +306,12 @@ public class GameManager implements GameStarter {
       final Player currentPlayer = gameState.getPlayers()
           .get(playerID);
 
+      // fetch the mother ship of the player to make sure that the player gets the right updates.
       final GameHistoryEntry<Ship> motherShipEntry = currentPlayer.getMotherShip().getCurrent();
 
       if (motherShipEntry.isDestroyed()) {
         if (currentPlayer.isAlive()) {
+          // if the mother ship was newly destroyed, inform the palyer taht they have lost.
           delta.addRemovedMotherShip(motherShipEntry.getState().getID());
           distributor.sendMessage(new YouLose(), playerID);
           currentPlayer.kill();
@@ -309,6 +325,8 @@ public class GameManager implements GameStarter {
             gameState.getPlayers().get(playerID), delta, playerID));
       }
 
+      // fetch the state of each other player taking into account
+      // the newest location of this player's motership
       gameState.getPlayers().forEach((deltaPlayerID, player) -> {
         if (!deltaPlayerID.equals(playerID)) {
           final Optional<Ship> motherShip = player.getMotherShip()
@@ -336,6 +354,7 @@ public class GameManager implements GameStarter {
       }
     });
 
+    // send updates in a thread to take some load off the game loop thread
     new Thread(() -> {
       gameStates.forEach((playerID, delta) -> distributor.sendMessage(delta, playerID));
     }).start();
