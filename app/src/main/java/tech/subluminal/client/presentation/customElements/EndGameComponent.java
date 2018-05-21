@@ -6,11 +6,18 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
 import tech.subluminal.client.presentation.controller.MainController;
 
@@ -24,21 +31,27 @@ public class EndGameComponent extends HBox {
 
     this.setAlignment(Pos.CENTER);
     box = new VBox();
-    Label endText = new Label("End of Game" + "\n" + "Winner is: " + winnerName);
-    endText.getStyleClass().add("console-red");
-    box.getChildren().add(endText);
-
-    Pane hbox = new Pane(box);
+    box.setAlignment(Pos.CENTER);
+    Label endText = new Label("The game ended and the winner is: ");
+    endText.setTextAlignment(TextAlignment.CENTER);
+    Label winnerLabel = new Label(winnerName);
+    endText.setTextAlignment(TextAlignment.CENTER);
+    winnerLabel.setFont(new Font("PxPlus IBM VGA9", 30));
+    winnerLabel.setTextFill(Color.GREEN);
+    endText.getStyleClass().addAll("console-red", "font-dos");
+    VBox hbox = new VBox();
     hbox.setPrefHeight(300);
     hbox.setPrefWidth(400);
+
+    hbox.getChildren().addAll(endText, winnerLabel);
+    hbox.setAlignment(Pos.CENTER);
     hbox.getStyleClass().add("console");
+    hbox.setBackground(
+        new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 
-    this.getChildren().add(hbox);
+    box.getChildren().add(hbox);
 
-    Platform.runLater(() -> {
-      this.prefWidthProperty().bind(getScene().widthProperty());
-      this.prefHeightProperty().bind(getScene().heightProperty());
-    });
+    this.getChildren().add(box);
 
 
     addButtons();
@@ -58,9 +71,8 @@ public class EndGameComponent extends HBox {
     box.getChildren().add(endText);
 
     Pane hbox = new Pane(box);
-    hbox.setPrefHeight(300);
-    hbox.setPrefWidth(400);
-    hbox.getStyleClass().add("console");
+    box.setPrefHeight(300);
+    box.setPrefWidth(400);
 
     Timeline timeTl = new Timeline();
     timeTl.getKeyFrames().add(new KeyFrame(Duration.seconds(1), event -> {
@@ -87,6 +99,7 @@ public class EndGameComponent extends HBox {
 
   public void addButtons() {
     Label backToLobby = new Label("Back to Lobby");
+    backToLobby.getStyleClass().add("button");
     box.getChildren().add(backToLobby);
     backToLobby.setOnMouseClicked(event -> {
       main.getGameController().leaveGame();

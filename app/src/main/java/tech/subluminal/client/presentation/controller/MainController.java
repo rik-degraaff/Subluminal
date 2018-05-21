@@ -195,9 +195,6 @@ public class MainController implements Initializable {
 
     chatDock.getChildren().add(chat);
 
-    chatDock.setBackground(
-        new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
-
     initMiddleBoard();
 
     display = new DisplayComponent();
@@ -349,7 +346,6 @@ public class MainController implements Initializable {
     });
 
     leaveButton = new Button3dComponent("Leave");
-
 
     leaveButton.setOnMouseClicked(event -> {
       gameController.leaveGame();
@@ -693,6 +689,10 @@ public class MainController implements Initializable {
   public void setAmountBox(TextField actual, Button3dComponent sendMother, Button3dComponent send) {
     amountShown.set(true);
     middleBoardDock.add(actual, 0, 0);
+
+    actual.setBackground(
+        new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+
     middleBoardDock.add(sendMother, 0, 1);
     middleBoardDock.add(send, 0, 2);
 
