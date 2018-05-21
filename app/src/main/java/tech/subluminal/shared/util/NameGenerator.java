@@ -17,6 +17,9 @@ import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import tech.subluminal.shared.records.GlobalSettings;
 
+/**
+ * Allows you to generate any number of star names.
+ */
 public class NameGenerator {
 
   private Random rand = new Random(GlobalSettings.SHARED_RANDOM.nextLong());
@@ -28,11 +31,15 @@ public class NameGenerator {
   private int fileCounter = 0;
   private ConfigModifier<String, String> cm = new ConfigModifier("mods");
 
+  /**
+   * Creates a new name generator
+   */
   public NameGenerator() {
     starNamesMod = cm.getAllFiles("stars");
     readStarFiles();
   }
 
+  // reads fields with stars that are saved inside the jar.
   private void readStarFiles() {
     Reflections reflections = new Reflections("tech.subluminal", new ResourcesScanner());
     Pattern pat = Pattern.compile(".*\\.*star.*\\.txt");
@@ -44,16 +51,17 @@ public class NameGenerator {
         readLines(path);
         fileCounter++;
       });
+
+      // check if there are star mods present and load star names
       starNamesMod.forEach(file -> {
         starNames.add(new LinkedList<>());
         readLines(file);
         fileCounter++;
       });
     } else {
-      throw new IllegalArgumentException("No list with starnames in resources found!");
+      throw new IllegalArgumentException("No list with star names in resources found!");
     }
   }
-
 
   private void readLines(File file) {
     try {
@@ -76,6 +84,7 @@ public class NameGenerator {
 
   private void readLines(BufferedReader br) {
     try {
+      // check how rare these stars should be
       int tempWeight;
       br.mark(1);
       if (br.read() != 0xFEFF) {
@@ -92,15 +101,14 @@ public class NameGenerator {
       br.lines().forEach(l -> {
         starNames.get(fileCounter).add(l);
       });
-    } catch (UnsupportedEncodingException e) {
-      e.printStackTrace();
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
     } catch (IOException e) {
-      e.printStackTrace();
+      Logger.error(e);
     }
   }
 
+  /**
+   * @return a single random star name.
+   */
   public String getName() {
     Random rand = new Random(GlobalSettings.SHARED_RANDOM.nextLong());
     int randRange = (int) (rand.nextDouble()*sumWeights);
@@ -111,6 +119,7 @@ public class NameGenerator {
       tempSum += starListWeights.get(tempIndex + 1);
       tempIndex++;
     }
+
     String newName;
     if (!starNames.get(tempIndex).isEmpty()) {
       newName = starNames.get(tempIndex).remove(rand.nextInt(starNames.get(tempIndex).size()));
@@ -121,21 +130,6 @@ public class NameGenerator {
     }
     return newName;
   }
-
-//TODO: Implement this method for star names
-//  public List<String> getNames(int count) {
-//    List<String> names = new LinkedList<>();
-//    int rIndex;
-//    for (int i = 0; i < count; i++) {
-//      rIndex = rand.nextInt(starNames.size() - 1);
-//      if (names.contains(planetNames.get(rIndex + 1))) {
-//        i--;
-//      } else {
-//        names.add(planetNames.remove(rIndex + 1));
-//      }
-//    }
-//    return names;
-//  }
 
   @Override
   public String toString() {

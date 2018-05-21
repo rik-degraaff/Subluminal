@@ -22,6 +22,9 @@ import tech.subluminal.shared.stores.records.game.Ship;
 import tech.subluminal.shared.util.IdUtils;
 import tech.subluminal.shared.util.NameGenerator;
 
+/**
+ * Contains a method to generate a map given an amount of players that's more or less fairly distributed.
+ */
 public class MapGeneration {
 
   private static Random rand = new Random(GlobalSettings.SHARED_RANDOM.nextLong());
@@ -35,6 +38,13 @@ public class MapGeneration {
 
   private static NameGenerator ng = new NameGenerator();
 
+  /**
+   * Generates a map (GameState) for the specified players
+   *
+   * @param playerNames the ids and names of the players participating in the game.
+   * @param gameID teh id of the game.
+   * @return
+   */
   public static GameState getNewGameStateForPlayers(Map<String, String> playerNames,
       String gameID) {
     final Set<Star> stars = new HashSet<>();
@@ -43,11 +53,10 @@ public class MapGeneration {
     int additionalStars = (int) Math.pow(10 + 3 * playerIDs.size(), 0.75);
     int offset = rand.nextInt(90);
     AtomicInteger playerPosCounter = new AtomicInteger();
-    //final UniformPoissonDiskSampler ufpds = new UniformPoissonDiskSampler(x0, y0, x1, y1, minDist, totalStars);
-    //List<Coordinates> coordinates = ufpds.sample();
 
     List<Coordinates> coordinates = new ArrayList<>(additionalStars + playerIDs.size());
 
+    // first, create home stars that are roughly uniformly distributed around a circle
     playerNames.forEach((playerID, name) -> {
       Coordinates homeCoords = getHomeCoordinates(playerIDs.size(), 0.45, 0.5, 0.5,
           playerPosCounter.get(), offset, 0.1); // getStarCoordinates(coordinates);
@@ -73,7 +82,7 @@ public class MapGeneration {
       players.add(player);
     });
 
-    List<Coordinates> homeCoordinates = new ArrayList<>(coordinates);
+    // generate additional stars to fill out the map
     Stream
         .generate(() -> {
           Coordinates coords = getStarCoordinates(coordinates); //coordinates.remove(0);
@@ -97,6 +106,7 @@ public class MapGeneration {
 
     List<Integer> components = new ArrayList<>(keys);
 
+    // generate new stars until the entire graph is connected
     while ((components = getComponents(graph, components)).size() > 1) {
       Coordinates coords = getStarCoordinates(coordinates);
       coordinates.add(coords);
@@ -109,6 +119,14 @@ public class MapGeneration {
     return new GameState(gameID, stars, players, LIGHT_SPEED, JUMP_DISTANCE, SHIP_SPEED);
   }
 
+  /**
+   * Returns exactly one star out of the core list for every component of the graph that contains
+   * one or more of the core elements.
+   *
+   * @param graph the graph containing the stars.
+   * @param core the core stars you want to make sure are connected.
+   * @return a list containing one star per component.
+   */
   private static List<Integer> getComponents(Graph<Integer> graph, List<Integer> core) {
     List<Integer> components = new LinkedList<>();
     outer:
@@ -147,5 +165,4 @@ public class MapGeneration {
         y + fuzz * (Math.random() - 0.5));
     return p;
   }
-
 }
