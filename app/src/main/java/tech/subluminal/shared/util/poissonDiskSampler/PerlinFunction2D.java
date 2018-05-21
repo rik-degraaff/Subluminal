@@ -3,8 +3,6 @@ package tech.subluminal.shared.util.poissonDiskSampler;
 
 /**
  * This class is sued to create 2D Perlin noise.
- *
- * @author Herman Tulleken
  */
 public class PerlinFunction2D extends RealFunction2D {
 

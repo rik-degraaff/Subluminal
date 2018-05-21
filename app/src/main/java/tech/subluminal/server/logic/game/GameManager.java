@@ -431,8 +431,10 @@ public class GameManager implements GameStarter {
       final double score = (1000.0 * diff) / total;
       highScoreStore.highScores()
           .update(old -> {
-            old.add(new HighScore(winnerPlayer.getName(), score));
-            old.sort(Comparator.comparingDouble(HighScore::getScore));
+            if (!Double.isNaN(score) && !Double.isInfinite(score)) {
+              old.add(new HighScore(winnerPlayer.getName(), score));
+            }
+            old.sort(Comparator.comparingDouble(HighScore::getScore).reversed());
             return old.subList(0, Math.min(9, old.size()));
           });
     }
