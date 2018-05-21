@@ -144,6 +144,12 @@
   -fx-alignment: center;
 }
 
+.button3D:hover {
+  -fx-cursor: hand;
+  -fx-background-color: transparent;
+  -fx-text-fill: #59FF00;
+}
+
 .button3D:hover{
   -fx-cursor: pointer;
 }

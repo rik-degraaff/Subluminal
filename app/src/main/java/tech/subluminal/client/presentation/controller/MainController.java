@@ -603,6 +603,7 @@ public class MainController implements Initializable {
       //rightSideDock.getChildren().clear();
 
       chatController.setInGame(true);
+
       playArea.getChildren().add(game);
       playArea.setMouseTransparent(false);
 
@@ -624,6 +625,7 @@ public class MainController implements Initializable {
     playArea.setMouseTransparent(true);
     gameController.clearMap();
     chatController.setInGame(false);
+    gameController.clearToastDock();
 
     menuHolder.setMouseTransparent(false);
 

@@ -531,6 +531,10 @@ public class GameController implements Initializable, GamePresenter {
     });
   }
 
+  public void clearToastDock(){
+    toastDock.getChildren().clear();
+  }
+
   @Override
   public void setTps(double tps) {
     main.setTps(tps);
