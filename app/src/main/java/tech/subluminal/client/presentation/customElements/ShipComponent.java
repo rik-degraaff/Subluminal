@@ -1,5 +1,10 @@
 package tech.subluminal.client.presentation.customElements;
 
+import static tech.subluminal.shared.util.FileUtils.getExtension;
+import static tech.subluminal.shared.util.FileUtils.removeExtension;
+
+import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import javafx.animation.Interpolator;
@@ -36,12 +41,29 @@ import tech.subluminal.client.presentation.controller.MainController;
 import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.shared.stores.records.game.Coordinates;
 import tech.subluminal.shared.stores.records.game.Star;
+import tech.subluminal.shared.util.ConfigModifier;
 import tech.subluminal.shared.util.DrawingUtils;
 
 public abstract class ShipComponent extends Pane {
 
-  private static final Integer SHIP_HEIGHT = 40;
-  private static final Integer FLEET_SIZE = 30;
+  public static final String DEFAULT_ANIM_EXTENTION = ".gif";
+  public static final String DEFAULT_EXTENTION = ".png";
+
+  public static final String FLEET_BODY_FILE = "fleetBody";
+  public static final String DEFAULT_FLEET_BODY_URL =
+      "/tech/subluminal/resources/100w/" + FLEET_BODY_FILE + DEFAULT_EXTENTION;
+  public static final String FLEET_DETAILS_FILE = "fleetDetails";
+  public static final String DEFAULT_FLEET_DETAILS_URL =
+      "/tech/subluminal/resources/100w/" + FLEET_DETAILS_FILE + DEFAULT_ANIM_EXTENTION;
+  public static final String SHIP_BODY_FILE = "shipBody";
+  public static final String DEFAULT_SHIP_BODY_URL =
+      "/tech/subluminal/resources/100w/" + SHIP_BODY_FILE + DEFAULT_EXTENTION;
+  public static final String SHIP_DETAILS_FILE = "shipDetails";
+  public static final String DEFAULT_SHIP_DETAILS_URL =
+      "/tech/subluminal/resources/100w/" + SHIP_DETAILS_FILE + DEFAULT_ANIM_EXTENTION;
+  public static final List<String> IMAGE_EXTENSIONS = Arrays.asList("gif", "jpg", "jpeg", "png");
+
+  private static final Integer SHIP_SIZE = 40;
 
   private final ObjectProperty<Color> color = new SimpleObjectProperty<>();
 
@@ -81,18 +103,30 @@ public abstract class ShipComponent extends Pane {
 
     Group ship = new Group();
 
-    ImageView shipBody = initShipImage("/tech/subluminal/resources/100w/shipBody.png");
+    ConfigModifier<String, String> cm = new ConfigModifier<>("mods/ships");
+    List<File> shipImages = cm.getAllFiles();
+
+    String shipBodyUrl = getModFileOrDefault(shipImages, SHIP_BODY_FILE, DEFAULT_SHIP_BODY_URL,
+        IMAGE_EXTENSIONS);
+
+    String shipDetailsUrl = getModFileOrDefault(shipImages, SHIP_DETAILS_FILE,
+        DEFAULT_SHIP_DETAILS_URL,
+        IMAGE_EXTENSIONS);
+
+    ImageView shipBody = initShipImage(shipBodyUrl);
+
+    ImageView shipDetails = initShipImage(shipDetailsUrl);
+
     setShipColor(shipBody);
     shipBody.setPreserveRatio(true);
 
-    ImageView shipDetails = initShipImage("/tech/subluminal/resources/100w/shipDetails.gif");
     shipDetails.setPreserveRatio(true);
 
     ship.getChildren().addAll(shipBody, shipDetails);
     ship.setMouseTransparent(true);
 
-    //ship.prefWidth(SHIP_HEIGHT);
-    //ship.prefHeight(SHIP_HEIGHT);
+    //ship.prefWidth(SHIP_SIZE);
+    //ship.prefHeight(SHIP_SIZE);
 
     transTl.setNode(ship);
     transTl.setDuration(Duration.seconds(0.8));
@@ -146,10 +180,22 @@ public abstract class ShipComponent extends Pane {
     Group ship = new Group();
     //group.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY,Insets.EMPTY)));
 
-    ImageView shipBody = initShipImage("/tech/subluminal/resources/100w/fleetBody.png");
+    ConfigModifier<String, String> cm = new ConfigModifier<>("mods/ships");
+    List<File> fleetImages = cm.getAllFiles();
+
+    String fleetBodyUrl = getModFileOrDefault(fleetImages, FLEET_BODY_FILE, DEFAULT_FLEET_BODY_URL,
+        IMAGE_EXTENSIONS);
+
+    String fleetDetailsUrl = getModFileOrDefault(fleetImages, FLEET_DETAILS_FILE,
+        DEFAULT_FLEET_DETAILS_URL,
+        IMAGE_EXTENSIONS);
+
+    ImageView shipBody = initShipImage(fleetBodyUrl);
+
+    ImageView shipDetails = initShipImage(fleetDetailsUrl);
+
     shipBody.setPreserveRatio(true);
 
-    ImageView shipDetails = initShipImage("/tech/subluminal/resources/100w/fleetDetails.gif");
     shipDetails.setPreserveRatio(true);
 
     setShipColor(shipBody);
@@ -178,9 +224,9 @@ public abstract class ShipComponent extends Pane {
 
       this.setMouseTransparent(true);
 
-      if(targetsWrapper.isEmpty()){
+      if (targetsWrapper.isEmpty()) {
         setFleetRotating(ship);
-      }else{
+      } else {
         setFleetMoving(ship);
       }
 
@@ -211,6 +257,16 @@ public abstract class ShipComponent extends Pane {
           Bindings.createDoubleBinding(() -> -amount.prefHeight(-1) / 2, amount.heightProperty()));
     });
 
+  }
+
+  private String getModFileOrDefault(List<File> files, String fileName, String defaultName,
+      List<String> extensions) {
+    return files.stream()
+        .filter(f -> removeExtension(f.getName()).equals(fileName))
+        .filter(f -> extensions.contains(getExtension(f.getName())))
+        .map(f -> f.toURI().toString())
+        .findAny()
+        .orElse(defaultName);
   }
 
   private void setFleetMoving(Group ship) {
@@ -270,12 +326,12 @@ public abstract class ShipComponent extends Pane {
   private ImageView initShipImage(String url) {
     Image shipImageBody = new Image(url);
     ImageView image = new ImageView(shipImageBody);
-    image.setFitWidth(SHIP_HEIGHT);
-    image.setFitHeight(SHIP_HEIGHT);
+    image.setFitWidth(SHIP_SIZE);
+    image.setFitHeight(SHIP_SIZE);
     image.setImage(shipImageBody);
     image.setRotate(-90);
-    image.setTranslateX(-SHIP_HEIGHT / 2);
-    image.setTranslateY(-SHIP_HEIGHT / 2);
+    image.setTranslateX(-SHIP_SIZE / 2);
+    image.setTranslateY(-SHIP_SIZE / 2);
     return image;
   }
 
