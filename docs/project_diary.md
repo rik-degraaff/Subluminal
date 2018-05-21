@@ -21,7 +21,7 @@
 - A spectator mode was created.
 - Ships became animated and now got moving flames on the back.
 - The network protocol documentation was finished.
-- The program architecture documentation was created and finished..
+- The program architecture documentation was created and finished.
 - A template for the presentation slides for milestone 5 was created.
 - The last few refactorings were completed.
 
