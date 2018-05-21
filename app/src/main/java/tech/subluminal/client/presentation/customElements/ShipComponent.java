@@ -83,11 +83,14 @@ public abstract class ShipComponent extends Pane {
 
     ImageView shipBody = initShipImage("/tech/subluminal/resources/100w/shipBody.png");
     setShipColor(shipBody);
+    shipBody.setPreserveRatio(true);
 
-    ImageView shipDetails = initShipImage("/tech/subluminal/resources/100w/shipDetails.png");
+    ImageView shipDetails = initShipImage("/tech/subluminal/resources/100w/shipDetails.gif");
+    shipDetails.setPreserveRatio(true);
 
     ship.getChildren().addAll(shipBody, shipDetails);
     ship.setMouseTransparent(true);
+
     //ship.prefWidth(SHIP_HEIGHT);
     //ship.prefHeight(SHIP_HEIGHT);
 
