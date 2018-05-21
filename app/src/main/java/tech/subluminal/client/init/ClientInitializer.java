@@ -2,6 +2,7 @@ package tech.subluminal.client.init;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -56,7 +57,13 @@ public class ClientInitializer extends Application {
     } catch (IOException e) {
       throw new RuntimeException(e); // we're all doomed
     }
-    Connection connection = new SocketConnection(socket, () -> System.exit(1));
+
+    AtomicBoolean tryLogout = new AtomicBoolean(true);
+
+    Connection connection = new SocketConnection(socket, () -> {
+      tryLogout.set(false);
+      System.exit(1);
+    });
     connection.start();
 
     UserStore userStore = new InMemoryUserStore();
@@ -87,8 +94,12 @@ public class ClientInitializer extends Application {
 
     userManager.start(username);
 
-    Runtime.getRuntime().addShutdownHook(new Thread(userManager::logoutNoShutdown));
-}
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      if (tryLogout.get()) {
+        userManager.logoutNoShutdown();
+      }
+    }));
+  }
 
 
   /**
@@ -114,7 +125,7 @@ public class ClientInitializer extends Application {
         getClass().getResource("/tech/subluminal/client/presentation/style/lobby.css")
             .toExternalForm());
 
-    controller = (MainController) loader.getController();
+    controller = loader.getController();
 
     primaryStage.setTitle("Subluminal - The Game");
     primaryStage.setScene(new Scene(root));
