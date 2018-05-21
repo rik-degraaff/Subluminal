@@ -32,14 +32,14 @@ public class ConfigModifier<k, v> {
   private final String DELIMETER_KEY = "\\";
 
   public ConfigModifier(String path) {
-    if (!GlobalSettings.PATH_JAR.equals("")) {
+    //if (!GlobalSettings.PATH_JAR.equals("")) {
       configPath = GlobalSettings.PATH_JAR + DELIMETER_KEY + GlobalSettings.PATH_CONFIG;
       folderPath = configPath + DELIMETER_KEY + path.replace("/", DELIMETER_KEY);
       createDirectory(folderPath);
-    } else {
-     configPath = ".\\config";
-     folderPath = ".\\config\\settings";
-    }
+    //} else {
+    // configPath = ".\\config";
+    // folderPath = ".\\config\\settings";
+    //}
   }
 
   /**

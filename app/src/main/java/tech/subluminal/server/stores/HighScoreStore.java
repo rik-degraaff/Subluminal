@@ -20,16 +20,20 @@ import tech.subluminal.shared.util.Synchronized;
  */
 public class HighScoreStore {
 
-  private static ConfigModifier  cm = new ConfigModifier("highscore");
+  private static ConfigModifier cm;
   private static String HIGHSCORES_PATH;
   private final Synchronized<List<HighScore>> highScores = new RemoteSynchronized<>(
       HighScoreStore::getHighScoresFromFile,
       HighScoreStore::writeHighscoresToFile);
 
   public HighScoreStore() {
-
-    cm.attachToFile(GlobalSettings.FILE_HIGHSCORE);
-    HIGHSCORES_PATH = cm.getAttachedFile().getPath();
+    if (!GlobalSettings.PATH_JAR.equals("")) {
+      cm = new ConfigModifier("highscore");
+      cm.attachToFile(GlobalSettings.FILE_HIGHSCORE);
+      HIGHSCORES_PATH = cm.getAttachedFile().getPath();
+    } else {
+      HIGHSCORES_PATH = "./files/highscores.son";
+    }
   }
 
   private static List<HighScore> getHighScoresFromFile() {
