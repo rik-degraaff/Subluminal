@@ -531,6 +531,11 @@ public class GameController implements Initializable, GamePresenter {
     });
   }
 
+  @Override
+  public void setTps(double tps) {
+    main.setTps(tps);
+  }
+
   public void leaveGame() {
     gameDelegate.leaveGame();
     clearGame();
