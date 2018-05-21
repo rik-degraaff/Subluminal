@@ -14,14 +14,17 @@ import javafx.animation.Timeline;
 import javafx.animation.Transition;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -36,6 +39,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Box;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.TextAlignment;
@@ -68,8 +72,11 @@ import tech.subluminal.server.stores.records.HighScore;
 public class MainController implements Initializable {
 
   private final Timeline chatDownTl = new Timeline();
-  private KeyMap keyMap;
+  private final BooleanProperty amountShown = new SimpleBooleanProperty();
   List<Node> tempMenu = new ArrayList<>();
+  Group shipAmountGroup;
+  Box amountMonitor;
+  private KeyMap keyMap;
   @FXML
   private AnchorPane spaceBackgroundDock;
   @FXML
@@ -112,6 +119,10 @@ public class MainController implements Initializable {
   private AnchorPane introPane;
   @FXML
   private HBox introBoxHolder;
+  @FXML
+  private AnchorPane shipAmountDock;
+  @FXML
+  private GridPane middleBoardDock;
   private GameComponent game;
   private UserStore userStore;
   private LobbyStore lobbyStore;
@@ -133,6 +144,7 @@ public class MainController implements Initializable {
   private Timeline chatUpTl = new Timeline();
   private Stage scene;
   private DoubleProperty tpsProperty = new SimpleDoubleProperty();
+  private Button3dComponent leaveButton;
 
   public LobbyComponent getLobby() {
     return lobby;
@@ -146,6 +158,18 @@ public class MainController implements Initializable {
     this.lobbyStore = lobbyStore;
   }
 
+  public boolean isAmountShown() {
+    return amountShown.get();
+  }
+
+  public void setAmountShown(boolean amountShown) {
+    this.amountShown.set(amountShown);
+  }
+
+  public BooleanProperty amountShownProperty() {
+    return amountShown;
+  }
+
   public void setUserStore(UserStore userStore) {
     this.userStore = userStore;
 
@@ -157,6 +181,222 @@ public class MainController implements Initializable {
   public void initialize(URL location, ResourceBundle resources) {
     keyMap = new KeyMap();
 
+    Timeline timeTl = initIntro();
+
+    background = new BackgroundComponent(1000);
+    spaceBackgroundDock.getChildren().add(background);
+
+    initCockpit();
+
+    initPlayArea();
+
+    chat = new ChatComponent(this);
+    chatController = chat.getChatcontroller();
+
+    chatDock.getChildren().add(chat);
+
+    chatDock.setBackground(
+        new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+
+    initMiddleBoard();
+
+    display = new DisplayComponent();
+
+    userList = new UserListComponent(this, display);
+    playerListButton = new ControlButton(this, "Players", userList, display);
+
+    userList.prefWidthProperty().bind(display.widthProperty());
+    userList.prefHeightProperty().bind(display.heightProperty());
+
+    userListController = userList.getController();
+
+    nameChange = new NameChangeComponent(this);
+    nameChangeButton = new ControlButton(this, "NameChange", nameChange, display);
+    //rightSideDock.getChildren().add(nameChangeButton);
+    //rightSideDock.getChildren().add(nameChange);
+
+    menu = new MenuComponent(this);
+    settings = new SettingsComponent(this, keyMap);
+    //rightSideDock.getChildren().add(settingsButton);
+
+    highscore = new HighscoreComponent();
+
+    lobby = new LobbyComponent();
+
+    game = new GameComponent(this);
+    gameController = game.getController();
+
+    //playArea.setMouseTransparent(true);
+
+    menuDock.getChildren().add(menu);
+
+    initChatSide();
+
+    initLeftBoard(timeTl);
+
+  }
+
+  private void initLeftBoard(Timeline timeTl) {
+    VBox debugDock = initDebug();
+
+    window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
+      if (keyEvent.getCode() == keyMap.get("FPS").get()) {
+        if (debugDock.getChildren().contains(fpsTracker)) {
+          debugDock.getChildren().remove(fpsTracker);
+        } else {
+          debugDock.getChildren().add(fpsTracker);
+        }
+      } else if (keyEvent.getCode() == keyMap.get("FPSMonitor").get()) {
+        if (debugDock.getChildren().contains(fpsMonitor)) {
+          debugDock.getChildren().remove(fpsMonitor);
+        } else {
+          debugDock.getChildren().add(fpsMonitor);
+        }
+      } else if (keyEvent.getCode() == keyMap.get("TPS").get()) {
+        if (debugDock.getChildren().contains(tpsTracker)) {
+          debugDock.getChildren().remove(tpsTracker);
+        } else {
+          debugDock.getChildren().add(tpsTracker);
+        }
+      } else if (keyEvent.getCode() == keyMap.get("TPSMonitor").get()) {
+        if (debugDock.getChildren().contains(tpsMonitor)) {
+          debugDock.getChildren().remove(tpsMonitor);
+        } else {
+          debugDock.getChildren().add(tpsMonitor);
+        }
+      } else if (keyEvent.getCode() == keyMap.get("Settings").get()) {
+        onSettingOpenHandle();
+      } else if (keyEvent.getCode() == keyMap.get("Skip").get()) {
+        clearIntro(timeTl);
+      }
+    });
+
+    window.addEventHandler(KeyEvent.KEY_RELEASED, keyEvent -> {
+      if (keyEvent.getCode() == keyMap.get("Chat").getValue()) {
+        toggleChat();
+      }
+    });
+  }
+
+  private void initPlayArea() {
+    Rectangle clipNode = new Rectangle();
+    clipNode.widthProperty().bind(playArea.widthProperty());
+    clipNode.heightProperty().bind(playArea.heightProperty());
+    playArea.setClip(clipNode);
+
+    playArea.setBackground(new Background(
+        new BackgroundImage(new Image("/tech/subluminal/resources/Pixel_Overlay.png"),
+            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+            BackgroundSize.DEFAULT)));
+  }
+
+  private void initCockpit() {
+    CockpitComponent cockpit = new CockpitComponent();
+    cockpitDock.getChildren().addAll(cockpit);
+    cockpit.setVisible(true);
+  }
+
+  private VBox initDebug() {
+    FpsUpdater updater = new FpsUpdater();
+
+    fpsTracker = new DebugComponent(updater.averageFpsProperty(), "FPS");
+    fpsMonitor = new MonitorComponent(updater.averageFpsProperty(), "FPS");
+
+    tpsTracker = new DebugComponent(tpsProperty, "TPS");
+    tpsMonitor = new MonitorComponent(tpsProperty, "TPS");
+
+    VBox debugDock = new VBox();
+    window.getChildren().add(debugDock);
+    return debugDock;
+  }
+
+  private void initChatSide() {
+    Rotate rotate = new Rotate(-60, 0, 0, 0, Rotate.X_AXIS);
+    rotate.pivotYProperty().bind(boardComputerWrapper.heightProperty());
+    boardComputer.getTransforms().add(rotate);
+
+    Rotate rotateTl = new Rotate();
+    rotateTl.pivotYProperty().bind(chat.heightProperty());
+    rotateTl.setPivotX(0);
+    rotateTl.setPivotZ(0);
+    rotateTl.setAxis(Rotate.X_AXIS);
+    chat.getTransforms().add(rotateTl);
+
+    chatUpTl.getKeyFrames().add(
+        new KeyFrame(Duration.seconds(0.7), new KeyValue(rotateTl.angleProperty(), 60))
+    );
+
+    chatDownTl.getKeyFrames()
+        .add(new KeyFrame(Duration.seconds(0.7), new KeyValue(rotateTl.angleProperty(), 0)));
+
+    boardComputer.setOnMouseClicked((e) -> {
+      toggleChat();
+    });
+
+    Button3dComponent settingButton = new Button3dComponent("Settings");
+    settingButton.setOnMouseClicked((e) -> {
+      Button3dComponent settingClose = new Button3dComponent("X");
+      settingClose.setOnMouseClicked(event -> {
+        onWindowClose();
+        event.consume();
+        buttonsDock.getChildren().remove(settingButton);
+        buttonsDock.add(settingButton, 0, 0);
+      });
+      buttonsDock.getChildren().remove(settingButton);
+      buttonsDock.add(settingClose, 0, 0);
+      onSettingOpenHandle();
+      e.consume();
+    });
+
+    leaveButton = new Button3dComponent("Leave");
+
+
+    leaveButton.setOnMouseClicked(event -> {
+      gameController.leaveGame();
+      Logger.debug("LEAVE PLZ");
+    });
+
+    hideLeaveButton();
+
+    buttonsDock.add(settingButton, 0, 0);
+    buttonsDock.add(playerListButton, 0, 1);
+    buttonsDock.add(nameChangeButton, 0, 2);
+    buttonsDock.add(leaveButton, 0, 3);
+
+    bindDockButtons(settingButton);
+    bindDockButtons(playerListButton);
+    bindDockButtons(nameChangeButton);
+    bindDockButtons(leaveButton);
+
+    monitorDock.add(display, 1, 0);
+  }
+
+  private void initMiddleBoard() {
+    shipAmountDock.setBackground(
+        new Background(new BackgroundFill(Color.BLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+
+    clearMiddleBoard();
+
+    amountShown.addListener((observable, oldValue, newValue) -> {
+      if (newValue) {
+        middleBoardDock.setDisable(false);
+      } else {
+        middleBoardDock.setDisable(true);
+      }
+    });
+  }
+
+  private void clearMiddleBoard() {
+    Button3dComponent standartMiddleButtonUp = new Button3dComponent("");
+    Button3dComponent standartMiddleButtonDown = new Button3dComponent("");
+
+    middleBoardDock.getChildren().clear();
+
+    middleBoardDock.add(standartMiddleButtonUp, 0, 1);
+    middleBoardDock.add(standartMiddleButtonDown, 0, 2);
+  }
+
+  private Timeline initIntro() {
     introPane.setBackground(
         new Background(new BackgroundFill(Color.BLACK, CornerRadii.EMPTY, Insets.EMPTY)));
 
@@ -225,158 +465,7 @@ public class MainController implements Initializable {
     mainTl.setOnFinished(e -> {
       clearIntro(timeTl);
     });
-
-    background = new BackgroundComponent(1000);
-    spaceBackgroundDock.getChildren().add(background);
-
-    CockpitComponent cockpit = new CockpitComponent();
-    cockpitDock.getChildren().addAll(cockpit);
-    cockpit.setVisible(true);
-
-    Rectangle clipNode = new Rectangle();
-    clipNode.widthProperty().bind(playArea.widthProperty());
-    clipNode.heightProperty().bind(playArea.heightProperty());
-    playArea.setClip(clipNode);
-
-    playArea.setBackground(new Background(
-        new BackgroundImage(new Image("/tech/subluminal/resources/Pixel_Overlay.png"),
-            BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-            BackgroundSize.DEFAULT)));
-
-    chat = new ChatComponent(this);
-    chatController = chat.getChatcontroller();
-    chatDock.getChildren().add(chat);
-
-    //LeverComponent lever = new LeverComponent();
-    //leverDock.getChildren().addAll(lever);
-    //leverDock.setBackground(new Background(new BackgroundFill(Color.RED,CornerRadii.EMPTY,Insets.EMPTY)));
-
-    display = new DisplayComponent();
-
-    userList = new UserListComponent(this, display);
-    playerListButton = new ControlButton(this, "P", userList, display);
-
-    userList.prefWidthProperty().bind(display.widthProperty());
-    userList.prefHeightProperty().bind(display.heightProperty());
-
-    userListController = userList.getController();
-
-    nameChange = new NameChangeComponent(this);
-    nameChangeButton = new ControlButton(this, "C", nameChange, display);
-    //rightSideDock.getChildren().add(nameChangeButton);
-    //rightSideDock.getChildren().add(nameChange);
-
-    menu = new MenuComponent(this);
-    settings = new SettingsComponent(this, keyMap);
-    //rightSideDock.getChildren().add(settingsButton);
-
-    highscore = new HighscoreComponent();
-
-    lobby = new LobbyComponent();
-
-    game = new GameComponent(this);
-    gameController = game.getController();
-
-    //playArea.setMouseTransparent(true);
-
-    menuDock.getChildren().add(menu);
-
-    FpsUpdater updater = new FpsUpdater();
-
-    fpsTracker = new DebugComponent(updater.averageFpsProperty(), "FPS");
-    fpsMonitor = new MonitorComponent(updater.averageFpsProperty(), "FPS");
-
-    tpsTracker = new DebugComponent(tpsProperty, "TPS");
-    tpsMonitor = new MonitorComponent(tpsProperty, "TPS");
-
-    VBox debugDock = new VBox();
-    window.getChildren().add(debugDock);
-
-    Rotate rotate = new Rotate(-60, 0, 0, 0, Rotate.X_AXIS);
-    rotate.pivotYProperty().bind(boardComputerWrapper.heightProperty());
-    boardComputer.getTransforms().add(rotate);
-
-    Rotate rotateTl = new Rotate();
-    rotateTl.pivotYProperty().bind(chat.heightProperty());
-    rotateTl.setPivotX(0);
-    rotateTl.setPivotZ(0);
-    rotateTl.setAxis(Rotate.X_AXIS);
-    chat.getTransforms().add(rotateTl);
-
-    chatUpTl.getKeyFrames().add(
-        new KeyFrame(Duration.seconds(0.7), new KeyValue(rotateTl.angleProperty(), 60))
-    );
-
-    chatDownTl.getKeyFrames()
-        .add(new KeyFrame(Duration.seconds(0.7), new KeyValue(rotateTl.angleProperty(), 0)));
-
-    boardComputer.setOnMouseClicked((e) -> {
-      toggleChat();
-    });
-
-    Button3dComponent settingButton = new Button3dComponent("S");
-    settingButton.setOnMouseClicked((e) -> {
-      Button3dComponent settingClose = new Button3dComponent("X");
-      settingClose.setOnMouseClicked(event -> {
-        onWindowClose();
-        event.consume();
-        buttonsDock.getChildren().remove(settingButton);
-        buttonsDock.add(settingButton, 0, 0);
-      });
-      buttonsDock.getChildren().remove(settingButton);
-      buttonsDock.add(settingClose, 0, 0);
-      onSettingOpenHandle();
-      e.consume();
-    });
-
-    buttonsDock.add(settingButton, 0, 0);
-    buttonsDock.add(playerListButton, 0, 1);
-    buttonsDock.add(nameChangeButton, 0, 2);
-
-    bindDockButtons(settingButton);
-    bindDockButtons(playerListButton);
-    bindDockButtons(nameChangeButton);
-
-    monitorDock.add(display, 1, 0);
-
-    window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
-      if (keyEvent.getCode() == keyMap.get("FPS").get()) {
-        if (debugDock.getChildren().contains(fpsTracker)) {
-          debugDock.getChildren().remove(fpsTracker);
-        } else {
-          debugDock.getChildren().add(fpsTracker);
-        }
-      } else if (keyEvent.getCode() == keyMap.get("FPSMonitor").get()) {
-        if (debugDock.getChildren().contains(fpsMonitor)) {
-          debugDock.getChildren().remove(fpsMonitor);
-        } else {
-          debugDock.getChildren().add(fpsMonitor);
-        }
-      } else if (keyEvent.getCode() == keyMap.get("TPS").get()) {
-        if (debugDock.getChildren().contains(tpsTracker)) {
-          debugDock.getChildren().remove(tpsTracker);
-        } else {
-          debugDock.getChildren().add(tpsTracker);
-        }
-      } else if (keyEvent.getCode() == keyMap.get("TPSMonitor").get()) {
-        if (debugDock.getChildren().contains(tpsMonitor)) {
-          debugDock.getChildren().remove(tpsMonitor);
-        } else {
-          debugDock.getChildren().add(tpsMonitor);
-        }
-      } else if (keyEvent.getCode() == keyMap.get("Settings").get()) {
-        onSettingOpenHandle();
-      } else if (keyEvent.getCode() == keyMap.get("Skip").get()) {
-        clearIntro(timeTl);
-      }
-    });
-
-    window.addEventHandler(KeyEvent.KEY_RELEASED, keyEvent -> {
-      if (keyEvent.getCode() == keyMap.get("Chat").getValue()) {
-        toggleChat();
-      }
-    });
-
+    return timeTl;
   }
 
   private void toggleChat() {
@@ -513,23 +602,17 @@ public class MainController implements Initializable {
 
       //rightSideDock.getChildren().clear();
 
-      Button3dComponent leave = new Button3dComponent("LEAVE");
-      leave.prefHeightProperty().bind(Bindings
-          .createDoubleBinding(() -> buttonsDock.getHeight() / buttonsDock.getChildren().size(),
-              buttonsDock.heightProperty(), buttonsDock.getChildren()));
-      leave.prefWidthProperty().bind(buttonsDock.widthProperty());
-      leave.setOnMouseClicked(event -> {
-        gameController.leaveGame();
-        Logger.debug("LEAVE PLZ");
-      });
-
-      buttonsDock.addRow(3);
-      buttonsDock.add(leave, 0, 3);
-      //rightSide.getChildren().add(new Label("this is a test"));
-
       chatController.setInGame(true);
       playArea.getChildren().add(game);
+      playArea.setMouseTransparent(false);
+
+      showLeaveButton(false, "Leave");
     });
+  }
+
+  private void showLeaveButton(boolean b, String leave) {
+    leaveButton.setDisable(b);
+    leaveButton.setText(leave);
   }
 
   /**
@@ -545,6 +628,12 @@ public class MainController implements Initializable {
     menuHolder.setMouseTransparent(false);
 
     menuDock.getChildren().add(menu);
+
+    hideLeaveButton();
+  }
+
+  private void hideLeaveButton() {
+    showLeaveButton(true, "");
   }
 
   public void setTps(double tps) {
@@ -597,5 +686,18 @@ public class MainController implements Initializable {
 
   public void setScene(Stage scene) {
     this.scene = scene;
+  }
+
+  public void setAmountBox(TextField actual, Button3dComponent sendMother, Button3dComponent send) {
+    amountShown.set(true);
+    middleBoardDock.add(actual, 0, 0);
+    middleBoardDock.add(sendMother, 0, 1);
+    middleBoardDock.add(send, 0, 2);
+
+  }
+
+  public void resetAmounBox() {
+    amountShown.set(false);
+    clearMiddleBoard();
   }
 }
