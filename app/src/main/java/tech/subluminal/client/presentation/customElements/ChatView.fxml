@@ -77,11 +77,11 @@
             <Box fx:id="sendAllBox" depth="5.0" height="30.0" width="100.0" GridPane.rowIndex="1"/>
             <Button fx:id="sendButton" contentDisplay="CENTER" maxWidth="1.7976931348623157E308"
               mnemonicParsing="false" onAction="#sendMessage" prefHeight="25.0"
-              styleClass="button3D" text="SEND">
+              styleClass="button3D" text="Send">
             </Button>
             <Button fx:id="sendAllButton" contentDisplay="CENTER" maxWidth="1.7976931348623157E308"
               mnemonicParsing="false" onAction="#sendMessageAll" prefHeight="6.0" prefWidth="111.0"
-              styleClass="button3D" text="SEND ALL" GridPane.rowIndex="1">
+              styleClass="button3D" text="Send All" GridPane.rowIndex="1">
             </Button>
           </children>
         </GridPane>

@@ -104,8 +104,12 @@ public class GameController implements Initializable, GamePresenter {
   }
 
   private void clearPressStore() {
-    if(pressStore[0] != null) pressStore[0].setHoverShown(false);
-    if(pressStore[1] != null) pressStore[1].setHoverShown(false);
+    if (pressStore[0] != null) {
+      pressStore[0].setHoverShown(false);
+    }
+    if (pressStore[1] != null) {
+      pressStore[1].setHoverShown(false);
+    }
     pressStore[0] = null;
     pressStore[1] = null;
   }
@@ -128,9 +132,14 @@ public class GameController implements Initializable, GamePresenter {
           path.clear();
         }
         //System.out.println(pressStore[0].getStarID() + " " + pressStore[1].getStarID());
-
-        this.path = graph
-            .findShortestPath(pressStore[0].getStarID(), pressStore[1].getStarID());
+        try {
+          this.path = graph
+              .findShortestPath(pressStore[0].getStarID(), pressStore[1].getStarID());
+        } catch (IllegalStateException e) {
+          calculateGraph();
+          this.path = graph
+              .findShortestPath(pressStore[0].getStarID(), pressStore[1].getStarID());
+        }
         if (!path.isEmpty()) {
           removeJumpPath();
           createJumpPath(path);
@@ -182,7 +191,7 @@ public class GameController implements Initializable, GamePresenter {
   }
 
   public void createJumpBox(StarComponent start) {
-    box = new JumpBox(start.layoutXProperty(), start.layoutYProperty(),
+    box = new JumpBox(main,
         amount -> {
           gameDelegate.sendShips(path, amount);
           removeJumpPath();
@@ -242,13 +251,17 @@ public class GameController implements Initializable, GamePresenter {
       if (graph != null) {
         return;
       }
-      this.graph = new Graph<>(stars.keySet(),
-          (s1, s2) -> starMap.get(s1).getDistanceFrom(starMap.get(s2)) <= starMap.get(s1).getJump(),
-          (s1, s2) -> starMap.get(s1).getDistanceFrom(starMap.get(s2)),
-          false);
+      calculateGraph();
     });
 
 
+  }
+
+  private void calculateGraph() {
+    this.graph = new Graph<>(stars.keySet(),
+        (s1, s2) -> starMap.get(s1).getDistanceFrom(starMap.get(s2)) <= starMap.get(s1).getJump(),
+        (s1, s2) -> starMap.get(s1).getDistanceFrom(starMap.get(s2)),
+        false);
   }
 
   @Override
@@ -275,19 +288,25 @@ public class GameController implements Initializable, GamePresenter {
       if (winnerID != null) {
         String winnerName = userStore.users().getByID(winnerID).get().use(User::getUsername);
         Platform.runLater(() -> {
-          map.getChildren().add(new EndGameComponent(main, winnerName));
+          EndGameComponent endGameComponent = new EndGameComponent(main, winnerName);
+          endGameComponent.prefHeightProperty().bind(map.heightProperty());
+          endGameComponent.prefWidthProperty().bind(map.widthProperty());
+          map.getChildren().add(endGameComponent);
         });
 
       } else {
         Platform.runLater(() -> {
-          map.getChildren().add(new EndGameComponent(main));
+          EndGameComponent endGameComponent = new EndGameComponent(main);
+          endGameComponent.prefHeightProperty().bind(map.heightProperty());
+          endGameComponent.prefWidthProperty().bind(map.widthProperty());
+          map.getChildren().add(endGameComponent);
         });
       }
     } else {
       if (winnerID != null) {
         String winnerName = userStore.users().getByID(winnerID).get().use(User::getUsername);
         main.getChatController()
-            .addMessageChat(winnerName + " won one of the last games you where in.", Channel.INFO);
+            .addMessageChat(winnerName + " won one of the last games you were in.", Channel.INFO);
       } else {
         main.getChatController()
             .addMessageChat("You all failed Bob...", Channel.INFO);
@@ -472,14 +491,6 @@ public class GameController implements Initializable, GamePresenter {
     });
   }
 
-  public void setUserStore(UserStore userStore) {
-    this.userStore = userStore;
-  }
-
-  public void clearMap() {
-    map.getChildren().clear();
-  }
-
   @Override
   public void clearGame() {
     Platform.runLater(() -> {
@@ -505,7 +516,7 @@ public class GameController implements Initializable, GamePresenter {
       } else {
         if (toast.isPermanent()) {
           toastDock.getChildren()
-              .removeIf(n -> n instanceof  ToastComponent && ((ToastComponent) n).isPermanent());
+              .removeIf(n -> n instanceof ToastComponent && ((ToastComponent) n).isPermanent());
           toastDock.getChildren().add(0, toast);
         } else {
           toastDock.getChildren().add(toast);
@@ -534,6 +545,18 @@ public class GameController implements Initializable, GamePresenter {
   @Override
   public void setTps(double tps) {
     main.setTps(tps);
+  }
+
+  public void setUserStore(UserStore userStore) {
+    this.userStore = userStore;
+  }
+
+  public void clearMap() {
+    map.getChildren().clear();
+  }
+
+  public void clearToastDock() {
+    toastDock.getChildren().clear();
   }
 
   public void leaveGame() {

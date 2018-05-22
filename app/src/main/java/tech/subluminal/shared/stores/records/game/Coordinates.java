@@ -9,11 +9,18 @@ public class Coordinates implements SONRepresentable {
   private static final String X_KEY = "x";
   private static final String Y_KEY = "y";
   private double x;
+  private int intX;
   private double y;
+  private int intY;
 
   public Coordinates(double x, double y) {
     this.x = x;
     this.y = y;
+  }
+
+  public Coordinates(int x, int y) {
+    this.intX = x;
+    this.intY = y;
   }
 
   public static Coordinates fromSON(SON son) throws SONConversionError {
@@ -71,6 +78,31 @@ public class Coordinates implements SONRepresentable {
    */
   public void setY(double y) {
     this.y = y;
+  }
+
+  public int getIntX() {
+    return intX;
+  }
+
+  public void setIntX(int intX) {
+    this.intX = intX;
+  }
+
+  public int getIntY() {
+    return intY;
+  }
+
+  public void setIntY(int intY) {
+    this.intY = intY;
+  }
+
+  public String prettyPrint() {
+    return "X: " + getX() + ", Y: " + getY();
+  }
+
+  @Override
+  public String toString() {
+    return "" + getX() + "," + getY();
   }
 
   public SON asSON() {

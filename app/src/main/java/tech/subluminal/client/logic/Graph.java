@@ -17,6 +17,9 @@ import java.util.stream.Collectors;
  */
 public class Graph<E> {
 
+  private final BiPredicate<E, E> canReach;
+  private final BiFunction<E, E, Double> weightCalculator;
+  private final boolean symmetric;
   private Set<Node<E>> nodes;
 
   /**
@@ -34,13 +37,14 @@ public class Graph<E> {
   ) {
     this.nodes = nodes.stream().map(Node::new).collect(Collectors.toSet());
 
-    connectNodes(canReach, weightCalculator, symmetric);
-    System.out.println("path created");
-    nodes.forEach(n -> System.out.println(n.toString()));
+    this.canReach = canReach;
+    this.weightCalculator = weightCalculator;
+    this.symmetric = symmetric;
+
+    connectNodes();
   }
 
-  private void connectNodes(BiPredicate<E, E> canReach, BiFunction<E, E, Double> weightCalculator,
-      boolean symmetric) {
+  private void connectNodes() {
     List<Node<E>> nodes = new ArrayList<>(this.nodes);
 
     for (int i = 0; i < nodes.size(); i++) {
@@ -63,6 +67,29 @@ public class Graph<E> {
   }
 
   /**
+   * Adds a new node to the graph.
+   *
+   * @param data the data of the node to add.
+   */
+  public void addNode(E data) {
+    Node<E> node = new Node<>(data);
+    for (Node<E> n: nodes) {
+      E d = n.getData();
+      if (canReach.test(data, d)) {
+        double weight = weightCalculator.apply(data, d);
+        node.addNeighbour(n, weight);
+        if (symmetric) {
+          n.addNeighbour(node, weight);
+        }
+      }
+
+      if (!symmetric && canReach.test(d, data)) {
+        n.addNeighbour(node, weightCalculator.apply(data, d));
+      }
+    }
+  }
+
+  /**
    * Returns a List containing the node elements representing the shortest path from alpha to
    * omega.
    *
@@ -71,7 +98,6 @@ public class Graph<E> {
    * @return the node elements representing the shortest path from alpha to omega.
    */
   public List<E> findShortestPath(E alpha, E omega) {
-    System.out.println("PATH: " + alpha+ " " + omega);
     Node<E> start = nodes.stream()
         .filter(n -> n.getData().equals(alpha))
         .findFirst()
@@ -136,7 +162,5 @@ public class Graph<E> {
       this.distance = distance;
       this.path = path;
     }
-
   }
-
 }

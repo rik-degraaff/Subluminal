@@ -38,4 +38,8 @@ public class WindowContainerComponent extends AnchorPane {
   public void onWindowClose() {
     controller.closeWindow();
   }
+
+  public void setTitle(String text) {
+    controller.setTitel(text);
+  }
 }

@@ -16,6 +16,7 @@ public class NameChangeComponent extends AnchorPane {
   public NameChangeComponent(MainController main){
     HBox box = new HBox();
 
+    field.requestFocus();
     change = new Button("Change Name");
     change.setOnAction(e -> {
       if(!field.getText().equals("")){
@@ -38,9 +39,10 @@ public class NameChangeComponent extends AnchorPane {
       }
     });
     this.getChildren().addAll(box);
-    this.getStyleClass().add("console");
-    this.setMaxWidth(140);
-    this.setMaxHeight(400);
+    this.getStyleClass().add("font-dos");
+
+    this.setHeight(Double.MAX_VALUE);
+    this.setWidth(Double.MAX_VALUE);
 
   }
 

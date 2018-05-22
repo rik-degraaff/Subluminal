@@ -2,7 +2,7 @@ package tech.subluminal.client.presentation;
 
 public interface LobbyPresenter {
 
-  void joinLobbySucceded();
+  void joinLobbySucceded(String name);
 
   void leaveLobbySucceded();
 

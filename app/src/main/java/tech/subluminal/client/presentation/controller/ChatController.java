@@ -93,6 +93,8 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
   public void setInGame(boolean inGame) {
     this.inGame.set(inGame);
+    sendButton.setDisable(!inGame);
+    sendButton.setText(inGame ? "Send" : "");
   }
 
   public BooleanProperty inGameProperty() {
@@ -105,6 +107,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
   /**
    * Passes message to the channel formatter.
+   *
    * @param message the message to send.
    * @param channel the channel to send the message in.
    */
@@ -128,6 +131,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
   /**
    * Formats the whisper message and prints it to the chat.
+   *
    * @param message the message to send.
    * @param username the user who sent the message.
    * @param channel the channel to send the message in.
@@ -144,6 +148,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
   /**
    * Filters the global message from the chat view.
+   *
    * @param e changes the predicate for filtering.
    */
   public void updateFilter(ActionEvent e) {
@@ -173,8 +178,14 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
         handleCommand(line);
       } else {
         //send @all
-        chatDelegate.sendGameMessage(line);
-        addMessageChat("you@game: " + line, Channel.GAME);
+        if(inGame.get()){
+          chatDelegate.sendGameMessage(line);
+          addMessageChat("you@game: " + line, Channel.GAME);
+        }else{
+          chatDelegate.sendGlobalMessage(line);
+          addMessageChat("you: " + line, Channel.GLOBAL);
+        }
+
         clearInput();
       }
     }
@@ -182,6 +193,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
   /**
    * Send the message to all users.
+   *
    * @param actionEvent the trigger for when to the send message.
    */
   public void sendMessageAll(ActionEvent actionEvent) {
@@ -204,6 +216,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
   /**
    * Handles all possible commands input by the user.
+   *
    * @param line is the whole command input by the user.
    */
   private void handleCommand(String line) {
@@ -222,6 +235,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
   /**
    * Sends a private message to a user.
+   *
    * @param recipiant is the user to receive the message.
    */
   public void writeAt(String recipiant) {
@@ -478,6 +492,8 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
     sendBox.setMaterial(material);
     sendAllBox.setMaterial(material);
+
+    setInGame(false);
 
   }
 
