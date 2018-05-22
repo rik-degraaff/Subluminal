@@ -11,19 +11,21 @@
 %\renewcommand{\scdefault}{\ibm}
 \input{titlepage}
 %=========================================
+\pagestyle{plain}
 \input{chapters/story}
-\tableofcontents
+%\tableofcontents
 \clearpage
 %=========================================
 \renewcommand{\thepage}{\arabic{page}}% Arabic numerals for page counter
-\part{Subluminal - The Game}
-\input{chapters/intro/intro}
+\part*{Subluminal --- The Game}
 \input{chapters/gameconcept/game-concept}
 \input{chapters/gamerules/game-rules}
+\input{chapters/keybindings/keybindings}
+\input{chapters/modding/modding}
 
 %=========================================
 \begin{comment}
-  Just some notes, not visible in pdf.
+  Notes, not visible in pdf.
 \end{comment}
 %=========================================
 \end{document}

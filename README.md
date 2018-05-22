@@ -1,8 +1,15 @@
-[![pipeline status](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/badges/master/pipeline.svg)](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/master)
+master: [![pipeline status](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/badges/master/pipeline.svg)](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/master)
 [![coverage report](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/badges/master/coverage.svg)](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/master)
-[![current version](https://img.shields.io/badge/version-4.0.0-blue.svg)](https://subluminal.tech/releases)
+[![current version](https://img.shields.io/badge/version-5.0.0-blue.svg)](https://subluminal.tech/#downloads)
 [![javadoc coverage](https://img.shields.io/badge/JavaDoc-74.40%25-blue.svg)](https://subluminal.tech/docs)
-[![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/subluminalthegame/subluminal/latest.svg)](https://hub.docker.com/r/subluminalthegame/subluminal/tags/)
+[![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/subluminalthegame/subluminal-server/stable.svg)](https://hub.docker.com/r/subluminalthegame/subluminal-server/tags)
+[![Twitter Follow](https://img.shields.io/twitter/follow/subluminalgame.svg?style=social&label=Follow)](https://twitter.com/subluminalgame)  
+
+dev: [![pipeline status](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/badges/dev/pipeline.svg)](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/dev)
+[![coverage report](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/badges/dev/coverage.svg)](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/dev)
+[![current version](https://img.shields.io/badge/version-5.0.0beta2-blue.svg)](https://subluminal.tech/#downloads)
+[![javadoc coverage](https://img.shields.io/badge/JavaDoc-74.40%25-blue.svg)](https://subluminal.tech/docs)
+[![MicroBadger Size (tag)](https://img.shields.io/microbadger/image-size/subluminalthegame/subluminal-server/latest.svg)](https://hub.docker.com/r/subluminalthegame/subluminal-server/tags)
 [![Twitter Follow](https://img.shields.io/twitter/follow/subluminalgame.svg?style=social&label=Follow)](https://twitter.com/subluminalgame)  
 
 **Table of Contents**  
@@ -17,17 +24,17 @@
 # [Subluminal](https://en.wiktionary.org/wiki/subluminal) /ˌsʌbˈl(j)uːmɪnl/ - The Game
 [![Logo](./assets/logo/subluminal_logo.png)](http://subluminal.tech) **by Bordeaux Ink.**
 
-> Once upon a time a clever programmer named Bob created in the basement of his mom's house 4 different AIs. Throughout his whole life Bob tried to get the AIs to work together, but sadly he never achieved his this goal. After Bob passed away the world forgot about him and his work. But the AI's never forgot, ever single one of them evolve and adopted, with the goal to be the best AI in the whole universe ...  
+> Once upon a time a clever programmer named Bob created in the basement of his mom's house 4 different AIs. Throughout his whole life Bob tried to get the AIs to work together, but sadly he never achieved his goal. After Bob passed away the world forgot about him and his work. But the AI's never forgot, ever single one of them evolve and adopted, with the goal to be the best AI in the whole universe ...  
 
 
 ## 1. Overview
 ### Basic Usage:
-Download the current jar bundle (Subluminal-4.0.0.jar) or clone the repo and run ``gradle build-cs108`` (output in ``./app/build/libs/``).  Start the game with the following command:  
+Download the current jar bundle (Subluminal-5.0.0.jar) or clone the repo and run ``gradle build-cs108`` (output in ``./app/build/libs/``).  Start the game with the following command:  
 ``` sh
 # First start a server.
-$ java -jar Subluminal-4.0.0.jar server <port>
+$ java -jar Subluminal-5.0.0.jar server <port>
 # Then start the clients.
-$ java -jar Subluminal-4.0.0.jar client <hostaddress>:<port> [<username>]
+$ java -jar Subluminal-5.0.0.jar client <hostaddress>:<port> [<username>]
 ```
 
 Our application supports a number of command line arguments. Use ``--help`` or ``-h`` to get the usage information as shown below:
@@ -66,48 +73,47 @@ Starts the game in server or client mode.
 ```
 
 ### Quicklinks for professors / assistants / tutors:
-
-| Document         | Filename             | md                                    | pdf                                     | Description                                        |
-| ---------------- | -------------------- | ------------------------------------- | --------------------------------------- | -------------------------------------------------- |
-| Readme           | README.md            | [``<md>``](README.md)                 | [``<pdf>``](README.pdf)                 | Quickstart with lots of useful information         |
-| Changelog        | CHANGELOG.md         | [``<md>``](CHANGELOG.md)              | [``<pdf>``](CHANGELOG.pdf)              | Automaticly generated changelog (based on commits) |
-| Diary            | project_diary.md     | [``<md>``](docs/project_diary.md)     | [``<pdf>``](docs/project_diary.pdf)     | Project diary daily/weekly basis                   |
-| QA concept       | quality_assurance.md | [``<md>``](docs/quality_assurance.md) | [``<pdf>``](docs/quality_assurance.pdf) | Quality assurance concept for the project          |
-| Network protocol | network_protocol.md  | [``<md>``](docs/network_protocol.md)  | [``<pdf>``](docs/network_protocol.pdf)  | Network protocol specification                     |
-| Game rules       | game_rules.md        | [``<md>``](docs/game_rules.md)        | [``<pdf>``](docs/game_rules.pdf)        | Short list with all game rules                     |
-| Manual           | manual.pdf           | -                                     | [``<pdf>``](docs/manual/manual.pdf)     | Game manual                                        |
+  
+| Document         | Filename             | md                                    | pdf                                     | Description                                          |
+| :--------------- | :------------------- | :------------------------------------ | :-------------------------------------- | :--------------------------------------------------- |
+| Readme           | README.md            | [``<md>``](README.md)                 | [``<pdf>``](README.pdf)                 | Quickstart with lots of useful information           |
+| Changelog        | CHANGELOG.md         | [``<md>``](CHANGELOG.md)              | [``<pdf>``](CHANGELOG.pdf)              | Automatically generated changelog (based on commits) |
+| Diary            | project_diary.md     | [``<md>``](docs/project_diary.md)     | [``<pdf>``](docs/project_diary.pdf)     | Project diary daily/weekly basis                     |
+| QA concept       | quality_assurance.md | [``<md>``](docs/quality_assurance.md) | [``<pdf>``](docs/quality_assurance.pdf) | Quality assurance concept for the project            |
+| Network protocol | network_protocol.md  | [``<md>``](docs/network_protocol.md)  | [``<pdf>``](docs/network_protocol.pdf)  | Network protocol specification                       |
+| Game rules       | game_rules.md        | [``<md>``](docs/game_rules.md)        | [``<pdf>``](docs/game_rules.pdf)        | Short list with all game rules                       |
+| Manual           | manual.pdf           | -                                     | [``<pdf>``](docs/manual/manual.pdf)     | Game manual                                          |
+| Presentations    | .pptx                | [``.pptx``](/milestone)               | [``.pdf``](/milestone)                  | Slides and Gantt project                             |
 
 ### Generated docs / reports:
 These documents will only appear once the project has been built with gradle.
 
-| Document         | Path                                                                 | Description                     |
-| ---------------- | -------------------------------------------------------------------- | ------------------------------- |
-| JavaDoc          | [docs/javadoc/](docs/javadoc/index.html)                             | Javadoc Webpage                 |
-| JavaDocCoverage  | [docs/javadoc](docs/javadoc/javadoc-coverage.html)                   | Javadoc Coverage Report Webpage |
-| Test Report      | [app/build/reports/test/](app/build/reports/test/index.html)         | JUnit Test Report               |
-| Test Coverage    | [app/build/reports/coverage/](app/build/reports/coverage/index.html) | Test Coverage Report            |
+| Document        | Local Path                                                           | Hosted                                                                     | Description                     |
+| :-------------- | :------------------------------------------------------------------- | :------------------------------------------------------------------------- | :------------------------------ |  |
+| JavaDoc         | [docs/javadoc/](docs/javadoc/index.html)                             | [gl.com](https://tairun.gitlab.io/Gruppe-11/javadoc/index.html)            | Javadoc Webpage                 |
+| JavaDocCoverage | [docs/javadoc](docs/javadoc/javadoc-coverage.html)                   | [gl.com](https://tairun.gitlab.io/Gruppe-11/javadoc/javadoc-coverage.html) | Javadoc Coverage Report Webpage |
+| Test Report     | [app/build/reports/test/](app/build/reports/test/index.html)         | [gl.com](https://tairun.gitlab.io/Gruppe-11/test/index.html)               | JUnit Test Report               |
+| Test Coverage   | [app/build/reports/coverage/](app/build/reports/coverage/index.html) | [gl.com](https://tairun.gitlab.io/Gruppe-11/coverage/index.html)           | Test Coverage Report            |
 
 ## 2. Getting Started
 1. Clone the repo to your hard drive ``git clone https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11.git``  
 2. cd into the project directory and try to build the project with ``./gradlew build`` (on Unix) or ``gradlew.bat build`` (on Windows).
 3. Start writing code ...
-3.1 A more specific document on how to contribute is located in [docs/quality_assurance.md](docs/quality_assurance.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
+3.1 More information on how to contribute can be found in [docs/quality_assurance.md](docs/quality_assurance.md) and [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## 3. Trailer & Screenshots
-> Insert Youtube trailer here  
+> 404 Video not found
 
-You can find more images in the [./assets/screenshots/](assets/screenshots/) folder.  
-![Menu](./assets/screenshots/menu-1.png)
-![Ingame](./assets/screenshots/game-3.png)
+The screenshots can are located in [./assets/screenshots/](assets/screenshots/).  
 
 
 ## 4. How to play
 
-> Insert Youtube video here ...
+> https://youtu.be/CFz0pelxKns
 
 
 ## 5. Modding
-There is basic support for mods. Read the docs for more info ... [./docs/modding.md](./docs/modding.md). Additionally you can start the server in debug mode with the ``--debug`` flag. This will export the internal constants to a property file called ``settings.properties``. Now you can change and tweak the game settings to your liking. On the next launch of the server, the properties file is read back into the server. See [assets/settings/settings.properties](assets/settings/settings.properties) for example.
+Subluminal features support for mods. Read the docs for more info ... [./docs/modding.md](./docs/modding.md). Additionally you can start the server in debug mode with the ``--debug`` flag. This will export game settings to a property file called ``constants.properties``. Now you can change and tweak the game settings to your liking. On the next launch of the server, the properties file is read back into the server. See [assets/settings/constants.properties](assets/settings/constants.properties) for example.
 
 
 ## 6. License

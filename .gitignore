@@ -14,11 +14,11 @@ __*.tex
 *.synctex*
 log.txt
 *.toc
+*.out
 docker/_secrets.sh
 
 #folders
 .app/
-.files/
 .idea/
 .gradle/
 .settings/
@@ -31,4 +31,6 @@ bin/
 build/
 classes/
 docs/javadoc/
+files/
+log\.txt
 classes/
