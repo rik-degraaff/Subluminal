@@ -3,6 +3,9 @@ package tech.subluminal.client.presentation.controller;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
@@ -19,7 +22,14 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.PhongMaterial;
+import javafx.scene.shape.Box;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Translate;
+import javafx.util.Duration;
 import tech.subluminal.client.presentation.ChatPresenter;
 import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.stores.ReadOnlyUserStore;
@@ -42,8 +52,21 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   private Button sendButton;
   @FXML
   private Button sendAllButton;
+
   @FXML
-  private GridPane chatOptions;
+  private AnchorPane chatBox;
+
+  @FXML
+  private Box chat3DBox;
+
+  @FXML
+  private Box sendBox;
+
+  @FXML
+  private Box sendAllBox;
+
+  @FXML
+  private GridPane sendOptions;
 
   private ReadOnlyUserStore userStore;
   private ChatPresenter.Delegate chatDelegate;
@@ -68,18 +91,26 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     return inGame.get();
   }
 
-  public BooleanProperty inGameProperty() {
-    return inGame;
-  }
-
   public void setInGame(boolean inGame) {
     this.inGame.set(inGame);
+    sendButton.setDisable(!inGame);
+    sendButton.setText(inGame ? "Send" : "");
+  }
+
+  public BooleanProperty inGameProperty() {
+    return inGame;
   }
 
   public void setUserStore(UserStore store) {
     this.userStore = store;
   }
 
+  /**
+   * Passes message to the channel formatter.
+   *
+   * @param message the message to send.
+   * @param channel the channel to send the message in.
+   */
   public void addMessageChat(String message, Channel channel) {
     Platform.runLater(() -> {
       Label msg = new Label(message);
@@ -98,6 +129,13 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     });
   }
 
+  /**
+   * Formats the whisper message and prints it to the chat.
+   *
+   * @param message the message to send.
+   * @param username the user who sent the message.
+   * @param channel the channel to send the message in.
+   */
   public void addMessageChat(String message, String username, Channel channel) {
     if (channel == Channel.WHISPER) {
       addMessageChat(username + "@you: " + message, channel);
@@ -108,6 +146,11 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     }
   }
 
+  /**
+   * Filters the global message from the chat view.
+   *
+   * @param e changes the predicate for filtering.
+   */
   public void updateFilter(ActionEvent e) {
     if (isGlobalShown.isSelected()) {
       filteredList.setPredicate(l -> true);
@@ -117,6 +160,9 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
 
   }
 
+  /**
+   * Scrolls the chat view to bottom (last message).
+   */
   private void scrollToBottom() {
     chatHistory.scrollTo(chatHistory.getItems().size() - 1);
   }
@@ -132,13 +178,24 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
         handleCommand(line);
       } else {
         //send @all
-        chatDelegate.sendGameMessage(line);
-        addMessageChat("you@game: " + line, Channel.GAME);
+        if(inGame.get()){
+          chatDelegate.sendGameMessage(line);
+          addMessageChat("you@game: " + line, Channel.GAME);
+        }else{
+          chatDelegate.sendGlobalMessage(line);
+          addMessageChat("you: " + line, Channel.GLOBAL);
+        }
+
         clearInput();
       }
     }
   }
 
+  /**
+   * Send the message to all users.
+   *
+   * @param actionEvent the trigger for when to the send message.
+   */
   public void sendMessageAll(ActionEvent actionEvent) {
     String line = messageText.getText();
     if (!line.equals("")) {
@@ -176,6 +233,11 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     }
   }
 
+  /**
+   * Sends a private message to a user.
+   *
+   * @param recipiant is the user to receive the message.
+   */
   public void writeAt(String recipiant) {
     String temp = messageText.getText();
     clearInput();
@@ -251,7 +313,7 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     return line.substring(channel.length() + 1);
   }
 
-  public void requestHighscores(){
+  public void requestHighscores() {
     chatDelegate.requestHighScores();
   }
 
@@ -262,7 +324,6 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   @Override
   public void displaySystemMessage(String message) {
     addMessageChat(message, Channel.CRITICAL);
-    main.openChat();
 
   }
 
@@ -286,7 +347,6 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   @Override
   public void whisperMessageReceived(String message, String username) {
     addMessageChat(message, username, Channel.WHISPER);
-    main.openChat();
   }
 
   /**
@@ -323,11 +383,6 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     addMessageChat("Logged in as: " + getCurrentUsername(), Channel.INFO);
   }
 
-  private String getCurrentUsername() {
-    return userStore.currentUser().get().use(user -> user.map(User::getUsername))
-        .orElseThrow(() -> new IllegalStateException("Current User is not in the Userstore."));
-  }
-
   /**
    * Gets called when the client got logged out.
    */
@@ -342,7 +397,6 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
   @Override
   public void nameChangeSucceeded() {
     addMessageChat("Your username got changed to: " + getCurrentUsername(), Channel.INFO);
-    main.openChat();
   }
 
   @Override
@@ -366,22 +420,89 @@ public class ChatController implements ChatPresenter, UserPresenter, Initializab
     addMessageChat(oldUsername + " changed his name to: " + newUsername + ".", Channel.INFO);
   }
 
+  private String getCurrentUsername() {
+    return userStore.currentUser().get().use(user -> user.map(User::getUsername))
+        .orElseThrow(() -> new IllegalStateException("Current User is not in the Userstore."));
+  }
+
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     chatHistory.setItems(filteredList);
     chatHistory.setPadding(new Insets(0, 0, 0, 0));
-    chatOptions.getChildren().remove(sendButton);
+    //  chatOptions.getChildren().remove(sendButton);
 
-    inGameProperty().addListener((observable, oldValue, newValue) -> {
-      if(newValue != oldValue){
-        if(chatOptions.getChildren().contains(sendButton)){
-          chatOptions.getChildren().remove(sendButton);
-        }else {
-          chatOptions.getChildren().add(sendButton);
-        }
+    chat3DBox.heightProperty().bind(chatBox.heightProperty());
+    chat3DBox.widthProperty().bind(chatBox.widthProperty());
 
-      }
+    //boardCylinder.heightProperty().bind(chatBox.widthProperty());
+    PhongMaterial material = new PhongMaterial();
+    material.setSpecularColor(Color.BLACK);
+    material.setDiffuseColor(Color.GREY);
+
+    PhongMaterial materialChat = new PhongMaterial();
+    materialChat.setSpecularColor(Color.BLACK);
+    materialChat.setDiffuseColor(Color.BEIGE);
+
+    chat3DBox.setMaterial(materialChat);
+
+    chatBox.setTranslateX(-5);
+
+    sendAllBox.widthProperty().bind(sendOptions.widthProperty());
+    sendBox.widthProperty().bind(sendOptions.widthProperty());
+    Translate transAll = new Translate();
+    //sendAllBox.getTransforms().add(transAll);
+    sendAllButton.getTransforms().add(transAll);
+    Scale scaleAll = new Scale();
+    sendAllBox.getTransforms().add(scaleAll);
+
+    Translate trans = new Translate();
+    //sendBox.getTransforms().add(trans);
+    sendButton.getTransforms().add(trans);
+    Scale scale = new Scale();
+    sendBox.getTransforms().add(scale);
+
+    sendButton.setOnMouseEntered((e) -> {
+      Timeline timeTl = new Timeline();
+      timeTl.getKeyFrames().addAll(
+          new KeyFrame(Duration.seconds(0.1), new KeyValue(trans.zProperty(), 3)),
+          new KeyFrame(Duration.seconds(0.1), new KeyValue(scale.zProperty(), 0.5)));
+      timeTl.play();
+    });
+    sendButton.setOnMouseExited((e) -> {
+      Timeline timeTl = new Timeline();
+      timeTl.getKeyFrames().addAll(
+          new KeyFrame(Duration.seconds(0.1), new KeyValue(trans.zProperty(), 0)),
+          new KeyFrame(Duration.seconds(0.1), new KeyValue(scale.zProperty(), 1)));
+      timeTl.play();
+    });
+    sendAllButton.setOnMouseEntered((e) -> {
+      Timeline timeTl = new Timeline();
+      timeTl.getKeyFrames().addAll(
+          new KeyFrame(Duration.seconds(0.1), new KeyValue(transAll.zProperty(), 3)),
+          new KeyFrame(Duration.seconds(0.1), new KeyValue(scaleAll.zProperty(), 0.5)));
+      timeTl.play();
+    });
+    sendAllButton.setOnMouseExited((e) -> {
+      Timeline timeTl = new Timeline();
+      timeTl.getKeyFrames().addAll(
+          new KeyFrame(Duration.seconds(0.1), new KeyValue(transAll.zProperty(), 0)),
+          new KeyFrame(Duration.seconds(0.1), new KeyValue(scaleAll.zProperty(), 1)));
+      timeTl.play();
     });
 
+    sendBox.setMaterial(material);
+    sendAllBox.setMaterial(material);
+
+    setInGame(false);
+
+  }
+
+  public void requestFocus() {
+    messageText.requestFocus();
+
+  }
+
+  public TextField getTextField() {
+    return messageText;
   }
 }

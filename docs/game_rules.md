@@ -1,34 +1,25 @@
 # Game Rules
 
-- Possibly 2-n players, for the moment we decided the maximum number of players will be 8.
-- At the beginning of a game, the map is created randomly.
-- You lose the game when your mother ship does not exist anymore.
-- You win the game when your mother ship is the only remaining mother ship on the map.
-- Starting positions of the players are assigned randomly, but in a way no player has a big advantage or disadvantage.
-- Every player is able to see the whole map.
-- The map consists of stars, which also are solar systems. At the beginning of a game every player's mother ship is randomly assigned to a star.
-- Each star has its own attributes, which influence:  
-	a) The frequency of production of new regular ships.
-	b) The basic defense of a star against intruders.
-	c) How much effort it takes to colonize the star.
-- If a player colonizes a new star, the star automatically starts producing regular ships for the player, which are local to that star.
-- The regular ships that are local to a star that is owned by a player can be sent out by the player.
-- Every order to move regular ships from one star to another originate from the mother ship.
-- Each star also has an attribute that regulates the maximum radius a ship can reach without having to fuel up on another star.
-- The rule above implicates	that further destinations can only be reached by one's regular ships by "hopping" from star to star to be able to fuel up.
-- "Hopping" can occur on both neutral and owned (colonized) stars.
-- By hopping onto a star that is owned by an opponent, the hopping player gets punished by automatic tear-down of a certain percentage of his hopping ships.
-- If a player targets a certain star he or she can influence the hopping path his or her ships or use the one that is automatically calculated by the system, which is the shortest.
-- Hopping stars and colonizing stars are two separate processes. Accidental colonization while hopping a star can not occur.
-- When regular ships reach the target they hopped to, two scenarios can happen:
-	a) Nobody is there yet, the star is neutral. The player's regular ships start colonizing the star. The speed of the colonization progress depends from the number of regular ships the player sent, the basic defense of the star and how much effort the star takes to be colonized.
-	b) The star is already under possession of an opponent. In this case the fleets of the opponents start tearing down themselves, until only regular ships of one of the fleets remain. If the remaining regular ships belong to the intruder, they immediately start neutralizing the star to then colonize it. If the remaining regular ships belong to the previous owner of the star, nothing else happens.
-- Every move one's regular ships make originates from the mother ship. Thus, the order takes longer to get to the concerning regular ships, the further their base star is away from the mother ship.
-- When a player orders a fleet to go colonize another star, the information about the number of available regular ships is always outdated (because of the distance). So the player has to options:
-	a) He/She sends out the order that a certain percentage of the regular ships should leave their base star.
-	b) He/She sends out the order that a certain number or regular ships should be the maximum number of sent out ships. If there are not that many regular ships left the moment the order arrives at the base, all regular ships are sent out.
-- Fleets of regular ships that are hopping to their target send out information to their mother ship about their position in regular intervals.
-- The mother ship can also be moved from her base, it's slower than the regular ships.
-- The mother ship has an own basic defense value.
-- If the base of the mother ship is intruded, the mother ship is the last one to be torn down.
-- Every mother ship and every regular ship broadcast their position so that every player can see it.
+1. The maximum number of players is 8.
+2. At the beginning of a game, the map is created randomly.
+3. The map consists of stars.
+4. At the beginning of a game, every player's mothership is randomly assigned to a star.
+5. You lose the game when your mothership dies.
+6. You win the game when your mothership is the only remaining mothership on the map.
+7. Every player is able to see the whole map.
+8. When a player colonizes a star, the star automatically starts to produce ships for the player, which accumulate on that star.
+9. The ships that are local to a star that is owned by a player, can be sent to neighbouring stars as fleets.
+10. Stars can be colonized by sending fleets to them. If a star already belongs to another player, dematerialization occurs between the two fleets and the winning player (the one with the bigger fleet) keeps the star.
+11. Since the fleets have to fuel up at some point, the maximum jumping distance between two stars is restricted.
+12. The rule above implicates	that further destinations can only be reached by one's ships by "hopping" from star to star to be able to fuel up.
+13. A pathfinding algorithm computes the shortest path between the origin and target star. The target star can only be reached by that path.
+14. "Hopping" can occur on both neutral and owned (colonized) stars.
+15. By hopping onto a star that is owned by an opponent, the hopping player gets punished by dematerialization of a small part of his hopping fleet.
+16. Hopping and colonizing stars are two separate processes. Accidental colonization while hopping a star can not occur.
+17. Every move one’s ships make originates from the mothership. Thus, the order takes longer to get to the concerning ships, the further their base star is away from the mothership.
+18. The rule above also implies that, the further away from one's mothership something happens, the more outdated the respective information is when it arrives at a player (i.e. his mothership).
+19. When a player orders a fleet to go colonize another star, the information about the number of available regular ships is always outdated (because of the distance). So the player simply enters the maximum number of ships to be sent and, if there are not that many, all available ships are sent.
+20. Every event on the map is broadcasted to all the players and reaches a player's mothership according to the time delay caused by the distance.
+21. The mothership can also be moved from her base, it's slower than ships.
+22. The mothership is as strong as 5 ships.
+23. If the base of the mothership is intruded, the mothership is the last one to be torn down.

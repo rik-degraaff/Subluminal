@@ -70,4 +70,11 @@ public class GameHistoryEntry<E extends GameObject> {
   public boolean isDestroyed() {
     return destroyed;
   }
+
+  @Override
+  public boolean equals(Object obj) {
+    return obj instanceof GameHistoryEntry
+        && isDestroyed() == ((GameHistoryEntry) obj).isDestroyed()
+        && ((GameHistoryEntry) obj).getState().equals(getState());
+  }
 }

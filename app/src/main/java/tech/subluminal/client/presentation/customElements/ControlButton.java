@@ -1,37 +1,63 @@
 package tech.subluminal.client.presentation.customElements;
 
 import javafx.scene.Node;
-import javafx.scene.control.Button;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import tech.subluminal.client.presentation.controller.MainController;
+import tech.subluminal.client.presentation.customElements.custom3DComponents.Button3dComponent;
 
-public class ControlButton extends Button {
+public class ControlButton extends AnchorPane {
 
-  private boolean isOpen;
   Node parent;
   Node node;
   MainController main;
+  private boolean isOpen;
 
-  public ControlButton(MainController main, String label, Node node, Node parent) {
+  public ControlButton(MainController main, String label, Node node, Node goal) {
     this.main = main;
     this.node = node;
-    this.parent = parent;
-    this.setText(label);
+    this.parent = goal;
 
-    if (parent instanceof VBox) {
+    Button3dComponent button = new Button3dComponent(label);
 
-      this.setOnAction(e -> {
+    button.getStyleClass().addAll("button3D", "font-dos");
+
+    button.prefWidthProperty().bind(this.widthProperty());
+    button.prefHeightProperty().bind(this.heightProperty());
+
+
+    this.getChildren().addAll(button);
+
+    if (goal instanceof VBox) {
+
+      button.setOnMouseClicked(e -> {
 
         if (!isOpen) {
-          ((VBox)parent).getChildren().add(node);
-          this.setText("X");
+          ((VBox) goal).getChildren().add(node);
+          button.setText("X");
           isOpen = true;
         } else {
-          ((VBox) parent).getChildren().remove(node);
+          ((VBox) goal).getChildren().remove(node);
           isOpen = false;
-          this.setText(label);
+          button.setText(label);
         }
+        e.consume();
+      });
+    } else {
+      button.setOnMouseClicked(e -> {
+        if (!isOpen) {
+          ((DisplayComponent) goal).clearDisplay();
+          ((DisplayComponent) goal).setDisplay((AnchorPane) node);
+          button.setText("X");
+          isOpen = true;
+        } else {
+          ((DisplayComponent) goal).clearDisplay();
+          isOpen = false;
+          button.setText(label);
+        }
+        e.consume();
       });
     }
+
   }
 }

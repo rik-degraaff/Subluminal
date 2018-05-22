@@ -5,11 +5,15 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Message gets send from a leaving client to the server.
+ * Message that is sent from a leaving client to the server. This message, when converted to SON and
+ * then to string, looks like this:
+ * <pre>
+ * {}
+ * </pre>
  */
 public class GameLeaveReq implements SONRepresentable {
 
-  public static GameLeaveReq fromSON(SON son) throws SONConversionError{
+  public static GameLeaveReq fromSON(SON son) throws SONConversionError {
     return new GameLeaveReq();
   }
 

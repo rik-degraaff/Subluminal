@@ -19,8 +19,11 @@ import org.pmw.tinylog.Logger;
 import tech.subluminal.shared.records.GlobalSettings;
 
 public class SettingsReaderWriter implements PropertiesReaderWriter {
-  public SettingsReaderWriter() {
 
+  ConfigModifier<String, String> cm = new ConfigModifier<>("settings");
+
+  public SettingsReaderWriter() {
+    cm.attachToFile(GlobalSettings.FILE_SETTINGS);
   }
 
   @Override
@@ -31,7 +34,7 @@ public class SettingsReaderWriter implements PropertiesReaderWriter {
 
   @Override
   public void readProperties(Class type, Object obj, String jarPath) {
-    File f = new File(jarPath + "\\" + GlobalSettings.FILE_SETTINGS);
+    File f = cm.getAttachedFile();
 
     if (f.exists() && !f.isDirectory()) {
       Properties props = new Properties();
@@ -40,12 +43,12 @@ public class SettingsReaderWriter implements PropertiesReaderWriter {
       try {
         is = new FileInputStream(f);
       } catch (FileNotFoundException e) {
-        e.printStackTrace();
+        Logger.error(e);
       }
       try {
         props.load(is);
       } catch (IOException e) {
-        e.printStackTrace();
+        Logger.error(e);
       }
 
       Stream<Field> fields = getFields(type, Export.class);
@@ -62,6 +65,10 @@ public class SettingsReaderWriter implements PropertiesReaderWriter {
               tmp = Double.parseDouble(props.getProperty(field.getName()));
               break;
             }
+            case("long"): {
+              tmp = Long.parseLong(props.getProperty(field.getName()));
+              break;
+            }
             case("boolean"): {
               tmp = Boolean.parseBoolean(props.getProperty(field.getName()));
               break;
@@ -72,7 +79,6 @@ public class SettingsReaderWriter implements PropertiesReaderWriter {
             }
             default: {
               Logger.error("No type handler found for: " + field.getType().getSimpleName());
-              System.out.println("No type handler found: " + field.getType().getSimpleName());
               break;
             }
           }
@@ -82,7 +88,7 @@ public class SettingsReaderWriter implements PropertiesReaderWriter {
           field.set(type, tmp);
           field.setAccessible(false);
         } catch (IllegalAccessException e) {
-          e.printStackTrace();
+          Logger.error(e);
         }
       });
 
@@ -94,9 +100,9 @@ public class SettingsReaderWriter implements PropertiesReaderWriter {
 
   @Override
   public void writeProperties(Class type, Object obj, String jarPath) {
-    File f = new File(jarPath + "\\" + GlobalSettings.FILE_SETTINGS);
+    File f = cm.getAttachedFile();
 
-    if (!f.exists() && !f.isDirectory()) {
+    if (!f.isDirectory()) { //TODO: FIX not being able to write in empty properties file with --> !f.exists()
       Properties props = new Properties();
       Stream<Field> fields = getFields(type, Export.class);
       fields.forEach(field -> {
@@ -112,7 +118,7 @@ public class SettingsReaderWriter implements PropertiesReaderWriter {
         props.store(out, "Subluminal settings file with @Export annotated fields");
       } catch (
           IOException e) {
-        e.printStackTrace();
+        Logger.error(e);
       }
     } else {
       Logger.info("Settings file (" + f.toString() + ") already exists. Won't overwrite.");

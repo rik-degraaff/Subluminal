@@ -4,18 +4,20 @@ import static tech.subluminal.shared.util.IdUtils.generateId;
 
 import java.io.IOException;
 import java.util.Optional;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.client.stores.PingStore;
 import tech.subluminal.shared.logic.PingResponder;
 import tech.subluminal.shared.messages.LogoutReq;
 import tech.subluminal.shared.messages.Ping;
 import tech.subluminal.shared.messages.Pong;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.records.GlobalSettings;
 import tech.subluminal.shared.stores.records.SentPing;
 
 
 public class PingManager {
 
-  public static final int PING_TIMEOUT_KEY = 6000;
+  public static final int PING_TIMEOUT_KEY = GlobalSettings.SERVER_PING_TIMEOUT;
   private final PingStore pingStore;
   private final Connection connection;
 
@@ -45,18 +47,16 @@ public class PingManager {
             try {
               connection.close();
             } catch (IOException e) {
-              e.printStackTrace();
-              //TODO: handle this accordingly
+              Logger.error(e); // this shouldn't happen
             }
           } else {
-            SentPing ping = new SentPing(System.currentTimeMillis(), null, generateId(6));
+            SentPing ping = new SentPing(System.currentTimeMillis(), null, generateId(GlobalSettings.SHARED_UUID_LENGTH));
             pingStore.lastPing().set(ping);
             connection.sendMessage(new Ping(ping.getID()));
           }
         }
       } catch (InterruptedException e) {
-        e.printStackTrace();
-        //TODO: handle sensible
+        Logger.error(e);
       }
     }
   }
@@ -67,8 +67,6 @@ public class PingManager {
   }
 
   private void onPongReceived(Pong pong) {
-    //pingStore.getPing().getSentTime();
-    //TODO: calculate ping and store in pingstore
     pingStore.lastPing().remove();
 
   }

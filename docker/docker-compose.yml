@@ -2,13 +2,13 @@ version: '3'
 
 services:
   subluminal:
-    container_name: subluminal_staging
-    build:
-      context: ../
-      file: ./docker/dockerfile-subluminal.yml
+    image: subluminalthegame/subluminal-server
+    container_name: "subluminal_server_compose"
     ports:
-    - "1790:1790/tcp"
-    restart_policy:
-      condition: always
+      - "1729/tcp"
+    restart: always
     labels:
-    - subluminal
+      - "subluminal_server"
+#    volumes:
+#      - "../app/build/libs/mods:/opt/lib/subluminal/mods"
+#      - "../app/build/libs/logs:/opt/lib/subluminal/logs"

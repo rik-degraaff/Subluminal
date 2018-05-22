@@ -21,15 +21,11 @@ public class PingTest {
   }
 
   @Test
-  public void testParsing() {
+  public void testParsing() throws SONParsingError, SONConversionError {
     String pingMsg = ping.asSON().asString();
-    try {
-      Ping parsedPing = Ping.fromSON(SON.parse(pingMsg));
-      String parsedID = parsedPing.getId();
-      assertEquals(ping.getId(), parsedID);
-    } catch (SONParsingError | SONConversionError e) {
-      e.printStackTrace();
-    }
+    Ping parsedPing = Ping.fromSON(SON.parse(pingMsg));
+    String parsedID = parsedPing.getId();
+    assertEquals(ping.getId(), parsedID);
     System.out.println(pingMsg);
   }
 
@@ -41,7 +37,6 @@ public class PingTest {
       Ping parsedPing = Ping.fromSON(SON.parse(faultyPingMsg));
       String ID = parsedPing.getId();
     } catch (SONParsingError | SONConversionError e) {
-      e.printStackTrace();
       parsingSucceeded = false;
     }
     assertFalse(parsingSucceeded);

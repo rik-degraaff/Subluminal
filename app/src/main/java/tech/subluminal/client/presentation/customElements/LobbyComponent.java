@@ -2,6 +2,7 @@ package tech.subluminal.client.presentation.customElements;
 
 import javafx.application.Platform;
 import javafx.scene.Group;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.LobbyPresenter;
 import tech.subluminal.client.presentation.controller.LobbyListController;
 import tech.subluminal.client.presentation.controller.LobbyUserController;
@@ -46,16 +47,19 @@ public class LobbyComponent extends Group implements LobbyPresenter {
     });
   }
 
-  public void setUserActive() {
+  public void setUserActive(String name) {
     Platform.runLater(() -> {
       this.getChildren().clear();
       this.getChildren().add(lobbyUser);
+
+      main.setWindowTitle("Lobby: " + name);
+
     });
 
   }
 
   public void onLobbyJoin(String id) {
-    System.out.println("join lobby: " + id);
+    Logger.trace("join lobby: " + id);
     lobbyDelegate.joinLobby(id);
   }
 
@@ -74,11 +78,12 @@ public class LobbyComponent extends Group implements LobbyPresenter {
     this.userStore = userStore;
 
     lobbyUserController.setUserStore(userStore);
+    lobbyListController.setUserStore(userStore);
   }
 
   @Override
-  public void joinLobbySucceded() {
-    setUserActive();
+  public void joinLobbySucceded(String name) {
+    setUserActive(name);
   }
 
   @Override

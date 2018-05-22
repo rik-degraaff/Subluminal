@@ -64,10 +64,19 @@ public class GameHistory<E extends GameObject> extends MultiHistory<String, Game
    * the last sent state if no new state is available. If this function returns a Right (Void) this
    * means that the object was destroyed and that information has reached the player.
    */
-  public Either<E, Void> getLatestOrLastForPlayer(String playerID,
-      GameHistoryEntry<Ship> motherShip) {
+  public Either<E, Void> getLatestOrLastForPlayer(
+      String playerID, GameHistoryEntry<Ship> motherShip
+  ) {
     return getLatestForPlayer(playerID, motherShip)
-        .orElseGet(() -> last.get(playerID));
+        .orElseGet(() -> getLastForPlayer(playerID));
+  }
+
+  /**
+   * @param playerID the id of the player for whom the state should be read.
+   * @return the last sent state for this player.
+   */
+  public Either<E, Void> getLastForPlayer(String playerID) {
+    return last.get(playerID);
   }
 
   /**

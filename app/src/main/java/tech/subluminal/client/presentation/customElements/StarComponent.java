@@ -2,9 +2,11 @@ package tech.subluminal.client.presentation.customElements;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -19,7 +21,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import tech.subluminal.client.presentation.controller.MainController;
 import tech.subluminal.shared.stores.records.game.Coordinates;
+import tech.subluminal.shared.util.DrawingUtils;
 
 public class StarComponent extends Group {
 
@@ -38,14 +42,16 @@ public class StarComponent extends Group {
   private final IntegerProperty parentWidthProperty = new SimpleIntegerProperty();
   private final IntegerProperty parentHeightProperty = new SimpleIntegerProperty();
 
+  private final BooleanProperty hoverShown = new SimpleBooleanProperty();
+
   private final String name;
   private final Group border;
+  private Circle jumpCircle;
 
   //private final ObjectProperty
 
   public StarComponent(String ownerID, String name, double possession, Coordinates coordinates,
-      String id,
-      double jump) {
+      String id, double jump, MainController main) {
 
     setPossession(possession);
     setXProperty(coordinates.getX());
@@ -57,23 +63,12 @@ public class StarComponent extends Group {
 
     setColor(Color.GRAY);
 
-    this.layoutXProperty().bind(Bindings
-        .createDoubleBinding(
-            () -> parentWidthProperty.doubleValue() / 2 + (xProperty.doubleValue() - 0.5) * Math
-                .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue()),
-            xProperty, parentWidthProperty, parentHeightProperty));
-    this.layoutYProperty().bind(Bindings
-        .createDoubleBinding(
-            () -> parentHeightProperty.doubleValue() / 2 + (yProperty.doubleValue() - 0.5) * Math
-                .min(parentWidthProperty.doubleValue(), parentHeightProperty.doubleValue()),
-            yProperty, parentWidthProperty, parentHeightProperty));
     Platform.runLater(() -> {
-      if (getScene() == null) {
-        return;
-      }
+      parentHeightProperty.bind(main.getPlayArea().heightProperty());
+      parentWidthProperty.bind(main.getPlayArea().widthProperty());
 
-      this.parentWidthProperty.bind(getScene().widthProperty());
-      this.parentHeightProperty.bind(getScene().heightProperty());
+      this.layoutXProperty().bind(DrawingUtils.getXPosition(main.getPlayArea(), xProperty));
+      this.layoutYProperty().bind(DrawingUtils.getYPosition(main.getPlayArea(), yProperty));
     });
 
     this.name = name;
@@ -101,30 +96,38 @@ public class StarComponent extends Group {
     glowBox.setTranslateY(-sizeAll / 2);
 
     border = makeBorder();
-    Circle jumpCircle = new Circle();
+    jumpCircle = new Circle();
     jumpCircle.radiusProperty().bind(Bindings
         .createDoubleBinding(() -> jump * parentHeightProperty.getValue(), parentHeightProperty,
             jumpProperty()));
     jumpCircle.setFill(Color.TRANSPARENT);
     jumpCircle.setStroke(Color.RED);
+    jumpCircle.setMouseTransparent(true);
 
-    border.setVisible(false);
-    jumpCircle.setVisible(false);
+    setOnHover(false);
 
     //starGroup.setB(new Background(new BackgroundFill(Color.RED,CornerRadii.EMPTY,Insets.EMPTY)));
 
     starGroup.setOnMouseEntered(event -> {
-
-      border.setVisible(true);
-      jumpCircle.setVisible(true);
-
+      if(!isHoverShown()){
+        setOnHover(true);
+      }
     });
 
     starGroup.setOnMouseExited(event -> {
 
-      border.setVisible(false);
-      jumpCircle.setVisible(false);
+      if(!isHoverShown()){
+        setOnHover(false);
+      }
 
+    });
+
+    hoverShownProperty().addListener((observable, oldValue, newValue) -> {
+      if(newValue){
+        setOnHover(true);
+      }else{
+        setOnHover(false);
+      }
     });
 
     Label starName = new Label(name);
@@ -134,13 +137,30 @@ public class StarComponent extends Group {
       starName.setLayoutX(-starName.getWidth() / 2);
     });
 
-    starName.setFont(new Font("PxPlus IBM VGA9", 10));
+    starName.setFont(new Font("PxPlus IBM VGA9", 11));
 
     starGroup.getChildren().addAll(glowBox, border, star, starName, possessionCount);
     Effect glow = new Bloom();
     starGroup.setEffect(glow);
     this.getChildren().addAll(jumpCircle, starGroup);
 
+  }
+
+  public void setOnHover(boolean b) {
+    border.setVisible(b);
+    jumpCircle.setVisible(b);
+  }
+
+  public boolean isHoverShown() {
+    return hoverShown.get();
+  }
+
+  public BooleanProperty hoverShownProperty() {
+    return hoverShown;
+  }
+
+  public void setHoverShown(boolean hoverShown) {
+    this.hoverShown.set(hoverShown);
   }
 
   public double getJump() {

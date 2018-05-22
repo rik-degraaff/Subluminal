@@ -1,46 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<fx:root xmlns:fx="http://javafx.com/fxml/1" style="-fx-background-color: black;" prefHeight="400.0"
-  prefWidth="600.0" type="javafx.scene.layout.AnchorPane"
-  xmlns="http://javafx.com/javafx/8"
+<fx:root prefHeight="400.0" prefWidth="600.0" styleClass="window-opac"
+  type="javafx.scene.layout.AnchorPane" xmlns="http://javafx.com/javafx/8"
+  xmlns:fx="http://javafx.com/fxml/1"
   fx:controller="tech.subluminal.client.presentation.controller.SettingsController">
   <children>
-    <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-      AnchorPane.topAnchor="0.0" prefHeight="400.0" prefWidth="600.0">
+    <VBox prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0"
+      AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
         <TabPane prefHeight="400.0" prefWidth="600.0" rotateGraphic="true" side="LEFT"
-          tabClosingPolicy="UNAVAILABLE">
+          style="-fx-background-color: transparent;" tabClosingPolicy="UNAVAILABLE">
           <tabs>
-            <Tab text="General">
+            <Tab styleClass="window-dark-opac" text="General">
               <content>
                 <AnchorPane prefHeight="200.0" prefWidth="200.0">
                   <children>
-                    <Pane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                      AnchorPane.topAnchor="0.0" prefHeight="365.0"
-                      prefWidth="571.0"/>
-                  </children>
-                </AnchorPane>
-              </content>
-            </Tab>
-            <Tab text="Audio">
-              <content>
-                <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                  <children>
-                    <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                      AnchorPane.topAnchor="0.0" prefHeight="365.0"
-                      prefWidth="571.0" spacing="20.0">
+                    <VBox prefHeight="365.0" prefWidth="571.0" spacing="20.0"
+                      AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                       <children>
                         <GridPane alignment="CENTER" prefHeight="344.0" prefWidth="467.0">
                           <columnConstraints>
@@ -56,16 +46,11 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
                           </rowConstraints>
                           <children>
-                            <Slider GridPane.columnIndex="2" max="1.0" value="0.1"
-                              fx:id="masterVolume"/>
-                            <CheckBox GridPane.columnIndex="1" mnemonicParsing="false" text="mute"
-                              fx:id="muteMasterVolume"/>
-                            <Label text="Master Volume"/>
-                            <Slider GridPane.columnIndex="2" GridPane.rowIndex="1" max="1.0"
-                              value="0.1"/>
-                            <CheckBox GridPane.columnIndex="1" GridPane.rowIndex="1" mnemonicParsing="false"
-                              text="mute"/>
-                            <Label GridPane.rowIndex="1" text="Music Volume"/>
+                            <Slider fx:id="masterVolume" max="1.0" value="0.1"
+                              GridPane.columnIndex="2"/>
+                            <CheckBox fx:id="muteMasterVolume" mnemonicParsing="false" text="mute"
+                              textFill="WHITE" GridPane.columnIndex="1"/>
+                            <Label text="Volume" textFill="WHITE"/>
                           </children>
                         </GridPane>
                       </children>
@@ -77,13 +62,23 @@
                 </AnchorPane>
               </content>
             </Tab>
-            <Tab text="Video">
+            <Tab styleClass="window-dark-opac" text="Keys">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                  <styleClass>
+                    <String fx:value="font-white"/>
+                    <String fx:value="window-opac"/>
+                  </styleClass>
                   <children>
-                    <Pane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                      AnchorPane.topAnchor="0.0" prefHeight="365.0"
-                      prefWidth="571.0"/>
+                    <ScrollPane fx:id="keyDock" hbarPolicy="NEVER" prefHeight="400.0"
+                      prefWidth="571.0" style="-fx-background-color: transparent;"
+                      AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                      <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0"
+                          prefWidth="200.0"/>
+                      </content>
+                    </ScrollPane>
                   </children>
                 </AnchorPane>
               </content>

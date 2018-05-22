@@ -15,7 +15,7 @@ import tech.subluminal.shared.stores.records.User;
 public class InitialUsersTest {
 
   @Test
-  public void testStringifyAndParsing() {
+  public void testStringifyAndParsing() throws SONParsingError, SONConversionError {
     User user1 = new User("sölkdfa", "2917");
     User user2 = new User("asdöflkj", "049851");
     InitialUsers iu = new InitialUsers();
@@ -25,15 +25,12 @@ public class InitialUsersTest {
     String iuStringified = iu.asSON().asString();
     InitialUsers parsedIU = null;
     List<User> parsedUsers = null;
-    try {
-      parsedIU = InitialUsers.fromSON(SON.parse(iuStringified));
-      parsedUsers = parsedIU.getUsers();
-    } catch (SONConversionError | SONParsingError e) {
-      e.printStackTrace();
-    }
+    parsedIU = InitialUsers.fromSON(SON.parse(iuStringified));
+    parsedUsers = parsedIU.getUsers();
 
     boolean containsName = false;
     boolean scoreIsRight = false;
+    System.out.println(iuStringified);
 
 
     for (int i = 0; i < users.size(); i++) {

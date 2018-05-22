@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import tech.subluminal.client.presentation.GamePresenter;
 import tech.subluminal.client.stores.GameStore;
 import tech.subluminal.client.stores.records.game.OwnerPair;
+import tech.subluminal.shared.messages.ClearGame;
 import tech.subluminal.shared.messages.EndGameRes;
 import tech.subluminal.shared.messages.FleetMoveReq;
 import tech.subluminal.shared.messages.GameLeaveReq;
@@ -18,6 +19,7 @@ import tech.subluminal.shared.messages.GameStateDelta;
 import tech.subluminal.shared.messages.LobbyLeaveReq;
 import tech.subluminal.shared.messages.LoginRes;
 import tech.subluminal.shared.messages.MotherShipMoveReq;
+import tech.subluminal.shared.messages.Toast;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.stores.records.game.Star;
 import tech.subluminal.shared.util.Synchronized;
@@ -54,8 +56,15 @@ public class GameManager implements GamePresenter.Delegate {
         EndGameRes.class, EndGameRes::fromSON, this::onEndGameRes);
     connection.registerHandler(
         GameLeaveRes.class, GameLeaveRes::fromSON, req -> onGameLeave());
+    connection.registerHandler(
+        ClearGame.class, ClearGame::fromSON, req -> clearGame());
+    connection.registerHandler(
+        Toast.class, Toast::fromSON, this::onToast);
   }
 
+  private void onToast(Toast toast) {
+    gamePresenter.addToast(toast.getMessage(), toast.isPermanent());
+  }
 
   private void onEndGameRes(EndGameRes res) {
     gamePresenter.onEndGame(res.getGameID(), res.getWinnerID());
@@ -74,6 +83,8 @@ public class GameManager implements GamePresenter.Delegate {
   }
 
   private void onGameStateDeltaReceived(GameStateDelta delta) {
+    gamePresenter.setTps(delta.getTps());
+
     delta.getRemovedMotherShips().forEach(gameStore.motherShips()::removeByID);
     delta.getPlayers().forEach(player -> {
       ifPresent(player.getMotherShip())
@@ -135,10 +146,14 @@ public class GameManager implements GamePresenter.Delegate {
         throw new RuntimeException(e);
       }
       gameStore.inGame().set(false);
-      gameStore.motherShips().clear();
-      gameStore.stars().clear();
-      gameStore.fleets().clear();
+      clearGame();
       gamePresenter.clearGame();
     }).start();
+  }
+
+  private void clearGame() {
+    gameStore.motherShips().clear();
+    gameStore.stars().clear();
+    gameStore.fleets().clear();
   }
 }

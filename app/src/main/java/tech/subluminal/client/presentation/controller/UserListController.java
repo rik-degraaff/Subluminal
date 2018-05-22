@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.AnchorPane;
 import tech.subluminal.client.presentation.UserPresenter;
 import tech.subluminal.client.presentation.customElements.PlayerStatusComponent;
 import tech.subluminal.client.stores.UserStore;
@@ -19,6 +20,9 @@ public class UserListController implements Initializable, UserPresenter {
 
   @FXML
   private ListView<PlayerStatusComponent> playerBoard;
+
+  @FXML
+  private AnchorPane playerList;
 
   private LinkedList<Label> players;
 
@@ -32,17 +36,25 @@ public class UserListController implements Initializable, UserPresenter {
   }
 
 
+  /**
+   * Set the user store in this controller.
+   *
+   * @param userStore the user store to be set.
+   */
   public void setUserStore(UserStore userStore) {
     this.userStore = userStore;
 
     Platform.runLater(() -> {
       playerBoard.setItems(new MapperList<>(userStore.users().observableList(),
-          user -> new PlayerStatusComponent(user.getUsername(), PlayerStatus.INGAME, main)));
+          user -> new PlayerStatusComponent(user.getUsername(), PlayerStatus.INGAME, main, true)));
+
+      playerBoard.maxHeightProperty().bind(playerList.heightProperty());
+      playerBoard.maxWidthProperty().bind(playerList.widthProperty());
     });
 
   }
 
-  public void setMainController(MainController main){
+  public void setMainController(MainController main) {
     this.main = main;
   }
 

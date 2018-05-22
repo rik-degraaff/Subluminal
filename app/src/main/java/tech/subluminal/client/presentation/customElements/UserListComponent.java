@@ -19,7 +19,8 @@ public class UserListComponent extends AnchorPane {
     this.controller = controller;
   }
 
-  public UserListComponent(MainController mainController) {
+  public UserListComponent(MainController mainController, AnchorPane node) {
+    super();
     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("UserListView.fxml"));
     fxmlLoader.setRoot(this);
     //fxmlLoader.setController(this);
@@ -31,5 +32,8 @@ public class UserListComponent extends AnchorPane {
     } catch (IOException exception) {
       throw new RuntimeException(exception);
     }
+
+    this.maxWidthProperty().bind(node.widthProperty());
+    this.maxHeightProperty().bind(node.heightProperty());
   }
 }

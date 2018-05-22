@@ -4,7 +4,11 @@ import tech.subluminal.shared.son.SON;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Represents the logout request from the client to the server.
+ * Represents the logout request from the client to the server. This message, when converted to SON
+ * and then to String, looks like this:
+ * <pre>
+ * {}
+ * </pre>
  */
 public class LogoutReq implements SONRepresentable {
 

@@ -1,5 +1,7 @@
 package tech.subluminal.shared.son;
 
+import org.pmw.tinylog.Logger;
+
 public class SONParsing {
 
   static final char KEY_VALUE_DELIMITER = ':';
@@ -121,9 +123,13 @@ public class SONParsing {
       StringBuilder builder = new StringBuilder();
       char nextChar = str.charAt(i);
       while (nextChar == '-' || nextChar == '.' || nextChar == 'e' || nextChar == 'E'
-          || nextChar >= '0' && nextChar <= '9') {
+          || nextChar >= '0' && nextChar <= '9' ) {
         builder.append(nextChar);
         nextChar = str.charAt(++i);
+      }
+
+      if (builder.toString().length() == 0) {
+        Logger.error(str.substring(0, 20));
       }
 
       //create double from StringBuilder
@@ -131,7 +137,7 @@ public class SONParsing {
         double value = Double.parseDouble(builder.toString());
         return new PartialParseResult<>(value, i);
       } catch (NumberFormatException e) {
-        throw new SONParsingError("Invalid double value.");
+        throw new SONParsingError("Invalid double value: " + builder.toString());
       }
     } catch (IndexOutOfBoundsException e) {
       throw new SONParsingError("Double was not terminated.");
@@ -182,11 +188,17 @@ public class SONParsing {
       while (nextChar != STRING_DELIMITER) {
         if (str.charAt(i) == STRING_ESCAPE) {
           nextChar = str.charAt(++i);
-          if (nextChar != STRING_DELIMITER && nextChar != STRING_ESCAPE) {
+          if (nextChar != STRING_DELIMITER && nextChar != STRING_ESCAPE && nextChar != 'n') {
             throw new SONParsingError("Invalid escape character.");
           }
+          if (nextChar == 'n') {
+            builder.append('\n');
+          } else {
+            builder.append(nextChar);
+          }
+        } else {
+          builder.append(nextChar);
         }
-        builder.append(nextChar);
         nextChar = str.charAt(++i);
       }
 
@@ -199,7 +211,8 @@ public class SONParsing {
   private static String escapeString(String str) {
     return str
         .replace("" + STRING_ESCAPE, "" + STRING_ESCAPE + STRING_ESCAPE)
-        .replace("" + STRING_DELIMITER, "" + STRING_ESCAPE + STRING_DELIMITER);
+        .replace("" + STRING_DELIMITER, "" + STRING_ESCAPE + STRING_DELIMITER)
+        .replace("\n", STRING_ESCAPE + "n");
   }
 
   static class PartialParseResult<T> {

@@ -34,6 +34,7 @@ class Node<E> {
   }
 
   /**
+   * Constructs a map of all the neighbours a node.
    * @return the collection of the nodes within reach of this object..
    */
   Map<Node<E>, Double> getNeighbours() {
@@ -41,6 +42,7 @@ class Node<E> {
   }
 
   /**
+   * Return the data stored in a node.
    * @return the data stores in this node.
    */
   public E getData() {

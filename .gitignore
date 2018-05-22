@@ -13,6 +13,9 @@
 __*.tex
 *.synctex*
 log.txt
+*.toc
+*.out
+docker/_secrets.sh
 
 #folders
 .app/
@@ -20,6 +23,7 @@ log.txt
 .gradle/
 .settings/
 .vscode/
+files/
 
 app/out/
 app/build/
@@ -27,9 +31,6 @@ bin/
 build/
 classes/
 docs/javadoc/
-<<<<<<< HEAD
+files/
 log\.txt
 classes/
-=======
-
->>>>>>> f29ddca64cb0f21ecdf2bc95d3743b74e7361011

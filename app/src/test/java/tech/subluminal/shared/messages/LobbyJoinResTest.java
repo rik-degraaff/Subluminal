@@ -15,18 +15,14 @@ import tech.subluminal.shared.stores.records.LobbySettings;
 public class LobbyJoinResTest {
 
   @Test
-  public void testStringifyAndParsing() {
-    Lobby lobby = new Lobby("1729", new LobbySettings("Batman", "9000"), LobbyStatus.FULL);
+  public void testStringifyAndParsing() throws SONParsingError, SONConversionError {
+    Lobby lobby = new Lobby("1729", new LobbySettings("Batman", "9000"), LobbyStatus.INGAME);
     LobbyJoinRes lobbyJoinRes = new LobbyJoinRes(lobby);
     Lobby parsedLobby = null;
     LobbyJoinRes parsedLobbyJoinRes = null;
 
-    try {
-      parsedLobbyJoinRes = LobbyJoinRes.fromSON(SON.parse(lobbyJoinRes.asSON().asString()));
-      parsedLobby = parsedLobbyJoinRes.getLobby();
-    } catch (SONParsingError | SONConversionError e) {
-      System.out.println("This error was not expected.");
-    }
+    parsedLobbyJoinRes = LobbyJoinRes.fromSON(SON.parse(lobbyJoinRes.asSON().asString()));
+    parsedLobby = parsedLobbyJoinRes.getLobby();
 
     assertNotNull(parsedLobbyJoinRes);
     assertEquals(lobby.getID(), parsedLobby.getID());

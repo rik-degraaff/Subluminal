@@ -2,6 +2,7 @@ package tech.subluminal.client.presentation.customElements;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -23,10 +24,12 @@ public class LobbyStatusComponent extends HBox {
       LobbyStatus status, LobbyPresenter.Delegate delegate) {
     this.lobbyDelegate = delegate;
     this.lobbyID = lobbyID;
+    this.getStyleClass().add("font-white");
 
     HBox hbox = new HBox();
-    hbox.setSpacing(5);
-    this.setSpacing(5);
+    hbox.setSpacing(20);
+    hbox.setPadding(new Insets(0, 0, 0, 10));
+    this.setSpacing(20);
 
     statusBox = new Rectangle(20, 20);
     statusBox.setFill(status.getColor());
@@ -35,7 +38,15 @@ public class LobbyStatusComponent extends HBox {
 
     Label playersMax = new Label(Integer.toString(max));
 
+    Label spectate = new Label("Spectate");
+    spectate.getStyleClass().add("font-blue");
+    spectate.setOnMouseClicked(e -> {
+      lobbyToJoinProperty().set(lobbyID);
+      delegate.joinGame(lobbyID);
+    });
+
     Label join = new Label("Join Lobby");
+    join.getStyleClass().add("font-blue");
     join.setOnMouseClicked(e -> {
       Logger.trace("on Mouse Click");
       lobbyToJoinProperty().set(lobbyID);
@@ -45,8 +56,36 @@ public class LobbyStatusComponent extends HBox {
     Pane spacer = new Pane();
     HBox.setHgrow(spacer, Priority.ALWAYS);
 
-    hbox.getChildren().addAll(statusBox, name, playersNow, playersMax);
-    this.getChildren().addAll(hbox, spacer, join);
+    int length = 20;
+    String line = " ";
+    Label space = new Label("");
+
+    name.getStyleClass().add("font-white");
+
+    length -= lobbyName.length();
+
+    if(length >= 0){
+      for(int i = 0; i < length; i++){
+        space.setText(space.getText() + line);
+      }
+    }
+
+    playersNow.getStyleClass().add("font-white");
+    playersMax.getStyleClass().add("font-white");
+    Label slash = new Label("/");
+    slash.getStyleClass().add("font-white");
+    hbox.getChildren().addAll(statusBox, name, space, playersNow, slash, playersMax);
+    this.getChildren().addAll(hbox, spacer);
+
+    if (status == LobbyStatus.INGAME) {
+      this.getChildren().add(spectate);
+    }
+
+    if (status == LobbyStatus.OPEN) {
+      this.getChildren().add(join);
+    }
+
+
   }
 
   public String getLobbyToJoin() {

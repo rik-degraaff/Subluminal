@@ -5,7 +5,13 @@ import tech.subluminal.shared.son.SONConversionError;
 import tech.subluminal.shared.son.SONRepresentable;
 
 /**
- * Represents a request from client to server to join a lobby.
+ * Represents a request from client to server to join a lobby. This message, when converted to SON
+ * and then to string, might look like this:
+ * <pre>
+ * {
+ *   "id":s"4053"
+ * }
+ * </pre>
  */
 public class LobbyJoinReq implements SONRepresentable {
 
@@ -40,7 +46,7 @@ public class LobbyJoinReq implements SONRepresentable {
    *
    * @return the id of the lobby.
    */
-  public String getId() {
+  public String getID() {
     return id;
   }
 

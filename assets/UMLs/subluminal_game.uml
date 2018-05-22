@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>tech.subluminal.client.logic</OriginalElement>
+  <nodes>
+    <node x="845.5284934466575" y="416.0">tech.subluminal.server.net.SocketConnectionManager</node>
+    <node x="412.82032323145614" y="525.0">tech.subluminal.client.init.ClientInitializer</node>
+    <node x="150.33333333333326" y="267.0">tech.subluminal.client.logic.Graph</node>
+    <node x="1367.9451601133242" y="158.0">tech.subluminal.shared.logic.game.GameLoop</node>
+    <node x="354.3722956730763" y="416.0">tech.subluminal.client.logic.GameManager</node>
+    <node x="1535.0613982371788" y="158.0">tech.subluminal.server.stores.records.GameState</node>
+    <node x="1327.5284934466576" y="267.0">tech.subluminal.shared.logic.game.GameLoop.Delegate</node>
+    <node x="686.6665035485346" y="0.0">tech.subluminal.shared.son.SON</node>
+    <node x="957.5284934466575" y="267.0">tech.subluminal.shared.net.ConnectionManager</node>
+    <node x="914.7786565647895" y="604.0">tech.subluminal.main.Subluminal</node>
+    <node x="475.52849344665754" y="267.0">tech.subluminal.client.stores.InMemoryGameStore</node>
+    <node x="153.8203232314561" y="79.0">tech.subluminal.client.logic.Node</node>
+    <node x="439.38238824977157" y="158.0">tech.subluminal.client.stores.GameStore</node>
+    <node x="1513.17611893315" y="79.0">tech.subluminal.server.logic.game.GameHistory</node>
+    <node x="1358.820323231456" y="525.0">tech.subluminal.server.init.ServerInitializer</node>
+    <node x="110.03698989812278" y="158.0">tech.subluminal.client.logic.Graph.NodeEntry</node>
+    <node x="1134.5284934466576" y="267.0">tech.subluminal.server.logic.game.IntermediateGameState</node>
+    <node x="780.2784934466575" y="79.0">tech.subluminal.shared.son.SONRepresentable</node>
+    <node x="252.5703232314561" y="158.0">tech.subluminal.client.presentation.GamePresenter.Delegate</node>
+    <node x="1596.7336216517856" y="416.0">tech.subluminal.server.stores.InMemoryGameStore</node>
+    <node x="2.3333333333332575" y="267.0">tech.subluminal.client.presentation.controller.MainController</node>
+    <node x="283.8203232314561" y="267.0">tech.subluminal.client.presentation.GamePresenter</node>
+    <node x="1359.320323231456" y="416.0">tech.subluminal.server.logic.game.GameManager</node>
+    <node x="657.5284934466575" y="267.0">tech.subluminal.shared.net.SocketConnection</node>
+    <node x="1519.9836216517856" y="267.0">tech.subluminal.server.stores.GameStore</node>
+    <node x="150.70365656478953" y="416.0">tech.subluminal.client.presentation.controller.GameController</node>
+    <node x="850.5415035485346" y="158.0">tech.subluminal.shared.net.Connection</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="tech.subluminal.client.init.ClientInitializer" target="tech.subluminal.client.presentation.controller.MainController">
+      <point x="-42.0" y="-14.5" />
+      <point x="433.82032323145614" y="495.0" />
+      <point x="60.62286444024778" y="495.0" />
+      <point x="60.62286444024778" y="386.0" />
+      <point x="34.33333333333326" y="386.0" />
+      <point x="-32.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.init.ClientInitializer" target="tech.subluminal.shared.net.Connection">
+      <point x="56.0" y="-14.5" />
+      <point x="531.8203232314561" y="505.0" />
+      <point x="835.0284934466575" y="505.0" />
+      <point x="835.0284934466575" y="247.0" />
+      <point x="898.6665035485346" y="247.0" />
+      <point x="-6.875" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.logic.Graph" target="tech.subluminal.client.logic.Graph.NodeEntry">
+      <point x="-16.0" y="-14.5" />
+      <point x="174.33333333333326" y="237.0" />
+      <point x="162.03698989812278" y="237.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.server.stores.GameStore" target="tech.subluminal.server.stores.records.GameState">
+      <point x="0.0" y="-14.5" />
+      <point x="1572.9836216517856" y="247.0" />
+      <point x="1587.5613982371788" y="247.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.server.logic.game.GameManager" target="tech.subluminal.shared.logic.game.GameLoop">
+      <point x="9.692307692307622" y="-14.5" />
+      <point x="1432.0126309237637" y="346.0" />
+      <point x="1457.431838799222" y="346.0" />
+      <point x="1457.431838799222" y="247.0" />
+      <point x="1456.2784934466576" y="247.0" />
+      <point x="35.33333333333337" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.server.logic.game.GameManager" target="tech.subluminal.shared.logic.game.GameLoop.Delegate">
+      <point x="-9.69230769230768" y="-14.5" />
+      <point x="1412.6280155391485" y="346.0" />
+      <point x="1405.861826779991" y="346.0" />
+      <point x="31.33333333333337" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.logic.GameManager" target="tech.subluminal.client.stores.GameStore">
+      <point x="18.0" y="-14.5" />
+      <point x="435.3722956730763" y="376.0" />
+      <point x="465.02849344665754" y="376.0" />
+      <point x="465.02849344665754" y="247.0" />
+      <point x="507.5252453926287" y="247.0" />
+      <point x="15.14285714285711" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.server.stores.records.GameState" target="tech.subluminal.server.logic.game.GameHistory">
+      <point x="0.0" y="-14.5" />
+      <point x="1587.5613982371788" y="138.0" />
+      <point x="1586.30111893315" y="138.0" />
+      <point x="14.625" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.server.init.ServerInitializer" target="tech.subluminal.server.net.SocketConnectionManager">
+      <point x="-52.916666666666686" y="-14.5" />
+      <point x="1369.4036565647893" y="505.0" />
+      <point x="941.5284934466575" y="505.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.server.init.ServerInitializer" target="tech.subluminal.server.stores.GameStore">
+      <point x="31.75" y="-14.5" />
+      <point x="1454.070323231456" y="495.0" />
+      <point x="1586.2336216517856" y="495.0" />
+      <point x="13.25" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.shared.net.SocketConnection" target="tech.subluminal.shared.son.SON">
+      <point x="-54.375" y="-14.5" />
+      <point x="675.6534934466575" y="247.0" />
+      <point x="692.9972956730762" y="247.0" />
+      <point x="692.9972956730762" y="54.0" />
+      <point x="698.6665035485346" y="54.0" />
+      <point x="-24.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.logic.Graph.NodeEntry" target="tech.subluminal.client.logic.Graph">
+      <point x="34.66666666666674" y="14.5" />
+      <point x="196.70365656478953" y="247.0" />
+      <point x="190.33333333333326" y="247.0" />
+      <point x="0.0" y="-14.5" />
+    </edge>
+    <edge source="tech.subluminal.server.net.SocketConnectionManager" target="tech.subluminal.shared.net.Connection">
+      <point x="-24.0" y="-14.5" />
+      <point x="917.5284934466575" y="396.0" />
+      <point x="936.0284934466575" y="396.0" />
+      <point x="936.0284934466575" y="247.0" />
+      <point x="912.4165035485346" y="247.0" />
+      <point x="6.875" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.stores.InMemoryGameStore" target="tech.subluminal.client.stores.GameStore">
+      <point x="0.0" y="-14.5" />
+      <point x="556.0284934466575" y="247.0" />
+      <point x="522.6681025354858" y="247.0" />
+      <point x="30.28571428571422" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.presentation.controller.GameController" target="tech.subluminal.client.presentation.GamePresenter.Delegate">
+      <point x="24.0" y="-14.5" />
+      <point x="240.70365656478953" y="326.0" />
+      <point x="251.83333333333326" y="326.0" />
+      <point x="251.83333333333326" y="237.0" />
+      <point x="280.77032323145613" y="237.0" />
+      <point x="-18.799999999999955" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.server.logic.game.GameManager" target="tech.subluminal.server.stores.GameStore">
+      <point x="48.46153846153845" y="-14.5" />
+      <point x="1470.7818616929944" y="386.0" />
+      <point x="1533.2336216517856" y="386.0" />
+      <point x="-39.75" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.presentation.GamePresenter" target="tech.subluminal.client.stores.GameStore">
+      <point x="42.66666666666674" y="-14.5" />
+      <point x="390.48698989812283" y="207.0" />
+      <point x="446.95381682120023" y="207.0" />
+      <point x="-45.42857142857133" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.server.net.SocketConnectionManager" target="tech.subluminal.shared.net.SocketConnection">
+      <point x="-72.0" y="-14.5" />
+      <point x="869.5284934466575" y="376.0" />
+      <point x="766.2784934466575" y="376.0" />
+      <point x="36.25" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.server.logic.game.GameManager" target="tech.subluminal.shared.net.Connection">
+      <point x="-38.76923076923072" y="-14.5" />
+      <point x="1383.5510924622254" y="376.0" />
+      <point x="1317.0284934466576" y="376.0" />
+      <point x="1317.0284934466576" y="217.0" />
+      <point x="953.6665035485346" y="217.0" />
+      <point x="48.125" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.presentation.controller.GameController" target="tech.subluminal.client.logic.Graph">
+      <point x="-12.0" y="-14.5" />
+      <point x="204.70365656478953" y="336.0" />
+      <point x="170.33333333333326" y="336.0" />
+      <point x="-20.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.server.stores.InMemoryGameStore" target="tech.subluminal.server.stores.GameStore">
+      <point x="-53.66666666666666" y="-14.5" />
+      <point x="1623.566954985119" y="396.0" />
+      <point x="1612.7336216517856" y="396.0" />
+      <point x="39.75" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.init.ClientInitializer" target="tech.subluminal.shared.net.SocketConnection">
+      <point x="42.0" y="-14.5" />
+      <point x="517.8203232314561" y="495.0" />
+      <point x="693.7784934466575" y="495.0" />
+      <point x="-36.25" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.presentation.controller.MainController" target="tech.subluminal.client.presentation.controller.GameController">
+      <point x="32.0" y="14.5" />
+      <point x="98.33333333333326" y="356.0" />
+      <point x="180.70365656478953" y="356.0" />
+      <point x="-36.0" y="-14.5" />
+    </edge>
+    <edge source="tech.subluminal.server.stores.InMemoryGameStore" target="tech.subluminal.server.stores.records.GameState">
+      <point x="0.0" y="-14.5" />
+      <point x="1677.2336216517856" y="396.0" />
+      <point x="1692.9446593120426" y="396.0" />
+      <point x="1692.9446593120426" y="247.0" />
+      <point x="1608.5613982371788" y="247.0" />
+      <point x="21.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.logic.GameManager" target="tech.subluminal.client.presentation.GamePresenter">
+      <point x="-18.0" y="-14.5" />
+      <point x="399.3722956730763" y="336.0" />
+      <point x="390.48698989812283" y="336.0" />
+      <point x="42.66666666666674" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.server.init.ServerInitializer" target="tech.subluminal.shared.net.ConnectionManager">
+      <point x="-31.75" y="-14.5" />
+      <point x="1390.570323231456" y="495.0" />
+      <point x="1075.2784934466576" y="495.0" />
+      <point x="39.25" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.shared.net.Connection" target="tech.subluminal.shared.son.SONRepresentable">
+      <point x="0.0" y="-14.5" />
+      <point x="905.5415035485346" y="138.0" />
+      <point x="889.7784934466575" y="138.0" />
+      <point x="36.5" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.server.logic.game.GameManager" target="tech.subluminal.server.stores.records.GameState">
+      <point x="38.76923076923072" y="-14.5" />
+      <point x="1461.0895540006868" y="376.0" />
+      <point x="1509.4836216517856" y="376.0" />
+      <point x="1509.4836216517856" y="247.0" />
+      <point x="1566.5613982371788" y="247.0" />
+      <point x="-21.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.presentation.controller.GameController" target="tech.subluminal.client.stores.GameStore">
+      <point x="48.0" y="-14.5" />
+      <point x="264.7036565647895" y="346.0" />
+      <point x="422.32032323145614" y="346.0" />
+      <point x="422.32032323145614" y="217.0" />
+      <point x="462.09667396405735" y="217.0" />
+      <point x="-30.28571428571422" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.logic.GameManager" target="tech.subluminal.shared.net.Connection">
+      <point x="36.0" y="-14.5" />
+      <point x="453.3722956730763" y="386.0" />
+      <point x="813.0284934466575" y="386.0" />
+      <point x="813.0284934466575" y="227.0" />
+      <point x="871.1665035485346" y="227.0" />
+      <point x="-34.375" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.server.logic.game.GameManager" target="tech.subluminal.server.logic.game.GameHistory">
+      <point x="19.38461538461536" y="-14.5" />
+      <point x="1441.7049386160716" y="356.0" />
+      <point x="1484.4451601133242" y="356.0" />
+      <point x="1484.4451601133242" y="138.0" />
+      <point x="1527.80111893315" y="138.0" />
+      <point x="-43.875" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.main.Subluminal" target="tech.subluminal.client.init.ClientInitializer">
+      <point x="-27.0" y="-14.5" />
+      <point x="941.7786565647895" y="579.0" />
+      <point x="475.82032323145614" y="579.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.main.Subluminal" target="tech.subluminal.server.init.ServerInitializer">
+      <point x="27.0" y="-14.5" />
+      <point x="995.7786565647895" y="579.0" />
+      <point x="1422.320323231456" y="579.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.presentation.controller.GameController" target="tech.subluminal.client.presentation.GamePresenter">
+      <point x="36.0" y="-14.5" />
+      <point x="252.70365656478953" y="336.0" />
+      <point x="305.15365656478934" y="336.0" />
+      <point x="-42.66666666666674" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.shared.net.SocketConnection" target="tech.subluminal.shared.son.SONRepresentable">
+      <point x="18.125" y="-14.5" />
+      <point x="748.1534934466575" y="247.0" />
+      <point x="751.6665035485346" y="247.0" />
+      <point x="751.6665035485346" y="138.0" />
+      <point x="816.7784934466575" y="138.0" />
+      <point x="-36.5" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.server.init.ServerInitializer" target="tech.subluminal.server.stores.InMemoryGameStore">
+      <point x="52.91666666666663" y="-14.5" />
+      <point x="1475.2369898981228" y="505.0" />
+      <point x="1677.2336216517856" y="505.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.server.init.ServerInitializer" target="tech.subluminal.server.logic.game.GameManager">
+      <point x="10.583333333333314" y="-14.5" />
+      <point x="1432.9036565647893" y="485.0" />
+      <point x="1453.820323231456" y="485.0" />
+      <point x="31.5" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.server.logic.game.GameManager" target="tech.subluminal.server.logic.game.IntermediateGameState">
+      <point x="-58.15384615384619" y="-14.5" />
+      <point x="1364.16647707761" y="396.0" />
+      <point x="1177.5284934466576" y="396.0" />
+      <point x="-43.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.logic.Graph" target="tech.subluminal.client.logic.Node">
+      <point x="32.0" y="-14.5" />
+      <point x="222.33333333333326" y="217.0" />
+      <point x="242.0703232314561" y="217.0" />
+      <point x="242.0703232314561" y="128.0" />
+      <point x="221.1953232314561" y="128.0" />
+      <point x="28.875" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.presentation.controller.GameController" target="tech.subluminal.client.presentation.controller.MainController">
+      <point x="-48.0" y="-14.5" />
+      <point x="168.70365656478953" y="366.0" />
+      <point x="77.0" y="366.0" />
+      <point x="10.666666666666742" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.init.ClientInitializer" target="tech.subluminal.client.logic.GameManager">
+      <point x="-14.0" y="-14.5" />
+      <point x="461.82032323145614" y="475.0" />
+      <point x="385.8722956730763" y="475.0" />
+      <point x="-31.5" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.logic.GameManager" target="tech.subluminal.client.presentation.GamePresenter.Delegate">
+      <point x="-54.0" y="-14.5" />
+      <point x="363.3722956730763" y="326.0" />
+      <point x="273.3203232314561" y="326.0" />
+      <point x="273.3203232314561" y="247.0" />
+      <point x="299.5703232314561" y="247.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.presentation.GamePresenter" target="tech.subluminal.client.presentation.GamePresenter.Delegate">
+      <point x="-42.66666666666674" y="-14.5" />
+      <point x="305.15365656478934" y="247.0" />
+      <point x="318.37032323145604" y="247.0" />
+      <point x="18.799999999999955" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.shared.net.ConnectionManager" target="tech.subluminal.shared.net.Connection">
+      <point x="0.0" y="-14.5" />
+      <point x="1036.0284934466576" y="227.0" />
+      <point x="939.9165035485346" y="227.0" />
+      <point x="34.375" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.shared.son.SONRepresentable" target="tech.subluminal.shared.son.SON">
+      <point x="0.0" y="-14.5" />
+      <point x="853.2784934466575" y="54.0" />
+      <point x="746.6665035485346" y="54.0" />
+      <point x="24.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.logic.Graph.NodeEntry" target="tech.subluminal.client.logic.Node">
+      <point x="26.0" y="-14.5" />
+      <point x="188.03698989812278" y="138.0" />
+      <point x="182.6953232314561" y="138.0" />
+      <point x="-9.625" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.init.ClientInitializer" target="tech.subluminal.client.stores.InMemoryGameStore">
+      <point x="14.0" y="-14.5" />
+      <point x="489.82032323145614" y="475.0" />
+      <point x="556.0284934466575" y="475.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.presentation.GamePresenter.Delegate" target="tech.subluminal.client.presentation.GamePresenter">
+      <point x="37.59999999999991" y="14.5" />
+      <point x="337.170323231456" y="247.0" />
+      <point x="347.8203232314561" y="247.0" />
+      <point x="0.0" y="-14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.init.ClientInitializer" target="tech.subluminal.client.presentation.controller.GameController">
+      <point x="-28.0" y="-14.5" />
+      <point x="447.82032323145614" y="485.0" />
+      <point x="216.70365656478953" y="485.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.shared.net.SocketConnection" target="tech.subluminal.shared.net.Connection">
+      <point x="54.375" y="-14.5" />
+      <point x="784.4034934466575" y="217.0" />
+      <point x="857.4165035485346" y="217.0" />
+      <point x="-48.125" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.shared.logic.game.GameLoop.Delegate" target="tech.subluminal.shared.logic.game.GameLoop">
+      <point x="0.0" y="-14.5" />
+      <point x="1374.5284934466576" y="247.0" />
+      <point x="1385.611826779991" y="247.0" />
+      <point x="-35.333333333333314" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.init.ClientInitializer" target="tech.subluminal.client.stores.GameStore">
+      <point x="28.0" y="-14.5" />
+      <point x="503.82032323145614" y="485.0" />
+      <point x="647.0284934466575" y="485.0" />
+      <point x="647.0284934466575" y="237.0" />
+      <point x="537.8109596783429" y="237.0" />
+      <point x="45.42857142857133" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.server.net.SocketConnectionManager" target="tech.subluminal.shared.net.ConnectionManager">
+      <point x="72.0" y="-14.5" />
+      <point x="1013.5284934466575" y="396.0" />
+      <point x="996.7784934466575" y="396.0" />
+      <point x="-39.25" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.9" x="1074.7777777777778" y="364.22222222222223" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

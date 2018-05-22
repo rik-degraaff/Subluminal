@@ -55,10 +55,14 @@ public class LobbyUserController implements Initializable {
     this.lobbyStore = lobbyStore;
   }
 
+  /**
+   * Sets the user store in this controller.
+   * @param userStore to be attached to controller.
+   */
   public void setUserStore(UserStore userStore) {
     this.userStore = userStore;
 
-    Logger.trace("WOENFOWBEFOWEOFNWOENFWONEOIFWBNOEIFWEIONFWEIO");
+    Logger.trace("LOBBYUSERVIEW GOT UPDATED");
     this.filterdUsers = new FilteredList<>(userStore.users().observableList());
     filterdUsers.setPredicate(u -> {
       Logger.trace("LOBBYUSERVIEW GOT UPDATED");
@@ -69,7 +73,7 @@ public class LobbyUserController implements Initializable {
 
     Platform.runLater(() -> {
       userList.setItems(new MapperList<>(filterdUsers,
-          u -> new PlayerStatusComponent(u.getUsername(), PlayerStatus.INLOBBY, main)));
+          u -> new PlayerStatusComponent(u.getUsername(), PlayerStatus.INLOBBY, main, false)));
     });
 
 
@@ -84,8 +88,11 @@ public class LobbyUserController implements Initializable {
     this.main = main;
   }
 
+  /**
+   * Updates the playerlist in the current lobby.
+   */
   public void lobbyUpdateReceived() {
-    Logger.trace("LobbyUpdage got received here watch out!");
+    Logger.trace("LobbyUpdage got received here, watch out!");
     Platform.runLater(() -> {
       filterdUsers.setPredicate(u -> {
         Logger.trace("LOBBYUSERVIEW GOT UPDATED");

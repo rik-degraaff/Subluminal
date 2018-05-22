@@ -4,12 +4,14 @@ import static tech.subluminal.shared.util.IdUtils.generateId;
 
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.server.stores.PingStore;
 import tech.subluminal.server.stores.ReadOnlyUserStore;
 import tech.subluminal.shared.logic.PingResponder;
 import tech.subluminal.shared.messages.Ping;
 import tech.subluminal.shared.messages.Pong;
 import tech.subluminal.shared.net.Connection;
+import tech.subluminal.shared.records.GlobalSettings;
 import tech.subluminal.shared.stores.records.SentPing;
 import tech.subluminal.shared.stores.records.User;
 
@@ -58,14 +60,14 @@ public class PingManager {
       try {
         Thread.sleep(PING_TIMEOUT_MILLIS);
       } catch (InterruptedException e) {
-        e.printStackTrace(); // TODO: do something sensible
+        Logger.error(e);
       }
 
       pingStore.sentPings().sync(() -> {
         Set<SentPing> pings = userStore.connectedUsers().getAll().use(us ->
             us.stream()
                 .map(syncUser -> syncUser.use(User::getID))
-                .map(id -> new SentPing(System.currentTimeMillis(), id, generateId(8)))
+                .map(id -> new SentPing(System.currentTimeMillis(), id, generateId(GlobalSettings.SHARED_UUID_LENGTH)))
                 .collect(Collectors.toSet())
         );
 

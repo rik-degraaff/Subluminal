@@ -3,6 +3,7 @@ package tech.subluminal.client.logic;
 import static tech.subluminal.shared.util.function.IfPresent.ifPresent;
 
 import java.util.Optional;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.ChatPresenter;
 import tech.subluminal.client.stores.UserStore;
 import tech.subluminal.shared.messages.ChatMessageIn;
@@ -46,7 +47,6 @@ public class ChatManager implements ChatPresenter.Delegate {
   }
 
   private void onHighScoresReceived(HighScoreRes req) {
-    System.out.println(req.getHighScores());
     chatPresenter.displaySystemMessage(
         req.getHighScores().stream().map(hs -> hs.getUsername() + ": " + hs.getScore())
             .reduce("", (acc, s) -> acc + System.lineSeparator() + s));
@@ -92,7 +92,7 @@ public class ChatManager implements ChatPresenter.Delegate {
   }
 
   public void requestHighScores() {
-    System.out.println("request highscores");
+    Logger.trace("request highscores");
     connection.sendMessage(new HighScoreReq());
   }
 }

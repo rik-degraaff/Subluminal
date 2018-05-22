@@ -17,6 +17,9 @@ import java.util.stream.Collectors;
  */
 public class Graph<E> {
 
+  private final BiPredicate<E, E> canReach;
+  private final BiFunction<E, E, Double> weightCalculator;
+  private final boolean symmetric;
   private Set<Node<E>> nodes;
 
   /**
@@ -28,16 +31,21 @@ public class Graph<E> {
    * @param symmetric determines whether the reachability of two given nodes shall be symmetric or
    * asymmetric.
    */
-  public Graph(Set<E> nodes, BiPredicate<E, E> canReach, BiFunction<E, E, Double> weightCalculator,
-      boolean symmetric) {
+  public Graph(
+      Set<E> nodes, BiPredicate<E, E> canReach, BiFunction<E, E, Double> weightCalculator,
+      boolean symmetric
+  ) {
     this.nodes = nodes.stream().map(Node::new).collect(Collectors.toSet());
 
-    connectNodes(canReach, weightCalculator, symmetric);
+    this.canReach = canReach;
+    this.weightCalculator = weightCalculator;
+    this.symmetric = symmetric;
+
+    connectNodes();
   }
 
-  private void connectNodes(BiPredicate<E, E> canReach, BiFunction<E, E, Double> weightCalculator,
-      boolean symmetric) {
-    List<Node<E>> nodes = this.nodes.stream().collect(Collectors.toList());
+  private void connectNodes() {
+    List<Node<E>> nodes = new ArrayList<>(this.nodes);
 
     for (int i = 0; i < nodes.size(); i++) {
       int start = symmetric ? i + 1 : 0;
@@ -54,10 +62,29 @@ public class Graph<E> {
             n2.addNeighbour(n1, weight);
           }
         }
-        if (!symmetric && canReach.test(n2.getData(), n1.getData())) {
-          double weight = weightCalculator.apply(n2.getData(), n1.getData());
-          n2.addNeighbour(n1, weight);
+      }
+    }
+  }
+
+  /**
+   * Adds a new node to the graph.
+   *
+   * @param data the data of the node to add.
+   */
+  public void addNode(E data) {
+    Node<E> node = new Node<>(data);
+    for (Node<E> n: nodes) {
+      E d = n.getData();
+      if (canReach.test(data, d)) {
+        double weight = weightCalculator.apply(data, d);
+        node.addNeighbour(n, weight);
+        if (symmetric) {
+          n.addNeighbour(node, weight);
         }
+      }
+
+      if (!symmetric && canReach.test(d, data)) {
+        n.addNeighbour(node, weightCalculator.apply(data, d));
       }
     }
   }
@@ -135,7 +162,5 @@ public class Graph<E> {
       this.distance = distance;
       this.path = path;
     }
-
   }
-
 }

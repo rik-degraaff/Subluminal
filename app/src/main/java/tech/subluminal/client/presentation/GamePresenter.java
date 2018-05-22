@@ -27,6 +27,10 @@ public interface GamePresenter {
 
   void clearGame();
 
+  void addToast(String message, boolean permanent);
+
+  void setTps(double tps);
+
   interface Delegate {
 
     void sendShips(List<String> stars, int amount);
