@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>tech.subluminal</OriginalElement>
+  <nodes>
+    <node x="1167.0301347462062" y="79.0">tech.subluminal.client.logic.Graph</node>
+    <node x="604.2397501308214" y="545.0">tech.subluminal.client.init.ClientInitializer</node>
+    <node x="224.97305729984288" y="327.0">tech.subluminal.client.logic.ChatManager</node>
+    <node x="663.9730572998428" y="327.0">tech.subluminal.client.logic.GameManager</node>
+    <node x="48.443027210884225" y="0.0">tech.subluminal.shared.son.SON</node>
+    <node x="822.0551347462061" y="198.0">tech.subluminal.client.presentation.controller.ChatController</node>
+    <node x="323.6305272108842" y="406.0">tech.subluminal.client.logic.PingManager</node>
+    <node x="376.9730572998429" y="327.0">tech.subluminal.shared.logic.PingResponder</node>
+    <node x="525.9730572998428" y="327.0">tech.subluminal.client.logic.UserManager</node>
+    <node x="88.44302721088422" y="79.0">tech.subluminal.shared.son.SONRepresentable</node>
+    <node x="1010.030134746206" y="198.0">tech.subluminal.client.presentation.KeyMap</node>
+    <node x="995.9865253793823" y="327.0">tech.subluminal.client.presentation.controller.MainController</node>
+    <node x="576.1666666666666" y="79.0">tech.subluminal.client.presentation.UserPresenter</node>
+    <node x="845.9865253793823" y="327.0">tech.subluminal.client.presentation.LobbyPresenter</node>
+    <node x="717.5" y="79.0">tech.subluminal.client.presentation.GamePresenter</node>
+    <node x="0.0" y="327.0">tech.subluminal.shared.net.SocketConnection</node>
+    <node x="254.44302721088422" y="79.0">tech.subluminal.client.presentation.ChatPresenter</node>
+    <node x="1121.0301347462062" y="198.0">tech.subluminal.client.presentation.controller.GameController</node>
+    <node x="842.530134746206" y="406.0">tech.subluminal.client.logic.LobbyManager</node>
+    <node x="460.4730572998429" y="198.0">tech.subluminal.shared.net.Connection</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="tech.subluminal.client.init.ClientInitializer" target="tech.subluminal.client.presentation.controller.MainController">
+      <point x="49.5" y="-14.5" />
+      <point x="716.7397501308214" y="515.0" />
+      <point x="1096.4865253793823" y="515.0" />
+      <point x="1096.4865253793823" y="386.0" />
+      <point x="1107.9865253793823" y="386.0" />
+      <point x="48.00000000000006" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.init.ClientInitializer" target="tech.subluminal.shared.net.Connection">
+      <point x="-31.5" y="-14.5" />
+      <point x="635.7397501308214" y="495.0" />
+      <point x="515.4730572998428" y="495.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.init.ClientInitializer" target="tech.subluminal.client.logic.PingManager">
+      <point x="-40.5" y="-14.5" />
+      <point x="626.7397501308214" y="505.0" />
+      <point x="383.1305272108842" y="505.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.logic.PingManager" target="tech.subluminal.shared.logic.PingResponder">
+      <point x="39.666666666666686" y="-14.5" />
+      <point x="422.7971938775509" y="386.0" />
+      <point x="440.9730572998429" y="386.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.logic.LobbyManager" target="tech.subluminal.shared.net.Connection">
+      <point x="-25.600000000000023" y="-14.5" />
+      <point x="880.930134746206" y="376.0" />
+      <point x="830.947193877551" y="376.0" />
+      <point x="830.947193877551" y="257.0" />
+      <point x="566.2422880690737" y="257.0" />
+      <point x="50.769230769230774" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.logic.LobbyManager" target="tech.subluminal.client.presentation.controller.MainController">
+      <point x="25.600000000000023" y="-14.5" />
+      <point x="932.1301347462061" y="376.0" />
+      <point x="1011.9865253793823" y="376.0" />
+      <point x="-48.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.shared.net.SocketConnection" target="tech.subluminal.shared.son.SON">
+      <point x="-54.375" y="-14.5" />
+      <point x="18.125" y="307.0" />
+      <point x="38.0" y="307.0" />
+      <point x="38.0" y="49.0" />
+      <point x="60.443027210884225" y="49.0" />
+      <point x="-24.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.shared.logic.PingResponder" target="tech.subluminal.shared.net.Connection">
+      <point x="0.0" y="-14.5" />
+      <point x="440.9730572998429" y="307.0" />
+      <point x="507.0115188383044" y="307.0" />
+      <point x="-8.461538461538453" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.presentation.controller.GameController" target="tech.subluminal.client.logic.Graph">
+      <point x="0.0" y="-14.5" />
+      <point x="-20.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.init.ClientInitializer" target="tech.subluminal.shared.net.SocketConnection">
+      <point x="-58.5" y="-14.5" />
+      <point x="608.7397501308214" y="525.0" />
+      <point x="72.5" y="525.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.presentation.controller.MainController" target="tech.subluminal.client.presentation.controller.GameController">
+      <point x="32.0" y="-14.5" />
+      <point x="1091.9865253793823" y="277.0" />
+      <point x="1160.630134746206" y="277.0" />
+      <point x="-26.40000000000009" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.logic.GameManager" target="tech.subluminal.client.presentation.GamePresenter">
+      <point x="15.75" y="-14.5" />
+      <point x="742.7230572998428" y="307.0" />
+      <point x="754.6666666666666" y="307.0" />
+      <point x="754.6666666666666" y="178.0" />
+      <point x="738.8333333333333" y="178.0" />
+      <point x="-42.66666666666663" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.shared.net.Connection" target="tech.subluminal.shared.son.SONRepresentable">
+      <point x="0.0" y="-14.5" />
+      <point x="515.4730572998428" y="158.0" />
+      <point x="197.94302721088422" y="158.0" />
+      <point x="36.5" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.logic.LobbyManager" target="tech.subluminal.client.presentation.LobbyPresenter">
+      <point x="0.0" y="-14.5" />
+      <point x="906.530134746206" y="386.0" />
+      <point x="910.9865253793823" y="386.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.logic.GameManager" target="tech.subluminal.shared.net.Connection">
+      <point x="-15.75" y="-14.5" />
+      <point x="711.2230572998428" y="277.0" />
+      <point x="549.3192111459967" y="277.0" />
+      <point x="33.84615384615387" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.logic.ChatManager" target="tech.subluminal.shared.net.Connection">
+      <point x="45.0" y="-14.5" />
+      <point x="329.9730572998429" y="277.0" />
+      <point x="481.626903453689" y="277.0" />
+      <point x="-33.84615384615387" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.presentation.controller.ChatController" target="tech.subluminal.client.presentation.UserPresenter">
+      <point x="31.5" y="-14.5" />
+      <point x="916.5551347462061" y="138.0" />
+      <point x="676.1666666666666" y="138.0" />
+      <point x="40.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.presentation.controller.GameController" target="tech.subluminal.client.presentation.GamePresenter">
+      <point x="-44.0" y="-14.5" />
+      <point x="1143.0301347462062" y="128.0" />
+      <point x="824.1666666666665" y="128.0" />
+      <point x="42.66666666666663" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.shared.net.SocketConnection" target="tech.subluminal.shared.son.SONRepresentable">
+      <point x="18.125" y="-14.5" />
+      <point x="90.625" y="307.0" />
+      <point x="95.99999999999994" y="307.0" />
+      <point x="95.99999999999994" y="178.0" />
+      <point x="124.94302721088422" y="178.0" />
+      <point x="-36.5" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.init.ClientInitializer" target="tech.subluminal.client.logic.ChatManager">
+      <point x="-49.5" y="-14.5" />
+      <point x="617.7397501308214" y="515.0" />
+      <point x="284.9730572998429" y="515.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.presentation.controller.MainController" target="tech.subluminal.client.presentation.controller.ChatController">
+      <point x="-57.59999999999991" y="-14.5" />
+      <point x="1002.3865253793824" y="307.0" />
+      <point x="859.8551347462061" y="307.0" />
+      <point x="-25.200000000000045" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.presentation.controller.MainController" target="tech.subluminal.client.presentation.KeyMap">
+      <point x="6.400000000000091" y="-14.5" />
+      <point x="1066.3865253793824" y="257.0" />
+      <point x="1078.280134746206" y="257.0" />
+      <point x="22.75" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.logic.UserManager" target="tech.subluminal.shared.net.Connection">
+      <point x="-14.75" y="-14.5" />
+      <point x="570.2230572998428" y="297.0" />
+      <point x="532.3961342229197" y="297.0" />
+      <point x="16.923076923076906" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.presentation.controller.ChatController" target="tech.subluminal.client.presentation.ChatPresenter">
+      <point x="-31.5" y="-14.5" />
+      <point x="853.5551347462061" y="148.0" />
+      <point x="356.10969387755085" y="148.0" />
+      <point x="40.66666666666663" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.presentation.controller.GameController" target="tech.subluminal.client.presentation.controller.MainController">
+      <point x="26.40000000000009" y="14.5" />
+      <point x="1213.4301347462062" y="297.0" />
+      <point x="1117.5865253793822" y="297.0" />
+      <point x="57.599999999999966" y="-14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.logic.UserManager" target="tech.subluminal.client.presentation.UserPresenter">
+      <point x="44.25" y="-14.5" />
+      <point x="629.2230572998428" y="307.0" />
+      <point x="621.6666666666666" y="307.0" />
+      <point x="621.6666666666666" y="178.0" />
+      <point x="636.1666666666666" y="178.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.presentation.controller.ChatController" target="tech.subluminal.client.presentation.controller.MainController">
+      <point x="50.40000000000009" y="14.5" />
+      <point x="935.4551347462062" y="277.0" />
+      <point x="1040.7865253793823" y="277.0" />
+      <point x="-19.200000000000045" y="-14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.init.ClientInitializer" target="tech.subluminal.client.logic.GameManager">
+      <point x="-4.5" y="-14.5" />
+      <point x="662.7397501308214" y="455.0" />
+      <point x="697.7971938775509" y="455.0" />
+      <point x="697.7971938775509" y="386.0" />
+      <point x="695.4730572998428" y="386.0" />
+      <point x="-31.5" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.init.ClientInitializer" target="tech.subluminal.client.logic.LobbyManager">
+      <point x="31.5" y="-14.5" />
+      <point x="698.7397501308214" y="495.0" />
+      <point x="938.530134746206" y="495.0" />
+      <point x="32.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.init.ClientInitializer" target="tech.subluminal.client.presentation.controller.ChatController">
+      <point x="13.5" y="-14.5" />
+      <point x="680.7397501308214" y="475.0" />
+      <point x="802.7971938775509" y="475.0" />
+      <point x="802.7971938775509" y="307.0" />
+      <point x="834.655134746206" y="307.0" />
+      <point x="-50.40000000000009" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.shared.son.SONRepresentable" target="tech.subluminal.shared.son.SON">
+      <point x="0.0" y="-14.5" />
+      <point x="161.44302721088422" y="59.0" />
+      <point x="108.44302721088422" y="59.0" />
+      <point x="24.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.init.ClientInitializer" target="tech.subluminal.client.presentation.controller.GameController">
+      <point x="58.5" y="-14.5" />
+      <point x="725.7397501308214" y="525.0" />
+      <point x="1182.4059981684982" y="525.0" />
+      <point x="1182.4059981684982" y="307.0" />
+      <point x="1239.830134746206" y="307.0" />
+      <point x="52.799999999999955" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.logic.ChatManager" target="tech.subluminal.client.presentation.ChatPresenter">
+      <point x="-15.0" y="-14.5" />
+      <point x="269.9730572998429" y="247.0" />
+      <point x="271.66666666666663" y="247.0" />
+      <point x="271.66666666666663" y="178.0" />
+      <point x="315.4430272108842" y="178.0" />
+      <point x="0.0" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.init.ClientInitializer" target="tech.subluminal.client.logic.UserManager">
+      <point x="-13.5" y="-14.5" />
+      <point x="653.7397501308214" y="475.0" />
+      <point x="566.7971938775509" y="475.0" />
+      <point x="566.7971938775509" y="386.0" />
+      <point x="614.4730572998428" y="386.0" />
+      <point x="29.5" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.shared.net.SocketConnection" target="tech.subluminal.shared.net.Connection">
+      <point x="54.375" y="-14.5" />
+      <point x="126.875" y="257.0" />
+      <point x="464.7038265306121" y="257.0" />
+      <point x="-50.769230769230774" y="14.5" />
+    </edge>
+    <edge source="tech.subluminal.client.logic.PingManager" target="tech.subluminal.shared.net.Connection">
+      <point x="0.0" y="-14.5" />
+      <point x="383.1305272108842" y="386.0" />
+      <point x="366.4730572998429" y="386.0" />
+      <point x="366.4730572998429" y="297.0" />
+      <point x="498.549980376766" y="297.0" />
+      <point x="-16.923076923076906" y="14.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.9" x="632.7777777777777" y="362.22222222222223" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
