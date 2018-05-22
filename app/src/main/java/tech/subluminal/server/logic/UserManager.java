@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.server.stores.UserStore;
 import tech.subluminal.shared.messages.InitialUsers;
 import tech.subluminal.shared.messages.LoginReq;
@@ -121,7 +122,7 @@ public class UserManager {
   }
 
   private void successfulLogin(Connection connection, User user) {
-    System.out.println("new user connected: " + user.getUsername() + ": " + user.getID());
+    Logger.trace("new user connected: " + user.getUsername() + ": " + user.getID());
 
     userStore.connectedUsers().add(user);
 

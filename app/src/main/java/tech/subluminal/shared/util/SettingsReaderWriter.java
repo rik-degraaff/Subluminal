@@ -79,7 +79,6 @@ public class SettingsReaderWriter implements PropertiesReaderWriter {
             }
             default: {
               Logger.error("No type handler found for: " + field.getType().getSimpleName());
-              System.out.println("No type handler found: " + field.getType().getSimpleName());
               break;
             }
           }

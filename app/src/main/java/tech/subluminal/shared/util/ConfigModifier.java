@@ -129,7 +129,7 @@ public class ConfigModifier<k, v> {
     } else {
       theFile = new File(folderPath + DELIMETER_KEY + fullName.replace("/", DELIMETER_KEY));
     }
-    System.out.println(theFile.getPath());
+    Logger.trace(theFile.getPath());
     String[] parts = fullName.split("\\.");
 
     switch (parts[parts.length-1]) {
@@ -143,8 +143,6 @@ public class ConfigModifier<k, v> {
             OutputStream out = new FileOutputStream(theFile);
             propMap.forEach((k,v) -> props.setProperty(k.toString(), v.toString()));
             props.store(out, "Subluminal Properties");
-          } catch (FileNotFoundException e) {
-            Logger.error(e);
           } catch (IOException e) {
             Logger.error(e);
           }

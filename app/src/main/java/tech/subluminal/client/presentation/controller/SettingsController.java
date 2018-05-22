@@ -23,10 +23,14 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.client.presentation.KeyMap;
 import tech.subluminal.shared.records.GlobalSettings;
 import tech.subluminal.shared.util.ConfigModifier;
 
+/**
+ * A controller for teh settings view.
+ */
 public class SettingsController implements Observer, Initializable {
 
   private Random rand = new Random(GlobalSettings.SHARED_RANDOM.nextLong());
@@ -44,6 +48,12 @@ public class SettingsController implements Observer, Initializable {
   private ScrollPane keyDock;
   private KeyMap keyMap;
 
+  /**
+   * Initializes the settings controller.
+   *
+   * @param location the location where the settings are saved.
+   * @param resources the bundle which contains the settings resources.
+   */
   @Override
   public void initialize(URL location, ResourceBundle resources) {
     ConfigModifier<String, String> cm = new ConfigModifier<>("settings");
@@ -102,8 +112,6 @@ public class SettingsController implements Observer, Initializable {
               keyKey.setTextFill(Color.WHITE);
             }
           };
-
-          System.out.println(v.getValue());
           main.getScene().addEventHandler(KeyEvent.KEY_PRESSED, handler);
         });
 
@@ -120,18 +128,14 @@ public class SettingsController implements Observer, Initializable {
 
       vBox.getChildren().add(resetAll);
     });
-
-
   }
 
   private void initSound() {
     if (settingsMap.get(VOLUME_KEY) == null) {
       settingsMap.put(VOLUME_KEY, Double.toString(VOLUME_DEFAULT));
-      System.out.println("default sound");
+      Logger.debug("default sound");
     }
-    if(settingsMap.get(MUTE_SOUND_KEY) == null){
-      settingsMap.put(MUTE_SOUND_KEY, Boolean.toString(MUTE_SOUND_DEFAULT));
-    }
+    settingsMap.computeIfAbsent(MUTE_SOUND_KEY, k -> Boolean.toString(MUTE_SOUND_DEFAULT));
 
     Media media[] = new Media[3];
 

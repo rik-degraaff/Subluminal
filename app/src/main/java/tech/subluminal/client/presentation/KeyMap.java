@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.scene.input.KeyCode;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.shared.util.ConfigModifier;
 
 /**
@@ -73,7 +74,7 @@ public class KeyMap {
   }
 
   private void updateKeyMapFile(String key, ObjectProperty value) {
-    System.out.println("Property changed: " + value.toString());
+    Logger.trace("Property changed: " + value.toString());
   }
 
   /**
