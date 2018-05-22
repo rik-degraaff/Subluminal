@@ -40,7 +40,7 @@ public class SocketConnectionManager implements ConnectionManager {
         connection.start();
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      Logger.error(e);
       System.exit(1);
     }
   }
@@ -57,7 +57,7 @@ public class SocketConnectionManager implements ConnectionManager {
       Logger.info("Port " + port + " is already in use. Trying next port.");
       createSocket(port+1);
     } catch (IOException e) {
-      e.printStackTrace();
+      Logger.error(e);
     }
   }
 

@@ -4,6 +4,7 @@ import static tech.subluminal.shared.util.IdUtils.generateId;
 
 import java.io.IOException;
 import java.util.Optional;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.client.stores.PingStore;
 import tech.subluminal.shared.logic.PingResponder;
 import tech.subluminal.shared.messages.LogoutReq;
@@ -46,8 +47,7 @@ public class PingManager {
             try {
               connection.close();
             } catch (IOException e) {
-              e.printStackTrace();
-              //TODO: handle this accordingly
+              Logger.error(e); // this shouldn't happen
             }
           } else {
             SentPing ping = new SentPing(System.currentTimeMillis(), null, generateId(GlobalSettings.SHARED_UUID_LENGTH));
@@ -56,8 +56,7 @@ public class PingManager {
           }
         }
       } catch (InterruptedException e) {
-        e.printStackTrace();
-        //TODO: handle sensible
+        Logger.error(e);
       }
     }
   }
@@ -68,8 +67,6 @@ public class PingManager {
   }
 
   private void onPongReceived(Pong pong) {
-    //pingStore.getPing().getSentTime();
-    //TODO: calculate ping and store in pingstore
     pingStore.lastPing().remove();
 
   }

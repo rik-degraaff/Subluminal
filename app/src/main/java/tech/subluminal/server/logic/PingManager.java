@@ -4,6 +4,7 @@ import static tech.subluminal.shared.util.IdUtils.generateId;
 
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.server.stores.PingStore;
 import tech.subluminal.server.stores.ReadOnlyUserStore;
 import tech.subluminal.shared.logic.PingResponder;
@@ -59,7 +60,7 @@ public class PingManager {
       try {
         Thread.sleep(PING_TIMEOUT_MILLIS);
       } catch (InterruptedException e) {
-        e.printStackTrace(); // TODO: do something sensible
+        Logger.error(e);
       }
 
       pingStore.sentPings().sync(() -> {

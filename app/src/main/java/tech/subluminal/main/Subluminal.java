@@ -67,12 +67,10 @@ public class Subluminal {
       charset = Charset.class.getDeclaredField("defaultCharset");
       charset.setAccessible(true);
       charset.set(null,null);
-    } catch (NoSuchFieldException e) {
-      e.printStackTrace();
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
+    } catch (NoSuchFieldException | IllegalAccessException e) {
+      Logger.error(e);
     }
-    
+
     final Subluminal subl = CommandLine.populateCommand(new Subluminal(), args);
 
     if (subl.help) {
@@ -207,7 +205,7 @@ public class Subluminal {
           Subluminal.class.getProtectionDomain().getCodeSource().getLocation().toURI()
               .getPath()).getParentFile();
     } catch (URISyntaxException e) {
-      e.printStackTrace();
+      Logger.error(e);
     }
     return jar;
   }

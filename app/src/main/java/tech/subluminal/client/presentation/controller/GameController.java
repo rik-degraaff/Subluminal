@@ -122,9 +122,7 @@ public class GameController implements Initializable, GamePresenter {
         pressStore[0] = star;
         star.setHoverShown(true);
         pressStore[1] = null;
-      } else if (pressStore[0] == star) {
-
-      } else {
+      } else if (pressStore[0] != star) {
         Logger.debug("creating JumpPath");
         removeJumpPath();
         pressStore[1] = star;
@@ -132,7 +130,6 @@ public class GameController implements Initializable, GamePresenter {
         if (path != null) {
           path.clear();
         }
-        //System.out.println(pressStore[0].getStarID() + " " + pressStore[1].getStarID());
         try {
           this.path = graph
               .findShortestPath(pressStore[0].getStarID(), pressStore[1].getStarID());

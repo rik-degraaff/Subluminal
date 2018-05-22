@@ -137,7 +137,7 @@ public abstract class ShipComponent extends Pane {
 
     Platform.runLater(() -> {
       targetsWrapperProperty().addListener((observable, oldValue, newValue) -> {
-        System.out.println("NEW VAL" + newValue);
+        Logger.trace("NEW VAL" + newValue);
         if (!newValue.isEmpty()) {
           setShipMoving(ship);
         } else if (newValue.isEmpty()) {
@@ -212,7 +212,7 @@ public abstract class ShipComponent extends Pane {
 
     Platform.runLater(() -> {
       targetsWrapperProperty().addListener((observable, oldValue, newValue) -> {
-        System.out.println("NEW VAL" + newValue);
+        Logger.trace("NEW VAL" + newValue);
         if (targetsWrapper.isEmpty()) {
           //reset rotation
           setFleetRotating(ship);

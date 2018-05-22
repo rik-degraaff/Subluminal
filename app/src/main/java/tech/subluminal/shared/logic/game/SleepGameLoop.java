@@ -1,5 +1,7 @@
 package tech.subluminal.shared.logic.game;
 
+import org.pmw.tinylog.Logger;
+
 /**
  * Represents the repetitive steps that have to be done to update the game.
  */
@@ -13,6 +15,9 @@ public class SleepGameLoop implements GameLoop {
     this.delegate = delegate;
   }
 
+  /**
+   * Starts the game loop.
+   */
   @Override
   public void start() {
     long lastTime = System.currentTimeMillis();
@@ -30,7 +35,7 @@ public class SleepGameLoop implements GameLoop {
         Thread.sleep(
             Math.max(0, msPerIteration - (System.currentTimeMillis() - timeBeforeBeforeTick)));
       } catch (InterruptedException e) {
-        e.printStackTrace();
+        Logger.error(e);
       }
     }
   }

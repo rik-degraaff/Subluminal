@@ -84,10 +84,6 @@ public class UserManager implements UserPresenter.Delegate {
     userStore.users().getByID(id)
         .ifPresent(syncUser -> syncUser.update(user -> new User(newUsername, id)));
 
-    ifPresent(userStore.users().getByID(id).map(syncUser -> syncUser.use(User::getUsername)))
-        .then(System.out::println)
-        .els(() -> System.out.println("User ain't here bro."));
-
     userPresenter.onPlayerUpdate(oldUsername, newUsername);
   }
 

@@ -1,5 +1,7 @@
 package tech.subluminal.shared.son;
 
+import org.pmw.tinylog.Logger;
+
 public class SONParsing {
 
   static final char KEY_VALUE_DELIMITER = ':';
@@ -127,7 +129,7 @@ public class SONParsing {
       }
 
       if (builder.toString().length() == 0) {
-        System.out.println(str.substring(0, 20));
+        Logger.error(str.substring(0, 20));
       }
 
       //create double from StringBuilder
