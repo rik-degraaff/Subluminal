@@ -15,7 +15,7 @@
   <children>
     <VBox alignment="TOP_CENTER" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
-        <ToolBar prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: rgba(49, 45, 47, 0.5);">
+        <ToolBar prefHeight="40.0" prefWidth="600.0" style="-fx-background-color: rgba(49, 45, 47, 0.7)">
           <items>
             <Label fx:id="windowTitel" text="Titel" textFill="#42aaf4" />
             <Pane prefWidth="200.0" style="-fx-background-color: transparent;" HBox.hgrow="ALWAYS" />

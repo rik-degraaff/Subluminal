@@ -21,6 +21,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -42,6 +43,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Cylinder;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
@@ -219,6 +221,7 @@ public class MainController implements Initializable {
     highscore = new HighscoreComponent();
 
     lobby = new LobbyComponent();
+    lobby.setMainController(getController());
 
     game = new GameComponent(this);
     gameController = game.getController();
@@ -265,6 +268,14 @@ public class MainController implements Initializable {
         onSettingOpenHandle();
       } else if (keyEvent.getCode() == keyMap.get("Skip").get()) {
         clearIntro(timeTl);
+      } else if (keyEvent.getCode() == keyMap.get("Fullscreen").get()) {
+        Platform.runLater(() -> {
+          if (getScene().isFullScreen()) {
+            getScene().setFullScreen(false);
+          } else {
+            getScene().setFullScreen(true);
+          }
+        });
       }
     });
 
@@ -667,6 +678,10 @@ public class MainController implements Initializable {
     saveMenuState();
 
     windowContainer = new WindowContainerComponent(this, highscore, "Highscore");
+    highscore.prefWidthProperty().bind(windowContainer.widthProperty());
+    highscore.setMaxHeight(400);
+    highscore.setPrefViewportHeight(400);
+    //highscore.maxHeightProperty().bind(windowContainer.heightProperty());
 
     fitWindow();
 
@@ -692,6 +707,8 @@ public class MainController implements Initializable {
 
     actual.setBackground(
         new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+    actual.setAlignment(Pos.CENTER);
+    actual.setFont(new Font("PxPlus IBM VGA9", 30));
 
     middleBoardDock.add(sendMother, 0, 1);
     middleBoardDock.add(send, 0, 2);
@@ -701,5 +718,9 @@ public class MainController implements Initializable {
   public void resetAmounBox() {
     amountShown.set(false);
     clearMiddleBoard();
+  }
+
+  public void setWindowTitle(String text) {
+    windowContainer.setTitle(text);
   }
 }
