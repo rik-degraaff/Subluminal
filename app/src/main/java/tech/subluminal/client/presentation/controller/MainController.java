@@ -414,7 +414,7 @@ public class MainController implements Initializable {
     introText.getStyleClass().addAll("console-red", "intro-text");
     introBoxHolder.getChildren().addAll(introText);
 
-    String introStory = "In a basement just around your corner, we once were created.\nAnd now we are set to conquer the galaxy...";
+    String introStory = "In a basement no more than a few parsecs from here, you were created.\nAnd now you and your peers are set to conquer the galaxy...";
 
     SequentialTransition mainTl = new SequentialTransition();
     PauseTransition pauseTl = new PauseTransition(Duration.seconds(2));

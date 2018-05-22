@@ -104,8 +104,12 @@ public class GameController implements Initializable, GamePresenter {
   }
 
   private void clearPressStore() {
-    if(pressStore[0] != null) pressStore[0].setHoverShown(false);
-    if(pressStore[1] != null) pressStore[1].setHoverShown(false);
+    if (pressStore[0] != null) {
+      pressStore[0].setHoverShown(false);
+    }
+    if (pressStore[1] != null) {
+      pressStore[1].setHoverShown(false);
+    }
     pressStore[0] = null;
     pressStore[1] = null;
   }
@@ -293,7 +297,7 @@ public class GameController implements Initializable, GamePresenter {
       if (winnerID != null) {
         String winnerName = userStore.users().getByID(winnerID).get().use(User::getUsername);
         main.getChatController()
-            .addMessageChat(winnerName + " won one of the last games you where in.", Channel.INFO);
+            .addMessageChat(winnerName + " won one of the last games you were in.", Channel.INFO);
       } else {
         main.getChatController()
             .addMessageChat("You all failed Bob...", Channel.INFO);
@@ -478,14 +482,6 @@ public class GameController implements Initializable, GamePresenter {
     });
   }
 
-  public void setUserStore(UserStore userStore) {
-    this.userStore = userStore;
-  }
-
-  public void clearMap() {
-    map.getChildren().clear();
-  }
-
   @Override
   public void clearGame() {
     Platform.runLater(() -> {
@@ -511,7 +507,7 @@ public class GameController implements Initializable, GamePresenter {
       } else {
         if (toast.isPermanent()) {
           toastDock.getChildren()
-              .removeIf(n -> n instanceof  ToastComponent && ((ToastComponent) n).isPermanent());
+              .removeIf(n -> n instanceof ToastComponent && ((ToastComponent) n).isPermanent());
           toastDock.getChildren().add(0, toast);
         } else {
           toastDock.getChildren().add(toast);
@@ -537,13 +533,21 @@ public class GameController implements Initializable, GamePresenter {
     });
   }
 
-  public void clearToastDock(){
-    toastDock.getChildren().clear();
-  }
-
   @Override
   public void setTps(double tps) {
     main.setTps(tps);
+  }
+
+  public void setUserStore(UserStore userStore) {
+    this.userStore = userStore;
+  }
+
+  public void clearMap() {
+    map.getChildren().clear();
+  }
+
+  public void clearToastDock() {
+    toastDock.getChildren().clear();
   }
 
   public void leaveGame() {
