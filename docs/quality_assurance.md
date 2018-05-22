@@ -24,18 +24,23 @@
 
 ## Quality characteristics
 ### 1. Efficiency / Latency
-To ensure a fluid gaming experience, the server needs to be able to compute the data inside the game loop in a certain time frame. This is called the server tickrate. We are targeting a tickrate of 10 Hz per hosted game (up to 10 games) on the server (during a 4 player average). Is the server performing normally (faster than 10 Hz), the game loop is slowed down artificially with Thread.sleep(). The resulting tickrate is logged in the server console in debug mode. Additionally, the time difference from the game loop is sent to the client and can also be displayed in its debug view.  
-The chart shows a mostly stable framerate of around 45 frames per second (fps) with a fluctuation of +- 5 frames. This is sufficient for our purposes. An interesting remark: JavaFX tries to draw at a constant 60 fps, which clearly cannot be kept up with here. The server tick is artificially locked at 10 Hz, which works well, performance and gameplay wise. FPS and Tickrate are averaged over the last 100 values, then the last 20 entries are shown in the chart.  
+To ensure a fluid gaming experience, the server needs to be able to compute the data inside the game loop in a certain time frame. This is called the server tickrate. We are targeting a tickrate of 10 Hz per hosted game (up to 10 games) on the server (during a 4 player average). Is the server performing normally (faster than 10 Hz), the game loop is slowed down artificially with Thread.sleep().  
+The chart in the image below shows a mostly stable frame rate of around 45 frames per second (fps) on the client with a fluctuation of +- 5 frames. This is sufficient for our purposes. An interesting remark: JavaFX tries to draw at a constant 60 fps, which clearly cannot be kept up with here. The server tick is artificially locked at 10 Hz, which works well, performance and gameplay wise. FPS and Tickrate are averaged over the last 100 values, then the last 20 entries are shown in the chart.  
+We realized that this QA goal was rather difficult to examine, because we would have had to recruit a lot of people to help us diagnose our server efficiency. We also think that we overestimated our server's capabilities with the desired numbers stated above (10 games with an average of 4 players). Nevertheless, we were able to host 4 games with 3 players each on one server, while still maintaining a stable 10.0 ticks per second.
 
 ![Tickrate Graph](../assets/screenshots/qa/performance.png)
 
 
 ### 2. Reliability / Error tolerance [![coverage report](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/badges/master/coverage.svg)](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/tree/master)
 The software is tested with junit unit tests. For the more intricate tests, the mockito framework was used to construct mock classes and simulate network connections. As a metric we use the code coverage percentage (``"degree to which the source code of a program is executed when a particular test suite runs".`` [Wikipedia][6]).  
-The goal is to achieve a coverage of **35 %** (excluding gui packages). Currently, there are 146 unit tests and we are at **48 %** coverage, GUI packages excluded (May 19th, 2018). Some of the unit tests helped us finding a few logic flaws in our code and others helped us building some trust in our message parsing system.
+The goal was to achieve a coverage of **35 %** (excluding gui packages). Currently, there are 146 unit tests and we are at **48 %** coverage, GUI packages excluded (May 19th, 2018). Some of the unit tests helped us find a few logic flaws in our code and others helped us building some trust in our message parsing system.
 
 ![Jacoco Coverage](../assets/screenshots/qa/jacoco.png)  
 ![Test Report](../assets/screenshots/qa/test.png)
+
+Below, we included a graphical representation of our code coverage over time. To get the data, we checked out the repository from milestone 2 to 5 and retrospectively generated the test coverage report. As the graph shows, we started using unit tests right around milestone 3, that's also where we first drafted our quality assurance goals. The big increase in coverage stems from excluding the GUI packages from report generation and implementing more complex unit tests (game logic). Since milestone 4, our coverage dropped slightly. The explanation for that is: (1) Already having reached our targeted coverage of 35 %, we stopped writing additional unit tests. (2) Since our project was still ongoing, we kept adding untested code, which decreased our coverage slightly.
+
+![Coverage over time](../assets/other/Coverage.png)
 
 
 ## Merge requirements
