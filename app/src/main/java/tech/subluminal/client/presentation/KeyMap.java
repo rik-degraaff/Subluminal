@@ -23,7 +23,7 @@ public class KeyMap {
   private final KeyCode TPS_DEFAULT =  KeyCode.F6;
   private final KeyCode TPS_MONITOR_DEFAULT =  KeyCode.F7;
   private final KeyCode SETTINGS_DEFAULT =  KeyCode.S;
-  private final KeyCode SKIP_DEFAULT =  KeyCode.E;
+  private final KeyCode SKIP_DEFAULT =  KeyCode.ESCAPE;
 
   private final ObjectProperty<KeyCode> fullscreen = new SimpleObjectProperty<>(FULLSCREEN_DEFAULT);
   private final ObjectProperty<KeyCode> chatToggle = new SimpleObjectProperty<>(CHAT_DEFAULT);

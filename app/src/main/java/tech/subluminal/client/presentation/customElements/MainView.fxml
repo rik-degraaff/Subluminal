@@ -102,14 +102,22 @@
                                     <String fx:value="font-dos" />
                                  </styleClass>
                               </GridPane>
-                <AnchorPane fx:id="chatDock" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" HBox.hgrow="ALWAYS">
-                  <VBox.margin>
-                    <Insets />
-                  </VBox.margin>
-                                 <GridPane.margin>
-                                    <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                                 </GridPane.margin>
-                </AnchorPane>
+                              <HBox alignment="CENTER" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                 <children>
+                                    <VBox alignment="CENTER" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+                                       <children>
+                            <AnchorPane fx:id="chatDock" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.hgrow="SOMETIMES" GridPane.valignment="CENTER" HBox.hgrow="ALWAYS">
+                              <VBox.margin>
+                                <Insets />
+                              </VBox.margin>
+                                             <GridPane.margin>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                             </GridPane.margin>
+                            </AnchorPane>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
                   </children>
                 </GridPane>
               </children>

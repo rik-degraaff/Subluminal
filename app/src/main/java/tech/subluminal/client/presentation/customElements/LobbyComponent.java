@@ -46,10 +46,13 @@ public class LobbyComponent extends Group implements LobbyPresenter {
     });
   }
 
-  public void setUserActive() {
+  public void setUserActive(String name) {
     Platform.runLater(() -> {
       this.getChildren().clear();
       this.getChildren().add(lobbyUser);
+
+      main.setWindowTitle("Lobby: " + name);
+
     });
 
   }
@@ -78,8 +81,8 @@ public class LobbyComponent extends Group implements LobbyPresenter {
   }
 
   @Override
-  public void joinLobbySucceded() {
-    setUserActive();
+  public void joinLobbySucceded(String name) {
+    setUserActive(name);
   }
 
   @Override

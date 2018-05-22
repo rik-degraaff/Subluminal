@@ -46,6 +46,7 @@ public class ControlButton extends AnchorPane {
     } else {
       button.setOnMouseClicked(e -> {
         if (!isOpen) {
+          ((DisplayComponent) goal).clearDisplay();
           ((DisplayComponent) goal).setDisplay((AnchorPane) node);
           button.setText("X");
           isOpen = true;

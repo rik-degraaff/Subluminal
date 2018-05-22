@@ -9,9 +9,7 @@ import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.logic.ChatManager;
@@ -133,16 +131,6 @@ public class ClientInitializer extends Application {
     primaryStage.setMaximized(true);
     primaryStage.show();
     primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
-
-    primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
-      if (keyEvent.getCode() == KeyCode.F11) {
-        if (primaryStage.isFullScreen()) {
-          primaryStage.setFullScreen(false);
-        } else {
-          primaryStage.setFullScreen(true);
-        }
-      }
-    });
 
     primaryStage.setOnCloseRequest(e -> {
       System.exit(0);

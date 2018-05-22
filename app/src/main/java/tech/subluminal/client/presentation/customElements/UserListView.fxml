@@ -11,7 +11,11 @@
   <children>
     <HBox>
       <children>
-        <ListView fx:id="playerBoard" style="-fx-background-color: black;" />
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" prefViewportHeight="120.0">
+               <content>
+              <ListView fx:id="playerBoard" style="-fx-background-color: black;" />
+               </content>
+            </ScrollPane>
       </children>
     </HBox>
   </children>

@@ -73,7 +73,7 @@ public class LobbyUserController implements Initializable {
 
     Platform.runLater(() -> {
       userList.setItems(new MapperList<>(filterdUsers,
-          u -> new PlayerStatusComponent(u.getUsername(), PlayerStatus.INLOBBY, main)));
+          u -> new PlayerStatusComponent(u.getUsername(), PlayerStatus.INLOBBY, main, false)));
     });
 
 
