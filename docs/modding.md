@@ -13,20 +13,25 @@ Use the following structure to place your mods. The file names must be unique, o
 .
 |-- Subluminal-5.0.0.jar
 |
-|-- mods/
-|---- mothership/
-|------ shipBody_<name1>.png
-|------ shipDetail_<name1>.png
-|------ ...
+|-- config/
+|---- mods/
+|------ mothership/
+|-------- shipBody_<name1>.png
+|-------- shipDetail_<name1>.png
+|-------- ...
 |
-|---- fleet/
-|------ fleetBody_<name1>.png
-|------ fleetDetails_<name1>.png
-|------ ...
+|------ fleet/
+|-------- fleetBody_<name1>.png
+|-------- fleetDetails_<name1>.png
+|-------- ...
 |
-|---- starnames/
-|------ stars-<name1>.txt
-|------ ...
+|------ stars/
+|-------- stars-<name1>.txt
+|-------- ...
+|
+|------ chatbots/
+|-------- chatbot1.js
+|-------- ...
 ```
 ## Mothership
 ![Mothership Body](../app/src/main/java/tech/subluminal/resources/100w/shipBody.png)  ![Mothership Details](../app/src/main/java/tech/subluminal/resources/100w/shipDetails.png)  
@@ -49,5 +54,5 @@ star-trek.txt       # 99
 rare-stars.txt      # 1
 ```
 
-## Graphics export settings
-@lengdav00
+## Chatbots
+Bots are written in JavaScript and parsed by the Nashorn engine. Place them into the ``config/mods/chatbot`` directory and they will get picked up by the game. Call the bot from the chat window with the ``>`` followed by its name.

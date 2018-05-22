@@ -17,7 +17,7 @@ dev: [![pipeline status](https://git.scicore.unibas.ch/CS108-FS18/Gruppe-11/badg
 [2. Getting Started](#2-getting-started)  
 [3. Trailer & Screenshots](#3-trailer-screenshots)  
 [4. How to play](#4-how-to-play)  
-[5. Modding](#5-modding)  
+[5. Modding](#5-mods)  
 [6. License](#6-license)  
 [7. Web](#7-web)
 
@@ -74,22 +74,23 @@ Starts the game in server or client mode.
 
 ### Quicklinks for professors / assistants / tutors:
   
-| Document         | Filename             | md                                    | pdf                                     | Description                                          |
-| :--------------- | :------------------- | :------------------------------------ | :-------------------------------------- | :--------------------------------------------------- |
-| Readme           | README.md            | [``<md>``](README.md)                 | [``<pdf>``](README.pdf)                 | Quickstart with lots of useful information           |
-| Changelog        | CHANGELOG.md         | [``<md>``](CHANGELOG.md)              | [``<pdf>``](CHANGELOG.pdf)              | Automatically generated changelog (based on commits) |
-| Diary            | project_diary.md     | [``<md>``](docs/project_diary.md)     | [``<pdf>``](docs/project_diary.pdf)     | Project diary daily/weekly basis                     |
-| QA concept       | quality_assurance.md | [``<md>``](docs/quality_assurance.md) | [``<pdf>``](docs/quality_assurance.pdf) | Quality assurance concept for the project            |
-| Network protocol | network_protocol.md  | [``<md>``](docs/network_protocol.md)  | [``<pdf>``](docs/network_protocol.pdf)  | Network protocol specification                       |
-| Game rules       | game_rules.md        | [``<md>``](docs/game_rules.md)        | [``<pdf>``](docs/game_rules.pdf)        | Short list with all game rules                       |
-| Manual           | manual.pdf           | -                                     | [``<pdf>``](docs/manual/manual.pdf)     | Game manual                                          |
-| Presentations    | .pptx                | [``.pptx``](/milestone)               | [``.pdf``](/milestone)                  | Slides and Gantt project                             |
+| Document         | Filename                | md                                       | pdf                                        | Description                                          |
+| :--------------- | :---------------------- | :--------------------------------------- | :----------------------------------------- | :--------------------------------------------------- |
+| Readme           | README.md               | [``<md>``](README.md)                    | [``<pdf>``](README.pdf)                    | Quickstart with lots of useful information           |
+| Changelog        | CHANGELOG.md            | [``<md>``](CHANGELOG.md)                 | [``<pdf>``](CHANGELOG.pdf)                 | Automatically generated changelog (based on commits) |
+| Diary            | project_diary.md        | [``<md>``](docs/project_diary.md)        | [``<pdf>``](docs/project_diary.pdf)        | Project diary daily/weekly basis                     |
+| QA concept       | quality_assurance.md    | [``<md>``](docs/quality_assurance.md)    | [``<pdf>``](docs/quality_assurance.pdf)    | Quality assurance concept for the project            |
+| Network protocol | network_protocol.md     | [``<md>``](docs/network_protocol.md)     | [``<pdf>``](docs/network_protocol.pdf)     | Network protocol specification                       |
+| Game rules       | game_rules.md           | [``<md>``](docs/game_rules.md)           | [``<pdf>``](docs/game_rules.pdf)           | Short list with all game rules                       |
+| Manual           | manual.pdf              | -                                        | [``<pdf>``](docs/manual/manual.pdf)        | Game manual                                          |
+| Architecture     | program_architecture.md | [``<md>``](docs/program_architecture.md) | [``<pdf>``](docs/program_architecture.pdf) | Describes the architecture of the application        |
+| Presentations    | .pptx                   | [``.pptx``](/milestone)                  | [``.pdf``](/milestone)                     | Slides and Gantt project                             |
 
 ### Generated docs / reports:
 These documents will only appear once the project has been built with gradle.
 
 | Document        | Local Path                                                           | Hosted                                                                     | Description                     |
-| :-------------- | :------------------------------------------------------------------- | :------------------------------------------------------------------------- | :------------------------------ |  |
+| :-------------- | :------------------------------------------------------------------- | :------------------------------------------------------------------------- | :------------------------------ |
 | JavaDoc         | [docs/javadoc/](docs/javadoc/index.html)                             | [gl.com](https://tairun.gitlab.io/Gruppe-11/javadoc/index.html)            | Javadoc Webpage                 |
 | JavaDocCoverage | [docs/javadoc](docs/javadoc/javadoc-coverage.html)                   | [gl.com](https://tairun.gitlab.io/Gruppe-11/javadoc/javadoc-coverage.html) | Javadoc Coverage Report Webpage |
 | Test Report     | [app/build/reports/test/](app/build/reports/test/index.html)         | [gl.com](https://tairun.gitlab.io/Gruppe-11/test/index.html)               | JUnit Test Report               |
@@ -112,7 +113,7 @@ The screenshots can are located in [./assets/screenshots/](assets/screenshots/).
 > https://youtu.be/CFz0pelxKns
 
 
-## 5. Modding
+## 5. Mods
 Subluminal features support for mods. Read the docs for more info ... [./docs/modding.md](./docs/modding.md). Additionally you can start the server in debug mode with the ``--debug`` flag. This will export game settings to a property file called ``constants.properties``. Now you can change and tweak the game settings to your liking. On the next launch of the server, the properties file is read back into the server. See [assets/settings/constants.properties](assets/settings/constants.properties) for example.
 
 
