@@ -115,7 +115,8 @@ jacocoTestReport {
     afterEvaluate {
         classDirectories = files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
-                    '**/*tech/subluminal/client/presentation**'
+                    '**/*tech/subluminal/client/presentation**',
+                    '**/*tech/subluminal/shared/util/poissonDiskSampler**'
             ])
         })
     }

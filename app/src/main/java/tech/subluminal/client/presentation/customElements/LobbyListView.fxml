@@ -13,13 +13,17 @@
   <children>
     <VBox alignment="CENTER" layoutX="208.0" layoutY="-11.0" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
-        <ListView fx:id="lobbyList" prefHeight="401.0" prefWidth="600.0" style="-fx-background-color: grey;" />
+            <ScrollPane hbarPolicy="NEVER" prefViewportHeight="365.0" prefViewportWidth="600.0">
+               <content>
+              <ListView fx:id="lobbyList" prefHeight="401.0" prefWidth="600.0" style="-fx-background-color: transparent;" />
+               </content>
+            </ScrollPane>
         <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="200.0" style="-fx-background-color: transparent;">
           <items>
-            <Button mnemonicParsing="false" onAction="#onLobbyRefresh" text="Refresh Lobbies"/>
-            <Button mnemonicParsing="false" onAction="#onLobbyCreate" text="Create Lobby"/>
+            <Button mnemonicParsing="false" onAction="#onLobbyRefresh" text="Refresh Lobbies" />
+            <Button mnemonicParsing="false" onAction="#onLobbyCreate" text="Create Lobby" />
             <Region HBox.hgrow="ALWAYS" />
-            <Button mnemonicParsing="false" onAction="#onTutorialStart" text="Tutorial"/>
+            <Button mnemonicParsing="false" onAction="#onTutorialStart" text="Tutorial" />
           </items>
         </ToolBar>
 

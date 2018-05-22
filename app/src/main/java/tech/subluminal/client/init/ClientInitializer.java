@@ -2,15 +2,14 @@ package tech.subluminal.client.init;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import org.pmw.tinylog.Logger;
 import tech.subluminal.client.logic.ChatManager;
@@ -54,10 +53,15 @@ public class ClientInitializer extends Application {
     try {
       socket = new Socket(server, port);
     } catch (IOException e) {
-      //TODO: Proper error handling
-      e.printStackTrace();
+      throw new RuntimeException(e); // we're all doomed
     }
-    Connection connection = new SocketConnection(socket);
+
+    AtomicBoolean tryLogout = new AtomicBoolean(true);
+
+    Connection connection = new SocketConnection(socket, () -> {
+      tryLogout.set(false);
+      System.exit(1);
+    });
     connection.start();
 
     UserStore userStore = new InMemoryUserStore();
@@ -74,7 +78,7 @@ public class ClientInitializer extends Application {
     new PingManager(connection, pingStore);
 
     LobbyComponent lobbyPresenter = controller.getLobby();
-    LobbyManager lobbyManager = new LobbyManager(lobbyStore, connection, lobbyPresenter,
+    new LobbyManager(lobbyStore, connection, lobbyPresenter,
         controller);
 
     lobbyPresenter.setLobbyStore(lobbyStore);
@@ -82,15 +86,18 @@ public class ClientInitializer extends Application {
 
     GameStore gameStore = new InMemoryGameStore();
     GameController gamePresenter = controller.getGameController();
-    GameManager gameManager = new GameManager(gameStore, connection, gamePresenter);
+    new GameManager(gameStore, connection, gamePresenter);
     gamePresenter.setUserStore(userStore);
     gamePresenter.setGameStore(gameStore);
 
     userManager.start(username);
 
-    final Thread mainThread = Thread.currentThread();
-    Runtime.getRuntime().addShutdownHook(new Thread(userManager::logoutNoShutdown));
-}
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      if (tryLogout.get()) {
+        userManager.logoutNoShutdown();
+      }
+    }));
+  }
 
 
   /**
@@ -116,7 +123,7 @@ public class ClientInitializer extends Application {
         getClass().getResource("/tech/subluminal/client/presentation/style/lobby.css")
             .toExternalForm());
 
-    controller = (MainController) loader.getController();
+    controller = loader.getController();
 
     primaryStage.setTitle("Subluminal - The Game");
     primaryStage.setScene(new Scene(root));
@@ -125,16 +132,6 @@ public class ClientInitializer extends Application {
     primaryStage.show();
     primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 
-    primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
-      if (keyEvent.getCode() == KeyCode.F11) {
-        if (primaryStage.isFullScreen()) {
-          primaryStage.setFullScreen(false);
-        } else {
-          primaryStage.setFullScreen(true);
-        }
-      }
-    });
-
     primaryStage.setOnCloseRequest(e -> {
       System.exit(0);
     });
@@ -142,10 +139,7 @@ public class ClientInitializer extends Application {
     PerspectiveCamera camera = new PerspectiveCamera();
     primaryStage.getScene().setCamera(camera);
 
-
     controller.setScene(primaryStage);
-    //camera.setTranslateZ(-1000);
-
 
     String[] cmd = getParameters().getRaw().toArray(new String[4]);
 

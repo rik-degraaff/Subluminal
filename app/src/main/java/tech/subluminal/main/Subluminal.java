@@ -19,7 +19,6 @@ import picocli.CommandLine.Parameters;
 import tech.subluminal.client.init.ClientInitializer;
 import tech.subluminal.server.init.ServerInitializer;
 import tech.subluminal.shared.records.GlobalSettings;
-import tech.subluminal.shared.util.ConfigModifier;
 import tech.subluminal.shared.util.SettingsReaderWriter;
 
 /**
@@ -54,7 +53,7 @@ public class Subluminal {
   private String username = System.getProperty("user.name");
 
   // ======= OTHER VARIABLES =======
-  private static final SettingsReaderWriter srw = new SettingsReaderWriter();
+  private static SettingsReaderWriter srw;
 
   /**
    * Parses the command line arguments and calls the relevant packages.
@@ -104,19 +103,19 @@ public class Subluminal {
       }
 
       GlobalSettings.PATH_JAR = getJarPath().toString();
-
       if (subl.debug) {
+        srw = new SettingsReaderWriter();
         srw.run(GlobalSettings.class, GlobalSettings.class, GlobalSettings.PATH_JAR);
       }
 
-      String host = "localhost";
-      int port = 1729;
-      
+
       Logger.debug("mode:" + subl.mode + " hostAndOrPort:" + subl.hostAndOrPort + " debug:" + String
           .valueOf(subl.debug) + " logfile:" + subl.logfile + " loglevel:" + subl.loglevel
           + " username:" + subl.username);
 
       String[] parts = subl.hostAndOrPort.split(":");
+      String host;
+      int port = 0;
 
       if ("client".equals(subl.mode)) {
         if (parts.length != 2) {
@@ -127,7 +126,7 @@ public class Subluminal {
         try {
           port = Integer.parseInt(parts[1]);
         } catch (NumberFormatException e) {
-          System.out.println(port);
+          Logger.error(e);
         }
 
         initClient(host, port, subl.username, subl.debug);
@@ -136,7 +135,7 @@ public class Subluminal {
         try {
           port = Integer.parseInt(parts[0]);
         } catch (NumberFormatException e) {
-          System.out.println(port);
+          Logger.error(e);
         }
 
         initServer(port, subl.debug);

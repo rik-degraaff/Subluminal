@@ -18,6 +18,9 @@ import tech.subluminal.shared.son.SONConverter;
 import tech.subluminal.shared.son.SONParsingError;
 import tech.subluminal.shared.son.SONRepresentable;
 
+/**
+ * Represents a connection between two devices over a socket.
+ */
 public class SocketConnection implements Connection {
 
   private Socket socket;
@@ -27,9 +30,27 @@ public class SocketConnection implements Connection {
   private volatile boolean stop = false;
   private Thread readThread;
   private Thread writeThread;
+  private Runnable onForceClose;
 
-  public SocketConnection(Socket socket) {
+  /**
+   * Creates a socket connection
+   *
+   * @param socket the socket to connect to.
+   * @param onForceClose the action to execute when teh socket is closed forcefully.
+   */
+  public SocketConnection(Socket socket, Runnable onForceClose) {
     this.socket = socket;
+    this.onForceClose = onForceClose;
+  }
+
+  /**
+   * Creates a socket connection
+   *
+   * @param socket the socket to connect to.
+   */
+  public SocketConnection(Socket socket) {
+    this(socket, () -> {
+    });
   }
 
   private static <T extends SONRepresentable> void handleMessage(SONConverter<T> converter,
@@ -37,8 +58,8 @@ public class SocketConnection implements Connection {
     try {
       handler.accept(converter.convert(son));
     } catch (SONConversionError sonConversionError) {
-      System.err.println(
-          "Structure of " + sonConversionError.getMessage() + " packets was incorrect, son.");
+      Logger.error(
+          "Structure of packet packets was incorrect " + sonConversionError.getMessage());
     }
   }
 
@@ -63,16 +84,16 @@ public class SocketConnection implements Connection {
           }
         } catch (SONParsingError e) {
           //wrong format
-          System.out.println("Parsing of " + e.getMessage() + "failed"); //TODO: log better
+          Logger.error("Parsing of failed: " + e.getMessage());
+          Logger.error(e);
         } catch (NoSuchElementException e) {
-          System.out.println("Socket was forcefully closed.");
+          Logger.error("Socket was forcefully closed.");
           stop = true;
-          //System.exit(0); //FIXME: cleaner way
+          onForceClose.run();
         }
       }
     } catch (IOException e) {
-      //TODO: Handle client disconnect
-      System.err.println(e.toString());
+      Logger.error(e);
       System.exit(1);
     }
     closeListeners.forEach(Runnable::run);

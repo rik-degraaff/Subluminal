@@ -148,11 +148,15 @@ public class GameManagerTest {
         .getByID("game")
         .get();
 
-    final GameHistoryEntry<Fleet> fleet1 = game.use(state ->
-        state.getPlayers().get("1").getFleets().get("1").getCurrent()
-    );
+    if (game.use(state -> state.getPlayers().get("1").getFleets().get("1")) != null) {
 
-    assertTrue("A fleet of 7 ships facing a fleet of 20+ was not destroyed", fleet1.isDestroyed());
+      final GameHistoryEntry<Fleet> fleet1 = game.use(state ->
+          state.getPlayers().get("1").getFleets().get("1").getCurrent()
+      );
+
+      assertTrue("A fleet of 7 ships facing a fleet of 20+ was not destroyed",
+          fleet1.isDestroyed());
+    }
 
     final GameHistoryEntry<Fleet> fleet0 = game.use(state ->
         state.getPlayers().get("0").getFleets().get("0").getCurrent()

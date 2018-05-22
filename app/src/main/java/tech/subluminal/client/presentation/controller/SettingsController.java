@@ -12,15 +12,16 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.util.Duration;
 import tech.subluminal.client.presentation.KeyMap;
 import tech.subluminal.shared.records.GlobalSettings;
@@ -40,7 +41,7 @@ public class SettingsController implements Observer, Initializable {
   @FXML
   private Slider masterVolume;
   @FXML
-  private AnchorPane keyDock;
+  private ScrollPane keyDock;
   private KeyMap keyMap;
 
   @Override
@@ -61,14 +62,20 @@ public class SettingsController implements Observer, Initializable {
 
     //vBox.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
 
-    keyDock.getChildren().addAll(vBox);
+    keyDock.setContent(vBox);
+    keyDock.setFitToHeight(true);
+    keyDock.setFitToWidth(true);
 
     vBox.setPadding(new Insets(20));
 
     Platform.runLater(() -> {
       keyMap.getKeyMap().forEach((k, v) -> {
         Label keyName = new Label(k);
+        keyName.getStyleClass().add("font-white");
+
         Label keyKey = new Label();
+        keyKey.getStyleClass().add("font-white");
+
         keyKey.textProperty().bind(v.asString());
         Label change = new Label("Change");
         change.getStyleClass().addAll("button", "font-dos");
@@ -81,17 +88,18 @@ public class SettingsController implements Observer, Initializable {
         hBox.setSpacing(20);
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-        hBox.getChildren().addAll(keyName, keyKey, spacer, change, reset);
+        hBox.getChildren().addAll(keyName, spacer, keyKey, change, reset);
         hBox.setAlignment(Pos.CENTER);
         //hBox.setBackground(new Background(new BackgroundFill(Color.GREEN, CornerRadii.EMPTY, Insets.EMPTY)));
 
         change.setOnMouseClicked(e -> {
+          keyKey.setTextFill(Color.RED);
           EventHandler handler = new EventHandler<KeyEvent>() {
             public void handle(KeyEvent keyEvent) {
               keyEvent.consume();
               v.setValue(keyEvent.getCode());
               main.getScene().removeEventHandler(KeyEvent.KEY_PRESSED, this);
-
+              keyKey.setTextFill(Color.WHITE);
             }
           };
 
@@ -107,6 +115,7 @@ public class SettingsController implements Observer, Initializable {
       });
 
       Label resetAll = new Label("Reset All");
+      resetAll.getStyleClass().add("font-white");
       resetAll.setOnMouseClicked(e -> keyMap.resetAll());
 
       vBox.getChildren().add(resetAll);

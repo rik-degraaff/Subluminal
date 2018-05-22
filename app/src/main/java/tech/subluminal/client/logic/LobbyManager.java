@@ -129,9 +129,10 @@ public class LobbyManager implements LobbyPresenter.Delegate {
 
   private void onLobbyJoin(LobbyJoinRes res) {
     Lobby lobby = res.getLobby();
+    String name = res.getLobby().getSettings().getName();
     lobbyStore.currentLobby().set(lobby);
 
-    lobbyPresenter.joinLobbySucceded();
+    lobbyPresenter.joinLobbySucceded(name);
     lobbyPresenter.lobbyUpdateReceived();
   }
 }
