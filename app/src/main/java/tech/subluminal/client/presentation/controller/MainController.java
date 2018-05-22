@@ -25,6 +25,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -240,6 +241,10 @@ public class MainController implements Initializable {
     VBox debugDock = initDebug();
 
     window.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
+      if (scene.getScene().focusOwnerProperty().get() instanceof TextArea || scene.getScene()
+          .focusOwnerProperty().get() instanceof TextField) {
+        return;
+      }
       if (keyEvent.getCode() == keyMap.get("FPS").get()) {
         if (debugDock.getChildren().contains(fpsTracker)) {
           debugDock.getChildren().remove(fpsTracker);
@@ -280,6 +285,10 @@ public class MainController implements Initializable {
     });
 
     window.addEventHandler(KeyEvent.KEY_RELEASED, keyEvent -> {
+      if (scene.getScene().focusOwnerProperty().get() instanceof TextArea || scene.getScene()
+          .focusOwnerProperty().get() instanceof TextField) {
+        return;
+      }
       if (keyEvent.getCode() == keyMap.get("Chat").getValue()) {
         toggleChat();
       }
@@ -345,11 +354,15 @@ public class MainController implements Initializable {
     settingButton.setOnMouseClicked((e) -> {
       Button3dComponent settingClose = new Button3dComponent("X");
       settingClose.setOnMouseClicked(event -> {
-        onWindowClose();
         event.consume();
+        if(tempMenu.isEmpty()){
+          tempMenu.add(menu);
+        }
+        onWindowClose();
         buttonsDock.getChildren().remove(settingButton);
         buttonsDock.add(settingButton, 0, 0);
       });
+
       buttonsDock.getChildren().remove(settingButton);
       buttonsDock.add(settingClose, 0, 0);
       onSettingOpenHandle();
@@ -552,6 +565,7 @@ public class MainController implements Initializable {
 
     fitWindow();
 
+    tempMenu.remove(settings);
     menuDock.getChildren().add(windowContainer);
     windowContainer.onWindowOpen();
   }
