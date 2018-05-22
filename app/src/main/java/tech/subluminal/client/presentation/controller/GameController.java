@@ -104,6 +104,7 @@ public class GameController implements Initializable, GamePresenter {
   }
 
   private void clearPressStore() {
+    main.resetAmounBox();
     if (pressStore[0] != null) {
       pressStore[0].setHoverShown(false);
     }
