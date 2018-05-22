@@ -43,12 +43,12 @@ public class SettingsReaderWriter implements PropertiesReaderWriter {
       try {
         is = new FileInputStream(f);
       } catch (FileNotFoundException e) {
-        e.printStackTrace();
+        Logger.error(e);
       }
       try {
         props.load(is);
       } catch (IOException e) {
-        e.printStackTrace();
+        Logger.error(e);
       }
 
       Stream<Field> fields = getFields(type, Export.class);
@@ -88,7 +88,7 @@ public class SettingsReaderWriter implements PropertiesReaderWriter {
           field.set(type, tmp);
           field.setAccessible(false);
         } catch (IllegalAccessException e) {
-          e.printStackTrace();
+          Logger.error(e);
         }
       });
 
@@ -118,7 +118,7 @@ public class SettingsReaderWriter implements PropertiesReaderWriter {
         props.store(out, "Subluminal settings file with @Export annotated fields");
       } catch (
           IOException e) {
-        e.printStackTrace();
+        Logger.error(e);
       }
     } else {
       Logger.info("Settings file (" + f.toString() + ") already exists. Won't overwrite.");

@@ -12,6 +12,7 @@ import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import org.pmw.tinylog.Logger;
 import tech.subluminal.shared.net.Connection;
 import tech.subluminal.shared.net.ConnectionManager;
 import tech.subluminal.shared.son.SONConverter;
@@ -126,7 +127,7 @@ public class ConnectionMessageDistributor implements MessageDistributor {
       try {
         connection.close();
       } catch (IOException e) {
-        e.printStackTrace(); // TODO: do something that makes sense.
+        Logger.error(e);
       }
     }
   }

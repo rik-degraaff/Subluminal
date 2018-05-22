@@ -205,7 +205,7 @@ public class Subluminal {
           Subluminal.class.getProtectionDomain().getCodeSource().getLocation().toURI()
               .getPath()).getParentFile();
     } catch (URISyntaxException e) {
-      e.printStackTrace();
+      Logger.error(e);
     }
     return jar;
   }

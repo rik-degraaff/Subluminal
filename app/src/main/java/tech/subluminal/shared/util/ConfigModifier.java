@@ -60,7 +60,7 @@ public class ConfigModifier<k, v> {
       try {
         theFile.createNewFile();
       } catch (IOException e) {
-        e.printStackTrace();
+        Logger.error(e);
       }
     }
   }
