@@ -1,7 +1,7 @@
 <template>
   <div class="hello">
     <sub-header></sub-header>
-    <h3>Social</h3>
+    <h1>Social</h1>
     <ul>
       <li class="button-pixel">
         <div class="sub-button-top"></div>
@@ -40,7 +40,7 @@
         <div class="sub-button-bottom"></div>
       </li>
     </ul>
-    <h3>Preorder</h3>
+    <h1>Preorder</h1>
     <ul>
       <li class="button-pixel">
         <div class="sub-button-top"></div>
@@ -67,7 +67,21 @@
           </li>
 
         </ul>
-    <h1>More Coming Soon</h1>
+    <h1>Get The Game</h1>
+    <li class="button-pixel">
+            <div class="sub-button-top"></div>
+            <div class="sub-button-left"></div>
+              <a href="http://jar.subluminal.tech/Subluminal.jar" target="_blank">Download</a>
+            <div class="sub-button-right"></div>
+            <div class="sub-button-bottom"></div>
+          </li>
+    <li class="button-pixel">
+      <div class="sub-button-top"></div>
+      <div class="sub-button-left"></div>
+        <a href="http://jar.subluminal.tech/Manual.pdf" target="_blank">Manual</a>
+      <div class="sub-button-right"></div>
+      <div class="sub-button-bottom"></div>
+    </li>
   </div>
 </template>
 
@@ -83,9 +97,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  h1, h2 {
-    font-weight: normal;
-  }
   ul {
     list-style-type: none;
     padding: 0;
@@ -95,21 +106,23 @@ export default {
     margin: 0 10px;
   }
   a {
-    color: #42b983;
+    color: #59FF00;
     text-decoration: none;
+    font-size: 1.5rem;
   }
   .mini-details{
-    font-size: 0.25rem;
+    font-size: 0.75rem;
   }
 
   .button-pixel{
-    border: 1px solid transparent;
+    border: 2px solid transparent;
     padding: 10px 5px;
     position: relative;
   }
 
   .button-pixel:hover{
-    border: 1px solid red;
+    border: 2px solid red;
+    cursor:pointer;
   }
 
  .sub-button-top{
@@ -119,7 +132,7 @@ export default {
     margin-top: -5px;
     width: 80%;
     height: 5px;
-    background: black;
+    background: #101429;
   }
 
   .sub-button-bottom{
@@ -129,7 +142,7 @@ export default {
     margin-bottom: -5px;
     width: 80%;
     height: 5px;
-    background: black;
+    background: #101429;
   }
 
   .sub-button-left{
@@ -139,7 +152,7 @@ export default {
     height: 70%;
     top: 15%;
     left: 0;
-    background: black;
+    background: #101429;
   }
 
   .sub-button-right{
@@ -149,6 +162,6 @@ export default {
     height: 70%;
     top: 15%;
     right: 0;
-    background: black;
+    background: #101429;
   }
 </style>

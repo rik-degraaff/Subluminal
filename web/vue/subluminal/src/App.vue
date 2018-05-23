@@ -10,17 +10,28 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+@font-face {
+    font-family: 'PxPlus IBM VGA9';
+    src: url('~@/assets/PxPlus_IBM_VGA9.eot');
+    src: url('~@/assets/PxPlus_IBM_VGA9.eot?#iefix') format('embedded-opentype'),
+        url('~@/assets/PxPlus_IBM_VGA9.woff2') format('woff2'),
+        url('~@/assets/PxPlus_IBM_VGA9.woff') format('woff'),
+        url('~@/assets/PxPlus_IBM_VGA9.ttf') format('truetype');
+    /*font-weight: normal;*/
+    font-style: normal;
+}
 #app {
-  font-family: 'Press Start 2P', cursive;
+  font-family: 'PxPlus IBM VGA9', cursive;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: white;
   margin-top: 60px;
   box-sizing: content-box;
 }
 html {
-   background: black;
+   background: #101429;
 }
+
 </style>
