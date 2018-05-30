@@ -31,6 +31,7 @@ export default {
   color: white;
   margin-top: 60px;
   box-sizing: content-box;
+  overflow: hidden;
 }
 html {
    background: #101429;

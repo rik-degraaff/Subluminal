@@ -58,18 +58,7 @@
         <div class="sub-button-right"></div>
         <div class="sub-button-bottom"></div>
       </li>
-
     </ul>
-        <ul>
-          <li class="button-pixel">
-            <div class="sub-button-top"></div>
-            <div class="sub-button-left"></div>
-              <router-link to="/gamerules">Game Rules</router-link>
-            <div class="sub-button-right"></div>
-            <div class="sub-button-bottom"></div>
-          </li>
-
-        </ul>
     <h1>Get The Game</h1>
     <li class="button-pixel">
             <div class="sub-button-top"></div>
@@ -85,21 +74,28 @@
       <div class="sub-button-right"></div>
       <div class="sub-button-bottom"></div>
     </li>
+     <li class="button-pixel">
+            <div class="sub-button-top"></div>
+            <div class="sub-button-left"></div>
+              <router-link to="/gamerules">Game Rules</router-link>
+            <div class="sub-button-right"></div>
+            <div class="sub-button-bottom"></div>
+          </li>
+    <sub-video></sub-video>
   </div>
 </template>
 
 <script>
 import Header from './Header'
 import particles from 'particles.js'
+import Video from './Video'
 export default {
   name: 'HelloWorld',
   components: {
-    'sub-header': Header
+    'sub-header': Header,
+    'sub-video': Video
   },
   created(){
-    particles.load('particles-js', '~@/assets/particlesjs-config.json', function() {
-      console.log("callback - paritcles loaded heree");
-    })
   }
 }
 </script>
