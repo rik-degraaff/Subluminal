@@ -21,10 +21,7 @@ public class JumpBox extends Group {
     VBox box = new VBox();
 
     TextField actual = new TextField();
-    Platform.runLater(() -> {
-      actual.requestFocus();
-    });
-
+    Platform.runLater(actual::requestFocus);
 
     actual.addEventFilter(KeyEvent.KEY_TYPED, keyEvent -> {
       if (!"0123456789".contains(keyEvent.getCharacter()) && keyEvent.getCode() != KeyCode.ENTER) {
@@ -33,7 +30,6 @@ public class JumpBox extends Group {
     });
 
     Button3dComponent send = new Button3dComponent("Ships");
-
 
     send.setOnMouseClicked(event -> {
       fireSendFleet(onSendFleet, actual, main);
@@ -48,11 +44,11 @@ public class JumpBox extends Group {
     });
 
     actual.addEventHandler(KeyEvent.KEY_PRESSED, keyEvent -> {
-      if(keyEvent.getCode() == KeyCode.ENTER){
+      if (keyEvent.getCode() == KeyCode.ENTER) {
         keyEvent.consume();
-        if(!actual.getText().equals("")){
+        if (!actual.getText().equals("")) {
           fireSendFleet(onSendFleet, actual, main);
-        }else{
+        } else {
           fireSendMother(onSendMotherShip, main);
         }
       }
@@ -68,12 +64,12 @@ public class JumpBox extends Group {
   private void fireSendFleet(Consumer<Integer> onSendFleet, TextField actual, MainController main) {
     String text = actual.getText();
     int amount = 0;
-    if(text != ""){
+    if (text.equals("")) {
       amount = Integer.parseInt(text);
     }
-    if(amount != 0) {
+    if (amount != 0) {
       onSendFleet.accept(amount);
-    }else{
+    } else {
       onSendFleet.accept(Integer.MAX_VALUE);
     }
     main.resetAmounBox();
