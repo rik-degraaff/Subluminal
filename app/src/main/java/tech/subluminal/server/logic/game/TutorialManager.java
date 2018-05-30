@@ -6,6 +6,7 @@ import javafx.scene.paint.Color;
 import tech.subluminal.server.logic.MessageDistributor;
 import tech.subluminal.shared.messages.ClearGame;
 import tech.subluminal.shared.messages.EndGameRes;
+import tech.subluminal.shared.messages.GameLeaveReq;
 import tech.subluminal.shared.messages.StartTutorialReq;
 import tech.subluminal.shared.messages.Toast;
 import tech.subluminal.shared.net.Connection;
@@ -35,6 +36,12 @@ public class TutorialManager {
   private void attachListeners(String id, Connection connection) {
     connection.registerHandler(StartTutorialReq.class, StartTutorialReq::fromSON,
         req -> onStartTutorial(id));
+    connection.registerHandler(GameLeaveReq.class, GameLeaveReq::fromSON,
+        req -> onEndTutorial(id));
+  }
+
+  private void onEndTutorial(String id) {
+    starter.stopGame(id);
   }
 
   private void nextStage(String id, Runnable nextStage) {

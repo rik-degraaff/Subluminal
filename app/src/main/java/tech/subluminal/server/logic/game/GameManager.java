@@ -30,6 +30,7 @@ import tech.subluminal.server.stores.records.Signal;
 import tech.subluminal.server.stores.records.Star;
 import tech.subluminal.shared.logic.game.GameLoop;
 import tech.subluminal.shared.logic.game.SleepGameLoop;
+import tech.subluminal.shared.messages.ClearGame;
 import tech.subluminal.shared.messages.EndGameRes;
 import tech.subluminal.shared.messages.FleetMoveReq;
 import tech.subluminal.shared.messages.GameLeaveReq;
@@ -150,6 +151,7 @@ public class GameManager implements GameStarter {
             });
           });
     }));
+
     distributor.sendMessage(new GameLeaveRes(), id);
   }
 
@@ -235,6 +237,7 @@ public class GameManager implements GameStarter {
       String gameID, Map<String, String> players, GameState initialState,
       Function<Boolean, Boolean> afterTick, Consumer<List<Player>> onEnd
   ) {
+    stoppedGames.remove(gameID);
     gameStore.games().add(initialState);
     gameStore.moveRequests().add(new MoveRequests(gameID));
 
