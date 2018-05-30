@@ -64,7 +64,7 @@ public class JumpBox extends Group {
   private void fireSendFleet(Consumer<Integer> onSendFleet, TextField actual, MainController main) {
     String text = actual.getText();
     int amount = 0;
-    if (text.equals("")) {
+    if (!text.equals("")) {
       amount = Integer.parseInt(text);
     }
     if (amount != 0) {
